@@ -71,7 +71,7 @@ namespace PXWeb.Database
             string folderName = System.IO.Path.GetFileNameWithoutExtension(path);
             foreach (var language in _languages)
             {
-                PxMenuItem root = new PxMenuItem(null, System.IO.Path.GetDirectoryName(path), folderName, folderName, folderName, path, "");
+                PxMenuItem root = new PxMenuItem(null, System.IO.Path.GetDirectoryName(path)?.Replace("\\", "/"), folderName, folderName, folderName, path, "");
                 _languageRoots.Add(language, root);
                 _currentItems.Add(language, root);
                 _links.Add(root, new List<string>());
@@ -125,7 +125,7 @@ namespace PXWeb.Database
             string name = System.IO.Path.GetFileNameWithoutExtension(id);
             foreach (var language in _languages)
             {
-                ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(id.Substring(_hostingEnvironment.RootPath.Length + 1)), id.Substring(_hostingEnvironment.RootPath.Length + 1));
+                ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(id.Substring(_hostingEnvironment.RootPath.Length + 1))?.Replace("\\", "/"), id.Substring(_hostingEnvironment.RootPath.Length + 1));
                 PxMenuItem newItem = new PxMenuItem(null, name, "", name, cid.Menu, cid.Selection, "");
                 _currentItems[language].AddSubItem(newItem);
                 _currentItems[language] = newItem;
@@ -290,7 +290,7 @@ namespace PXWeb.Database
 
         private TableLink CreateTableLink(PCAxis.Paxiom.PXMeta meta, string path)
         {
-            ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(path.Substring(_hostingEnvironment.RootPath.Length + 1)), path.Substring(_hostingEnvironment.RootPath.Length + 1));
+            ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(path.Substring(_hostingEnvironment.RootPath.Length + 1))?.Replace("\\", "/"), path.Substring(_hostingEnvironment.RootPath.Length + 1));
 
             TableLink tbl = new TableLink(!string.IsNullOrEmpty(meta.Description) ? meta.Description : meta.Title,
                 meta.Matrix, _sortOrder(meta, path), cid.Menu, cid.Selection, meta.Description ?? "", LinkType.PX,
