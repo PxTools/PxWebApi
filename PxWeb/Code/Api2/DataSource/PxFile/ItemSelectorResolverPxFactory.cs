@@ -66,7 +66,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 foreach (XmlElement childEl in nodeList)
                 {
                     string selection = childEl.GetAttribute("selection");
-                    var menu = Path.GetDirectoryName(selection);
+                    var menu = Path.GetDirectoryName(selection)?.Replace("\\", "/");
                     var sel = Path.GetFileName(selection).ToUpper();
                     if (!menuLookup.ContainsKey(sel))
                     {
@@ -87,7 +87,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 {
                     string selection = childEl.GetAttribute("selection");
                     string tableId = childEl.GetAttribute("tableId");
-                    var menu = Path.GetDirectoryName(selection);
+                    var menu = Path.GetDirectoryName(selection)?.Replace("\\", "/");
                     if (!menuLookup.ContainsKey(tableId))
                     {
                         ItemSelection itemSelection = new ItemSelection(menu, selection);
