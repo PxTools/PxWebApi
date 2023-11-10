@@ -18,7 +18,7 @@ on:
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/artifact-registry-5n/dapla-lab-docker/onyxia
-  IMAGE: pxwebapi
+  IMAGE: statbank-pxwebapi
   TAG: ${{ github.ref_name }}-${{ github.sha }}
 
 jobs:
