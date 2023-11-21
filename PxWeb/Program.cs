@@ -135,18 +135,16 @@ namespace PxWeb
 
             // Handle CORS configuration from appsettings.json
             bool corsEnbled = builder.Services.ConfigurePxCORS(builder, _logger);
-
             
-
             var app = builder.Build();
-
-
+            
             // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            app.UseSwagger();
-            app.UseSwaggerUI();
-            //}
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
             app.UseHttpsRedirection();
 
             if (corsEnbled)
