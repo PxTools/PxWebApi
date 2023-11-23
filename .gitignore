@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# PxWebApi
+PxWeb/wwwroot/ControllerStates/
+PxWeb/wwwroot/Database/_INDEX/
