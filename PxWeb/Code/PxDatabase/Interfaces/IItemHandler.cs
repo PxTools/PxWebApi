@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace PXWeb.Database
+﻿namespace PXWeb.Database
 {
     /// <summary>
     /// Handler interface the DatabaseSpider. The DatabaseSpider uses 
@@ -31,7 +26,7 @@ namespace PXWeb.Database
         /// <param name="path">Path to the file to handle</param>
         /// <param name="logger">Callback method to log handler interactions</param>
         /// <returns>A information object that holds information read from the file</returns>
-        object Handle(string path, DatabaseLogger logger);
+        object? Handle(string path, DatabaseLogger logger);
     }
 
 }

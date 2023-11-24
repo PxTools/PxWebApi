@@ -46,7 +46,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
             ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
-            TableLink tblFix = null;
+            TableLink? tblFix = null;
 
             if (selectionExists)
             {
@@ -61,12 +61,12 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         {
                             if (item is Url)
                             {
-                                Url url = (Url) item;
+                                Url url = (Url)item;
                             }
 
                             if (item is TableLink)
                             {
-                                TableLink tbl = (TableLink) item;
+                                TableLink tbl = (TableLink)item;
 
                                 tbl.Text = CreateTableTitleWithInterval(tbl);
 
@@ -111,7 +111,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             }
             else if (id.StartsWith("vs_", System.StringComparison.InvariantCultureIgnoreCase))
             {
-                codelist = GetValueset(id, language);   
+                codelist = GetValueset(id, language);
             }
 
             return codelist;
@@ -120,7 +120,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         public bool TableExists(string tableId, string language)
         {
             bool selectionExists;
-            
+
             _itemSelectionResolver.Resolve(language, tableId, out selectionExists);
             return selectionExists;
         }
@@ -174,7 +174,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
             return sb.ToString();
         }
-       
+
         private static bool IsInteger(string value)
         {
             int outValue;
@@ -212,7 +212,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             if (id.StartsWith("vs_", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 // Remove leading "vs_" from id
-               id = id.Substring(3);
+                id = id.Substring(3);
             }
 
             PCAxis.Sql.Repositories.ValueSetRepository repo = new PCAxis.Sql.Repositories.ValueSetRepository(cnmmOptions.DatabaseID);

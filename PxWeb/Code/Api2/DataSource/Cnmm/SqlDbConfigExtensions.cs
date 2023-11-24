@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using PCAxis.Menu;
 using PCAxis.Sql;
 using PCAxis.Sql.DbClient;
 using PCAxis.Sql.DbConfig;
 using PxWeb.Config.Api2;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace PxWeb.Code.Api2.DataSource.Cnmm
 {
     public static class SqlDbConfigExtensions
     {
-        public static Dictionary<string, ItemSelection> GetMenuLookup(this SqlDbConfig DB, string language, IOptions<PxApiConfigurationOptions> configOptions)
+        public static Dictionary<string, ItemSelection>? GetMenuLookup(this SqlDbConfig DB, string language, IOptions<PxApiConfigurationOptions> configOptions)
         {
             // Check language to avoid SQL injection
             if (!configOptions.Value.Languages.Any(l => l.Id == language))
@@ -25,21 +24,21 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             var menuLookup = new Dictionary<string, ItemSelection>();
 
             string sql;
-            if (DB is SqlDbConfig_21)
+            if (DB is SqlDbConfig_21 sqlDbConfig_21)
             {
-                sql = GetMenuLookupQuery2_1(DB as SqlDbConfig_21, language);
+                sql = GetMenuLookupQuery2_1(sqlDbConfig_21, language);
             }
-            else if (DB is SqlDbConfig_22)
+            else if (DB is SqlDbConfig_22 sqlDbConfig_22)
             {
-                sql = (DB as SqlDbConfig_22).GetMenuLookupQuery2_2(language);
+                sql = sqlDbConfig_22.GetMenuLookupQuery2_2(language);
             }
-            else if (DB is SqlDbConfig_23)
+            else if (DB is SqlDbConfig_23 sqlDbConfig_23)
             {
-                sql = (DB as SqlDbConfig_23).GetMenuLookupQuery2_3(language);
+                sql = sqlDbConfig_23.GetMenuLookupQuery2_3(language);
             }
-            else if (DB is SqlDbConfig_24)
+            else if (DB is SqlDbConfig_24 sqlDbConfig_24)
             {
-                sql = (DB as SqlDbConfig_24).GetMenuLookupQuery2_4(language);
+                sql = sqlDbConfig_24.GetMenuLookupQuery2_4(language);
             }
             else
             {
@@ -53,13 +52,13 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
             foreach (DataRow row in dataSet.Tables[0].Rows)
             {
-                string key = row[2].ToString().ToUpper();
-                string menu = row[0].ToString();
-                string selection = row[1].ToString();
+                string key = row[2].ToString()?.ToUpper() ?? string.Empty;
+                string? menu = row[0].ToString();
+                string? selection = row[1].ToString();
 
                 if (!menuLookup.ContainsKey(key))
                 {
-                    itemSelection = new ItemSelection(menu,selection);
+                    itemSelection = new ItemSelection(menu, selection);
                     menuLookup.Add(key, itemSelection); // Key always uppercase
                 }
                 else

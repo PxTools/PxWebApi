@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using PCAxis.Paxiom;
+﻿using PCAxis.Paxiom;
+using System;
 
 namespace PXWeb.Database
 {
@@ -41,7 +37,7 @@ namespace PXWeb.Database
         /// Return a PCAxis.Paxiom.PXMeta object containing the metadata 
         /// read from path
         /// </returns>
-        public object Handle(string path, DatabaseLogger logger)
+        public object? Handle(string path, DatabaseLogger logger)
         {
             try
             {
@@ -49,9 +45,9 @@ namespace PXWeb.Database
                 builder.SetPath(path);
                 builder.BuildForSelection();
                 if (builder.Errors.Count > 0)
-                { 
+                {
                     for (int i = 0; i < builder.Errors.Count; i++)
-			        {
+                    {
                         logger(new DatabaseMessage() { MessageType = DatabaseMessage.BuilderMessageType.Error, Message = "PX file is corrupted " + path + " " + builder.Errors[i].Code });
                     }
                     return null;
