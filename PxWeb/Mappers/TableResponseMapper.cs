@@ -1,11 +1,10 @@
-﻿using Px.Search;
+﻿using Microsoft.Extensions.Options;
+using Px.Search;
 using PxWeb.Api2.Server.Models;
+using PxWeb.Config.Api2;
+using PxWeb.Converters;
 using System.Collections.Generic;
 using System.Linq;
-using PxWeb.Config.Api2;
-using Microsoft.Extensions.Options;
-using PxWeb.Converters;
-using PCAxis.Paxiom.Localization;
 
 namespace PxWeb.Mappers
 {
@@ -34,8 +33,8 @@ namespace PxWeb.Mappers
             linkList.Add(_linkCreator.GetTableDataLink(LinkCreator.LinkRelationEnum.data, searchResult.Id.ToUpper(), lang, true));
 
             TableResponse tableResponse = new TableResponse()
-            { 
-            
+            {
+
                 Type = FolderContentItemTypeEnum.TableEnum,
                 Id = searchResult.Id,
                 Label = searchResult.Label,
@@ -49,12 +48,12 @@ namespace PxWeb.Mappers
                 VariableNames = searchResult.VariableNames.ToList(),
                 Links = linkList,
                 Language = lang,
-                SortCode = searchResult.SortCode
-                
+                SortCode = searchResult.SortCode ?? string.Empty
+
             };
             return tableResponse;
-            
+
         }
-        
+
     }
 }

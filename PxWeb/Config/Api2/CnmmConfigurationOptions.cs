@@ -2,6 +2,6 @@
 {
     public class CnmmConfigurationOptions
     {
-        public string DatabaseID { get; set; }
+        public string DatabaseID { get; set; } = string.Empty;
     }
 }

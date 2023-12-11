@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-using System.Collections;
-using System.Text.RegularExpressions;
-using System.Globalization;
-using System.Web;
-using System.Configuration;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PxWeb.Config.Api2;
+using System;
 
 namespace PxWeb.Code.Api2.Cache
 {
@@ -24,7 +15,7 @@ namespace PxWeb.Code.Api2.Cache
         /// Delegate that waits for something after the cache has been cleaned
         /// </summary>
         public delegate bool CacheReenabler();
-        private Func<bool> _coherenceChecker;
+        private Func<bool>? _coherenceChecker;
 
         private ILogger<PxCache> _logger;
         private string _cacheLock = "lock";
