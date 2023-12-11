@@ -40,6 +40,8 @@ namespace PxWeb.Code.Api2.Serialization
                     return new JsonStatDataSerializer();
                 case "json-stat2":
                     return new JsonStat2DataSerializer();
+                case "parquet":
+                    return new ParquetSerializer();
                 case "html5_table":
                     return new Html5TableDataSerializer();
                 case "relational_table":
