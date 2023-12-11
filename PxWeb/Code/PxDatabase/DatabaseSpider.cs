@@ -1,19 +1,18 @@
-﻿using System;
+﻿using PxWeb.Code.BackgroundWorker;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using PxWeb.Code.BackgroundWorker;
 
 namespace PXWeb.Database
 {
 
     public class DatabaseMessage
-    { 
-        public string Message { get; set;}
+    {
+        public string Message { get; set; } = string.Empty;
         public BuilderMessageType MessageType { get; set; }
 
         public enum BuilderMessageType
-        { 
+        {
             Information,
             Warning,
             Error
@@ -31,7 +30,7 @@ namespace PXWeb.Database
     public class DatabaseSpider
     {
         public DatabaseSpider()
-        { 
+        {
             logger = new DatabaseLogger(LogMessage);
         }
 
@@ -46,13 +45,16 @@ namespace PXWeb.Database
 
         private DatabaseLogger logger;
         private bool _stateLogging = false;
-        private IControllerState _responseState;
+        private IControllerState? _responseState;
         private void LogMessage(DatabaseMessage msg)
         {
             Messages.Add(msg);
             if (_stateLogging)
             {
-                _responseState.AddEvent(new Event(msg.MessageType.ToString(), msg.Message));
+                if (_responseState != null)
+                {
+                    _responseState.AddEvent(new Event(msg.MessageType.ToString(), msg.Message));
+                }
             }
         }
 
@@ -88,7 +90,7 @@ namespace PXWeb.Database
                 builder.BeginBuild(startPath, logger);
             }
 
-            
+
             try
             {
                 SearchRecursive(startPath);
@@ -97,7 +99,7 @@ namespace PXWeb.Database
             {
                 var errorMessage = string.Format("Cannot search {0}. {1}", startPath, e.Message);
 
-               
+
                 logger(new DatabaseMessage()
                 {
                     MessageType = DatabaseMessage.BuilderMessageType.Error,
@@ -122,7 +124,7 @@ namespace PXWeb.Database
 
             foreach (var item in System.IO.Directory.GetFiles(path))
             {
-                IItemHandler handler = GetHandler(item);
+                IItemHandler? handler = GetHandler(item);
                 if (handler != null)
                 {
                     object obj = handler.Handle(item, logger);
@@ -142,7 +144,7 @@ namespace PXWeb.Database
             SignalStopNewLevel(path);
         }
 
-        private IItemHandler GetHandler(string path)
+        private IItemHandler? GetHandler(string path)
         {
             foreach (var item in Handles)
             {

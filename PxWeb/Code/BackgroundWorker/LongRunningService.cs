@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
-using System.Threading;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PxWeb.Code.BackgroundWorker
 {
@@ -21,7 +21,7 @@ namespace PxWeb.Code.BackgroundWorker
             while (!stoppingToken.IsCancellationRequested)
             {
                 var workItem = await queue.DequeueAsync(stoppingToken);
-                string id = getControllerIdFromTask(workItem);
+                string id = getControllerIdFromTask(workItem) ?? string.Empty;
 
                 IControllerState state = _stateProvider.Load(id);
 
@@ -40,11 +40,11 @@ namespace PxWeb.Code.BackgroundWorker
             }
         }
 
-        private string getControllerIdFromTask(System.Func<CancellationToken, Task> workItem)
+        private string? getControllerIdFromTask(System.Func<CancellationToken, Task> workItem)
         {
             var type = workItem.Method.DeclaringType;
-            while (type.DeclaringType != null) { type = type.DeclaringType; } // Avoid compiler generated classes
-            return type.FullName;
+            while (type?.DeclaringType != null) { type = type.DeclaringType; } // Avoid compiler generated classes
+            return type?.FullName;
         }
     }
 }

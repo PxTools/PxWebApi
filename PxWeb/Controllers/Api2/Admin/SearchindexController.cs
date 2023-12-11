@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using PxWeb.Code.BackgroundWorker;
+using System.Text.RegularExpressions;
 
 namespace PxWeb.Controllers.Api2.Admin
 {
@@ -27,8 +28,8 @@ namespace PxWeb.Controllers.Api2.Admin
         public SearchindexController(BackgroundWorkerQueue backgroundWorkerQueue, IControllerStateProvider stateProvider, IDataSource dataSource, ISearchBackend backend, IPxApiConfigurationService pxApiConfigurationService, ILogger<SearchindexController> logger)
         {
             _dataSource = dataSource;
-            _backend = backend; 
-            _pxApiConfigurationService = pxApiConfigurationService; 
+            _backend = backend;
+            _pxApiConfigurationService = pxApiConfigurationService;
             _logger = logger;
             _backgroundWorkerQueue = backgroundWorkerQueue;
             string id = GetType().FullName;
@@ -69,7 +70,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 }
                 catch (System.Exception ex)
                 {
-                    _logger.LogError(ex,"Error when building serach index");
+                    _logger.LogError(ex, "Error when building serach index");
                 }
             });
             return new AcceptedResult();
@@ -92,11 +93,13 @@ namespace PxWeb.Controllers.Api2.Admin
                 try
                 {
                     List<string> languages = new List<string>();
-                    List<string> tableList = new List<string>(tables);
+                    List<string> tableList = tables
+                        .Select(table => Regex.Replace(table.Trim(), @"[^0-9a-zA-Z]+", ""))
+                        .ToList();
 
                     if (tableList.Count == 0)
                     {
-                        string message = "No languages configured for PxApi"; 
+                        string message = "No languages configured for PxApi";
                         _logger.LogError(message);
                         _responseState.AddEvent(new Event("Error", message));
                         return;

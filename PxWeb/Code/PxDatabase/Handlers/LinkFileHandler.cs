@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using PxWeb.Config.Api2;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace PXWeb.Database
 {
@@ -18,7 +15,7 @@ namespace PXWeb.Database
         public LinkFileHandler(PxApiConfigurationOptions configOptions, ILogger logger)
         {
             _configOptions = configOptions;
-            _logger = logger;   
+            _logger = logger;
         }
 
         #region IItemHandler Members
@@ -28,9 +25,9 @@ namespace PXWeb.Database
         /// </summary>
         public int Priority
         {
-            get 
-            { 
-                return 4; 
+            get
+            {
+                return 4;
             }
         }
 
@@ -53,7 +50,7 @@ namespace PXWeb.Database
         /// If the link file do not have a language specified in the name then the 
         /// default language specified in the settings will be used
         /// </remarks>
-        public object Handle(string path, DatabaseLogger logger)
+        public object? Handle(string path, DatabaseLogger logger)
         {
             string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
             int splittIndex = fileName.IndexOf('_');
@@ -99,7 +96,7 @@ namespace PXWeb.Database
             splittIndex = linkData.IndexOf(',', splittIndex);
 
             //No , after the second " corrupted link file
-            if (splittIndex < 0) 
+            if (splittIndex < 0)
             {
                 logger(new DatabaseMessage() { MessageType = DatabaseMessage.BuilderMessageType.Warning, Message = "Corrupt link file " + path });
                 return null;
@@ -108,7 +105,7 @@ namespace PXWeb.Database
             text = TidyString(linkData.Substring(0, splittIndex)).Trim('"');
             location = TidyString(linkData.Substring(splittIndex + 1)).Trim('"');
 
-            link = new LinkItem(text,location,language);
+            link = new LinkItem(text, location, language);
             return link;
         }
 
