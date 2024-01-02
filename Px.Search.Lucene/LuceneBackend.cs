@@ -1,9 +1,9 @@
-﻿using Px.Search.Lucene.Config;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lucene.Net.Analysis.En;
+using Lucene.Net.Analysis.No;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Analysis;
+using Lucene.Net.Util;
+using Px.Search.Lucene.Config;
 
 namespace Px.Search.Lucene
 {
@@ -12,9 +12,16 @@ namespace Px.Search.Lucene
 
         private readonly ILuceneConfigurationService _luceneConfigurationService;
 
+        internal static LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
+
+        private static bool UseStandardAnalyzer;
+
         public LuceneBackend(ILuceneConfigurationService luceneConfigurationService)
         {
-            _luceneConfigurationService = luceneConfigurationService;   
+            _luceneConfigurationService = luceneConfigurationService;
+            _luceneConfigurationService.GetUseStandardAnalyzer();
+
+            UseStandardAnalyzer = _luceneConfigurationService.GetUseStandardAnalyzer();
         }
 
         public IIndex GetIndex()
@@ -29,7 +36,27 @@ namespace Px.Search.Lucene
             return new LuceneSearcher(path, language);
         }
 
- 
+        internal static Analyzer GetAnalyzer(string language)
+        {
+            // TODO ? Should read langs from config and prepare a static analyzerByLanguage dictionary? 
+            // 
+            if(UseStandardAnalyzer)
+            {
+                return new StandardAnalyzer(luceneVersion);
+            }   
+            else if (language.Equals("en"))
+            {
+                return new EnglishAnalyzer(luceneVersion);
+            }
+            else if (language.Equals("no"))
+            {
+                return new NorwegianAnalyzer(luceneVersion);
+            }
+            else
+                return new StandardAnalyzer(luceneVersion);
+
+            // depricated: Analyzer analyzer = new SnowballAnalyzer(LuceneVersion.LUCENE_48, "English");
+        }
 
     }
 }
