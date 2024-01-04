@@ -20,18 +20,18 @@ namespace Px.Search.Lucene
         /// Constructor
         /// </summary>
         /// <param name="indexDirectory">Index directory</param>
-        public LuceneSearcher(string indexDirectory, string language)
+        public LuceneSearcher(string indexDirectory, string language, bool useStandardAnalyzer)
         {
             if (string.IsNullOrWhiteSpace(indexDirectory))
             {
-                throw new ArgumentNullException(indexDirectory,"Index directory not defined for Lucene");
+                throw new ArgumentNullException(indexDirectory, "Index directory not defined for Lucene");
             }
 
             FSDirectory fsDir = FSDirectory.Open(Path.Combine(indexDirectory, language));
 
             IndexReader reader = DirectoryReader.Open(fsDir);
             _indexSearcher = new IndexSearcher(reader);
-            _analyzer = LuceneBackend.GetAnalyzer(language);
+            _analyzer = LuceneAnalyzer.GetAnalyzer(language, useStandardAnalyzer);
         }
 
 
@@ -51,7 +51,7 @@ namespace Px.Search.Lucene
             var searchResultList = new List<SearchResult>();
             string[] fields = GetSearchFields();
             Query luceneQuery;
-            QueryParser queryParser = new MultiFieldQueryParser(LuceneBackend.luceneVersion,
+            QueryParser queryParser = new MultiFieldQueryParser(LuceneAnalyzer.luceneVersion,
                                                        fields,
                                                         _analyzer);
             BooleanFilter filter = new BooleanFilter();
@@ -115,7 +115,7 @@ namespace Px.Search.Lucene
         {
             
             string[] field = new[] { SearchConstants.SEARCH_FIELD_SEARCHID };
-            LuceneVersion luceneVersion = LuceneBackend.luceneVersion;
+            LuceneVersion luceneVersion = LuceneAnalyzer.luceneVersion;
             Query luceneQuery;
             QueryParser queryParser = new MultiFieldQueryParser(luceneVersion,
                                                        field,

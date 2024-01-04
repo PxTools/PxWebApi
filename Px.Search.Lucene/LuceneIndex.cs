@@ -16,12 +16,13 @@ namespace Px.Search.Lucene
         private string _indexDirectoryBase = "";
         private string _indexDirectoryCurrent = "";
         private IndexWriter? _writer;
+        private readonly bool _useStandardAnalyzer;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="indexDirectory">Index directory</param>
-        public LuceneIndex(string indexDirectory)
+        public LuceneIndex(string indexDirectory, bool useStandardAnalyzer)
         {
             if (string.IsNullOrWhiteSpace(indexDirectory))
             {
@@ -29,6 +30,7 @@ namespace Px.Search.Lucene
             }
 
             _indexDirectoryBase = indexDirectory;
+            _useStandardAnalyzer = useStandardAnalyzer;
         }
 
         /// <summary>
@@ -47,9 +49,9 @@ namespace Px.Search.Lucene
                 throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
             }
 
-            Analyzer analyzer = LuceneBackend.GetAnalyzer(language);
+            Analyzer analyzer = LuceneAnalyzer.GetAnalyzer(language, _useStandardAnalyzer);
 
-            IndexWriterConfig config = new IndexWriterConfig(LuceneBackend.luceneVersion, analyzer)
+            IndexWriterConfig config = new IndexWriterConfig(LuceneAnalyzer.luceneVersion, analyzer)
             {
                 // Overwrite or append existing index
                 OpenMode = create ? OpenMode.CREATE : OpenMode.CREATE_OR_APPEND 

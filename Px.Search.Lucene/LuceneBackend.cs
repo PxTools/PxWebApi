@@ -4,6 +4,7 @@ using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Analysis;
 using Lucene.Net.Util;
 using Px.Search.Lucene.Config;
+using Lucene.Net.Analysis.Sv;
 
 namespace Px.Search.Lucene
 {
@@ -12,51 +13,25 @@ namespace Px.Search.Lucene
 
         private readonly ILuceneConfigurationService _luceneConfigurationService;
 
-        internal static LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
+        private readonly string _path;
 
-        private static bool UseStandardAnalyzer;
+        private readonly bool _useStandardAnalyzer;
 
         public LuceneBackend(ILuceneConfigurationService luceneConfigurationService)
         {
             _luceneConfigurationService = luceneConfigurationService;
-            _luceneConfigurationService.GetUseStandardAnalyzer();
-
-            UseStandardAnalyzer = _luceneConfigurationService.GetUseStandardAnalyzer();
+            _path = _luceneConfigurationService.GetIndexDirectoryPath();
+            _useStandardAnalyzer = _luceneConfigurationService.GetUseStandardAnalyzer();
         }
 
         public IIndex GetIndex()
         {
-            string path = _luceneConfigurationService.GetIndexDirectoryPath();
-            return new LuceneIndex(path);
+            return new LuceneIndex(_path, _useStandardAnalyzer);
         }
 
         public ISearcher GetSearcher(string language)
         {
-            string path = _luceneConfigurationService.GetIndexDirectoryPath();
-            return new LuceneSearcher(path, language);
+            return new LuceneSearcher(_path, language, _useStandardAnalyzer);
         }
-
-        internal static Analyzer GetAnalyzer(string language)
-        {
-            // TODO ? Should read langs from config and prepare a static analyzerByLanguage dictionary? 
-            // 
-            if(UseStandardAnalyzer)
-            {
-                return new StandardAnalyzer(luceneVersion);
-            }   
-            else if (language.Equals("en"))
-            {
-                return new EnglishAnalyzer(luceneVersion);
-            }
-            else if (language.Equals("no"))
-            {
-                return new NorwegianAnalyzer(luceneVersion);
-            }
-            else
-                return new StandardAnalyzer(luceneVersion);
-
-            // depricated: Analyzer analyzer = new SnowballAnalyzer(LuceneVersion.LUCENE_48, "English");
-        }
-
     }
 }
