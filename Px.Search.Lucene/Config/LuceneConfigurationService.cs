@@ -47,5 +47,23 @@ namespace Px.Search.Lucene.Config
                 throw new Exception("Non existing index directory configured for Lucene index: " + indexDirectory);
             }
         }
+
+        /// <summary>
+        /// Shold Lucene use the StandardAnalyzer, or the language dependent ones. Defaults to false.
+        /// </summary>
+        /// <returns></returns>
+        public bool GetUseStandardAnalyzer()
+        {
+            var luceneOptions = GetConfiguration();
+            if( luceneOptions.UseStandardAnalyzer == null)
+            {
+                return false;
+            }
+            else
+            {
+                return (bool)luceneOptions.UseStandardAnalyzer;
+            }
+
+        }
     }
 }

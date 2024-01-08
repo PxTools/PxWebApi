@@ -1,20 +1,10 @@
 ﻿using Lucene.Net.Analysis;
 using Lucene.Net.Index;
 using Lucene.Net.Store;
-using Lucene.Net.Util;
 using Lucene.Net.Documents;
 using PCAxis.Paxiom;
-using PCAxis.Paxiom.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Lucene.Net.Analysis.Standard;
-using System.IO;
-using System.Security.Policy;
 using Lucene.Net.Search;
-using static System.Net.WebRequestMethods;
 
 namespace Px.Search.Lucene
 {
@@ -26,12 +16,13 @@ namespace Px.Search.Lucene
         private string _indexDirectoryBase = "";
         private string _indexDirectoryCurrent = "";
         private IndexWriter? _writer;
+        private readonly bool _useStandardAnalyzer;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="indexDirectory">Index directory</param>
-        public LuceneIndex(string indexDirectory)
+        public LuceneIndex(string indexDirectory, bool useStandardAnalyzer)
         {
             if (string.IsNullOrWhiteSpace(indexDirectory))
             {
@@ -39,6 +30,7 @@ namespace Px.Search.Lucene
             }
 
             _indexDirectoryBase = indexDirectory;
+            _useStandardAnalyzer = useStandardAnalyzer;
         }
 
         /// <summary>
@@ -49,18 +41,17 @@ namespace Px.Search.Lucene
         /// If false, the existing index will be appended
         /// </param>
         /// <returns>IndexWriter object. If the Index directory is locked, null is returned</returns>
-        private IndexWriter CreateIndexWriter(bool create)
+        private IndexWriter CreateIndexWriter(bool create, string language)
         {
             FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
             if (IndexWriter.IsLocked(fsDir))
             {
-                return null;
+                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
             }
 
-            LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
-            Analyzer analyzer = new StandardAnalyzer(luceneVersion);
+            Analyzer analyzer = LuceneAnalyzer.GetAnalyzer(language, _useStandardAnalyzer);
 
-            IndexWriterConfig config = new IndexWriterConfig(luceneVersion, analyzer)
+            IndexWriterConfig config = new IndexWriterConfig(LuceneAnalyzer.luceneVersion, analyzer)
             {
                 // Overwrite or append existing index
                 OpenMode = create ? OpenMode.CREATE : OpenMode.CREATE_OR_APPEND 
@@ -79,7 +70,7 @@ namespace Px.Search.Lucene
             }
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
-            _writer = CreateIndexWriter(false);
+            _writer = CreateIndexWriter(false, language);
 
             if (_writer == null)
             {
@@ -95,7 +86,7 @@ namespace Px.Search.Lucene
             }
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
-            _writer = CreateIndexWriter(true);  
+            _writer = CreateIndexWriter(true, language);  
 
             if (_writer == null)
             {
