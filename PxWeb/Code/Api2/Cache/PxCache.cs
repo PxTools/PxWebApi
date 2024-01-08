@@ -82,8 +82,6 @@ namespace PxWeb.Code.Api2.Cache
         {
             if (_cache.Get(key) is null)
             {
-                _logger.LogDebug("Adding key={0} to Cache", key);
-
                 lock (_cacheLock)
                 {
                     if (_cache.Get(key) is null)
