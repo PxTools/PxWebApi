@@ -7,8 +7,7 @@ using System.IO;
 
 namespace PxWeb.UnitTests.Search
 {
-    //Perhaps these tests test Lucene as much as local code :-)")]
-    //[Ignore("dsfsd")]
+    //Perhaps these tests test Lucene as much as local code :-)
     [TestClass]
     public class LuceneAnalyzerTest
     {
@@ -30,15 +29,16 @@ namespace PxWeb.UnitTests.Search
             LuceneConfigurationOptions luceneConfigurationOptions = new LuceneConfigurationOptions();
             luceneConfigurationOptions.IndexDirectory = "Database";
 
-            //MyHost myHost = new MyHost("C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot");
-            string wwwPathRunning = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            int index = wwwPathRunning.IndexOf("PxWeb.UnitTests");
+            //seeking "C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot" 
+            string pathRunning = Directory.GetCurrentDirectory();
+            int index = pathRunning.IndexOf("PxWeb.UnitTests");
             
             if (index == -1)
             {
-                throw new System.Exception("Hmm");
+                throw new System.Exception("Hmm, Directory.GetCurrentDirectory() does not contain string:PxWeb.UnitTests , so unable to find wwwroot path.");
             }
-            string wwwPath = Path.Combine(wwwPathRunning.Substring(0, index) ,  "PxWeb", "wwwroot");
+            string repoRoot = pathRunning.Substring(0, index);
+            string wwwPath = Path.Combine(repoRoot,  "PxWeb", "wwwroot");
 
             MyHost myHost = new MyHost(wwwPath);
 
