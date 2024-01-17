@@ -1,11 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Px.Search;
 using Px.Search.Lucene;
 using Px.Search.Lucene.Config;
+using System.IO;
 
 namespace PxWeb.UnitTests.Search
 {
     //Perhaps these tests test Lucene as much as local code :-)")]
+    //[Ignore("dsfsd")]
     [TestClass]
     public class LuceneAnalyzerTest
     {
@@ -27,7 +30,18 @@ namespace PxWeb.UnitTests.Search
             LuceneConfigurationOptions luceneConfigurationOptions = new LuceneConfigurationOptions();
             luceneConfigurationOptions.IndexDirectory = "Database";
 
-            MyHost myHost = new MyHost("C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot");
+            //MyHost myHost = new MyHost("C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot");
+            string wwwPathRunning = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            int index = wwwPathRunning.IndexOf("PxWeb.UnitTests");
+            
+            if (index == -1)
+            {
+                throw new System.Exception("Hmm");
+            }
+            string wwwPath = Path.Combine(wwwPathRunning.Substring(0, index) ,  "PxWeb", "wwwroot");
+
+            MyHost myHost = new MyHost(wwwPath);
+
 
 
             var myOptions = Microsoft.Extensions.Options.Options.Create(luceneConfigurationOptions);
