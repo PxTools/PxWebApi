@@ -20,7 +20,7 @@ namespace Px.Search.Lucene
         /// Constructor
         /// </summary>
         /// <param name="indexDirectory">Index directory</param>
-        public LuceneSearcher(string indexDirectory, string language, bool useStandardAnalyzer)
+        public LuceneSearcher(string indexDirectory, string language)
         {
             if (string.IsNullOrWhiteSpace(indexDirectory))
             {
@@ -31,7 +31,7 @@ namespace Px.Search.Lucene
 
             IndexReader reader = DirectoryReader.Open(fsDir);
             _indexSearcher = new IndexSearcher(reader);
-            _analyzer = LuceneAnalyzer.GetAnalyzer(language, useStandardAnalyzer);
+            _analyzer = LuceneAnalyzer.GetAnalyzer(language);
         }
 
 

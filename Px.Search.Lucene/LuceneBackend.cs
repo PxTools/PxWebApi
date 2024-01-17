@@ -15,23 +15,20 @@ namespace Px.Search.Lucene
 
         private readonly string _path;
 
-        private readonly bool _useStandardAnalyzer;
-
         public LuceneBackend(ILuceneConfigurationService luceneConfigurationService)
         {
             _luceneConfigurationService = luceneConfigurationService;
             _path = _luceneConfigurationService.GetIndexDirectoryPath();
-            _useStandardAnalyzer = _luceneConfigurationService.GetUseStandardAnalyzer();
         }
 
         public IIndex GetIndex()
         {
-            return new LuceneIndex(_path, _useStandardAnalyzer);
+            return new LuceneIndex(_path);
         }
 
         public ISearcher GetSearcher(string language)
         {
-            return new LuceneSearcher(_path, language, _useStandardAnalyzer);
+            return new LuceneSearcher(_path, language);
         }
     }
 }

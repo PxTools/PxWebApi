@@ -5,42 +5,29 @@ using Px.Search.Lucene.Config;
 
 namespace PxWeb.UnitTests.Search
 {
-    [Ignore("These tests require that you index your databases first. And perhaps they test Lucene as much as local code :-)")]
+    //Perhaps these tests test Lucene as much as local code :-)")]
     [TestClass]
     public class LuceneAnalyzerTest
     {
         [TestMethod]
-        public void UsingStandardAnalyzerOnPlural()
-        {
-            TestSearcher(true, "sv", "regionar", 0);
-        }
-
-        [TestMethod]
-        public void UsingStandardAnalyzerOnSingular()
-        {
-            TestSearcher(true, "sv", "region", 3);
-        }
-
-        [TestMethod]
         public void UsingSwedishAnalyzerOnPlural()
         {
-            TestSearcher(false, "sv", "regionar", 3);
+            TestSearcher("sv", "regionar", 3);
         }
 
         [TestMethod]
         public void UsingSwedishAnalyzerOnSingular()
         {
-            TestSearcher(false, "sv", "region", 3);
+            TestSearcher("sv", "region", 3);
         }
 
 
-        private void TestSearcher(bool useStandardAnalyzer, string language, string searchFor, int expectedCount)
+        private void TestSearcher(string language, string searchFor, int expectedCount)
         {
             LuceneConfigurationOptions luceneConfigurationOptions = new LuceneConfigurationOptions();
-            luceneConfigurationOptions.UseStandardAnalyzer = useStandardAnalyzer;
             luceneConfigurationOptions.IndexDirectory = "Database";
 
-            MyHost myHost = new MyHost("C:\\repos\\github\\pxtools\\PxwebApi2\\PxWebApi\\PxWeb\\wwwroot");
+            MyHost myHost = new MyHost("C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot");
 
 
             var myOptions = Microsoft.Extensions.Options.Options.Create(luceneConfigurationOptions);
