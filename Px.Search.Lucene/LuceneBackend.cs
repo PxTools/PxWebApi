@@ -1,9 +1,10 @@
-﻿using Px.Search.Lucene.Config;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lucene.Net.Analysis.En;
+using Lucene.Net.Analysis.No;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Analysis;
+using Lucene.Net.Util;
+using Px.Search.Lucene.Config;
+using Lucene.Net.Analysis.Sv;
 
 namespace Px.Search.Lucene
 {
@@ -12,24 +13,22 @@ namespace Px.Search.Lucene
 
         private readonly ILuceneConfigurationService _luceneConfigurationService;
 
+        private readonly string _path;
+
         public LuceneBackend(ILuceneConfigurationService luceneConfigurationService)
         {
-            _luceneConfigurationService = luceneConfigurationService;   
+            _luceneConfigurationService = luceneConfigurationService;
+            _path = _luceneConfigurationService.GetIndexDirectoryPath();
         }
 
         public IIndex GetIndex()
         {
-            string path = _luceneConfigurationService.GetIndexDirectoryPath();
-            return new LuceneIndex(path);
+            return new LuceneIndex(_path);
         }
 
         public ISearcher GetSearcher(string language)
         {
-            string path = _luceneConfigurationService.GetIndexDirectoryPath();
-            return new LuceneSearcher(path, language);
+            return new LuceneSearcher(_path, language);
         }
-
- 
-
     }
 }
