@@ -28,6 +28,12 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             var menuLookup = new Dictionary<string, ItemSelection>();
 
+            if (!LanguageUtil.HasValidLanguageCodePattern(language))
+            {
+                _logger.LogWarning($"Unsupported language: {LanguageUtil.SanitizeLangueCode(language)}");
+                return menuLookup;
+            }
+
             try
             {
                 string webRootPath = _hostingEnvironment.RootPath;
@@ -51,7 +57,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             catch (Exception e)
             {
-                _logger.LogError($"Error loading MenuLookup table for language {language}", e);
+                _logger.LogError($"Error loading MenuLookup table for language {LanguageUtil.SanitizeLangueCode(language)}", e);
             }
 
             return menuLookup;
