@@ -8,6 +8,7 @@ using PxWeb.Code.Api2.DataSource.Cnmm;
 using PxWeb.Code.Api2.DataSource.PxFile;
 using PxWeb.Config.Api2;
 using PxWeb.Mappers;
+using System;
 
 namespace PxWeb.UnitTests.DataSource
 {
@@ -25,7 +26,8 @@ namespace PxWeb.UnitTests.DataSource
         private static string GetPathToPxWebProject()
         {
             string pathAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string folderAssembly = System.IO.Path.GetDirectoryName(pathAssembly).Replace("\\","/");
+            string directoryName = System.IO.Path.GetDirectoryName(pathAssembly) ?? throw new System.Exception("GetDirectoryName(pathAssembly) is null for:"+ pathAssembly);
+            string folderAssembly = directoryName.Replace("\\", "/");
             if (folderAssembly.EndsWith("/") == false) folderAssembly = folderAssembly + "/";
             string folderProjectLevel = System.IO.Path.GetFullPath(folderAssembly + "../../../../");
             return folderProjectLevel;
@@ -72,10 +74,12 @@ namespace PxWeb.UnitTests.DataSource
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
 
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
 
-            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, null);
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
 
             var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
 
@@ -108,7 +112,8 @@ namespace PxWeb.UnitTests.DataSource
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
 
-            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, null);
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
 
             var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
 
@@ -158,7 +163,8 @@ namespace PxWeb.UnitTests.DataSource
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
 
-            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, null);
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
 
             var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
 
@@ -194,7 +200,8 @@ namespace PxWeb.UnitTests.DataSource
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
 
-            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, null);
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
 
             var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
 
@@ -242,7 +249,18 @@ namespace PxWeb.UnitTests.DataSource
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
 
-            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, null);
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
+
+            /* This actually works, and fails the test since/when there was no logging made.
+            itemLoggerMock.Verify( x => x.Log(
+                    It.IsAny<LogLevel>(),
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+                    Times.AtLeastOnce);
+            */
 
             var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
 
