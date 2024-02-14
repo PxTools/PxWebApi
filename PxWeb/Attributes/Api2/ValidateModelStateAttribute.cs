@@ -24,8 +24,9 @@ namespace PxWeb.Attributes.Api2
             {
                 foreach (var parameter in descriptor.MethodInfo.GetParameters())
                 {
-                    object args = null;
-                    if (context.ActionArguments.ContainsKey(parameter.Name))
+                    object? args = null;
+
+                    if (parameter.Name is not null && context.ActionArguments.ContainsKey(parameter.Name))
                     { 
                         args = context.ActionArguments[parameter.Name];
                     }
@@ -40,7 +41,7 @@ namespace PxWeb.Attributes.Api2
             }
         }
 
-        private void ValidateAttributes(ParameterInfo parameter, object args, ModelStateDictionary modelState)
+        private void ValidateAttributes(ParameterInfo parameter, object? args, ModelStateDictionary modelState)
         {
             foreach (var attributeData in parameter.CustomAttributes)
             {
@@ -52,7 +53,11 @@ namespace PxWeb.Attributes.Api2
                     var isValid = validationAttribute.IsValid(args);
                     if (!isValid)
                     {
-                        modelState.AddModelError(parameter.Name, validationAttribute.FormatErrorMessage(parameter.Name));
+                        string parameterName = (parameter.Name != null) ? parameter.Name : "parameter.Name_Is_null";
+                        //TODO removes the build warning, but not more. Throw something perhaps?
+                        modelState.AddModelError(parameterName, validationAttribute.FormatErrorMessage(parameterName));
+                        
+
                     }
                 }
             }
