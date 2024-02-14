@@ -126,8 +126,6 @@ namespace PxWeb.UnitTests.DataSource
 
             var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object);
 
-            bool selectionExists;
-
             var result = datasource.TableExists("Befolkning", language);
 
             Assert.IsTrue(result);
@@ -158,8 +156,6 @@ namespace PxWeb.UnitTests.DataSource
             var tablePathResolver = new TablePathResolverCnmm(configServiceMock.Object, resolver);
 
             var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object);
-
-            bool selectionExists;
 
             var result = datasource.TableExists("select * from Befolkning", language);
 

@@ -175,8 +175,7 @@ namespace PxWeb.UnitTests.DataSource
             var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
-            bool selectionExists;
-
+            
             //act
             var result = datasource.TableExists("tAB003", language);
 
@@ -212,7 +211,6 @@ namespace PxWeb.UnitTests.DataSource
             var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
-            bool selectionExists;
 
             //act
             var result = datasource.TableExists("select * from BE0101F1", language);
