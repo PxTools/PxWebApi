@@ -46,12 +46,7 @@ namespace PxWeb.Mappers
 
         private CodelistValue Map(PCAxis.Paxiom.Group group)
         {
-            CodelistValue codelistValue = new CodelistValue();
-
-            codelistValue.Code = group.GroupCode;
-            codelistValue.Label = group.Name;
-
-            codelistValue.ValueMap = new System.Collections.Generic.List<string>();
+            CodelistValue codelistValue = new CodelistValue(group.GroupCode, group.Name);
 
             foreach (GroupChildValue child in group.ChildCodes)
             {
@@ -63,12 +58,7 @@ namespace PxWeb.Mappers
 
         private CodelistValue Map(PCAxis.Sql.Models.GroupedValue group)
         {
-            CodelistValue codelistValue = new CodelistValue();
-
-            codelistValue.Code = group.Code;
-            codelistValue.Label = group.Text;
-
-            codelistValue.ValueMap = new System.Collections.Generic.List<string>();
+            CodelistValue codelistValue = new CodelistValue(group.Code, group.Text);
 
             foreach (string code in group.Codes)
             {
@@ -80,12 +70,7 @@ namespace PxWeb.Mappers
 
         private CodelistValue MapValuesetValue(PCAxis.Sql.Models.Value value)
         {
-            CodelistValue codelistValue = new CodelistValue();
-
-            codelistValue.Code = value.Code;
-            codelistValue.Label = value.Text;
-
-            codelistValue.ValueMap = new System.Collections.Generic.List<string>();
+            CodelistValue codelistValue = new CodelistValue(value.Code, value.Text);
             codelistValue.ValueMap.Add(value.Code);
 
             return codelistValue;

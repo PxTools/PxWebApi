@@ -8,12 +8,16 @@ namespace Px.Search
 {
     public class SearchResultContainer
     {
-        public IEnumerable<SearchResult> searchResults;
+        public IEnumerable<SearchResult> searchResults = new List<SearchResult>();
         public int pageNumber { get; set; }
         public int pageSize { get; set; }
         public int totalElements { get; set; }
         public int totalPages { get; set; }
         public bool outOfRange { get; set; }
+
+
+
+
 
     }
 }

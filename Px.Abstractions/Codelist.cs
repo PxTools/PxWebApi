@@ -36,6 +36,13 @@ namespace Px.Abstractions
         public string Code { get; set; }
         public string Label { get; set; }
         public List<string> ValueMap { get; set; }
+
+        public CodelistValue(string code, string label)
+        {
+            Code = code;
+            Label = label;
+            ValueMap = new List<string>();
+        }
     }
 
 }
