@@ -1,23 +1,4 @@
-﻿using Lucene.Net.Analysis.En;
-using Lucene.Net.Analysis.Sv;
-using Lucene.Net.Analysis.No;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Analysis;
-using Lucene.Net.Util;
-using Lucene.Net.Analysis.Fi;
-using Lucene.Net.Analysis.El;
-using Lucene.Net.Analysis.Eu;
-using Lucene.Net.Analysis.Es;
-using Lucene.Net.Analysis.Fr;
-using Lucene.Net.Analysis.Ar;
-using Lucene.Net.Analysis.It;
-using Lucene.Net.Analysis.Lv;
-using Lucene.Net.Analysis.Id;
-using Lucene.Net.Analysis.Hy;
-using Lucene.Net.Analysis.De;
-using Lucene.Net.Analysis.Da;
-
-namespace Px.Search.Lucene
+﻿namespace Px.Search.Lucene
 {
     public class LuceneAnalyzer
     {

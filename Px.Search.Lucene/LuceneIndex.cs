@@ -1,12 +1,4 @@
-﻿using Lucene.Net.Analysis;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
-using Lucene.Net.Documents;
-using PCAxis.Paxiom;
-using System.Text;
-using Lucene.Net.Search;
-
-namespace Px.Search.Lucene
+﻿namespace Px.Search.Lucene
 {
 
     //TODO look at https://github.com/statisticssweden/Px.Search.Lucene/blob/main/Px.Search.Lucene/LuceneIndexer.cs for inspiration
