@@ -20,6 +20,8 @@ namespace PxWeb.UnitTests
             dict.Add("AA0003B", new ItemSelection("AA0003", "AA0003B"));
             return dict;
         }
+		
+		//Random text in random file to trigger codeQL
 
         //public Dictionary<string, string> GetMenuLookup()
         //{
