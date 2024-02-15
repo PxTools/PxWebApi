@@ -1,13 +1,4 @@
-﻿using PCAxis.Paxiom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PCAxis.Paxiom.Extensions;
-using System.Collections.Immutable;
-
-namespace Px.Search
+﻿namespace Px.Search
 {
     /// <summary>
     /// Paxiom extensions

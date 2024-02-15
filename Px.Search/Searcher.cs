@@ -1,12 +1,4 @@
-﻿using Px.Abstractions.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Px.Search
+﻿namespace Px.Search
 {
     public class Searcher
     {

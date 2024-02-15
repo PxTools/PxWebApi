@@ -1,7 +1,5 @@
 ﻿global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Logging;
-//global using System.Runtime.InteropServices;
-//global using Microsoft.Extensions.Options;
 global using Microsoft.VisualStudio.TestTools.UnitTesting;
 global using Moq;
 global using PCAxis.Menu;
