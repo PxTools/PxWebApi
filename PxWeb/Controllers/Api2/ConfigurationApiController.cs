@@ -69,7 +69,7 @@ namespace PxWeb.Controllers.Api2
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning("Sonething bad in config of rateLimiting.", ex);
+                    _logger.LogWarning("Something bad in config of rateLimiting.", ex);
                     //Use default values for timewindow and maxCalls if an exeption occurs
                     timeWindow = DefaultTimeWindow;
                     maxCallsPerTimeWindow = DefaultMaxCallsPerTimeWindow;
