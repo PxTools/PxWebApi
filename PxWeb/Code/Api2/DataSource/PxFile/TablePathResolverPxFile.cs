@@ -65,6 +65,8 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 return tableLookup;
             }
 
+            language = LanguageUtil.SanitizeLangueCode(language);
+
             try
             {
                 string webRootPath = _hostingEnvironment.RootPath;
