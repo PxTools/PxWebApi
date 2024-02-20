@@ -18,5 +18,15 @@
             string folderProjectLevel = System.IO.Path.GetFullPath(folderAssembly + "../../../../");
             return folderProjectLevel;
         }
+
+        //From AI :-)
+        internal static IOptions<TOptions> GetIOptions<TOptions>(IConfigurationRoot configuration, string section)
+             where TOptions : class, new() // This ensures TOptions is a class and has a parameterless constructor
+        {
+            TOptions options = new TOptions();
+            configuration.GetSection(section).Bind(options);
+            IOptions<TOptions> myOptions = Options.Create(options);
+            return myOptions;
+        }
     }
 }

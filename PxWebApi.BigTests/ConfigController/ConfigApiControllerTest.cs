@@ -11,26 +11,16 @@
         public void GetApiConfiguration()
         {
             string conf_dir_String = Util.GetFullPathToFile(@"PxWebApi.BigTests/ConfigController/");
-
             var builder = new ConfigurationBuilder()
             .SetBasePath(conf_dir_String)
             .AddJsonFile("test_appsettings.json", optional: false, reloadOnChange: true);
 
             IConfigurationRoot configuration = builder.Build();
 
-            // Use the configuration
-            //builder.Services.Configure<PxApiConfigurationOptions>(builder.Configuration.GetSection("PxApiConfiguration"));
-            PxApiConfigurationOptions pxApiConfigurationOptions = new PxApiConfigurationOptions();
-            configuration.GetSection("PxApiConfiguration").Bind(pxApiConfigurationOptions);
-            IOptions<PxApiConfigurationOptions> options = Options.Create(pxApiConfigurationOptions);
-            IPxApiConfigurationService pxApiConfigurationService = new PxApiConfigurationService(options);
+            IOptions<PxApiConfigurationOptions> pxApiConfigurationOptions = Util.GetIOptions<PxApiConfigurationOptions>(configuration, "PxApiConfiguration");
+            IPxApiConfigurationService pxApiConfigurationService = new PxApiConfigurationService(pxApiConfigurationOptions);
 
-
-
-            //builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
-            IpRateLimitOptions ipRateLimitOptions = new IpRateLimitOptions();
-            configuration.GetSection("IpRateLimiting").Bind(ipRateLimitOptions);
-            IOptions<IpRateLimitOptions> optionsRate = Options.Create(ipRateLimitOptions);
+            IOptions<IpRateLimitOptions> optionsRate = Util.GetIOptions<IpRateLimitOptions>(configuration, "IpRateLimiting");
 
             var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.ConfigurationApiController>>();            
 
