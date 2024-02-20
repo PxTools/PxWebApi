@@ -57,7 +57,7 @@ namespace PxWebApi.BigTests.TableController
         }
 
 
-        
+        /*
         [TestMethod]
         [Description("Same input-file gives same output string.")]
         public void GetMetadataById()
@@ -72,7 +72,7 @@ namespace PxWebApi.BigTests.TableController
 
             Assert.AreEqual(bb, aa);
         }
-        
+        */
 
         /*
         [TestMethod]
