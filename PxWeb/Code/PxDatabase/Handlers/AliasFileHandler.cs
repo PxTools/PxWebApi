@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using PxWeb.Config.Api2;
+﻿using Microsoft.Extensions.Logging;
 
 namespace PXWeb.Database
 {

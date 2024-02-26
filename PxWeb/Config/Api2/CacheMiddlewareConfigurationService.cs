@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 
 namespace PxWeb.Config.Api2
 {

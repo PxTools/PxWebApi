@@ -1,6 +1,4 @@
-﻿using PCAxis.Paxiom;
-using Px.Abstractions;
-using PCAxis.Sql;
+﻿using Px.Abstractions;
 
 namespace PxWeb.Mappers
 {

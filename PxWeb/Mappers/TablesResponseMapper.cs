@@ -1,13 +1,8 @@
-﻿using Px.Search;
+﻿using Microsoft.Extensions.Options;
+using Px.Search;
 using PxWeb.Api2.Server.Models;
-using System.Runtime.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using PxWeb.Config.Api2;
-using Microsoft.Extensions.Options;
 using PxWeb.Converters;
-using PCAxis.Paxiom.Localization;
+using System.Linq;
 
 namespace PxWeb.Mappers
 {

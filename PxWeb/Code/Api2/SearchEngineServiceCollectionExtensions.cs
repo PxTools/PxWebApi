@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Px.Search.Lucene;
 using Px.Search;
-using PxWeb.Config.Api2;
+using Px.Search.Lucene;
 using Px.Search.Lucene.Config;
 
 namespace PxWeb.Code.Api2

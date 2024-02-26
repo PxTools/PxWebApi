@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using PxWeb.Config.Api2;
-using System;
 
 namespace PXWeb.Database
 {

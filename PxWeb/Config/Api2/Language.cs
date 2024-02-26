@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PxWeb.Config.Api2
+﻿namespace PxWeb.Config.Api2
 {
     public class Language
     {

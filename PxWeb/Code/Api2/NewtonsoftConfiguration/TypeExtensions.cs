@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System;
-
-namespace PxWeb.Code.Api2.NewtonsoftConfiguration
+﻿namespace PxWeb.Code.Api2.NewtonsoftConfiguration
 {
     /// <summary>
     /// This class is used together with BaseFirstContractResolver to control the order of object properties

@@ -1,10 +1,5 @@
-﻿using J2N.Text;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using PxWeb.Api2.Server.Models;
-using PxWeb.Config.Api2;
-using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace PxWeb.Mappers

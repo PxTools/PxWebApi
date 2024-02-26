@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using PxWeb.Config.Api2;
-using System.Collections.Generic;
 using System.Net;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace PxWeb.Middleware
 {
