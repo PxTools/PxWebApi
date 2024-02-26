@@ -77,7 +77,7 @@ namespace PxWebApi.BigTests.TableController
 
 
             //updated causes problems. When expected and actual is made in different places and input is in localtime.
-            int posOfUpdatedString = actual.IndexOf("2023-05-25T13:42:00");
+            int posOfUpdatedString = expected.IndexOf("2023-05-25T13:42:00");
             actual = actual.Substring(0, posOfUpdatedString) + "XXXX-XX-XXTXX" +actual.Substring(posOfUpdatedString + 13);
             expected =  expected.Substring(0, posOfUpdatedString) + "XXXX-XX-XXTXX" + expected.Substring(posOfUpdatedString + 13);
 
