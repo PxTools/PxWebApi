@@ -4,7 +4,7 @@
     public class ConfigApiControllerTest
     {
 
-       
+
         [TestMethod]
         [Description("Same input-file gives same output string.")]
 
@@ -22,9 +22,9 @@
 
             IOptions<IpRateLimitOptions> optionsRate = Util.GetIOptions<IpRateLimitOptions>(configuration, "IpRateLimiting");
 
-            var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.ConfigurationApiController>>();            
+            var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.ConfigurationApiController>>();
 
-            PxWeb.Controllers.Api2.ConfigurationApiController cac = 
+            PxWeb.Controllers.Api2.ConfigurationApiController cac =
                 new PxWeb.Controllers.Api2.ConfigurationApiController(pxApiConfigurationService, optionsRate, loggerMock.Object);
 
             var result = cac.GetApiConfiguration();
