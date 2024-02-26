@@ -1,13 +1,7 @@
 ﻿using Lucene.Net.Util;
-using Microsoft.Extensions.Options;
 using PCAxis.Paxiom;
-using PCAxis.Sql.Pxs;
 using PxWeb.Api2.Server.Models;
-using PxWeb.Config.Api2;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace PxWeb.Code.Api2.DataSelection

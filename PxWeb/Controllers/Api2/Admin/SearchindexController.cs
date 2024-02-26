@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Px.Abstractions.Interfaces;
 using Px.Search;
-using PxWeb.Api2.Server.Models;
-using PxWeb.Config.Api2;
+using PxWeb.Code.BackgroundWorker;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using PxWeb.Code.BackgroundWorker;
 using System.Text.RegularExpressions;
 
 namespace PxWeb.Controllers.Api2.Admin

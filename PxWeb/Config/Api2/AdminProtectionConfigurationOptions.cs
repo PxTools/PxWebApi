@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PxWeb.Config.Api2
+﻿namespace PxWeb.Config.Api2
 {
     public class AdminProtectionConfigurationOptions
     {

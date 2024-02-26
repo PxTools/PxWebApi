@@ -1,13 +1,6 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-using PCAxis.Menu;
-using PCAxis.Paxiom;
+﻿using Microsoft.Extensions.Logging;
 using Px.Abstractions.Interfaces;
 using PxWeb.Code.Api2.Cache;
-using PxWeb.Code.Api2.DataSource.Cnmm;
-using PxWeb.Config.Api2;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 

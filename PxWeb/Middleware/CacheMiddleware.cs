@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
-using System.IO;
-using System;
-using PxWeb.Config.Api2;
 using PxWeb.Code.Api2.Cache;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace PxWeb.Middleware
 {

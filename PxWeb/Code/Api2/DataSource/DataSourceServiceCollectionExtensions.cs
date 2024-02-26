@@ -1,11 +1,8 @@
-﻿using log4net.Core;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Px.Abstractions.Interfaces;
 using PxWeb.Code.Api2.DataSource.Cnmm;
 using PxWeb.Code.Api2.DataSource.PxFile;
-using PxWeb.Config.Api2;
-using System;
 
 namespace PxWeb.Code.Api2.DataSource
 {

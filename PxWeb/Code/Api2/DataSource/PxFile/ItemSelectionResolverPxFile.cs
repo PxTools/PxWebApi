@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.Extensions.Caching.Memory;
-using PCAxis.Menu;
+﻿using PCAxis.Menu;
 using Px.Abstractions.Interfaces;
 using PxWeb.Code.Api2.Cache;
 using PxWeb.Code.Api2.DataSource.Cnmm;
-using PxWeb.Config.Api2;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {

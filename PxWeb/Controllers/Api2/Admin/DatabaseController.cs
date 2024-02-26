@@ -1,18 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using PCAxis.Paxiom;
 using Px.Abstractions.Interfaces;
-using Px.Search;
 using PxWeb.Code.Api2.DataSource.PxFile;
-using PxWeb.Config.Api2;
+using PxWeb.Code.BackgroundWorker;
 using PXWeb.Database;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using PxWeb.Code.BackgroundWorker;
 
 namespace PxWeb.Controllers.Api2.Admin
 {

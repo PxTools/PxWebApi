@@ -1,6 +1,5 @@
 ﻿using PCAxis.Menu;
 using Px.Abstractions.Interfaces;
-using PxWeb.Config.Api2;
 
 namespace PxWeb.Code.Api2.DataSource.Cnmm
 {

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PxWeb.Code.Api2.Cache;
 
 namespace PxWeb.Controllers.Api2.Admin

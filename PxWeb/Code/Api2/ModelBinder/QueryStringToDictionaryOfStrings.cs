@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Threading.Tasks;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace PxWeb.Code.Api2.ModelBinder
 {
