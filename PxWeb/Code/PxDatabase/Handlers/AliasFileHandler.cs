@@ -59,7 +59,7 @@ namespace PXWeb.Database
         /// If the alias file do not have a language specified in the name then the 
         /// default language specified in the settings will be used
         /// </remarks>
-        public object Handle(string path, DatabaseLogger logger)
+        public object? Handle(string path, DatabaseLogger logger)
         {
             string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
             int splittIndex = fileName.IndexOf('_');

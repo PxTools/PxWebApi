@@ -32,7 +32,8 @@ namespace PxWeb.Controllers.Api2.Admin
             _pxApiConfigurationService = pxApiConfigurationService;
             _logger = logger;
             _backgroundWorkerQueue = backgroundWorkerQueue;
-            string id = GetType().FullName;
+            System.Type tempType = GetType();
+            string id = (tempType.FullName != null) ? tempType.FullName : "GetType_has_no_FullName";
             _responseState = stateProvider.Load(id);
         }
 

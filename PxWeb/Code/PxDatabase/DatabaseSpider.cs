@@ -127,8 +127,12 @@ namespace PXWeb.Database
                 IItemHandler? handler = GetHandler(item);
                 if (handler != null)
                 {
-                    object obj = handler.Handle(item, logger);
-                    SignalNewItem(obj, item);
+                    object? obj = handler.Handle(item, logger);
+                    if (obj != null)
+                    {
+                        SignalNewItem(obj, item);
+                    }
+                    //Should there be an else logg here as well?
                 }
                 else
                 {

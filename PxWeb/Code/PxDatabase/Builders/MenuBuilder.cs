@@ -20,9 +20,9 @@ namespace PXWeb.Database
         private string[] _languages;
         private Func<PCAxis.Paxiom.PXMeta, string, string> _sortOrder;
         private DatabaseLogger _buildLogger;
+        private ILogger _logger;
         private bool _languageDependent;
         private Dictionary<PxMenuItem, List<string>> _links = new Dictionary<PxMenuItem, List<string>>();
-        private ILogger _logger;
 
         private readonly PxApiConfigurationOptions _configOptions;
         private readonly IPxHost _hostingEnvironment;
@@ -203,7 +203,7 @@ namespace PXWeb.Database
             }
             else if (item is MenuSortItem)
             {
-                MenuSortItem sort = item as MenuSortItem;
+                MenuSortItem sort = (MenuSortItem) item;
                 if (Array.IndexOf(_languages, sort.Language) >= 0)
                 {
                     _currentItems[sort.Language].SortCode = sort.SortString;
@@ -292,9 +292,12 @@ namespace PXWeb.Database
         {
             ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(path.Substring(_hostingEnvironment.RootPath.Length + 1))?.Replace("\\", "/"), path.Substring(_hostingEnvironment.RootPath.Length + 1));
 
+            DateTime? initPublished = null;
+            DateTime? initLastUpdated = null; 
+
             TableLink tbl = new TableLink(!string.IsNullOrEmpty(meta.Description) ? meta.Description : meta.Title,
                 meta.Matrix, _sortOrder(meta, path), cid.Menu, cid.Selection, meta.Description ?? "", LinkType.PX,
-                TableStatus.AccessibleToAll, null, meta.GetFirstTimeValue() , meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
+                TableStatus.AccessibleToAll, initPublished, initLastUpdated, meta.GetFirstTimeValue() , meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
             
             int cellCount = 1;
                     for (int i = 0; i < meta.Variables.Count; i++)

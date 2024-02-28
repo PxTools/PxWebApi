@@ -21,7 +21,7 @@ namespace PxWeb.Mappers
             _configOptions = configOptions.Value;
         }
 
-        public TablesResponse Map(SearchResultContainer searchResultContainer, string lang, string query)
+        public TablesResponse Map(SearchResultContainer searchResultContainer, string lang, string? query)
         {
             var tablesResponse = new TablesResponse();
             var linkPageList = new List<Link>();

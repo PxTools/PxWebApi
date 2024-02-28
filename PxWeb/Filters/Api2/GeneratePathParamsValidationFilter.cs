@@ -42,7 +42,7 @@ namespace PxWeb.Filters.Api2
                     var regexAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(RegularExpressionAttribute));
                     if (regexAttr != null)
                     {
-                        var regex = (string)regexAttr.ConstructorArguments[0].Value;
+                        var regex = (string?)regexAttr.ConstructorArguments[0].Value;
                         openapiParam.Schema.Pattern = regex;
                     }
 
@@ -53,21 +53,21 @@ namespace PxWeb.Filters.Api2
                     {
                         if (stringLengthAttr.NamedArguments.Count == 1)
                         {
-                            minLength = (int)stringLengthAttr.NamedArguments.Single(p => p.MemberName == "MinimumLength").TypedValue.Value;
+                            minLength = (int?)stringLengthAttr.NamedArguments.Single(p => p.MemberName == "MinimumLength").TypedValue.Value;
                         }
-                        maxLength = (int)stringLengthAttr.ConstructorArguments[0].Value;
+                        maxLength = (int?)stringLengthAttr.ConstructorArguments[0].Value;
                     }
 
                     var minLengthAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(MinLengthAttribute));
                     if (minLengthAttr != null)
                     {
-                        minLength = (int)minLengthAttr.ConstructorArguments[0].Value;
+                        minLength = (int?)minLengthAttr.ConstructorArguments[0].Value;
                     }
 
                     var maxLengthAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(MaxLengthAttribute));
                     if (maxLengthAttr != null)
                     {
-                        maxLength = (int)maxLengthAttr.ConstructorArguments[0].Value;
+                        maxLength = (int?)maxLengthAttr.ConstructorArguments[0].Value;
                     }
 
                     if (minLength != null)
@@ -84,8 +84,8 @@ namespace PxWeb.Filters.Api2
                     var rangeAttr = attributes.FirstOrDefault(p => p.AttributeType == typeof(RangeAttribute));
                     if (rangeAttr != null)
                     {
-                        var rangeMin = (int)rangeAttr.ConstructorArguments[0].Value;
-                        var rangeMax = (int)rangeAttr.ConstructorArguments[1].Value;
+                        var rangeMin = (int?)rangeAttr.ConstructorArguments[0].Value;
+                        var rangeMax = (int?)rangeAttr.ConstructorArguments[1].Value;
 
                         openapiParam.Schema.MinLength = rangeMin;
                         openapiParam.Schema.MaxLength = rangeMax;

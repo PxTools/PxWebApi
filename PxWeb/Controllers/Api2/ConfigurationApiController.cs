@@ -15,6 +15,9 @@ using System.Security.Cryptography.X509Certificates;
 using Language = PxWeb.Api2.Server.Models.Language;
 using System.Reflection.Metadata;
 using Microsoft.Extensions.Options;
+using System.Security.Policy;
+using DocumentFormat.OpenXml.Wordprocessing;
+using PCAxis.Sql.Pxs;
 
 namespace PxWeb.Controllers.Api2
 {
@@ -66,11 +69,13 @@ namespace PxWeb.Controllers.Api2
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogWarning("Something bad in config of rateLimiting.", ex);
                     //Use default values for timewindow and maxCalls if an exeption occurs
                     timeWindow = DefaultTimeWindow;
                     maxCallsPerTimeWindow = DefaultMaxCallsPerTimeWindow;
                 }
 
+               
                 var configResponse = new ConfigResponse
                 {
                     ApiVersion = op.ApiVersion,
@@ -80,11 +85,6 @@ namespace PxWeb.Controllers.Api2
                         Label = x.Label
                     }
                     ).ToList(),
-                    SourceReferences = op.SourceReferences.Select(x => new SourceReference
-                    {
-                        Language = x.Language,
-                        Text = x.Text
-                    }).ToList(),
                     Features = new List<ApiFeature>(),
                     DefaultLanguage = op.DefaultLanguage,
                     License = op.License,
@@ -95,8 +95,19 @@ namespace PxWeb.Controllers.Api2
                     DataFormats = op.OutputFormats
                 };
 
+                if( op.SourceReferences  != null) {
+                    configResponse.SourceReferences = op.SourceReferences.Select(x => new PxWeb.Api2.Server.Models.SourceReference
+                    {
+                        Language = x.Language,
+                        Text = x.Text
+                    }).ToList();
+                }
+
                 ApiFeature cors = new ApiFeature() { Id = "CORS", Params = new List<PxWeb.Api2.Server.Models.KeyValuePair>() };
-                PxWeb.Api2.Server.Models.KeyValuePair keyValuePair = new PxWeb.Api2.Server.Models.KeyValuePair() { Key = "enabled", Value = op.Cors.Enabled.ToString() };
+
+                bool myCorsEnabled = (op.Cors == null) ? false : op.Cors.Enabled;
+
+                PxWeb.Api2.Server.Models.KeyValuePair keyValuePair = new PxWeb.Api2.Server.Models.KeyValuePair() { Key = "enabled", Value = myCorsEnabled.ToString() };
                 cors.Params.Add(keyValuePair);
                 configResponse.Features.Add(cors);
 
