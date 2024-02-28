@@ -1,14 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PCAxis.Paxiom;
-using Px.Search;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Lucene.Net.Util.Fst.Util;
-
-namespace PxWeb.UnitTests.Search
+﻿namespace PxWeb.UnitTests.Search
 {
     [TestClass]
     public class SearchTest

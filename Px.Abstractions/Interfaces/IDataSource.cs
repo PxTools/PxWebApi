@@ -1,7 +1,4 @@
-﻿using PCAxis.Menu;
-using PCAxis.Paxiom;
-
-namespace Px.Abstractions.Interfaces
+﻿namespace Px.Abstractions.Interfaces
 {
     public interface IDataSource
     {

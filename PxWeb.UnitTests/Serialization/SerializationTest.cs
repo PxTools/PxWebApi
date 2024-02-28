@@ -1,19 +1,4 @@
-﻿using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure;
-using DocumentFormat.OpenXml.EMMA;
-using Microsoft.AspNetCore.Http;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using Moq.Protected;
-using PCAxis.Paxiom;
-using PxWeb.Code.Api2.Serialization;
-
-namespace PxWeb.UnitTests.Serialization
+﻿namespace PxWeb.UnitTests.Serialization
 {
     [TestClass]
     public class SerializationTest

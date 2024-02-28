@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PxWeb.Code.Api2.Cache
+﻿namespace PxWeb.Code.Api2.Cache
 {
     public interface IPxCache
     {

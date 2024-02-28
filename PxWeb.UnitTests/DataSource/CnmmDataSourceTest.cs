@@ -1,13 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using PxWeb.Code.Api2.Cache;
-using PxWeb.Code.Api2.DataSource.Cnmm;
-using PxWeb.Code.Api2.DataSource.PxFile;
-using PxWeb.Config.Api2;
-using PxWeb.Mappers;
-
-namespace PxWeb.UnitTests.DataSource
+﻿namespace PxWeb.UnitTests.DataSource
 {
     [TestClass]
     public class CnmmDataSourceTest

@@ -1,6 +1,4 @@
-﻿using PCAxis.Serializers;
-
-namespace PxWeb.Code.Api2.Serialization
+﻿namespace PxWeb.Code.Api2.Serialization
 {
     public class SerializeManager : ISerializeManager
     {

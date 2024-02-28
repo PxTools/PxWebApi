@@ -1,14 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using Px.Abstractions.Interfaces;
-using PxWeb.Code.Api2.Cache;
-using PxWeb.Code.Api2.DataSource.Cnmm;
-using PxWeb.Code.Api2.DataSource.PxFile;
-using PxWeb.Config.Api2;
-using PxWeb.Mappers;
-using System;
+﻿
 
 namespace PxWeb.UnitTests.DataSource
 {

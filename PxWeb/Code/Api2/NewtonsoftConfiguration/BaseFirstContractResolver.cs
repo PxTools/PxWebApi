@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Linq;
 
 namespace PxWeb.Code.Api2.NewtonsoftConfiguration

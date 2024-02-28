@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using PCAxis.Menu;
-using PCAxis.Paxiom;
 using PxWeb.Api2.Server.Models;
-using PxWeb.Config.Api2;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace PxWeb.Mappers
 {

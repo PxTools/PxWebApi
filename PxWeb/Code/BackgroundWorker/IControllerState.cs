@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PxWeb.Code.BackgroundWorker
+﻿namespace PxWeb.Code.BackgroundWorker
 {
     public interface IControllerState
     {

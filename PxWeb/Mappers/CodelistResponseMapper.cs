@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Px.Abstractions;
 using PxWeb.Api2.Server.Models;
-using PxWeb.Config.Api2;
 
 namespace PxWeb.Mappers
 {

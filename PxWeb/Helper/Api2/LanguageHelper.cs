@@ -1,6 +1,4 @@
-﻿using PxWeb.Config.Api2;
-
-namespace PxWeb.Helper.Api2
+﻿namespace PxWeb.Helper.Api2
 {
     public class LanguageHelper : ILanguageHelper
     {

@@ -1,11 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Px.Search;
-using Px.Search.Lucene;
-using Px.Search.Lucene.Config;
-using System.IO;
-
-namespace PxWeb.UnitTests.Search
+﻿namespace PxWeb.UnitTests.Search
 {
     //Perhaps these tests test Lucene as much as local code :-)
     [TestClass]

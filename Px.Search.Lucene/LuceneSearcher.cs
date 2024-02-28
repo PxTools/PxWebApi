@@ -1,12 +1,4 @@
-﻿using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
-using Lucene.Net.Search;
-using Lucene.Net.Store;
-using Lucene.Net.Util;
-using Lucene.Net.QueryParsers.Classic;
-using Lucene.Net.Documents;
-using Lucene.Net.Queries;
-using Lucene.Net.Analysis;
+﻿
 
 namespace Px.Search.Lucene
 {

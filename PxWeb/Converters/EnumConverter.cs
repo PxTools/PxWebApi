@@ -1,7 +1,6 @@
 ﻿using PxWeb.Api2.Server.Models;
-using System.Runtime.Serialization;
-using System;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace PxWeb.Converters
 {

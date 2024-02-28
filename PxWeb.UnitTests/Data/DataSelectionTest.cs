@@ -1,18 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using PCAxis.Paxiom;
-using PCAxis.Query;
-using PxWeb.Api2.Server.Models;
-using PxWeb.Code.Api2.Cache;
-using PxWeb.Code.Api2.DataSelection;
-using PxWeb.Config.Api2;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace PxWeb.UnitTests.Data
 {

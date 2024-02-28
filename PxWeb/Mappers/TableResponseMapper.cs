@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Px.Search;
 using PxWeb.Api2.Server.Models;
-using PxWeb.Config.Api2;
 using PxWeb.Converters;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace PxWeb.Mappers

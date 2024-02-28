@@ -9,16 +9,14 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
-using PxWeb.Attributes.Api2;
-using Px.Abstractions.Interfaces;
-using PxWeb.Helper.Api2;
 using PCAxis.Menu;
-using PxWeb.Mappers;
-using PxWeb.Api2.Server.Models;
+using Px.Abstractions.Interfaces;
 using Px.Search;
+using PxWeb.Api2.Server.Models;
+using PxWeb.Helper.Api2;
+using PxWeb.Mappers;
+using System.ComponentModel.DataAnnotations;
 
 namespace PxWeb.Controllers.Api2
 {

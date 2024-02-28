@@ -1,7 +1,5 @@
-﻿using PCAxis.Paxiom;
-using Px.Search;
+﻿using Px.Search;
 using PxWeb.Api2.Server.Models;
-using System.Collections.Generic;
 
 namespace PxWeb.Mappers
 {
