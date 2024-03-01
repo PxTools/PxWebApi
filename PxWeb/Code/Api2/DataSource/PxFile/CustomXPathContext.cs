@@ -101,17 +101,21 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         public object Evaluate(System.Xml.Xsl.XsltContext xsltContext)
         {
             XsltArgumentList vars = ((CustomXPathContext)xsltContext).ArgList;
-            if(varName.Equals("language"))
-            {
-                var theValue = vars.GetParam("language", "");
-                //Say bang here
+            //if(varName.Equals("language"))
+            //{
+            //    var theValue = vars.GetParam("language", "");
+            //    //Say bang here
+            //}
+            //else
+            //{
+            //   throw new NotImplementedException("We do not support other var than language");
+            //}
+            Object? myOut = vars.GetParam(varName, prefix);
+            if (myOut == null) {
+                throw new Exception("Something went wrong!");
             }
-            else
-            {
-               throw new NotImplementedException("We do not support other var than language");
-            }
-            
-            return vars.GetParam(varName, prefix);
+
+            return myOut;
         }
 
         // Determines whether this variable is a local XSLT variable.
