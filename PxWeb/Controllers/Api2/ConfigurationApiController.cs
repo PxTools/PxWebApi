@@ -56,7 +56,7 @@ namespace PxWeb.Controllers.Api2
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning("Something bad in config of rateLimiting.", ex);
+                    _logger.LogError(ex, "Something bad in config of rateLimiting.");
                     //Use default values for timewindow and maxCalls if an exeption occurs
                     timeWindow = DefaultTimeWindow;
                     maxCallsPerTimeWindow = DefaultMaxCallsPerTimeWindow;
@@ -103,12 +103,12 @@ namespace PxWeb.Controllers.Api2
             }
             catch (NullReferenceException ex)
             {
-                _logger.LogError("GetConfiguration caused an exception", ex);
+                _logger.LogError(ex, "GetConfiguration caused an exception");
             }
             return StatusCode(500, new Problem() { Status = 500, Title = "Something went wrong fetching the API configuration", Type = "https://TODO/ConfigError", });
         }
 
-        private int GetTimeWindowInSek(string timeWindowRuel )
+        private static int GetTimeWindowInSek(string timeWindowRuel)
         {
             string periodFormText = timeWindowRuel.ToLower()[timeWindowRuel.Length-1].ToString();
             string periodFormTime = timeWindowRuel.Remove(timeWindowRuel.Length - 1, 1);

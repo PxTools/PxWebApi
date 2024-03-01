@@ -54,7 +54,7 @@ namespace PxWeb.Controllers.Api2.Admin
                     PXWeb.Database.DatabaseSpider spider;
                     spider = new PXWeb.Database.DatabaseSpider();
 
-                    await Task.Run(() => spider.ActivateStateLogging(_responseState));
+                    await Task.Run(() => spider.ActivateStateLogging(_responseState), token);
 
                     spider.Handles.Add(new AliasFileHandler(_configOptions, _logger));
                     spider.Handles.Add(new LinkFileHandler(_configOptions, _logger));
@@ -93,7 +93,7 @@ namespace PxWeb.Controllers.Api2.Admin
             return new JsonResult(_responseState.Data);
         }
 
-        private bool GetLangDependent(bool? langDependent)
+        private static bool GetLangDependent(bool? langDependent)
         {
             if (langDependent == null)
             {
@@ -105,7 +105,7 @@ namespace PxWeb.Controllers.Api2.Admin
             }
         }
 
-        private string GetSorting(string? sortOrder)
+        private static string GetSorting(string? sortOrder)
         {
             if (string.IsNullOrWhiteSpace(sortOrder))
             {

@@ -11,15 +11,15 @@ namespace PXWeb.Database
 {
     class MenuBuilder : IDatabaseBuilder
     {
-        private Dictionary<string, PxMenuItem> _languageRoots = new Dictionary<string, PxMenuItem>();
-        private Dictionary<string, PxMenuItem> _currentItems = new Dictionary<string, PxMenuItem>();
-        private Dictionary<string, string> _matrixDict = new Dictionary<string, string>();
-        private string[] _languages;
+        private readonly Dictionary<string, PxMenuItem> _languageRoots = new Dictionary<string, PxMenuItem>();
+        private readonly Dictionary<string, PxMenuItem> _currentItems = new Dictionary<string, PxMenuItem>();
+        private readonly Dictionary<string, string> _matrixDict = new Dictionary<string, string>();
+        private readonly string[] _languages;
         private Func<PCAxis.Paxiom.PXMeta, string, string> _sortOrder;
         private DatabaseLogger? _buildLogger;
-        private ILogger _logger;
-        private bool _languageDependent;
-        private Dictionary<PxMenuItem, List<string>> _links = new Dictionary<PxMenuItem, List<string>>();
+        private readonly ILogger _logger;
+        private readonly bool _languageDependent;
+        private readonly Dictionary<PxMenuItem, List<string>> _links = new Dictionary<PxMenuItem, List<string>>();
 
         private readonly PxApiConfigurationOptions _configOptions;
         private readonly IPxHost _hostingEnvironment;
@@ -61,7 +61,7 @@ namespace PXWeb.Database
         /// <param name="path"></param>
         public void BeginBuild(string path, DatabaseLogger logger)
         {
-            _logger.LogInformation("Start building menu for {0}", path);
+            _logger.LogInformation("Start building menu for {path}", path);
             _buildLogger = logger;
             //TODO set use Date format
             _buildLogger(new DatabaseMessage() {MessageType = DatabaseMessage.BuilderMessageType.Information, Message = "Menu build started " + DateTime.Now.ToString() });
@@ -94,13 +94,13 @@ namespace PXWeb.Database
             try
             {
                 doc.Save(System.IO.Path.Combine(path, "Menu.xml"));
-                _logger.LogInformation("Finished building menu for {0}", path);
+                _logger.LogInformation("Finished building menu for {path}", path);
             }
             catch (Exception e)
             {
                 var errorMessage = string.Format("Cannot create file {0}. {1}", path, e.Message);
 
-                _logger.LogError(errorMessage);
+                _logger.LogError(e, errorMessage);
                 
                 if (_buildLogger != null)
                 {
