@@ -53,7 +53,8 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             var tableLookup = new Dictionary<string, string>();
 
-            if (!LanguageUtil.HasValidLanguageCodePattern(language)) {
+            if (!LanguageUtil.HasValidLanguageCodePattern(language))
+            {
                 _logger.LogWarning($"Unsupported language: {LanguageUtil.SanitizeLangueCode(language)}");
                 return tableLookup;
             }
@@ -62,18 +63,11 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             try
             {
-                string webRootPath = _hostingEnvironment.RootPath;
-                string xmlFilePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+                var menuXmlFile = new MenuXmlFile(_hostingEnvironment);
+                XmlDocument xdoc = menuXmlFile.GetLanguageAsXmlDocument(language);
 
-                XmlDocument xdoc = new XmlDocument();
-
-                if (System.IO.File.Exists(xmlFilePath))
-                {
-                    xdoc.Load(xmlFilePath);
-                }
-
-                string xpath = string.Format("//Language [@lang='{0}']//Link", language);
-                var nodeList = xdoc.SelectNodes(xpath); 
+                string xpath = "//Link";
+                var nodeList = xdoc.SelectNodes(xpath);
 
                 if (nodeList != null)
                 {
@@ -89,7 +83,6 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
                 }
             }
-
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error loading TablePathLookup table for language {LanguageUtil.SanitizeLangueCode(language)}");

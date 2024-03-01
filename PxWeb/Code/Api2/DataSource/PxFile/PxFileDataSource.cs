@@ -5,6 +5,7 @@ using Px.Abstractions;
 using Px.Abstractions.Interfaces;
 using PxWeb.Mappers;
 using System.IO;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
@@ -52,11 +53,16 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public Item? CreateMenu(string id, string language, out bool selectionExists)
         {
-            string xmlFilePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+
+            MenuXmlFile menuXmlFile = new MenuXmlFile(_hostingEnvironment);
+            XmlDocument xmlDocument = menuXmlFile.GetAsXmlDocument();
+            
+            var xNavigator = xmlDocument.CreateNavigator();
+            XDocument xDocument = xNavigator != null ? XDocument.Load(xNavigator.ReadSubtree()) : new XDocument();
 
             ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
 
-            XmlMenu menu = new XmlMenu(XDocument.Load(xmlFilePath), language,
+            XmlMenu menu = new XmlMenu(xDocument, language,
                     m =>
                     {
                         m.Restriction = item =>
