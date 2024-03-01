@@ -22,7 +22,6 @@ namespace PxWeb.Converters
 
                 var enumMemberAttribute = ((EnumMemberAttribute[])type.GetCustomAttributes(typeof(EnumMemberAttribute), true)).Single();
 
-                //var enumMemberAttribute = ((EnumMemberAttribute[])enumType.GetField(name).GetCustomAttributes(typeof(EnumMemberAttribute), true)).Single();
                 if (enumMemberAttribute.Value == category)
                 {
                     Table.CategoryEnum categoryEnum = (Table.CategoryEnum)Enum.Parse(enumType, name);
