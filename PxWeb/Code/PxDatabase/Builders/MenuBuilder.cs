@@ -16,7 +16,7 @@ namespace PXWeb.Database
         private Dictionary<string, string> _matrixDict = new Dictionary<string, string>();
         private string[] _languages;
         private Func<PCAxis.Paxiom.PXMeta, string, string> _sortOrder;
-        private DatabaseLogger _buildLogger;
+        private DatabaseLogger? _buildLogger;
         private ILogger _logger;
         private bool _languageDependent;
         private Dictionary<PxMenuItem, List<string>> _links = new Dictionary<PxMenuItem, List<string>>();
@@ -101,19 +101,27 @@ namespace PXWeb.Database
                 var errorMessage = string.Format("Cannot create file {0}. {1}", path, e.Message);
 
                 _logger.LogError(errorMessage);
-                _buildLogger(new DatabaseMessage()
+                
+                if (_buildLogger != null)
                 {
-                    MessageType = DatabaseMessage.BuilderMessageType.Error,
-                    Message = errorMessage
-                });
+                    _buildLogger(new DatabaseMessage()
+                    {
+                        MessageType = DatabaseMessage.BuilderMessageType.Error,
+                        Message = errorMessage
+                    });
+                }
+
             }
 
             //TODO set use Date format
-            _buildLogger(new DatabaseMessage()
+            if (_buildLogger != null)
             {
-                MessageType = DatabaseMessage.BuilderMessageType.Information,
-                Message = "Menu build ended " + DateTime.Now.ToString()
-            });
+                _buildLogger(new DatabaseMessage()
+                {
+                    MessageType = DatabaseMessage.BuilderMessageType.Information,
+                    Message = "Menu build ended " + DateTime.Now.ToString()
+                });
+            }
 
         }
 
@@ -213,11 +221,14 @@ namespace PXWeb.Database
                 // Check if table with this MATRIX is already added
                 if (_matrixDict.ContainsKey(meta.Matrix))
                 {
-                    _buildLogger(new DatabaseMessage()
+                    if (_buildLogger != null)
                     {
-                        MessageType = DatabaseMessage.BuilderMessageType.Information,
-                        Message = "Duplicate MATRIX " + meta.Matrix + " adding " + path + " already exists at " + _matrixDict[meta.Matrix]
-                    });
+                        _buildLogger(new DatabaseMessage()
+                        {
+                            MessageType = DatabaseMessage.BuilderMessageType.Information,
+                            Message = "Duplicate MATRIX " + meta.Matrix + " adding " + path + " already exists at " + _matrixDict[meta.Matrix]
+                        });
+                    }
                 }
                 else
                 {

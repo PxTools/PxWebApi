@@ -14,6 +14,11 @@ namespace PxWeb.Code.BackgroundWorker
         {
             await _signal.WaitAsync(cancellationToken);
             _workItems.TryDequeue(out var workItem);
+            
+            if (workItem == null)
+            {
+                throw new System.InvalidOperationException("No work item available");
+            }
 
             return workItem;
         }

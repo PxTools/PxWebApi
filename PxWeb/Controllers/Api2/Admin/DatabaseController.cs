@@ -7,6 +7,7 @@ using PxWeb.Code.BackgroundWorker;
 using PXWeb.Database;
 using Swashbuckle.AspNetCore.Annotations;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace PxWeb.Controllers.Api2.Admin
 {
@@ -53,7 +54,7 @@ namespace PxWeb.Controllers.Api2.Admin
                     PXWeb.Database.DatabaseSpider spider;
                     spider = new PXWeb.Database.DatabaseSpider();
 
-                    spider.ActivateStateLogging(_responseState);
+                    await Task.Run(() => spider.ActivateStateLogging(_responseState));
 
                     spider.Handles.Add(new AliasFileHandler(_configOptions, _logger));
                     spider.Handles.Add(new LinkFileHandler(_configOptions, _logger));
@@ -70,7 +71,7 @@ namespace PxWeb.Controllers.Api2.Admin
                     string databasePath = Path.Combine(_hostingEnvironment.RootPath, "Database");
 
                     spider.Builders.Add(new MenuBuilder(_configOptions, _logger, _hostingEnvironment, langs.ToArray(), GetLangDependent(langDependent)) { SortOrder = GetSortOrder(sorting) });
-                    spider.Search(databasePath);
+                    await Task.Run(() => spider.Search(databasePath), token);
                 }
                 catch (System.Exception ex)
                 {

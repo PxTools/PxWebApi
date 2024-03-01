@@ -6,7 +6,7 @@
     /// </summary>
     public static class TypeExtensions
     {
-        public static IEnumerable<Type> BaseTypesAndSelf(this Type type)
+        public static IEnumerable<Type> BaseTypesAndSelf(this Type? type)
         {
             while (type != null)
             {
