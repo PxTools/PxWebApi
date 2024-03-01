@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace PxWeb.Controllers.Api2.Admin
 {
@@ -63,7 +64,7 @@ namespace PxWeb.Controllers.Api2.Admin
                     }
 
                     Indexer indexer = new Indexer(_dataSource, _backend, _logger);
-                    indexer.IndexDatabase(languages);
+                    await Task.Run(() => indexer.IndexDatabase(languages), token);
                 }
                 catch (System.Exception ex)
                 {
@@ -118,7 +119,7 @@ namespace PxWeb.Controllers.Api2.Admin
                     }
 
                     Indexer indexer = new Indexer(_dataSource, _backend, _logger);
-                    indexer.UpdateTableEntries(tableList, languages);
+                    await Task.Run(() => indexer.UpdateTableEntries(tableList, languages), token);
                 }
                 catch (System.Exception ex)
                 {
