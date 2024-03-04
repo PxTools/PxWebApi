@@ -6,7 +6,9 @@ using PxWeb.Code.Api2.DataSource.PxFile;
 using PxWeb.Code.BackgroundWorker;
 using PXWeb.Database;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PxWeb.Controllers.Api2.Admin
@@ -51,6 +53,13 @@ namespace PxWeb.Controllers.Api2.Admin
             {
                 try
                 {
+                    var customCulture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+                    customCulture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+                    customCulture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
+
+                    Thread.CurrentThread.CurrentCulture = customCulture;
+
+
                     PXWeb.Database.DatabaseSpider spider;
                     spider = new PXWeb.Database.DatabaseSpider();
 

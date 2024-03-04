@@ -131,7 +131,7 @@ namespace PXWeb.Database
             foreach (var language in _languages)
             {
                 ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(id.Substring(_hostingEnvironment.RootPath.Length + 1))?.Replace("\\", "/"), id.Substring(_hostingEnvironment.RootPath.Length + 1));
-                PxMenuItem newItem = new PxMenuItem(null, name, "", name, cid.Menu, cid.Selection, "");
+                PxMenuItem newItem = new PxMenuItem(null, name, "", name, cid.Menu, cid.Selection.Replace("\\", "/"), "");
                 _currentItems[language].AddSubItem(newItem);
                 _currentItems[language] = newItem;
                 _links.Add(newItem, new List<string>());
@@ -304,7 +304,7 @@ namespace PXWeb.Database
             DateTime? initLastUpdated = null; 
 
             TableLink tbl = new TableLink(!string.IsNullOrEmpty(meta.Description) ? meta.Description : meta.Title,
-                meta.Matrix, _sortOrder(meta, path), cid.Menu, cid.Selection, meta.Description ?? "", LinkType.PX,
+                meta.Matrix, _sortOrder(meta, path), cid.Menu, cid.Selection.Replace("\\", "/"), meta.Description ?? "", LinkType.PX,
                 TableStatus.AccessibleToAll, initPublished, initLastUpdated, meta.GetFirstTimeValue() , meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
             
             int cellCount = 1;
