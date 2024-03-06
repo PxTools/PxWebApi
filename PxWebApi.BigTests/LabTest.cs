@@ -14,34 +14,25 @@ namespace PxWebApi.BigTests
     public class LabTest
     {
         [TestMethod]
-
-
-        // TODO set Thread.CurrentThread.CurrentCulture  in all methods
-
-        public void Raw()
-        {
-            var raw = DateTime.Now.ToString();
-            Assert.AreEqual("raw,"+ CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, raw);
-        }
-
-        [TestMethod]
-        public void withInvariantCulture()
+        public void DatetimeToStringWithInvariantCulture()
         {
             // Clone the InvariantCulture
             CultureInfo customCulture = (CultureInfo)CultureInfo.InvariantCulture.Clone();
 
             // Set the desired date and time pattern
-            customCulture.DateTimeFormat.ShortDatePattern = "yyyy_MM_dd";
-            customCulture.DateTimeFormat.LongDatePattern = "yyyy_MM_dd";
-            customCulture.DateTimeFormat.ShortTimePattern = "HH:mm";
-            customCulture.DateTimeFormat.LongTimePattern = "HH:mm";
+            customCulture.DateTimeFormat.ShortDatePattern = "yyyy-MM-dd";
+            customCulture.DateTimeFormat.LongDatePattern = "yyyy-MM-dd";
+            customCulture.DateTimeFormat.ShortTimePattern = "HH:mm:ss";
+            customCulture.DateTimeFormat.LongTimePattern = "HH:mm:ss";
 
             // Apply the custom culture to the current thread
             Thread.CurrentThread.CurrentCulture = customCulture;
             Thread.CurrentThread.CurrentUICulture = customCulture;
 
-            var withIC = DateTime.Now.ToString();
-            Assert.AreEqual("withIC ," + CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, withIC);
+            var aDatetime = new DateTime(2020, 12, 24, 16, 59, 59);
+
+            var withIC = aDatetime.ToString();
+            Assert.AreEqual("2020-12-24 16:59:59", withIC);
         }
 
     }
