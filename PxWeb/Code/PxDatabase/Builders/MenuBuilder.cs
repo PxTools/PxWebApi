@@ -91,6 +91,13 @@ namespace PXWeb.Database
                              new XAttribute("default", lang == _configOptions.DefaultLanguage),
                              (_languageRoots[lang].HasSubItems?(XNode)_languageRoots[lang].SubItems[0].GetAsXML(): (XNode)new XComment("No items")))));
 
+
+            // Sort the elements recursively on SortCode attrinute
+            if (doc.Root != null)
+            {
+                SortElements(doc.Root);
+            }
+
             try
             {
                 doc.Save(System.IO.Path.Combine(path, "Menu.xml"));
@@ -125,13 +132,50 @@ namespace PXWeb.Database
 
         }
 
+        //Crude sorting, from ChatGPT.
+        static void SortElements(XElement element)
+        {
+            if (! element.HasElements)
+               { return; }
+            var dsfsd = element.Name;
+
+            var sortedChildren = element.Elements()
+                                        .OrderBy(el => GetOrderByValue(el))
+                                        .ToList();
+
+            // Replace existing children with sorted ones
+            element.ReplaceNodes(sortedChildren);
+
+            // Recursively sort the children of each child
+            foreach (var child in sortedChildren)
+            {
+                SortElements(child);
+            }
+        }
+
+        static string GetOrderByValue(XElement element)
+        {
+            string myOut = "A"; //Elements like <Description> goes first.
+            var sortOrder = element.Attribute("sortCode");
+            if ( sortOrder != null)
+            {
+                myOut = sortOrder.Value;
+            } 
+            
+            return myOut;
+        }
+
         public void BeginNewLevel(string id)
         {
             string name = System.IO.Path.GetFileNameWithoutExtension(id);
             foreach (var language in _languages)
             {
-                ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(id.Substring(_hostingEnvironment.RootPath.Length + 1))?.Replace("\\", "/"), id.Substring(_hostingEnvironment.RootPath.Length + 1));
-                PxMenuItem newItem = new PxMenuItem(null, name, "", name, cid.Menu, cid.Selection.Replace("\\", "/"), "");
+
+                var idFromRoot= id.Substring(_hostingEnvironment.RootPath.Length + 1);
+
+                ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(idFromRoot)?.Replace("\\", "/"), idFromRoot);
+                string sortOrderField = name;
+                PxMenuItem newItem = new PxMenuItem(null, name, "", sortOrderField, cid.Menu, cid.Selection.Replace("\\", "/"), "");
                 _currentItems[language].AddSubItem(newItem);
                 _currentItems[language] = newItem;
                 _links.Add(newItem, new List<string>());
