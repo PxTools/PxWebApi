@@ -34,7 +34,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
 
             Mock<IPxHost> hostingEnvironmentMock = new Mock<IPxHost>();
-            var wwwrootPath = Util.GetFullPathToFile(@"PxWeb\wwwroot");
+            var wwwrootPath = Util.GetFullPathToFile(@"PxWeb/wwwroot");
             hostingEnvironmentMock
                 .Setup(m => m.RootPath)
                 .Returns(wwwrootPath);
