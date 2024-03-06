@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Routing.Constraints;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Options;
-using PxWeb.Code.BackgroundWorker;
-using PxWeb.Controllers.Api2.Admin;
+﻿using PxWeb.Code.BackgroundWorker;
+using System;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-
-using System;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace PxWebApi.BigTests.AdminDatabaseController
@@ -23,6 +18,9 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
         public async Task MakeMenu()
         {
+            var afterCheckoutBeforeBuildMenu = DateTime.Now;
+
+
             var myState = new ControllerStateProvider();
             var myQueue = new BackgroundWorkerQueue();
 
@@ -48,8 +46,6 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             IOptions<PxApiConfigurationOptions> pxApiConfigurationOptions = Util.GetIOptions<PxApiConfigurationOptions>(configuration, "PxApiConfiguration");
             IPxApiConfigurationService pxApiConfigurationService = new PxApiConfigurationService(pxApiConfigurationOptions);
 
-           // Mock<ILogger<PxWeb.Controllers.Api2.TableApiController>> loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.TableApiController>>();
-
             //GetIOptions
             IOptions<PxFileConfigurationOptions> pxFileConfigurationOptions = Util.GetIOptions<PxFileConfigurationOptions>(configuration, "DataSource:PX");
             IPxFileConfigurationService pxFileConfigurationService = new PxFileConfigurationService(pxFileConfigurationOptions);
@@ -72,30 +68,34 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
             PxWeb.Controllers.Api2.Admin.DatabaseController dac =
             new PxWeb.Controllers.Api2.Admin.DatabaseController(myState, myQueue, iDataSource, pxApiConfigurationOptions, loggerMock.Object, hostingEnvironmentMock.Object);
-            
+
             CancellationToken cancellationToken = new CancellationToken();
             await dac.createMenuXml(false, "filename", cancellationToken);
-     
 
+            var actualFilePath = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/Menu.xml");
             var expectedFilePath = Util.GetFullPathToFile(@"PxWebApi.BigTests/AdminDatabaseController/expectedMenu.xml");
+
+            FileInfo fileInfo = new FileInfo(actualFilePath);
+            DateTime menuXmllastUpdated = fileInfo.LastWriteTime;
+
+            Assert.IsTrue(menuXmllastUpdated > afterCheckoutBeforeBuildMenu);
+
+
+
 
             var expected = RemoveElements(expectedFilePath).ToString();
 
             //Ensuring we dont compare empty things
             Assert.IsTrue(expected.Length > 10000, "Problems reading expectedMenu.xml or it no longer contains more than 10000 chars");
 
-            var actualFilePath = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/Menu.xml");
+
 
             var actual = RemoveElements(actualFilePath).ToString();
 
 
             Assert.AreEqual(expected.Substring(0, 5), actual.Substring(0, 5), "Diff in first 5.");
 
-            //updated causes problems. When expected and actual is made in different places and input is in localtime.
-            //int posOfUpdatedString = expected.IndexOf("2023-05-25T13:42:00");
-            //actual = actual.Substring(0, posOfUpdatedString) + "XXXX-XX-XXTXX" + actual.Substring(posOfUpdatedString + 13);
-            //expected = expected.Substring(0, posOfUpdatedString) + "XXXX-XX-XXTXX" + expected.Substring(posOfUpdatedString + 13);
-
+            //Comparing them in chunks or it is imposible to spot the diff 
             for (int i = 0; i < actual.Length; i += 25)
             {
                 int lengthToCompare = Math.Min(50, actual.Length - i);
@@ -118,7 +118,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
             // Find and remove all <Attribute name="updated"> elements
             var attributesToRemove = doc.Descendants()
-                .Where(x => x.Name == "Attribute" && "updated" == (string?) x.Attribute("name") )
+                .Where(x => x.Name == "Attribute" && "updated" == (string?)x.Attribute("name"))
                 .ToList();
 
             foreach (var attr in attributesToRemove)
@@ -129,9 +129,6 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             return doc;
         }
     }
-
-
-
 
 }
 
