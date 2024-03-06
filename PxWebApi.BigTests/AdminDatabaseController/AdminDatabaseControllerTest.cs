@@ -69,6 +69,8 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             PxWeb.Controllers.Api2.Admin.DatabaseController dac =
             new PxWeb.Controllers.Api2.Admin.DatabaseController(myState, myQueue, iDataSource, pxApiConfigurationOptions, loggerMock.Object, hostingEnvironmentMock.Object);
 
+            Console.WriteLine("Hello");
+
             CancellationToken cancellationToken = new CancellationToken();
             await dac.createMenuXml(false, "filename", cancellationToken);
 
@@ -78,7 +80,10 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             FileInfo fileInfo = new FileInfo(actualFilePath);
             DateTime menuXmllastUpdated = fileInfo.LastWriteTime;
 
-            Assert.IsTrue(menuXmllastUpdated > afterCheckoutBeforeBuildMenu);
+            string FailString = "Failed menuXmllastUpdated > afterCheckoutBeforeBuildMenu.  menuXmllastUpdated = " 
+                 + menuXmllastUpdated.ToString() + ", afterCheckoutBeforeBuildMenu " + afterCheckoutBeforeBuildMenu.ToString();
+
+            Assert.IsTrue(menuXmllastUpdated > afterCheckoutBeforeBuildMenu, FailString );
 
 
 
