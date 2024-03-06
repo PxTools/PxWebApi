@@ -137,7 +137,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
             // Find and remove all <Attribute name="updated"> elements
             var attributesToRemove = doc.Descendants()
-                .Where(x => x.Name == "Attribute" && "updated" == (string?)x.Attribute("name"))
+                .Where(x => x.Name == "Attribute" && ( "updated" == (string?)x.Attribute("name") || "size" == (string?)x.Attribute("name")))
                 .ToList();
 
             foreach (var attr in attributesToRemove)
