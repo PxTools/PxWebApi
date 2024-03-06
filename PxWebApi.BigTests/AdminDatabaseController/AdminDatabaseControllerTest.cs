@@ -1,5 +1,6 @@
 ﻿using PxWeb.Code.BackgroundWorker;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -39,8 +40,10 @@ namespace PxWebApi.BigTests.AdminDatabaseController
                 .Returns(wwwrootPath);
 
 
-            var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.Admin.DatabaseController>>();
+            // Create an instance of your test logger
+            var testLogger = new TestLogger<PxWeb.Controllers.Api2.Admin.DatabaseController>();
 
+           // var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.Admin.DatabaseController>>();
 
             ///
             IOptions<PxApiConfigurationOptions> pxApiConfigurationOptions = Util.GetIOptions<PxApiConfigurationOptions>(configuration, "PxApiConfiguration");
@@ -67,12 +70,23 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             ///
 
             PxWeb.Controllers.Api2.Admin.DatabaseController dac =
-            new PxWeb.Controllers.Api2.Admin.DatabaseController(myState, myQueue, iDataSource, pxApiConfigurationOptions, loggerMock.Object, hostingEnvironmentMock.Object);
+            new PxWeb.Controllers.Api2.Admin.DatabaseController(myState, myQueue, iDataSource, pxApiConfigurationOptions, testLogger , hostingEnvironmentMock.Object);
 
             Console.WriteLine("Hello");
 
             CancellationToken cancellationToken = new CancellationToken();
             await dac.createMenuXml(false, "filename", cancellationToken);
+
+            foreach(var item in testLogger.LogMessages )
+            {
+                Console.WriteLine("Logged: " + item);
+            }
+
+
+            Console.WriteLine("Done logged.");
+
+
+
 
             var actualFilePath = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/Menu.xml");
             var expectedFilePath = Util.GetFullPathToFile(@"PxWebApi.BigTests/AdminDatabaseController/expectedMenu.xml");
