@@ -24,6 +24,8 @@ namespace PxWebApi.BigTests.Other
 
             string[] stringsNonMac = new[] { "Alias", "Alias_en", "Alias_sv" };
             string[] stringsMac = new[] { "Alias_en", "Alias_sv", "Alias", };
+            string[] stringsUbuntu = new[] { "Alias_sv", "Alias", "Alias_en"};
+
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -38,7 +40,7 @@ namespace PxWebApi.BigTests.Other
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                MyDiff(stringsNonMac, actual);
+                MyDiff(stringsUbuntu, actual);
 
                 // Linux is reported for all distributions; there's no straightforward way to differentiate between them (like Ubuntu) using only .NET APIs.
                 // You may need to check specific files or use other methods to distinguish between Linux distributions.
@@ -49,6 +51,7 @@ namespace PxWebApi.BigTests.Other
                 {
                     Console.WriteLine("This is likely Ubuntu.");
                 }
+                MyDiff(stringsUbuntu, actual);
             }
             else
             {
