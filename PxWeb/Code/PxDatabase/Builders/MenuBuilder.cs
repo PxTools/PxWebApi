@@ -174,7 +174,7 @@ namespace PXWeb.Database
                 var idFromRoot= id.Substring(_hostingEnvironment.RootPath.Length + 1);
 
                 ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(idFromRoot)?.Replace("\\", "/"), idFromRoot);
-                string sortOrderField = name;
+                string sortOrderField = name.TrimEnd();  //macos
                 PxMenuItem newItem = new PxMenuItem(null, name, "", sortOrderField, cid.Menu, cid.Selection.Replace("\\", "/"), "");
                 _currentItems[language].AddSubItem(newItem);
                 _currentItems[language] = newItem;
