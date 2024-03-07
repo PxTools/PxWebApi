@@ -56,6 +56,9 @@ namespace PXWeb.Database
         public object? Handle(string path, DatabaseLogger logger)
         {
             string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            _logger.LogDebug("Readind alias from :"+fileName);
+
+
             int splittIndex = fileName.IndexOf('_');
 
             AliasItem aliasItem;

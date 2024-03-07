@@ -168,15 +168,12 @@ namespace PXWeb.Database
         public void BeginNewLevel(string id)
         {
             string name = System.IO.Path.GetFileNameWithoutExtension(id);
-            _logger.LogDebug("System.IO.Path.GetFileNameWithoutExtension(id):'" + name + "', id:"+id);
             foreach (var language in _languages)
             {
-
                 var idFromRoot= id.Substring(_hostingEnvironment.RootPath.Length + 1);
 
                 ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(idFromRoot)?.Replace("\\", "/"), idFromRoot);
-                string sortOrderField = name.TrimEnd();  //macos
-                _logger.LogDebug("sortOrderField:'" + sortOrderField + "'");
+                string sortOrderField = name;
                 PxMenuItem newItem = new PxMenuItem(null, name, "", sortOrderField, cid.Menu, cid.Selection.Replace("\\", "/"), "");
                 _currentItems[language].AddSubItem(newItem);
                 _currentItems[language] = newItem;
