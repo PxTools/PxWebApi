@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E255536D-7C9F-42A7-9C95-2CBD7E216CFE}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWeb", "PxWeb\PxWeb.csproj", "{9800E2DD-D8BD-4D11-9907-A39FED4EDD0F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWeb.UnitTests", "PxWeb.UnitTests\PxWeb.UnitTests.csproj", "{D0FA67A0-F9B5-4EBA-B88D-73392674EDE7}"
