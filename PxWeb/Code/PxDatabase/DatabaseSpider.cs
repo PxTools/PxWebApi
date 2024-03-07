@@ -1,4 +1,5 @@
 ﻿using PxWeb.Code.BackgroundWorker;
+using PxWeb.Code.PxDatabase;
 using System.Linq;
 
 namespace PXWeb.Database
@@ -120,7 +121,10 @@ namespace PXWeb.Database
             //allocates a new menu
             SignalStartNewLevel(path);
 
-            foreach (var item in System.IO.Directory.GetFiles(path))
+            string[] filesInDir = System.IO.Directory.GetFiles(path);
+            //Ensuring the languageless alias file is applied first:
+            Array.Sort(filesInDir, new AliasTxtFirstComparer());
+            foreach (var item in filesInDir)
             {
                 IItemHandler? handler = GetHandler(item);
                 if (handler != null)

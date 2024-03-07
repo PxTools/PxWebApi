@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PxWeb.Code.PxDatabase;
+using System;
 using System.Runtime.InteropServices;
 
 namespace PxWebApi.BigTests.Other
@@ -7,13 +8,37 @@ namespace PxWebApi.BigTests.Other
     public class OSTest
     {
         [TestMethod]
-        public void FileOrderingTest()
+        public void AliasTxtFirstComparerTest()
+        {
+            string[] XSorted = new[] { "BAlias_en", "balias.txt", "Alias.txt", "Alias_sv" };
+
+            Array.Sort(XSorted, new AliasTxtFirstComparer());
+
+            Assert.AreEqual("balias.txt", XSorted[0]);
+            Assert.AreEqual("Alias.txt", XSorted[1]);
+            Assert.AreEqual("BAlias_en", XSorted[2]);
+            Assert.AreEqual("Alias_sv", XSorted[3]);
+
+
+            string path = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/EN");
+            string[] filesInDir = System.IO.Directory.GetFiles(path);
+            Array.Sort(filesInDir, new AliasTxtFirstComparer());
+            Assert.IsTrue(filesInDir[0].EndsWith("Alias.txt"));
+
+        }
+
+
+        [TestMethod]
+        public void GetFilesTest()
         {
             string path = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/EN");
 
-
-
             string[] filesInDir = System.IO.Directory.GetFiles(path);
+            //https://learn.microsoft.com/en-us/dotnet/api/system.io.directory.getfiles?view=net-6.0
+            // says: The order of the returned file names is not guaranteed; use the Sort method if a specific sort order is required.
+
+
+
             string[] actual = new string[filesInDir.Length];
 
             for (int i = 0; i < filesInDir.Length; i++)
