@@ -8,10 +8,10 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PxWebApi.BigTests
+namespace PxWebApi.BigTests.Other
 {
     [TestClass]
-    public class LabTest
+    public class Datetime_vs_Culture
     {
         [TestMethod]
         public void DatetimeToStringWithInvariantCulture()
