@@ -1,5 +1,8 @@
 ﻿namespace Px.Search
 {
+    /// <summary>
+    /// SearchEngine
+    /// </summary>
     public interface ISearchBackend
     {
         IIndex GetIndex();

@@ -1,5 +1,8 @@
 ﻿namespace Px.Search
 {
+    /// <summary>
+    /// Not sure if this adds value?   
+    /// </summary>
     public class Searcher
     {
         private readonly ISearchBackend _backend;
@@ -7,6 +10,7 @@
 
         public Searcher(IDataSource dataSource, ISearchBackend backend)
         {
+            //TODO remove unused param dataSource
             _backend = backend;
         }
         public SearchResultContainer Find(string? query, string language, int? pastdays, bool includediscontinued, int pageSize = 20, int pageNumber = 1 )

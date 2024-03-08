@@ -1,5 +1,8 @@
 ﻿namespace Px.Search
 {
+    /// <summary>
+    /// SearchEngineWriter
+    /// </summary>
     public interface IIndex : IDisposable
     {
         void BeginWrite(string language);
