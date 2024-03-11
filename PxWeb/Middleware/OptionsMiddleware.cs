@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace PxWeb.Middleware
@@ -22,25 +24,26 @@ namespace PxWeb.Middleware
         {
             if (context.Request.Method == "OPTIONS")
             {
-                await _next.Invoke(context);
 
-                if (context.Response.StatusCode == 405)
+                context.Response.OnStarting(() =>
                 {
-
-                    if (context.Response.Headers.Keys.Contains("Allow"))
+                    int responseStatusCode = context.Response.StatusCode;
+                    if (responseStatusCode == (int)HttpStatusCode.MethodNotAllowed)
                     {
-                        context.Response.Headers["Allow"] += ", OPTIONS";
-                        context.Response.Headers.Add("Access-Control-Allow-Methods", context.Response.Headers["Allow"]);
+                        IHeaderDictionary headers = context.Response.Headers;
+                        StringValues allowHeaderValue = string.Empty;
+                        if (headers.TryGetValue("Allow", out allowHeaderValue))
+                        {
+                            context.Response.Headers.Remove("Allow");
+                            context.Response.Headers.Add("Allow", allowHeaderValue + ", OPTIONS");
+                        }
+                        context.Response.StatusCode = 200;
                     }
-
-                    context.Response.StatusCode = 200;
-                }
-
+                    return Task.FromResult(0);
+                });
+                
             }
-            else
-            {
-                await _next.Invoke(context);
-            }
+            await _next.Invoke(context);
         }
     }
 
