@@ -8,7 +8,7 @@
       "name": "C#: PxWebApi Debug",
       "type": "dotnet",
       "request": "launch",
-      "projectPath": "${workspaceFolder}/<relative-path-to-project-folder>PxWeb.csproj"
+      "projectPath": "${workspaceFolder}/PxWeb/PxWeb.csproj"
     }
   ]
 }
