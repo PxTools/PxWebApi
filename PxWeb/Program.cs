@@ -141,6 +141,7 @@ namespace PxWeb
             if (corsEnbled)
             {
                 app.UseCors();
+                app.UseOptions();
             }
 
             if (!app.Environment.IsDevelopment())
