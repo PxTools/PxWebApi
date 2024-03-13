@@ -1,5 +1,8 @@
 ﻿namespace Px.Search
 {
+    /// <summary>
+    /// Moves data from IDataSource to ISearchBackend.
+    /// </summary>
     public class Indexer
     {
         private IDataSource _source;

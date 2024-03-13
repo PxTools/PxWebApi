@@ -34,22 +34,15 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             try
             {
-                string webRootPath = _hostingEnvironment.RootPath;
-                string xmlFilePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
-
-                XmlDocument xdoc = new XmlDocument();
-
-                if (System.IO.File.Exists(xmlFilePath))
-                {
-                    xdoc.Load(xmlFilePath);
-                }
+                var menuXmlFile = new MenuXmlFile(_hostingEnvironment);
+                XmlDocument xdoc = menuXmlFile.GetLanguageAsXmlDocument(language);
 
                 // Add Menu levels to lookup table
-                string xpath = string.Format("//Language [@lang='{0}']//MenuItem", language);
+                string xpath = "//MenuItem";
                 AddMenuItemsToMenuLookup(xdoc, menuLookup, xpath);
 
                 // Add Tables to lookup table
-                xpath = string.Format("//Language [@lang='{0}']//Link", language);
+                xpath = "//Link";
                 AddTablesToMenuLookup(xdoc, menuLookup, xpath);
             }
 

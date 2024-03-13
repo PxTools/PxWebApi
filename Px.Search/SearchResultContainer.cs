@@ -1,5 +1,9 @@
 ﻿namespace Px.Search
 {
+
+    /// <summary>
+    /// Holdes a list of SearchResult and pagination info
+    /// </summary>
     public class SearchResultContainer
     {
         public IEnumerable<SearchResult> searchResults = new List<SearchResult>();

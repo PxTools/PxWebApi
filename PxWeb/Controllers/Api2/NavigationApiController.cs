@@ -27,14 +27,14 @@ namespace PxWeb.Controllers.Api2
     public class NavigationApiController : PxWeb.Api2.Server.Controllers.NavigationApiController
     {
         private readonly IDataSource _dataSource;
-        private readonly ISearchBackend _backend;
         private readonly ILanguageHelper _languageHelper;
         private readonly IFolderResponseMapper _folderResponseMapper;
 
         public NavigationApiController(IDataSource dataSource, ISearchBackend backend, ILanguageHelper languageHelper, IFolderResponseMapper folderMapper)
         {
+            //TODO Remove  _backend = backend; from constructor
+
             _dataSource = dataSource;
-            _backend = backend;
             _languageHelper = languageHelper;
             _folderResponseMapper = folderMapper;
         }
@@ -52,25 +52,7 @@ namespace PxWeb.Controllers.Api2
         /// <response code="429">Error respsone for 429</response>
         public override IActionResult GetNavigationById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
-            bool selectionExists = true;
-
-            lang = _languageHelper.HandleLanguage(lang);
-
-            Item? item = _dataSource.CreateMenu(id, lang, out selectionExists);
-
-            if (!selectionExists)
-            {
-                return NotFound(NonExistentNode());
-            }
-
-            if (item == null)
-            {
-                return new BadRequestObjectResult(ErrorReadingNodeData());
-            }
-
-            FolderResponse folder = _folderResponseMapper.GetFolder((PxMenuItem)item, lang);
-
-            return new ObjectResult(folder);
+            return GetFolder(id, lang, false);
         }
 
         /// <summary>
@@ -86,18 +68,23 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetNavigationRoot([FromQuery(Name = "lang")] string? lang)
         {
+            return GetFolder("", lang, true);
+        }
+
+        private IActionResult GetFolder(string id, string? lang, bool isRoot)
+        {
             bool selectionExists = true;
 
             lang = _languageHelper.HandleLanguage(lang);
 
-            Item? item = _dataSource.CreateMenu("", lang, out selectionExists);
+            Item? item = _dataSource.CreateMenu(id, lang, out selectionExists);
 
             if (item == null)
             {
                 return new BadRequestObjectResult(ErrorReadingNodeData());
             }
 
-            FolderResponse folder = _folderResponseMapper.GetFolder((PxMenuItem)item, lang, true);
+            FolderResponse folder = _folderResponseMapper.GetFolder((PxMenuItem)item, lang, isRoot);
 
             return new ObjectResult(folder);
         }
