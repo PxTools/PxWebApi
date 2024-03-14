@@ -22,6 +22,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: Format code
+        run: dotnet format --severity error --no-restore --verify-no-changes --verbosity normal
+
       - name: Build the application
         run: dotnet build --verbosity normal --no-restore --configuration ${{ matrix.configuration }}
 
