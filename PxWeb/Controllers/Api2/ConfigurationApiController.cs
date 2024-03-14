@@ -1,9 +1,13 @@
-﻿using AspNetCoreRateLimit;
+﻿using System.Linq;
+
+using AspNetCoreRateLimit;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using PxWeb.Api2.Server.Models;
-using System.Linq;
+
 using Language = PxWeb.Api2.Server.Models.Language;
 
 namespace PxWeb.Controllers.Api2
@@ -16,7 +20,7 @@ namespace PxWeb.Controllers.Api2
         private readonly ILogger<ConfigurationApiController> _logger;
         private const int DefaultTimeWindow = 0;
         private const int DefaultMaxCallsPerTimeWindow = 0;
-        public ConfigurationApiController(IPxApiConfigurationService pxApiConfigurationService, IOptions<IpRateLimitOptions> rateLimitOptions, 
+        public ConfigurationApiController(IPxApiConfigurationService pxApiConfigurationService, IOptions<IpRateLimitOptions> rateLimitOptions,
                 ILogger<ConfigurationApiController> logger)
         {
             _pxApiConfigurationService = pxApiConfigurationService;
@@ -33,15 +37,15 @@ namespace PxWeb.Controllers.Api2
             //// return StatusCode(429, default(Problem));
             try
             {
-                int timeWindow = DefaultTimeWindow; 
+                int timeWindow = DefaultTimeWindow;
                 int maxCallsPerTimeWindow = DefaultMaxCallsPerTimeWindow;
                 var op = _pxApiConfigurationService.GetConfiguration();
 
                 try
                 {
                     //Set the values for time window and max calls per time window if they exist in appsetting                    
-                    if(_rateLimitOptions.GeneralRules != null)
-                    { 
+                    if (_rateLimitOptions.GeneralRules != null)
+                    {
                         var generalRules = _rateLimitOptions.GeneralRules.Where(x => x.Endpoint == "*").First();
                         timeWindow = GetTimeWindowInSek(generalRules.Period);
                         if (timeWindow < 0)
@@ -62,7 +66,7 @@ namespace PxWeb.Controllers.Api2
                     maxCallsPerTimeWindow = DefaultMaxCallsPerTimeWindow;
                 }
 
-               
+
                 var configResponse = new ConfigResponse
                 {
                     ApiVersion = op.ApiVersion,
@@ -75,14 +79,15 @@ namespace PxWeb.Controllers.Api2
                     Features = new List<ApiFeature>(),
                     DefaultLanguage = op.DefaultLanguage,
                     License = op.License,
-                    MaxCallsPerTimeWindow = maxCallsPerTimeWindow, 
+                    MaxCallsPerTimeWindow = maxCallsPerTimeWindow,
                     MaxDataCells = op.MaxDataCells,
                     TimeWindow = timeWindow,
                     DefaultDataFormat = op.DefaultOutputFormat,
                     DataFormats = op.OutputFormats
                 };
 
-                if( op.SourceReferences  != null) {
+                if (op.SourceReferences != null)
+                {
                     configResponse.SourceReferences = op.SourceReferences.Select(x => new PxWeb.Api2.Server.Models.SourceReference
                     {
                         Language = x.Language,
@@ -110,7 +115,7 @@ namespace PxWeb.Controllers.Api2
 
         private static int GetTimeWindowInSek(string timeWindowRuel)
         {
-            string periodFormText = timeWindowRuel.ToLower()[timeWindowRuel.Length-1].ToString();
+            string periodFormText = timeWindowRuel.ToLower()[timeWindowRuel.Length - 1].ToString();
             string periodFormTime = timeWindowRuel.Remove(timeWindowRuel.Length - 1, 1);
             int time;
             if (int.TryParse(periodFormTime, out time))
@@ -128,8 +133,8 @@ namespace PxWeb.Controllers.Api2
                     default:
                         return -1;
                 }
-            }            
-            return -1;            
+            }
+            return -1;
         }
 
     }

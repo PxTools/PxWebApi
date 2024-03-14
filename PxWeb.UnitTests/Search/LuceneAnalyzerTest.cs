@@ -25,13 +25,13 @@
             //seeking "C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot" 
             string pathRunning = Directory.GetCurrentDirectory();
             int index = pathRunning.IndexOf("PxWeb.UnitTests");
-            
+
             if (index == -1)
             {
                 throw new System.Exception("Hmm, Directory.GetCurrentDirectory() does not contain string:PxWeb.UnitTests , so unable to find wwwroot path.");
             }
             string repoRoot = pathRunning.Substring(0, index);
-            string wwwPath = Path.Combine(repoRoot,  "PxWeb", "wwwroot");
+            string wwwPath = Path.Combine(repoRoot, "PxWeb", "wwwroot");
 
             MyHost myHost = new MyHost(wwwPath);
 

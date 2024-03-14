@@ -1,16 +1,19 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Linq;
+
+using Microsoft.Extensions.Options;
+
 using Px.Search;
+
 using PxWeb.Api2.Server.Models;
 using PxWeb.Converters;
-using System.Linq;
 
 namespace PxWeb.Mappers
 {
     public class TableResponseMapper : ITableResponseMapper
     {
 
-        private ILinkCreator _linkCreator;
-        private PxApiConfigurationOptions _configOptions;
+        private readonly ILinkCreator _linkCreator;
+        private readonly PxApiConfigurationOptions _configOptions;
 
         public TableResponseMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions)
         {

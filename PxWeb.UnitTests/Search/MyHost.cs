@@ -9,9 +9,9 @@ namespace PxWeb.UnitTests.Search
 
         public MyHost(string inRootPath)
         {
-            RootPath = inRootPath;  
+            RootPath = inRootPath;
         }
-   
+
     }
 }
 

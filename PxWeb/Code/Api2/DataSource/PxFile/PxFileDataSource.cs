@@ -1,12 +1,15 @@
-﻿using PCAxis.Menu;
-using PCAxis.Menu.Implementations;
-using PCAxis.Paxiom;
-using Px.Abstractions;
-using Px.Abstractions.Interfaces;
-using PxWeb.Mappers;
-using System.IO;
+﻿using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+
+using PCAxis.Menu;
+using PCAxis.Menu.Implementations;
+using PCAxis.Paxiom;
+
+using Px.Abstractions;
+using Px.Abstractions.Interfaces;
+
+using PxWeb.Mappers;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
@@ -38,7 +41,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             var builder = new PCAxis.Paxiom.PXFileBuilder();
 
             var path = _tablePathResolver.Resolve(language, id, out bool selectionExists);
-       
+
             if (selectionExists)
             {
                 builder.SetPath(path);
@@ -46,8 +49,8 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 return builder;
             }
             else
-            { 
-                return null; 
+            {
+                return null;
             }
         }
 
@@ -56,7 +59,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             MenuXmlFile menuXmlFile = new MenuXmlFile(_hostingEnvironment);
             XmlDocument xmlDocument = menuXmlFile.GetAsXmlDocument();
-            
+
             var xNavigator = xmlDocument.CreateNavigator();
             XDocument xDocument = xNavigator != null ? XDocument.Load(xNavigator.ReadSubtree()) : new XDocument();
 
@@ -74,7 +77,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             menu.SetCurrentItemBySelection(itmSel.Menu, itmSel.Selection);
 
             // Fix selection for subitems - we only want the last part...
-            if (menu.CurrentItem is PxMenuItem) 
+            if (menu.CurrentItem is PxMenuItem)
             {
                 foreach (var item in ((PxMenuItem)(menu.CurrentItem)).SubItems)
                 {
@@ -91,7 +94,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         public Codelist? GetCodelist(string id, string language)
         {
             Codelist? codelist = null;
-            
+
             if (string.IsNullOrEmpty(id))
             {
                 return codelist;

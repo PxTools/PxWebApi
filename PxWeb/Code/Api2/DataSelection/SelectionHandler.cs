@@ -1,31 +1,34 @@
-﻿using Lucene.Net.Util;
-using PCAxis.Paxiom;
-using PxWeb.Api2.Server.Models;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
+
+using Lucene.Net.Util;
+
+using PCAxis.Paxiom;
+
+using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Code.Api2.DataSelection
 {
     public class SelectionHandler : ISelectionHandler
     {
-        private PxApiConfigurationOptions _configOptions;
+        private readonly PxApiConfigurationOptions _configOptions;
 
         // Regular expressions for selection expression validation
 
         // TOP(xxx), TOP(xxx,yyy), top(xxx) and top(xxx,yyy)
-        private static string REGEX_TOP = "^(TOP\\([1-9]\\d*\\)|TOP\\([1-9]\\d*,[0-9]\\d*\\))$";
+        private static readonly string REGEX_TOP = "^(TOP\\([1-9]\\d*\\)|TOP\\([1-9]\\d*,[0-9]\\d*\\))$";
 
         // BOTTOM(xxx), BOTTOM(xxx,yyy), bottom(xxx) and bottom(xxx,yyy)
-        private static string REGEX_BOTTOM = "^(BOTTOM\\([1-9]\\d*\\)|BOTTOM\\([1-9]\\d*,[0-9]\\d*\\))$";
+        private static readonly string REGEX_BOTTOM = "^(BOTTOM\\([1-9]\\d*\\)|BOTTOM\\([1-9]\\d*,[0-9]\\d*\\))$";
 
         // RANGE(xxx,yyy) and range(xxx,yyy)
-        private static string REGEX_RANGE = "^(RANGE\\(([^,]+)\\d*,([^,)]+)\\d*\\))$";
+        private static readonly string REGEX_RANGE = "^(RANGE\\(([^,]+)\\d*,([^,)]+)\\d*\\))$";
 
         // FROM(xxx) and from(xxx)
-        private static string REGEX_FROM = "^(FROM\\(([^,]+)\\d*\\))$";
+        private static readonly string REGEX_FROM = "^(FROM\\(([^,]+)\\d*\\))$";
 
         // TO(xxx) and to(xxx)
-        private static string REGEX_TO = "^(TO\\(([^,]+)\\d*\\))$";
+        private static readonly string REGEX_TO = "^(TO\\(([^,]+)\\d*\\))$";
 
         public SelectionHandler(IPxApiConfigurationService configOptionsService)
         {
@@ -48,7 +51,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             Selection[]? selections;
 
-            if  (variablesSelection is not null && HasSelection(variablesSelection))
+            if (variablesSelection is not null && HasSelection(variablesSelection))
             {
                 //Add variables that the user did not post
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
@@ -99,7 +102,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     if (variable.VariableCode.ToLower().Equals("time"))
                     {
                         Variable? pxVariableTime = builder.Model.Meta.Variables.FirstOrDefault(x => x.IsTime);
-                        
+
                         if (pxVariableTime is not null && (variable.VariableCode.ToLower() != pxVariableTime.Code.ToLower()))
                         {
                             variable.VariableCode = pxVariableTime.Code.ToLower();
@@ -127,8 +130,8 @@ namespace PxWeb.Code.Api2.DataSelection
                     }
 
                     if (!ApplyCodelist(builder, pxVariable, variable, out problem))
-                    {  
-                        return false; 
+                    {
+                        return false;
                     }
                 }
 
@@ -189,7 +192,7 @@ namespace PxWeb.Code.Api2.DataSelection
             if (string.IsNullOrWhiteSpace(variable.CodeList))
             {
                 problem = NonExistentCodelist();
-                return false; 
+                return false;
             }
 
             GroupingInfo grpInfo = pxVariable.GetGroupingInfoById(variable.CodeList.Replace("agg_", ""));
@@ -289,7 +292,7 @@ namespace PxWeb.Code.Api2.DataSelection
                             {
                                 // Is it a problem with case sensitivity?
                                 pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(variable.ValueCodes[i], System.StringComparison.InvariantCultureIgnoreCase));
-                                
+
                                 if (pxValue is not null)
                                 {
                                     // Use the correct value code for making the selection
@@ -365,7 +368,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             if (expression.Equals("*"))
             {
-                return true; 
+                return true;
             }
 
             int count = expression.Count(c => c == '*');
@@ -459,8 +462,8 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns></returns>
         private bool IsSelectionExpression(string value)
         {
-            return value.Contains('*') || 
-                   value.Contains('?') || 
+            return value.Contains('*') ||
+                   value.Contains('?') ||
                    value.StartsWith("TOP(", System.StringComparison.InvariantCultureIgnoreCase) ||
                    value.StartsWith("BOTTOM(", System.StringComparison.InvariantCultureIgnoreCase) ||
                    value.StartsWith("RANGE(", System.StringComparison.InvariantCultureIgnoreCase) ||
@@ -482,7 +485,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     //Add variable
                     var variableSelectionObject = new VariableSelection
-                    { 
+                    {
                         VariableCode = variable.Code,
                         ValueCodes = new List<string>()
                     };
@@ -490,7 +493,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     variablesSelection.Selection.Add(variableSelectionObject);
                 }
             }
-            
+
             return variablesSelection;
         }
 
@@ -523,7 +526,7 @@ namespace PxWeb.Code.Api2.DataSelection
             var selection = new Selection(varSelection.VariableCode);
             var values = new List<string>();
             bool aggregatedSingle = false;
-            
+
             if (variable.CurrentGrouping is not null && varSelection.OutputValues == CodeListOutputValuesType.SingleEnum)
             {
                 // Single values from aggregation groups shall be added
@@ -634,7 +637,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     sortedValues.Add(value.Code);
                 }
             }
-            return sortedValues;    
+            return sortedValues;
         }
 
         /// <summary>
@@ -1233,7 +1236,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             bool mandatory = false;
             var mandatoryVariable = model.Meta.Variables.Where(x => x.Code.Equals(variable.VariableCode) && x.Elimination.Equals(false));
-            
+
             if (mandatoryVariable.Count() != 0)
             {
                 mandatory = true;

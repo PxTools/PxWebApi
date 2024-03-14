@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace PxWeb.Middleware
 {
@@ -30,7 +31,7 @@ namespace PxWeb.Middleware
                 return;
             }
             await _next(httpContext);
-           
+
 
         }
     }

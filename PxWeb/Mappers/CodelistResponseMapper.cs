@@ -1,14 +1,16 @@
 ﻿using Microsoft.Extensions.Options;
+
 using Px.Abstractions;
+
 using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Mappers
 {
     public class CodelistResponseMapper : ICodelistResponseMapper
     {
-        private ILinkCreator _linkCreator;
-        private PxApiConfigurationOptions _configOptions;
-        private string _language;
+        private readonly ILinkCreator _linkCreator;
+        private readonly PxApiConfigurationOptions _configOptions;
+        private readonly string _language;
 
         public CodelistResponseMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions)
         {

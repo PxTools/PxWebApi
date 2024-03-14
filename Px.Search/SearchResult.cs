@@ -10,6 +10,6 @@
         }
 
         public float Score { get; set; }
-        
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+
 using PCAxis.Menu;
 using PCAxis.Paxiom;
 using PCAxis.Sql.DbConfig;
@@ -24,7 +25,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             {
                 throw new PXException($"Database with id {cnmmOptions.DatabaseID} not found");
             }
-            return SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID].GetMenuLookup(language, _configOptions)??new Dictionary<string, ItemSelection>();
+            return SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID].GetMenuLookup(language, _configOptions) ?? new Dictionary<string, ItemSelection>();
         }
     }
 }

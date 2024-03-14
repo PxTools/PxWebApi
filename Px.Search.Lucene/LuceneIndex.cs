@@ -5,7 +5,7 @@
 
     public class LuceneIndex : IIndex
     {
-        private string _indexDirectoryBase = "";
+        private readonly string _indexDirectoryBase = "";
         private string _indexDirectoryCurrent = "";
         private IndexWriter? _writer;
 
@@ -44,7 +44,7 @@
             IndexWriterConfig config = new IndexWriterConfig(LuceneAnalyzer.luceneVersion, analyzer)
             {
                 // Overwrite or append existing index
-                OpenMode = create ? OpenMode.CREATE : OpenMode.CREATE_OR_APPEND 
+                OpenMode = create ? OpenMode.CREATE : OpenMode.CREATE_OR_APPEND
             };
 
             IndexWriter writer = new IndexWriter(fsDir, config);
@@ -76,7 +76,7 @@
             }
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
-            _writer = CreateIndexWriter(true, language);  
+            _writer = CreateIndexWriter(true, language);
 
             if (_writer == null)
             {
@@ -155,14 +155,14 @@
                 doc.Add(new StringField(SearchConstants.SEARCH_FIELD_DOCID, tbl.Id, Field.Store.YES)); // Used as id when updating a document - NOT searchable!!!
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SEARCHID, tbl.Id, Field.Store.NO)); // Used for finding a document by id - will be used for generating URL from just the tableid - Searchable!!!
                 doc.Add(new StringField(SearchConstants.SEARCH_FIELD_UPDATED, strUpdated, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_MATRIX, meta.Matrix, Field.Store.YES)); 
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_MATRIX, meta.Matrix, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TITLE, tbl.Label, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DESCRIPTION, tbl.Description, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SORTCODE, tbl.SortCode, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_CATEGORY, tbl.Category, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_FIRSTPERIOD, tbl.FirstPeriod, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_LASTPERIOD, tbl.LastPeriod, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VARIABLES, string.Join("|", tbl.VariableNames), Field.Store.YES)); 
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VARIABLES, string.Join("|", tbl.VariableNames), Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_PERIOD, meta.GetTimeValues(), Field.Store.NO));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUES, meta.GetAllValues(), Field.Store.NO));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_CODES, meta.GetAllCodes(), Field.Store.NO));

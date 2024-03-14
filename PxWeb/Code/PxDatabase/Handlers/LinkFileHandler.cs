@@ -7,7 +7,7 @@ namespace PXWeb.Database
     /// </summary>
     public class LinkFileHandler : IItemHandler
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private readonly PxApiConfigurationOptions _configOptions;
 
         public LinkFileHandler(PxApiConfigurationOptions configOptions, ILogger logger)

@@ -10,10 +10,10 @@ namespace PxWeb.Config.Api2
         {
             _configOptions = configOptions.Value;
         }
-        
+
         public PxApiConfigurationOptions GetConfiguration()
         {
-            return  _configOptions;
+            return _configOptions;
         }
     }
 }

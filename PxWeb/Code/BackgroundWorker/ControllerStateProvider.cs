@@ -5,7 +5,7 @@ namespace PxWeb.Code.BackgroundWorker
 {
     public class ControllerStateProvider : IControllerStateProvider
     {
-        private Dictionary<string, IControllerState> _states;
+        private readonly Dictionary<string, IControllerState> _states;
 
         public ControllerStateProvider()
         {
@@ -46,7 +46,7 @@ namespace PxWeb.Code.BackgroundWorker
         {
             string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ControllerStates");
             if (!Directory.Exists(directoryPath)) { Directory.CreateDirectory(directoryPath); }
-            return Path.Combine(directoryPath ,$"{id}.json");
+            return Path.Combine(directoryPath, $"{id}.json");
         }
     }
 }

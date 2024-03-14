@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+
 using Px.Abstractions.Interfaces;
 
 namespace PxWeb.Code
@@ -11,7 +12,7 @@ namespace PxWeb.Code
         {
             _hostingEnvironment = hostingEnvironment;
         }
-        
+
         public string RootPath => _hostingEnvironment.WebRootPath;
     }
 }

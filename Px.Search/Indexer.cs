@@ -5,10 +5,10 @@
     /// </summary>
     public class Indexer
     {
-        private IDataSource _source;
-        private ISearchBackend _backend;
-        private ILogger _logger;
-        private List<string> _indexedTables; 
+        private readonly IDataSource _source;
+        private readonly ISearchBackend _backend;
+        private readonly ILogger _logger;
+        private List<string> _indexedTables;
 
         public Indexer(IDataSource dataSource, ISearchBackend backend, ILogger logger)
         {
@@ -17,7 +17,7 @@
             _logger = logger;
             _indexedTables = new List<string>();
         }
-        
+
         /// <summary>
         /// Creates or recreates a search index for the database
         /// </summary>
@@ -25,7 +25,7 @@
         public void IndexDatabase(List<string> languages)
         {
             bool selectionExisits;
-           
+
             using (var index = _backend.GetIndex())
             {
                 foreach (var language in languages)
@@ -76,7 +76,7 @@
             catch (Exception ex)
             {
                 _logger.LogError($"TraverseDatabase : Could not CreateMenu for id {id} for language {language}", ex);
-                return; 
+                return;
             }
 
             if (item == null || !exists)
@@ -110,7 +110,7 @@
                         {
                             _logger.LogDebug($"Table {tableId} is already indexed.");
                         }
- 
+
                     }
                 }
             }
@@ -210,7 +210,7 @@
             tbl.Updated = tblLink.LastUpdated;
             tbl.Discontinued = null; // TODO: Implement later
 
-            return tbl; 
+            return tbl;
         }
 
         private string GetCategory(TableLink tblLink)

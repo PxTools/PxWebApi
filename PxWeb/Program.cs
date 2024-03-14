@@ -1,13 +1,21 @@
+using System.Linq;
+using System.Text;
+
 using AspNetCoreRateLimit;
+
 using log4net;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+
 using Px.Abstractions.Interfaces;
+
 using PxWeb.Code;
 using PxWeb.Code.Api2;
 using PxWeb.Code.Api2.Cache;
@@ -20,16 +28,14 @@ using PxWeb.Filters.Api2;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
 using PxWeb.Middleware;
-using System.Linq;
-using System.Text;
 
 
 namespace PxWeb
 {
     public class Program
     {
-        private static ILogger<Program> ?_logger;
-        private static ILog _log = LogManager.GetLogger(typeof(Program));
+        private static ILogger<Program>? _logger;
+        private static readonly ILog _log = LogManager.GetLogger(typeof(Program));
 
         public static void Main(string[] args)
         {
@@ -74,8 +80,8 @@ namespace PxWeb
             builder.Services.Configure<AdminProtectionConfigurationOptions>(builder.Configuration.GetSection("AdminProtection"));
             builder.Services.Configure<CacheMiddlewareConfigurationOptions>(builder.Configuration.GetSection("CacheMiddleware"));
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
-            
-            builder.Services.AddTransient<IPxApiConfigurationService, PxApiConfigurationService>();            
+
+            builder.Services.AddTransient<IPxApiConfigurationService, PxApiConfigurationService>();
             builder.Services.AddTransient<IAdminProtectionConfigurationService, AdminProtectionConfigurationService>();
             builder.Services.AddTransient<ICacheMiddlewareConfigurationService, CacheMiddlewareConfigurationService>();
             builder.Services.AddTransient<ILanguageHelper, LanguageHelper>();
@@ -126,9 +132,9 @@ namespace PxWeb
 
             // Handle CORS configuration from appsettings.json
             bool corsEnbled = builder.Services.ConfigurePxCORS(builder, _logger);
-            
+
             var app = builder.Build();
-            
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -146,7 +152,7 @@ namespace PxWeb
 
             if (!app.Environment.IsDevelopment())
             {
-                    app.UseAuthorization();
+                app.UseAuthorization();
 
                 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v2/admin"), appBuilder =>
                 {

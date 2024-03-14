@@ -16,11 +16,11 @@ namespace PxWeb.Code.Api2.Cache
         public delegate bool CacheReenabler();
         private Func<bool>? _coherenceChecker;
 
-        private ILogger<PxCache> _logger;
-        private string _cacheLock = "lock";
-        private MemoryCache _cache;
+        private readonly ILogger<PxCache> _logger;
+        private readonly string _cacheLock = "lock";
+        private readonly MemoryCache _cache;
         private bool _enableCache;
-        private TimeSpan _cacheTime;
+        private readonly TimeSpan _cacheTime;
 
         public PxCache(ILogger<PxCache> logger, IOptions<PxApiConfigurationOptions> configOptions)
         {

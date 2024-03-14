@@ -1,15 +1,18 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Linq;
+
+using Microsoft.Extensions.Options;
+
 using Px.Search;
+
 using PxWeb.Api2.Server.Models;
 using PxWeb.Converters;
-using System.Linq;
 
 namespace PxWeb.Mappers
 {
     public class TablesResponseMapper : ITablesResponseMapper
     {
-        private ILinkCreator _linkCreator;
-        private PxApiConfigurationOptions _configOptions;
+        private readonly ILinkCreator _linkCreator;
+        private readonly PxApiConfigurationOptions _configOptions;
         public TablesResponseMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions)
         {
             _linkCreator = linkCreator;
@@ -48,14 +51,14 @@ namespace PxWeb.Mappers
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 TotalElements = totalElements,
-                TotalPages = totalPages == 0 ?  totalPages + 1 :totalPages,
-                Links = linkPageList                    
+                TotalPages = totalPages == 0 ? totalPages + 1 : totalPages,
+                Links = linkPageList
             };
 
             var tableList = new List<Table>();
 
             tablesResponse.Page = page;
-            tablesResponse.Language = lang;           
+            tablesResponse.Language = lang;
 
             foreach (var item in searchResultContainer.searchResults)
             {
@@ -83,7 +86,7 @@ namespace PxWeb.Mappers
                     Category = EnumConverter.ToCategoryEnum(item.Category),
                     Discontinued = item.Discontinued,
                     VariableNames = item.VariableNames.ToList(),
-                    Links = linkList                 
+                    Links = linkList
                 };
                 tableList.Add(tb);
             }
@@ -100,6 +103,6 @@ namespace PxWeb.Mappers
             return tablesResponse;
         }
 
-        
+
     }
 }

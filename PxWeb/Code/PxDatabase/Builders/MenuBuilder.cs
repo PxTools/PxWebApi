@@ -1,11 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
-using PCAxis.Menu;
-using PCAxis.Paxiom.Extensions;
-using Px.Abstractions.Interfaces;
-using Px.Search;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+
+using Microsoft.Extensions.Logging;
+
+using PCAxis.Menu;
+using PCAxis.Paxiom.Extensions;
+
+using Px.Abstractions.Interfaces;
+using Px.Search;
 
 namespace PXWeb.Database
 {
@@ -45,7 +48,7 @@ namespace PXWeb.Database
         /// <param name="languagDependent">If only file with the specific language should be included in the menu</param>
         public MenuBuilder(PxApiConfigurationOptions configOptions, ILogger logger, IPxHost hostingEnvironment, string[] languages, bool languageDependent)
         {
-            _configOptions = configOptions; 
+            _configOptions = configOptions;
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
             _languages = languages;
@@ -64,7 +67,7 @@ namespace PXWeb.Database
             _logger.LogInformation("Start building menu for {path}", path);
             _buildLogger = logger;
             //TODO set use Date format
-            _buildLogger(new DatabaseMessage() {MessageType = DatabaseMessage.BuilderMessageType.Information, Message = "Menu build started " + DateTime.Now.ToString() });
+            _buildLogger(new DatabaseMessage() { MessageType = DatabaseMessage.BuilderMessageType.Information, Message = "Menu build started " + DateTime.Now.ToString() });
             string folderName = System.IO.Path.GetFileNameWithoutExtension(path);
             foreach (var language in _languages)
             {
@@ -83,13 +86,13 @@ namespace PXWeb.Database
         public void EndBuild(string path)
         {
 
-            var doc = new XDocument(new XDeclaration("1.0", "UTF-8", "true"),  
-                new XElement("Menu", 
-                    from lang in _languages 
-                    select new XElement("Language", 
+            var doc = new XDocument(new XDeclaration("1.0", "UTF-8", "true"),
+                new XElement("Menu",
+                    from lang in _languages
+                    select new XElement("Language",
                              new XAttribute("lang", lang),
                              new XAttribute("default", lang == _configOptions.DefaultLanguage),
-                             (_languageRoots[lang].HasSubItems?(XNode)_languageRoots[lang].SubItems[0].GetAsXML(): (XNode)new XComment("No items")))));
+                             (_languageRoots[lang].HasSubItems ? (XNode)_languageRoots[lang].SubItems[0].GetAsXML() : (XNode)new XComment("No items")))));
 
 
             // Sort the elements recursively on SortCode attrinute
@@ -108,7 +111,7 @@ namespace PXWeb.Database
                 var errorMessage = string.Format("Cannot create file {0}. {1}", path, e.Message);
 
                 _logger.LogError(e, errorMessage);
-                
+
                 if (_buildLogger != null)
                 {
                     _buildLogger(new DatabaseMessage()
@@ -135,8 +138,8 @@ namespace PXWeb.Database
         //Crude sorting, from ChatGPT.
         static void SortElements(XElement element)
         {
-            if (! element.HasElements)
-               { return; }
+            if (!element.HasElements)
+            { return; }
             var dsfsd = element.Name;
 
             var sortedChildren = element.Elements()
@@ -157,11 +160,11 @@ namespace PXWeb.Database
         {
             string myOut = "A"; //Elements like <Description> goes first.
             var sortOrder = element.Attribute("sortCode");
-            if ( sortOrder != null)
+            if (sortOrder != null)
             {
                 myOut = sortOrder.Value;
-            } 
-            
+            }
+
             return myOut;
         }
 
@@ -170,7 +173,7 @@ namespace PXWeb.Database
             string name = System.IO.Path.GetFileNameWithoutExtension(id);
             foreach (var language in _languages)
             {
-                var idFromRoot= id.Substring(_hostingEnvironment.RootPath.Length + 1);
+                var idFromRoot = id.Substring(_hostingEnvironment.RootPath.Length + 1);
 
                 ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(idFromRoot)?.Replace("\\", "/"), idFromRoot);
                 string sortOrderField = name;
@@ -190,14 +193,14 @@ namespace PXWeb.Database
                 {
                     return true;
                 }
-                else if (itm is PxMenuItem) 
+                else if (itm is PxMenuItem)
                 {
                     if (HasLinks((PxMenuItem)itm))
                     {
                         return true;
                     }
                 }
-            } 
+            }
             return false;
         }
 
@@ -234,7 +237,7 @@ namespace PXWeb.Database
                         _currentItems[alias.Language].SortCode = alias.Alias;
                     }
                     _currentItems[alias.Language].Text = alias.Alias;
-                    
+
                 }
             }
             else if (item is LinkItem)
@@ -251,7 +254,7 @@ namespace PXWeb.Database
             }
             else if (item is MenuSortItem)
             {
-                MenuSortItem sort = (MenuSortItem) item;
+                MenuSortItem sort = (MenuSortItem)item;
                 if (Array.IndexOf(_languages, sort.Language) >= 0)
                 {
                     _currentItems[sort.Language].SortCode = sort.SortString;
@@ -296,7 +299,7 @@ namespace PXWeb.Database
                             }
                             else
                             {
-                                meta.SetLanguage("default");  
+                                meta.SetLanguage("default");
                             }
                             TableLink tbl = CreateTableLink(meta, path);
                             _currentItems[language].AddSubItem(tbl);
@@ -344,42 +347,42 @@ namespace PXWeb.Database
             ItemSelection cid = new ItemSelection(System.IO.Path.GetDirectoryName(path.Substring(_hostingEnvironment.RootPath.Length + 1))?.Replace("\\", "/"), path.Substring(_hostingEnvironment.RootPath.Length + 1));
 
             DateTime? initPublished = null;
-            DateTime? initLastUpdated = null; 
+            DateTime? initLastUpdated = null;
 
             TableLink tbl = new TableLink(!string.IsNullOrEmpty(meta.Description) ? meta.Description : meta.Title,
                 meta.Matrix, _sortOrder(meta, path), cid.Menu, cid.Selection.Replace("\\", "/"), meta.Description ?? "", LinkType.PX,
-                TableStatus.AccessibleToAll, initPublished, initLastUpdated, meta.GetFirstTimeValue() , meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
-            
+                TableStatus.AccessibleToAll, initPublished, initLastUpdated, meta.GetFirstTimeValue(), meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
+
             int cellCount = 1;
-                    for (int i = 0; i < meta.Variables.Count; i++)
-                    {
-                        tbl.SetAttribute("Var" + (i + 1) + "Name", meta.Variables[i].Name);
-                        tbl.SetAttribute("Var" + (i+1) + "Values", GetNames(meta.Variables[i]));
-                        tbl.SetAttribute("Var" + (i + 1) + "NumberOfValues", meta.Variables[i].Values.Count.ToString());
-                        cellCount *= meta.Variables[i].Values.Count;
-                    }
+            for (int i = 0; i < meta.Variables.Count; i++)
+            {
+                tbl.SetAttribute("Var" + (i + 1) + "Name", meta.Variables[i].Name);
+                tbl.SetAttribute("Var" + (i + 1) + "Values", GetNames(meta.Variables[i]));
+                tbl.SetAttribute("Var" + (i + 1) + "NumberOfValues", meta.Variables[i].Values.Count.ToString());
+                cellCount *= meta.Variables[i].Values.Count;
+            }
 
-                    System.IO.FileInfo info = new System.IO.FileInfo(path);
-                    tbl.SetAttribute("size", info.Length);
-                    tbl.SetAttribute("cells", cellCount.ToString());
+            System.IO.FileInfo info = new System.IO.FileInfo(path);
+            tbl.SetAttribute("size", info.Length);
+            tbl.SetAttribute("cells", cellCount.ToString());
 
-                    if (meta.AutoOpen)
-                    {
-                        tbl.SetAttribute("autoOpen", "true");
-                    }
-                    
-                    // Store dates in the PC-Axis date format
-                    tbl.SetAttribute("updated", info.LastWriteTime.ToString(PCAxis.Paxiom.PXConstant.PXDATEFORMAT));
-                    tbl.SetAttribute("modified", GetLastModified(meta));
+            if (meta.AutoOpen)
+            {
+                tbl.SetAttribute("autoOpen", "true");
+            }
 
-                    string lastUpdated = GetLastModified(meta);
-                    if (PxDate.IsPxDate(lastUpdated))
-                    {
-                        tbl.LastUpdated = PxDate.PxDateStringToDateTime(lastUpdated);
-                    }
-                    tbl.Published = info.LastWriteTime;
-                   
-               return tbl;
+            // Store dates in the PC-Axis date format
+            tbl.SetAttribute("updated", info.LastWriteTime.ToString(PCAxis.Paxiom.PXConstant.PXDATEFORMAT));
+            tbl.SetAttribute("modified", GetLastModified(meta));
+
+            string lastUpdated = GetLastModified(meta);
+            if (PxDate.IsPxDate(lastUpdated))
+            {
+                tbl.LastUpdated = PxDate.PxDateStringToDateTime(lastUpdated);
+            }
+            tbl.Published = info.LastWriteTime;
+
+            return tbl;
         }
 
         private static string GetLastModified(PCAxis.Paxiom.PXMeta meta)
@@ -393,9 +396,9 @@ namespace PXWeb.Database
                     if (value.ContentInfo != null)
                     {
                         if (value.ContentInfo.LastUpdated != "")
-                        { 
+                        {
                             DateTime d = GetDate(value.ContentInfo.LastUpdated);
-                            maxDate = maxDate > d?maxDate:d;
+                            maxDate = maxDate > d ? maxDate : d;
                         }
                     }
                 }
@@ -442,7 +445,7 @@ namespace PXWeb.Database
                 }
                 catch (Exception)
                 {
-                    
+
                 }
             }
             return DateTime.MinValue;
@@ -459,9 +462,9 @@ namespace PXWeb.Database
                 // if the varible have five or less values
                 int limit = Math.Min(5, variable.Values.Count);
                 for (int i = 0; i < limit; i++)
-			    {
+                {
                     names.Append(variable.Values[i].Value);
-	                if (i < 4 && i <= (limit - 1))
+                    if (i < 4 && i <= (limit - 1))
                     {
                         names.Append(", ");
                     }
@@ -479,8 +482,8 @@ namespace PXWeb.Database
                     {
                         names.Append(", ");
                     }
-                   
-               }
+
+                }
                 names.Append("..., ");
                 names.Append(variable.Values[variable.Values.Count - 1].Value);
             }
@@ -495,7 +498,7 @@ namespace PXWeb.Database
         /// </summary>
         public int Priority
         {
-            get {return 1; }
+            get { return 1; }
         }
 
         #endregion

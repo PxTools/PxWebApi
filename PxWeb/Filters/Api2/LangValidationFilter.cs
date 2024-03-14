@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+
 using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Filters.Api2
@@ -17,7 +18,7 @@ namespace PxWeb.Filters.Api2
         {
             var lanValues = context.HttpContext.Request.Query["lang"].ToString();
 
-            if (!string.IsNullOrEmpty(lanValues) && !_languages.Exists(x => string.Compare(x, lanValues,true) == 0))
+            if (!string.IsNullOrEmpty(lanValues) && !_languages.Exists(x => string.Compare(x, lanValues, true) == 0))
             {
                 Problem p = new Problem();
                 p.Type = "Parameter error";

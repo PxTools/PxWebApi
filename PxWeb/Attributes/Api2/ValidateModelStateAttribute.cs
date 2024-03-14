@@ -1,9 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace PxWeb.Attributes.Api2
 {
@@ -27,7 +28,7 @@ namespace PxWeb.Attributes.Api2
                     object? args = null;
 
                     if (parameter.Name is not null && context.ActionArguments.ContainsKey(parameter.Name))
-                    { 
+                    {
                         args = context.ActionArguments[parameter.Name];
                     }
 
@@ -56,7 +57,7 @@ namespace PxWeb.Attributes.Api2
                         string parameterName = (parameter.Name != null) ? parameter.Name : "parameter.Name_Is_null";
                         //TODO removes the build warning, but not more. Throw something perhaps?
                         modelState.AddModelError(parameterName, validationAttribute.FormatErrorMessage(parameterName));
-                        
+
 
                     }
                 }

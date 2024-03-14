@@ -13,7 +13,7 @@
             //TODO remove unused param dataSource
             _backend = backend;
         }
-        public SearchResultContainer Find(string? query, string language, int? pastdays, bool includediscontinued, int pageSize = 20, int pageNumber = 1 )
+        public SearchResultContainer Find(string? query, string language, int? pastdays, bool includediscontinued, int pageSize = 20, int pageNumber = 1)
         {
             var searcher = _backend.GetSearcher(language);
 

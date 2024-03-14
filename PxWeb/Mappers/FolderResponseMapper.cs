@@ -1,14 +1,17 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.IO;
+
+using Microsoft.Extensions.Options;
+
 using PCAxis.Menu;
+
 using PxWeb.Api2.Server.Models;
-using System.IO;
 
 namespace PxWeb.Mappers
 {
-    public class FolderResponseMapper : IFolderResponseMapper   
+    public class FolderResponseMapper : IFolderResponseMapper
     {
-        private ILinkCreator _linkCreator;
-        private PxApiConfigurationOptions _configOptions;
+        private readonly ILinkCreator _linkCreator;
+        private readonly PxApiConfigurationOptions _configOptions;
         private string _language;
 
         public FolderResponseMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions)
@@ -21,14 +24,14 @@ namespace PxWeb.Mappers
         public FolderResponse GetFolder(PxMenuItem currentItem, string language, bool root = false)
         {
             // Id shall not be displayed for the root folder
-            string id = root == false ? Path.GetFileName(currentItem.ID.Selection) : ""; 
+            string id = root == false ? Path.GetFileName(currentItem.ID.Selection) : "";
 
             _language = language;
 
             FolderResponse folder = new FolderResponse
             {
                 Language = _language,
-                Id = id, 
+                Id = id,
                 Label = currentItem.Text,
                 Description = currentItem.Description,
                 //Tags = null // TODO: Implement later
@@ -61,9 +64,9 @@ namespace PxWeb.Mappers
             }
             else
             {
-                itm = MapHeading((Headline)child); 
+                itm = MapHeading((Headline)child);
             }
-            
+
             return itm;
         }
 
@@ -119,7 +122,7 @@ namespace PxWeb.Mappers
             // Links to data
             table.Links.Add(_linkCreator.GetTableDataLink(LinkCreator.LinkRelationEnum.data, tableId, _language, true));
 
-            return table;   
+            return table;
         }
 
         private Heading MapHeading(Headline child)

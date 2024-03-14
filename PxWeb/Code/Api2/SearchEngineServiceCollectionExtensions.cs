@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+
 using Px.Search;
 using Px.Search.Lucene;
 using Px.Search.Lucene.Config;

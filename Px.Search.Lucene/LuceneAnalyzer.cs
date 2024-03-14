@@ -41,12 +41,12 @@
                 default:
                     return new StandardAnalyzer(luceneVersion);
             }
-            
+
         }
 
     }
     // TODO ? Should read langs from config and prepare a static analyzerByLanguage dictionary? 
-    
+
     // depricated: Analyzer analyzer = new SnowballAnalyzer(LuceneVersion.LUCENE_48, "English");
 }
 

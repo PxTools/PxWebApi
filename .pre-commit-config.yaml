@@ -1,0 +1,5 @@
+repos:
+  - repo: https://github.com/dotnet/format
+    rev: "v8.0.453106" # Specify a tag or sha here, or run "pre-commit autoupdate"
+    hooks:
+      - id: dotnet-format

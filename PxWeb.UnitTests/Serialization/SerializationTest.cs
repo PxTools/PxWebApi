@@ -7,7 +7,7 @@
         public void ShouldSerializeToPx()
         {
             PXModel pxModel = TestFactory.GetPxModel();
-            
+
             var serializeManager = new SerializeManager();
             string outputFormat = "px";
             var serializer = serializeManager.GetSerializer(outputFormat);
@@ -34,7 +34,7 @@
             var response = new Mock<HttpResponse>();
             //response.Setup(c => c.GetResponseStream()).Returns(responseStream);
             response.Setup(x => x.StatusCode).Returns(1);
-            
+
             //var serializer = _serializeManager.GetSerializer(outputFormat);
             //serializer.Serialize(pxModel, response.Object);
 

@@ -1,9 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using PCAxis.Menu;
-using Px.Abstractions.Interfaces;
-using PxWeb.Code.Api2.DataSource.Cnmm;
-using System.IO;
+﻿using System.IO;
 using System.Xml;
+
+using Microsoft.Extensions.Logging;
+
+using PCAxis.Menu;
+
+using Px.Abstractions.Interfaces;
+
+using PxWeb.Code.Api2.DataSource.Cnmm;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
@@ -19,7 +23,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
         }
-        
+
         public Dictionary<string, ItemSelection> GetMenuLookup(string language)
         {
             var menuLookup = new Dictionary<string, ItemSelection>();

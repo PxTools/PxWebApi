@@ -22,7 +22,7 @@ namespace PxWeb.Code.Api2
             {
                 corsEnbled = false;
                 logger.LogError("Could not read CORS Enabled configuration");
-                return false;   
+                return false;
             }
 
             if (corsEnbled)
