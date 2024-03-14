@@ -1,11 +1,12 @@
-﻿using PxWeb.Code.BackgroundWorker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+
+using PxWeb.Code.BackgroundWorker;
 
 namespace PxWebApi.BigTests.AdminDatabaseController
 {
@@ -43,7 +44,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             // Create an instance of your test logger
             var testLogger = new TestLogger<PxWeb.Controllers.Api2.Admin.DatabaseController>();
 
-           // var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.Admin.DatabaseController>>();
+            // var loggerMock = new Mock<ILogger<PxWeb.Controllers.Api2.Admin.DatabaseController>>();
 
             ///
             IOptions<PxApiConfigurationOptions> pxApiConfigurationOptions = Util.GetIOptions<PxApiConfigurationOptions>(configuration, "PxApiConfiguration");
@@ -70,14 +71,14 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             ///
 
             PxWeb.Controllers.Api2.Admin.DatabaseController dac =
-            new PxWeb.Controllers.Api2.Admin.DatabaseController(myState, myQueue, iDataSource, pxApiConfigurationOptions, testLogger , hostingEnvironmentMock.Object);
+            new PxWeb.Controllers.Api2.Admin.DatabaseController(myState, myQueue, iDataSource, pxApiConfigurationOptions, testLogger, hostingEnvironmentMock.Object);
 
             Console.WriteLine("Hello");
 
             CancellationToken cancellationToken = new CancellationToken();
             await dac.createMenuXml(false, "filename", cancellationToken);
 
-            foreach(var item in testLogger.LogMessages )
+            foreach (var item in testLogger.LogMessages)
             {
                 Console.WriteLine("Logged: " + item);
             }
@@ -94,10 +95,10 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             FileInfo fileInfo = new FileInfo(actualFilePath);
             DateTime menuXmllastUpdated = fileInfo.LastWriteTime;
 
-            string FailString = "Failed menuXmllastUpdated > afterCheckoutBeforeBuildMenu.  menuXmllastUpdated = " 
+            string FailString = "Failed menuXmllastUpdated > afterCheckoutBeforeBuildMenu.  menuXmllastUpdated = "
                  + menuXmllastUpdated.ToString() + ", afterCheckoutBeforeBuildMenu " + afterCheckoutBeforeBuildMenu.ToString();
 
-            Assert.IsTrue(menuXmllastUpdated > afterCheckoutBeforeBuildMenu, FailString );
+            Assert.IsTrue(menuXmllastUpdated > afterCheckoutBeforeBuildMenu, FailString);
 
 
 
@@ -137,7 +138,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
             // Find and remove all <Attribute name="updated"> elements
             var attributesToRemove = doc.Descendants()
-                .Where(x => x.Name == "Attribute" && ( "updated" == (string?)x.Attribute("name") || "size" == (string?)x.Attribute("name")))
+                .Where(x => x.Name == "Attribute" && ("updated" == (string?)x.Attribute("name") || "size" == (string?)x.Attribute("name")))
                 .ToList();
 
             foreach (var attr in attributesToRemove)

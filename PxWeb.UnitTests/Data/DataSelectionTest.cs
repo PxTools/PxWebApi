@@ -52,7 +52,7 @@ namespace PxWeb.UnitTests.Data
             }
             else
             {
-                Assert.Fail();   
+                Assert.Fail();
             }
         }
 
@@ -103,7 +103,7 @@ namespace PxWeb.UnitTests.Data
             }
             else
             {
-                Assert.Fail();  
+                Assert.Fail();
             }
 
         }
@@ -300,7 +300,7 @@ namespace PxWeb.UnitTests.Data
                 }
             }
             else
-            {  Assert.Fail(); }
+            { Assert.Fail(); }
         }
 
 
@@ -347,7 +347,7 @@ namespace PxWeb.UnitTests.Data
             }
             else
             {
-                Assert.Fail();  
+                Assert.Fail();
             }
         }
 
@@ -417,7 +417,7 @@ namespace PxWeb.UnitTests.Data
                     Assert.AreEqual("0025", selection.ValueCodes[24]);
                 }
             }
-            else { Assert.Fail(); } 
+            else { Assert.Fail(); }
         }
 
 

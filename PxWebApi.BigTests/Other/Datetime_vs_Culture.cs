@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Routing.Constraints;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Options;
-using PxWeb.Code.BackgroundWorker;
-using PxWeb.Controllers.Api2.Admin;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.Extensions.Options;
+
+using PxWeb.Code.BackgroundWorker;
+using PxWeb.Controllers.Api2.Admin;
 
 namespace PxWebApi.BigTests.Other
 {
@@ -42,7 +44,7 @@ namespace PxWebApi.BigTests.Other
             Thread.CurrentThread.CurrentCulture = customCulture;
             Thread.CurrentThread.CurrentUICulture = customCulture;
 
-           
+
 
             var withIC = aDatetime.ToString();
             Assert.AreEqual("2020-12-24 16:59:59", withIC);

@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Text;
+
+using Microsoft.Extensions.Options;
+
 using PxWeb.Api2.Server.Models;
-using System.Text;
 
 namespace PxWeb.Mappers
 {
-    public class LinkCreator : ILinkCreator 
+    public class LinkCreator : ILinkCreator
     {
         public enum LinkRelationEnum
         {
@@ -17,7 +19,7 @@ namespace PxWeb.Mappers
             last
         }
 
-        private string _urlBase;
+        private readonly string _urlBase;
 
         public LinkCreator(IOptions<PxApiConfigurationOptions> configOptions)
         {
@@ -32,7 +34,7 @@ namespace PxWeb.Mappers
 
             return link;
         }
-       
+
         public Link GetTableLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
         {
             var link = new Link();
@@ -103,7 +105,7 @@ namespace PxWeb.Mappers
 
             sb.Append(_urlBase);
             sb.Append(endpointUrl);
-            
+
             if (!string.IsNullOrEmpty(query) && showLangParam)
             {
                 sb.Append("?lang=");

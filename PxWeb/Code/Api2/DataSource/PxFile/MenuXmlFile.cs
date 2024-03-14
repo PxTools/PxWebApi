@@ -1,9 +1,11 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Px.Abstractions.Interfaces;
+﻿using System.IO;
+using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
-using System.Xml;
-using System.IO;
+
+using DocumentFormat.OpenXml.Wordprocessing;
+
+using Px.Abstractions.Interfaces;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {

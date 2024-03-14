@@ -1,6 +1,6 @@
 ﻿namespace PxWeb.Code.PxDatabase
 {
-    public class AliasTxtFirstComparer: IComparer<string>
+    public class AliasTxtFirstComparer : IComparer<string>
     {
         //Puts files ending with "alias.txt" first
         public int Compare(string? x, string? y)
@@ -8,7 +8,7 @@
             // Check if x ends with "alias.txt" or "Alias.txt"
 
             bool xIsAlias = false;
-            if (x != null) 
+            if (x != null)
             {
                 xIsAlias = x.EndsWith("alias.txt", StringComparison.OrdinalIgnoreCase);
             }

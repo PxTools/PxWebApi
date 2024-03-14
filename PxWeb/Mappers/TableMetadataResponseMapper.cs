@@ -1,16 +1,19 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Linq;
+using System.Text;
+
+using Microsoft.Extensions.Options;
+
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Extensions;
+
 using PxWeb.Api2.Server.Models;
-using System.Linq;
-using System.Text;
 
 namespace PxWeb.Mappers
 {
     public class TableMetadataResponseMapper : ITableMetadataResponseMapper
     {
-        private ILinkCreator _linkCreator;
-        private PxApiConfigurationOptions _configOptions;
+        private readonly ILinkCreator _linkCreator;
+        private readonly PxApiConfigurationOptions _configOptions;
         private string _language;
 
         public TableMetadataResponseMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions)
@@ -28,18 +31,18 @@ namespace PxWeb.Mappers
 
             tm.Id = id.ToUpper();
             tm.Language = language;
-            tm.Label = model.Meta.Title;  
+            tm.Label = model.Meta.Title;
             tm.Description = model.Meta.Description;
             tm.Source = model.Meta.Source;
             //tm.Tags = new System.Collections.Generic.List<string>(); // TODO: Implement later
             tm.OfficalStatistics = model.Meta.OfficialStatistics;
-            tm.SubjectLabel = model.Meta.SubjectArea; 
+            tm.SubjectLabel = model.Meta.SubjectArea;
             tm.SubjectCode = model.Meta.SubjectCode;
             tm.Licence = _configOptions.License;
             tm.AggregationAllowed = model.Meta.AggregAllowed;
             //tm.Discontinued = false; // TODO: Implement later. Not in spec!
 
-            tm.Variables = new System.Collections.Generic.List<AbstractVariable>(); 
+            tm.Variables = new System.Collections.Generic.List<AbstractVariable>();
 
             foreach (Variable variable in model.Meta.Variables)
             {
@@ -87,9 +90,9 @@ namespace PxWeb.Mappers
             {
                 v = MapContentsVariable(tm, variable);
             }
-            else if (!string.IsNullOrWhiteSpace(variable.Map) || (variable.VariableType != null && variable.VariableType.Equals("G"))) 
+            else if (!string.IsNullOrWhiteSpace(variable.Map) || (variable.VariableType != null && variable.VariableType.Equals("G")))
             {
-                v = MapGeographicalVariable(variable);   
+                v = MapGeographicalVariable(variable);
             }
             else
             {
@@ -105,18 +108,18 @@ namespace PxWeb.Mappers
 
                 foreach (var note in variable.Notes)
                 {
-                    v.Notes.Add(Map(note)); 
+                    v.Notes.Add(Map(note));
                 }
             }
-            
+
             return v;
         }
 
         private TimeVariable MapTimeVariable(Variable variable)
         {
             TimeVariable timeVariable = new TimeVariable();
-            timeVariable.Type = VariableTypeEnum.TimeVariableEnum; 
-            timeVariable.FirstPeriod = GetFirstTimePeriod(variable);    
+            timeVariable.Type = VariableTypeEnum.TimeVariableEnum;
+            timeVariable.FirstPeriod = GetFirstTimePeriod(variable);
             timeVariable.LastPeriod = GetLastTimePeriod(variable);
             timeVariable.TimeUnit = GetTimeUnit(variable.TimeScale);
 
@@ -138,7 +141,7 @@ namespace PxWeb.Mappers
                 contentsVariable.Values.Add(MapContentValue(tm, value));
             }
 
-            return contentsVariable;    
+            return contentsVariable;
         }
 
         private GeographicalVariable MapGeographicalVariable(Variable variable)
@@ -149,7 +152,7 @@ namespace PxWeb.Mappers
             geographicalVariable.Elimination = variable.Elimination;
             if (variable.EliminationValue != null)
             {
-                geographicalVariable.EliminationValueCode = variable.EliminationValue.Code; 
+                geographicalVariable.EliminationValueCode = variable.EliminationValue.Code;
             }
 
             geographicalVariable.Values = new System.Collections.Generic.List<Api2.Server.Models.Value>();
@@ -161,7 +164,7 @@ namespace PxWeb.Mappers
                 MapCodelists(geographicalVariable.CodeLists, variable);
             }
 
-            return geographicalVariable;    
+            return geographicalVariable;
         }
 
         private RegularVariable MapRegularVariable(Variable variable)
@@ -171,7 +174,7 @@ namespace PxWeb.Mappers
             regularVariable.Elimination = variable.Elimination;
             if (variable.EliminationValue != null)
             {
-                regularVariable.EliminationValueCode = variable.EliminationValue.Code; 
+                regularVariable.EliminationValueCode = variable.EliminationValue.Code;
             }
 
             regularVariable.Values = new System.Collections.Generic.List<Api2.Server.Models.Value>();
@@ -191,7 +194,7 @@ namespace PxWeb.Mappers
             Api2.Server.Models.Value v = new Api2.Server.Models.Value();
             v.Code = value.Code;
             v.Label = value.Text;
-            
+
             if (value.Notes != null)
             {
                 v.Notes = new System.Collections.Generic.List<Api2.Server.Models.Note>();
@@ -202,7 +205,7 @@ namespace PxWeb.Mappers
                 }
             }
 
-            return v;   
+            return v;
         }
 
         private ContentValue MapContentValue(TableMetadataResponse tm, PCAxis.Paxiom.Value value)
@@ -265,7 +268,7 @@ namespace PxWeb.Mappers
             {
                 tm.Contacts = new System.Collections.Generic.List<Api2.Server.Models.Contact>();
             }
-            
+
             Api2.Server.Models.Contact c = new Api2.Server.Models.Contact();
 
             StringBuilder sb = new StringBuilder();
@@ -303,7 +306,7 @@ namespace PxWeb.Mappers
                 {
                     tm.Contacts = new System.Collections.Generic.List<Api2.Server.Models.Contact>();
                 }
-               
+
                 var contactsSplitString = contact.Split("##", StringSplitOptions.RemoveEmptyEntries).ToList();
 
                 foreach (var item in contactsSplitString)
@@ -313,7 +316,7 @@ namespace PxWeb.Mappers
                         Raw = item,
                     };
                     tm.Contacts.Add(contacts);
-                }                    
+                }
             }
         }
 
@@ -435,7 +438,7 @@ namespace PxWeb.Mappers
             {
                 foreach (var valueset in variable.ValueSets)
                 {
-                    if (!valueset.ID.Equals("_ALL_")) 
+                    if (!valueset.ID.Equals("_ALL_"))
                     {
                         codelists.Add(Map(valueset));
                     }
@@ -549,7 +552,7 @@ namespace PxWeb.Mappers
                 case "F":
                     return ContentValue.PriceTypeEnum.FixedEnum;
                 default:
-                    return ContentValue.PriceTypeEnum.UndefinedEnum; 
+                    return ContentValue.PriceTypeEnum.UndefinedEnum;
             }
         }
     }

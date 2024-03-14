@@ -7,13 +7,13 @@ namespace PXWeb.Database
     /// </summary>
     public class MenuSortFileHandler : IItemHandler
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
         private readonly PxApiConfigurationOptions _configOptions;
 
         public MenuSortFileHandler(PxApiConfigurationOptions configOptions, ILogger logger)
         {
             _configOptions = configOptions;
-            _logger = logger;   
+            _logger = logger;
         }
 
         #region IItemHandler Members

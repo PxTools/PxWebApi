@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace PxWeb.Code.Api2.ModelBinder
 {
@@ -25,12 +26,14 @@ namespace PxWeb.Code.Api2.ModelBinder
             {
                 //strip of the variable name format values[variableName]
                 //TODO check that the key starts with [ after the modelname and ends with ]
-                if (key != null) { 
+                if (key != null)
+                {
                     string variableName = key.Substring(modelName.Length + 1, key.Length - (modelName.Length + 2));
                     string? q = bindingContext.HttpContext.Request.Query[key];
-                    if (q != null) {
+                    if (q != null)
+                    {
                         var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))");
-                        var itemsList = new List<string>(); 
+                        var itemsList = new List<string>();
                         foreach (var item in items)
                         {
                             var item2 = item.Trim();

@@ -1,13 +1,14 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+
+using Microsoft.Extensions.Hosting;
 
 namespace PxWeb.Code.BackgroundWorker
 {
     public class LongRunningService : BackgroundService
     {
         private readonly BackgroundWorkerQueue queue;
-        private IControllerStateProvider _stateProvider;
+        private readonly IControllerStateProvider _stateProvider;
 
         public LongRunningService(IControllerStateProvider stateProvider, BackgroundWorkerQueue queue)
         {

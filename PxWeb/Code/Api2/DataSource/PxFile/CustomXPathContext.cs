@@ -1,6 +1,6 @@
-﻿using System.Xml.Xsl;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
@@ -10,10 +10,10 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
 
         // XsltArgumentList to store names and values of user-defined variables.
-        private XsltArgumentList argList;
+        private readonly XsltArgumentList argList;
 
 
-        public CustomXPathContext(NameTable nt, XsltArgumentList args): base(nt)
+        public CustomXPathContext(NameTable nt, XsltArgumentList args) : base(nt)
         {
             argList = args;
         }
@@ -23,15 +23,15 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         // extension variables in XPath query.
         public override System.Xml.Xsl.IXsltContextVariable ResolveVariable(string prefix, string name)
         {
-                // Create an instance of an XPathExtensionVariable
-                // (custom IXsltContextVariable implementation) object
-                //  by supplying the name of the user-defined variable to resolve.
-                XPathExtensionVariable var = new XPathExtensionVariable(prefix, name);
+            // Create an instance of an XPathExtensionVariable
+            // (custom IXsltContextVariable implementation) object
+            //  by supplying the name of the user-defined variable to resolve.
+            XPathExtensionVariable var = new XPathExtensionVariable(prefix, name);
 
-                // The Evaluate method of the returned object will be used at run time
-                // to resolve the user-defined variable that is referenced in the XPath
-                // query expression.
-                return var;
+            // The Evaluate method of the returned object will be used at run time
+            // to resolve the user-defined variable that is referenced in the XPath
+            // query expression.
+            return var;
         }
 
         // Function to resolve references to user-defined XPath extension
@@ -84,9 +84,9 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
     public class XPathExtensionVariable : IXsltContextVariable
     {
         // Namespace of user-defined variable.
-        private string prefix;
+        private readonly string prefix;
         // The name of the user-defined variable.
-        private string varName;
+        private readonly string varName;
 
         // Constructor used in the overridden ResolveVariable function of custom XsltContext.
         public XPathExtensionVariable(string prefix, string varName)
@@ -111,7 +111,8 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             //   throw new NotImplementedException("We do not support other var than language");
             //}
             Object? myOut = vars.GetParam(varName, prefix);
-            if (myOut == null) {
+            if (myOut == null)
+            {
                 throw new Exception("Something went wrong!");
             }
 

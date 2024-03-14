@@ -13,12 +13,12 @@
 
             var testFactory = new TestFactory();
             var dict = testFactory.GetMenuLookup();
-            
+
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
-            
+
             pcAxisFactory.Setup(x => x.GetMenuLookup(language)).Returns(dict);
-            
+
             var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory.Object, configMock.Object);
 
             bool selectionExists;
@@ -53,7 +53,7 @@
 
             var result = resolver.Resolve(language, "", out selectionExists);
 
-            Assert.AreEqual("START",result.Menu );
+            Assert.AreEqual("START", result.Menu);
             Assert.AreEqual("START", result.Selection);
         }
 

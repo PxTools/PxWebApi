@@ -78,7 +78,7 @@ namespace PxWeb.UnitTests
 
             pxApiConfigurationOptions.MaxDataCells = 100000;
 
-            return pxApiConfigurationOptions;   
+            return pxApiConfigurationOptions;
         }
 
 

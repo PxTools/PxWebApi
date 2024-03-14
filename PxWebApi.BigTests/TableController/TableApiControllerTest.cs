@@ -1,12 +1,13 @@
-﻿using PxWeb.Helper.Api2;
-using System;
+﻿using System;
+
+using PxWeb.Helper.Api2;
 
 namespace PxWebApi.BigTests.TableController
 {
     [TestClass]
     public class TableApiControllerTest
     {
-        private static Mock<IPxHost> hostingEnvironmentMock = new Mock<IPxHost>();
+        private static readonly Mock<IPxHost> hostingEnvironmentMock = new Mock<IPxHost>();
 
         [ClassInitialize]
         public static void ClassSetup(TestContext context)

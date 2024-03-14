@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PxWeb.Code.BackgroundWorker
 {
-    public class BackgroundWorkerQueue 
+    public class BackgroundWorkerQueue
     {
         private readonly ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new ConcurrentQueue<Func<CancellationToken, Task>>();
 
@@ -14,7 +14,7 @@ namespace PxWeb.Code.BackgroundWorker
         {
             await _signal.WaitAsync(cancellationToken);
             _workItems.TryDequeue(out var workItem);
-            
+
             if (workItem == null)
             {
                 throw new System.InvalidOperationException("No work item available");

@@ -1,6 +1,7 @@
-﻿using PxWeb.Code.PxDatabase;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+
+using PxWeb.Code.PxDatabase;
 
 namespace PxWebApi.BigTests.Other
 {
@@ -49,7 +50,7 @@ namespace PxWebApi.BigTests.Other
 
             string[] stringsNonMac = new[] { "Alias", "Alias_en", "Alias_sv" };
             string[] stringsMac = new[] { "Alias_en", "Alias_sv", "Alias", };
-            string[] stringsUbuntu = new[] { "Alias_sv", "Alias", "Alias_en"};
+            string[] stringsUbuntu = new[] { "Alias_sv", "Alias", "Alias_en" };
 
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -87,7 +88,7 @@ namespace PxWebApi.BigTests.Other
 
         private void MyDiff(string[] aExcepted, string[] aActual)
         {
-            var expected= string.Join(" ", aExcepted);
+            var expected = string.Join(" ", aExcepted);
             var actual = string.Join(" ", aActual);
 
             Assert.AreEqual(expected, actual);

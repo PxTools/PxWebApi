@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Net;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace PxWeb.Middleware
 {
@@ -41,7 +42,7 @@ namespace PxWeb.Middleware
                     }
                     return Task.FromResult(0);
                 });
-                
+
             }
             await _next.Invoke(context);
         }

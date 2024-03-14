@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Linq;
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Linq;
 
 namespace PxWeb.Code.Api2.NewtonsoftConfiguration
 {
@@ -18,7 +19,7 @@ namespace PxWeb.Code.Api2.NewtonsoftConfiguration
                 throw new ArgumentNullException();
             }
             return props.OrderBy(p => p.DeclaringType.BaseTypesAndSelf().Count()).ToList();
-            
+
         }
 
     }

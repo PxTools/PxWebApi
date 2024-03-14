@@ -16,7 +16,7 @@ namespace PxWeb.UnitTests.DataSource
         private static string GetPathToPxWebProject()
         {
             string pathAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string directoryName = System.IO.Path.GetDirectoryName(pathAssembly) ?? throw new System.Exception("GetDirectoryName(pathAssembly) is null for:"+ pathAssembly);
+            string directoryName = System.IO.Path.GetDirectoryName(pathAssembly) ?? throw new System.Exception("GetDirectoryName(pathAssembly) is null for:" + pathAssembly);
             string folderAssembly = directoryName.Replace("\\", "/");
             if (folderAssembly.EndsWith("/") == false) folderAssembly = folderAssembly + "/";
             string folderProjectLevel = System.IO.Path.GetFullPath(folderAssembly + "../../../../");
@@ -53,7 +53,7 @@ namespace PxWeb.UnitTests.DataSource
         [TestMethod]
         public void ShouldReturnMenu()
         {
-            
+
             //arrange
             var testFactory = new TestFactory();
             string language = "en";
@@ -77,7 +77,7 @@ namespace PxWeb.UnitTests.DataSource
                 .Setup(m => m.RootPath)
                 .Returns(wwwrootPath);
 
-            var resolver = new ItemSelectionResolverCnmm( memorymock.Object, pcAxisFactory, configMock.Object);
+            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
             bool selectionExists;
@@ -88,7 +88,7 @@ namespace PxWeb.UnitTests.DataSource
             //assert
             Assert.IsNotNull(result);
         }
-        
+
         [TestMethod]
         public void ResolveShouldResolveItemCollection()
         {
@@ -165,7 +165,7 @@ namespace PxWeb.UnitTests.DataSource
             var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
-            
+
             //act
             var result = datasource.TableExists("tAB003", language);
 

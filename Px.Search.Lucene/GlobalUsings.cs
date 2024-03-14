@@ -1,4 +1,6 @@
-﻿global using Lucene.Net.Analysis;
+﻿global using System.Text;
+
+global using Lucene.Net.Analysis;
 global using Lucene.Net.Analysis.Ar;
 global using Lucene.Net.Analysis.Da;
 global using Lucene.Net.Analysis.De;
@@ -22,8 +24,10 @@ global using Lucene.Net.QueryParsers.Classic;
 global using Lucene.Net.Search;
 global using Lucene.Net.Store;
 global using Lucene.Net.Util;
+
 global using Microsoft.Extensions.Options;
+
 global using PCAxis.Paxiom;
+
 global using Px.Abstractions.Interfaces;
 global using Px.Search.Lucene.Config;
-global using System.Text;
