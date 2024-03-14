@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug]
-        os: [windows-latest, ubuntu-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     runs-on: ${{ matrix.os }}
 
