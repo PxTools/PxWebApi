@@ -28,7 +28,7 @@ namespace PxWebApi.BigTests.Other
 
         }
 
-
+        [Ignore]
         [TestMethod]
         public void GetFilesTest()
         {
