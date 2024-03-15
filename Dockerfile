@@ -13,9 +13,10 @@ RUN adduser -u 1000 --disabled-password --gecos "" appuser && chown -R appuser /
 USER 1000
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine  AS build
+ARG TARGETARCH
 WORKDIR /src
 COPY . .
-RUN dotnet restore "PxWeb.sln"
+RUN dotnet restore -a $TARGETARCH
 RUN dotnet build "PxWeb/PxWeb.csproj" -c Release -o /app/build
 
 FROM build AS publish
