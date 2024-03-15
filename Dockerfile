@@ -12,7 +12,7 @@ RUN apk add --no-cache icu-libs
 RUN adduser -u 1000 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER 1000
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine  AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 ARG TARGETARCH
 WORKDIR /src
 COPY . .
