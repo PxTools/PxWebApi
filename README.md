@@ -20,6 +20,4 @@ We use [dotnet format](https://github.com/dotnet/format) to clean the source cod
 
 If you don't want to manually run `dotnet format` or Code Cleanup in Visual Studio you can use git [pre-commit](https://pre-commit.com/). After installing pre-commit for your operating system, run `pre-commit install`from the root of this repo and you're done.
 
-The rules for formatting are set in the [.editorconfig]([.editorconfig]) file. Visual Studio supports this automatically, and for VS Code we have the [EditorConfig extension](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig).
-
-More information on [EditorConfig](https://editorconfig.org/)
+The rules for formatting are set in the [.editorconfig](.editorconfig) file. Visual Studio supports this automatically, and for VS Code we have the [EditorConfig extension](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig). More information on [EditorConfig](https://editorconfig.org/)
