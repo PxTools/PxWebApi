@@ -6,6 +6,7 @@ using AspNetCoreRateLimit;
 using log4net;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -135,12 +136,15 @@ namespace PxWeb
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>("/pxapi2-beta");
+
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0");
+                options.RoutePrefix = "/pxapi2-beta";
+            });
 
             app.UseHttpsRedirection();
 
@@ -160,6 +164,7 @@ namespace PxWeb
                     appBuilder.UseAdminProtectionKey();
                 });
             }
+            app.UsePathBase(new PathString("/pxapi2-beta"));
             app.MapControllers();
 
             if (!app.Environment.IsDevelopment())
