@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 
 namespace PxWeb.Code.Api2
 {
@@ -61,6 +62,8 @@ namespace PxWeb.Code.Api2
                         {
                             policy.WithOrigins(origins);
                         }
+                        policy.WithHeaders(HeaderNames.ContentType);
+                        policy.WithMethods("GET", "POST");
                     });
                 });
             }
