@@ -63,7 +63,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             var xNavigator = xmlDocument.CreateNavigator();
             XDocument xDocument = xNavigator != null ? XDocument.Load(xNavigator.ReadSubtree()) : new XDocument();
 
-            ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, id, out selectionExists);
 
             XmlMenu menu = new XmlMenu(xDocument, language,
                     m =>
@@ -120,7 +120,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             bool selectionExists;
 
-            _itemSelectionResolver.Resolve(language, tableId, out selectionExists);
+            _itemSelectionResolver.ResolveTable(language, tableId, out selectionExists);
             return selectionExists;
 
         }

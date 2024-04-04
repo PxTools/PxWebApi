@@ -18,7 +18,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         public string Resolve(string language, string id, out bool selectionExists)
         {
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
-            ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
+            ItemSelection itmSel = _itemSelectionResolver.ResolveTable(language, id, out selectionExists);
             string path = "";
 
             if (selectionExists)

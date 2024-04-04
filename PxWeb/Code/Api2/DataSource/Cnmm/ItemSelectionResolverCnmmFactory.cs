@@ -18,14 +18,24 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             _configOptions = configOptions;
         }
 
-        public Dictionary<string, ItemSelection> GetMenuLookup(string language)
+        public Dictionary<string, ItemSelection> GetMenuLookupFolders(string language)
         {
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
             if (!SqlDbConfigsStatic.DataBases.ContainsKey(cnmmOptions.DatabaseID))
             {
                 throw new PXException($"Database with id {cnmmOptions.DatabaseID} not found");
             }
-            return SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID].GetMenuLookup(language, _configOptions) ?? new Dictionary<string, ItemSelection>();
+            return SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID].GetMenuLookupFolders(language, _configOptions) ?? new Dictionary<string, ItemSelection>();
+        }
+
+        public Dictionary<string, ItemSelection> GetMenuLookupTables(string language)
+        {
+            var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
+            if (!SqlDbConfigsStatic.DataBases.ContainsKey(cnmmOptions.DatabaseID))
+            {
+                throw new PXException($"Database with id {cnmmOptions.DatabaseID} not found");
+            }
+            return SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID].GetMenuLookupTables(language, _configOptions) ?? new Dictionary<string, ItemSelection>();
         }
     }
 }

@@ -47,7 +47,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         {
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
-            ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, id, out selectionExists);
+
             TableLink? tblFix = null;
 
             if (selectionExists)
@@ -93,7 +94,10 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         m.Restriction = item => { return true; }; // TODO: Will show all tables! Even though they are not published...
                     });
                 retMenu.RootItem.Sort();
-                return tblFix != null ? tblFix : retMenu.CurrentItem;
+                var lala = retMenu.GetAsXML();
+
+                return retMenu.CurrentItem;
+                //return tblFix != null ? tblFix : retMenu.CurrentItem;
             }
             return null;
         }
@@ -123,7 +127,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         {
             bool selectionExists;
 
-            _itemSelectionResolver.Resolve(language, tableId, out selectionExists);
+            _itemSelectionResolver.ResolveTable(language, tableId, out selectionExists);
             return selectionExists;
         }
 
