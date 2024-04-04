@@ -8,6 +8,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 {
     public class ItemSelectionResolverCnmm : IItemSelectionResolver
     {
+        //TODO this class and ItemSelectionResolverPxFile are the same except for name and namespace 
+
         private readonly IPxCache _pxCache;
         private readonly IItemSelectionResolverFactory _itemSelectionResolverFactory;
         private readonly IPxApiConfigurationService _pxApiConfigurationService;
