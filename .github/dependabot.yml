@@ -9,6 +9,18 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    reviewers:
+      - "JohannesFinsveen"
+      - "likp"
+      - "runejo"
+    groups:
+      small-change:
+        patterns:
+        - "*"
+        update-types:
+        - "minor"
+        - "patch" 
+      
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
