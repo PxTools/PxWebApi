@@ -94,7 +94,6 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         m.Restriction = item => { return true; }; // TODO: Will show all tables! Even though they are not published...
                     });
                 retMenu.RootItem.Sort();
-                var lala = retMenu.GetAsXML();
 
                 return retMenu.CurrentItem;
                 //return tblFix != null ? tblFix : retMenu.CurrentItem;

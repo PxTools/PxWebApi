@@ -105,7 +105,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 }
             }
 
-            if (!menuLookup.ContainsKey("START"))
+            if (folders && !menuLookup.ContainsKey("START"))
             {
                 itemSelection = new ItemSelection("START", "START");
                 menuLookup.Add("START", itemSelection);
