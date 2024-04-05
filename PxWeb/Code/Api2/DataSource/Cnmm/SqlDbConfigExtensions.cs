@@ -125,7 +125,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         FROM 
                             {DB.MenuSelection.GetNameAndAlias()}
                         WHERE 
-                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE {DB.MetaAdm.PropertyCol.Id()} = 'MenuLevels')";
+                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE upper({DB.MetaAdm.PropertyCol.Id()}) = 'MENULEVELS')";
             }
             else
             {
@@ -137,7 +137,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                             {DB.MenuSelectionLang2.GetNameAndAlias(language)} 
                         JOIN {DB.MenuSelectionLang2.GetNameAndAlias(language)} ON {DB.MenuSelectionLang2.MenuCol.Id(language)} = {DB.MenuSelection.MenuCol.Id()} AND {DB.MenuSelectionLang2.SelectionCol.Id(language)} = {DB.MenuSelection.SelectionCol.Id()}
                     WHERE 
-                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE {DB.MetaAdm.PropertyCol.Id()} = 'MenuLevels')";
+                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE upper({DB.MetaAdm.PropertyCol.Id()}) = 'MENULEVELS')";
             }
         }
 
@@ -180,7 +180,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         FROM 
                             {DB.MenuSelection.GetNameAndAlias()}
                         WHERE 
-                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE {DB.MetaAdm.PropertyCol.Id()} = 'MenuLevels')";
+                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE upper({DB.MetaAdm.PropertyCol.Id()}) = 'MENULEVELS')";
             }
             else
             {
@@ -192,7 +192,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                             {DB.MenuSelectionLang2.GetNameAndAlias(language)} 
                         JOIN {DB.MenuSelectionLang2.GetNameAndAlias(language)} ON {DB.MenuSelectionLang2.MenuCol.Id(language)} = {DB.MenuSelection.MenuCol.Id()} AND {DB.MenuSelectionLang2.SelectionCol.Id(language)} = {DB.MenuSelection.SelectionCol.Id()}
                     WHERE 
-                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE {DB.MetaAdm.PropertyCol.Id()} = 'MenuLevels')";
+                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE upper({DB.MetaAdm.PropertyCol.Id()}) = 'MENULEVELS')";
             }
         }
 
@@ -234,7 +234,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         FROM 
                             {DB.MenuSelection.GetNameAndAlias()}
                         WHERE 
-                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol.Id()} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE {DB.MetaAdm.PropertyCol.Id()} = 'MenuLevels')";
+                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol.Id()} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE upper({DB.MetaAdm.PropertyCol.Id()}) = 'MENULEVELS')";
             }
             else
             {
@@ -246,7 +246,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                             {DB.MenuSelectionLang2.GetNameAndAlias(language)} 
                             JOIN {DB.MenuSelection.GetNameAndAlias()} ON {DB.MenuSelectionLang2.MenuCol.Id(language)} = {DB.MenuSelection.MenuCol.Id()} AND {DB.MenuSelectionLang2.SelectionCol.Id(language)} = {DB.MenuSelection.SelectionCol.Id()}
                         WHERE 
-                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol.Id()} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE {DB.MetaAdm.PropertyCol.Id()} = 'MenuLevels')";
+                            {DB.MenuSelection.LevelNoCol.Id()} NOT IN (SELECT {DB.MetaAdm.ValueCol.Id()} FROM {DB.MetaAdm.GetNameAndAlias()} WHERE upper({DB.MetaAdm.PropertyCol.Id()}) = 'MENULEVELS')";
             }
         }
 
