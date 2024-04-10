@@ -64,7 +64,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             Item? outItem = CreateMenu(language, itmSel);
 
-            return (TableLink?) outItem;
+            return (TableLink?)outItem;
         }
 
         public Item? CreateMenu(string id, string language, out bool selectionExists)
@@ -81,7 +81,8 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         }
 
-        private Item? CreateMenu(string language, ItemSelection itmSel) { 
+        private Item? CreateMenu(string language, ItemSelection itmSel)
+        {
 
             MenuXmlFile menuXmlFile = new MenuXmlFile(_hostingEnvironment);
             XmlDocument xmlDocument = menuXmlFile.GetAsXmlDocument();

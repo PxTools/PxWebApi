@@ -76,7 +76,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
             TableLink? tblFix = null;
-            
+
             //Create database object to return
             DatamodelMenu retMenu = ConfigDatamodelMenu.Create(
                     language,
@@ -97,7 +97,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
                                 tbl.Text = CreateTableTitleWithInterval(tbl);
 
-                                if (string.Compare(tbl.ID.Selection, itmSel.Selection, true) == 0   
+                                if (string.Compare(tbl.ID.Selection, itmSel.Selection, true) == 0
                                  && string.Compare(tbl.ID.Menu, itmSel.Menu, true) == 0)
                                 {
                                     tblFix = tbl;
@@ -118,14 +118,10 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         };
                         m.Restriction = item => { return true; }; // TODO: Will show all tables! Even though they are not published...
                     });
-                retMenu.RootItem.Sort();
+            retMenu.RootItem.Sort();
 
-                var lala1 = tblFix;
-                var lala2 = retMenu.CurrentItem;
+            return tblFix != null ? tblFix : retMenu.CurrentItem;
 
-                //return retMenu.CurrentItem;
-                return tblFix != null ? tblFix : retMenu.CurrentItem;
-            
         }
 
         public Codelist? GetCodelist(string id, string language)
