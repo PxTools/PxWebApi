@@ -43,18 +43,42 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             }
         }
 
+
+        public TableLink? CreateMenuTableLink(string id, string language)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveTable(language, id, out bool selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel);
+
+            return (TableLink?)outItem;
+        }
+
         public Item? CreateMenu(string id, string language, out bool selectionExists)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, id, out selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel);
+
+            return outItem;
+
+        }
+
+        private Item? CreateMenu(string language, ItemSelection itmSel)
         {
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
-            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, id, out selectionExists);
-
             TableLink? tblFix = null;
-
-            if (selectionExists)
-            {
-                //Create database object to return
-                DatamodelMenu retMenu = ConfigDatamodelMenu.Create(
+            
+            //Create database object to return
+            DatamodelMenu retMenu = ConfigDatamodelMenu.Create(
                     language,
                     PCAxis.Sql.DbConfig.SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID],
                     m =>
@@ -73,7 +97,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
                                 tbl.Text = CreateTableTitleWithInterval(tbl);
 
-                                if (string.Compare(tbl.ID.Selection, id, true) == 0)
+                                if (string.Compare(tbl.ID.Selection, itmSel.Selection, true) == 0   
+                                 && string.Compare(tbl.ID.Menu, itmSel.Menu, true) == 0)
                                 {
                                     tblFix = tbl;
                                 }
@@ -95,10 +120,12 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                     });
                 retMenu.RootItem.Sort();
 
-                return retMenu.CurrentItem;
-                //return tblFix != null ? tblFix : retMenu.CurrentItem;
-            }
-            return null;
+                var lala1 = tblFix;
+                var lala2 = retMenu.CurrentItem;
+
+                //return retMenu.CurrentItem;
+                return tblFix != null ? tblFix : retMenu.CurrentItem;
+            
         }
 
         public Codelist? GetCodelist(string id, string language)
