@@ -2,6 +2,7 @@
 {
     public interface IItemSelectionResolver
     {
-        ItemSelection Resolve(string language, string selection, out bool selectionExists);
+        ItemSelection ResolveFolder(string language, string selection, out bool selectionExists);
+        ItemSelection ResolveTable(string language, string selection, out bool selectionExists);
     }
 }

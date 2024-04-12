@@ -24,7 +24,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             _logger = logger;
         }
 
-        public Dictionary<string, ItemSelection> GetMenuLookup(string language)
+        public Dictionary<string, ItemSelection> GetMenuLookupFolders(string language)
         {
             var menuLookup = new Dictionary<string, ItemSelection>();
 
@@ -44,10 +44,6 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 // Add Menu levels to lookup table
                 string xpath = "//MenuItem";
                 AddMenuItemsToMenuLookup(xdoc, menuLookup, xpath);
-
-                // Add Tables to lookup table
-                xpath = "//Link";
-                AddTablesToMenuLookup(xdoc, menuLookup, xpath);
             }
 
             catch (Exception e)
@@ -76,6 +72,37 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                     }
                 }
             }
+        }
+
+
+        public Dictionary<string, ItemSelection> GetMenuLookupTables(string language)
+        {
+            var menuLookup = new Dictionary<string, ItemSelection>();
+
+            if (!LanguageUtil.HasValidLanguageCodePattern(language))
+            {
+                _logger.LogWarning($"Unsupported language: {LanguageUtil.SanitizeLangueCode(language)}");
+                return menuLookup;
+            }
+
+            language = LanguageUtil.SanitizeLangueCode(language);
+
+            try
+            {
+                var menuXmlFile = new MenuXmlFile(_hostingEnvironment);
+                XmlDocument xdoc = menuXmlFile.GetLanguageAsXmlDocument(language);
+
+                // Add Tables to lookup table
+                string xpath = "//Link";
+                AddTablesToMenuLookup(xdoc, menuLookup, xpath);
+            }
+
+            catch (Exception e)
+            {
+                _logger.LogError($"Error loading MenuLookup table for language {LanguageUtil.SanitizeLangueCode(language)}", e);
+            }
+
+            return menuLookup;
         }
 
         private void AddTablesToMenuLookup(XmlDocument xdoc, Dictionary<string, ItemSelection> menuLookup, string xpath)

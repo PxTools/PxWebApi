@@ -32,18 +32,18 @@ namespace PxWeb.UnitTests.DataSource
             var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
 
             var testFactory = new TestFactory();
-            var dict = testFactory.GetMenuLookup();
+            var dict = testFactory.GetMenuLookupFolders();
 
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
 
-            pcAxisFactory.Setup(x => x.GetMenuLookup(language)).Returns(dict);
+            pcAxisFactory.Setup(x => x.GetMenuLookupFolders(language)).Returns(dict);
 
             var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory.Object, configMock.Object);
 
             bool selectionExists;
 
-            var result = resolver.Resolve(language, "", out selectionExists);
+            var result = resolver.ResolveFolder(language, "", out selectionExists);
 
             Assert.AreEqual("START", result.Menu);
             Assert.AreEqual("START", result.Selection);
@@ -115,7 +115,7 @@ namespace PxWeb.UnitTests.DataSource
 
             bool selectionExists;
 
-            var result = resolver.Resolve(language, "EN", out selectionExists);
+            var result = resolver.ResolveFolder(language, "EN", out selectionExists);
 
             Assert.IsNotNull(result);
             Assert.AreEqual("Database", result.Menu);

@@ -5,7 +5,18 @@ namespace PxWeb.UnitTests
     [TestClass]
     public class TestFactory
     {
-        public Dictionary<string, ItemSelection> GetMenuLookup()
+        public Dictionary<string, ItemSelection> GetMenuLookupFolders()
+        {
+            var dict = new Dictionary<string, ItemSelection>();
+
+            dict.Add("AA0003", new ItemSelection("AA", "AA0003"));
+            dict.Add("AA0005", new ItemSelection("AA", "AA0005"));
+            dict.Add("AA0003B", new ItemSelection("AA0003", "AA0003B"));
+            return dict;
+        }
+
+
+        public Dictionary<string, ItemSelection> GetMenuLookupTables()
         {
             var dict = new Dictionary<string, ItemSelection>();
 
