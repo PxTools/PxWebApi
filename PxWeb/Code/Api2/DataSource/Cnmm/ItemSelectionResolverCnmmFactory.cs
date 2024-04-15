@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
+using Px.Abstractions.Interfaces;
 
 using PCAxis.Menu;
 using PCAxis.Paxiom;
