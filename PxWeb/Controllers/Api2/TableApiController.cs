@@ -194,7 +194,7 @@ namespace PxWeb.Controllers.Api2
             var serializer = _serializeManager.GetSerializer(outputFormat);
             serializer.Serialize(builder.Model, Response);
 
-            Response.Headers.Add("X-Output-Format", orgFormat);
+            Response.Headers.Add("X-Output-Format", orgFormat??"null");
 
             return Ok();
         }
