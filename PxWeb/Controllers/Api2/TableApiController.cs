@@ -160,6 +160,8 @@ namespace PxWeb.Controllers.Api2
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat)
         {
             Problem? problem;
+            
+            var orgFormat = outputFormat;
 
             lang = _languageHelper.HandleLanguage(lang);
 
@@ -191,6 +193,8 @@ namespace PxWeb.Controllers.Api2
 
             var serializer = _serializeManager.GetSerializer(outputFormat);
             serializer.Serialize(builder.Model, Response);
+
+            Response.Headers.Add("X-Output-Format", orgFormat);
 
             return Ok();
         }
