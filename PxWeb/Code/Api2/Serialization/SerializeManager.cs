@@ -36,7 +36,7 @@
                     return new JsonDataSerializer();
                 case "json-stat":
                     return new JsonStatDataSerializer();
-                case "json-stat2":
+                case "json_stat2":
                     return new JsonStat2DataSerializer();
                 case "parquet":
                     return new ParquetSerializer();
