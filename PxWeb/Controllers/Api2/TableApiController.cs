@@ -265,7 +265,10 @@ namespace PxWeb.Controllers.Api2
             return p;
         }
 
-
+        public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

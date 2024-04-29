@@ -35,10 +35,10 @@ namespace PxWeb.Mappers
             tm.Description = model.Meta.Description;
             tm.Source = model.Meta.Source;
             //tm.Tags = new System.Collections.Generic.List<string>(); // TODO: Implement later
-            tm.OfficalStatistics = model.Meta.OfficialStatistics;
+            tm.OfficialStatistics = model.Meta.OfficialStatistics;
             tm.SubjectLabel = model.Meta.SubjectArea;
             tm.SubjectCode = model.Meta.SubjectCode;
-            tm.Licence = _configOptions.License;
+            tm.License = _configOptions.License;
             tm.AggregationAllowed = model.Meta.AggregAllowed;
             //tm.Discontinued = false; // TODO: Implement later. Not in spec!
 
