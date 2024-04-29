@@ -267,7 +267,31 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
-            throw new NotImplementedException();
+            Problem? problem;
+
+            lang = _languageHelper.HandleLanguage(lang);
+
+            var builder = _dataSource.CreateBuilder(id, lang);
+            if (builder == null)
+            {
+                return NotFound(NonExistentTable());
+            }
+
+            builder.BuildForSelection();
+
+            //No variable selection is provided, so we will return the default selection    
+            var selection = _selectionHandler.GetSelection(builder, null, out problem);
+
+            if (problem is not null)
+            {
+                return BadRequest(problem);
+            }
+
+            //TODO Map selection to SelectionResponse
+            //SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection);
+            return Ok();
+
+
         }
     }
 
