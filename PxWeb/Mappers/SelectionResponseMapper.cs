@@ -25,8 +25,8 @@ namespace PxWeb.Mappers
                 VariableCode = selection.VariableCode,
                 CodeList = GetCodeList(meta.Variables.FirstOrDefault(v => string.Compare(v.Code, selection.VariableCode, true) == 0)),
                 OutputValues = CodeListOutputValuesType.SingleEnum,
-                ValueCodes =  selection.ValueCodes.Cast<string>().ToList(),
-             }).ToList();
+                ValueCodes = selection.ValueCodes.Cast<string>().ToList(),
+            }).ToList();
 
             response.Links = new List<Link>();
 
@@ -40,7 +40,7 @@ namespace PxWeb.Mappers
             if (variable == null)
             {
                 return null;
-            }   
+            }
 
             if (variable.CurrentGrouping != null)
             {
