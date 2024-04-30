@@ -164,10 +164,12 @@ namespace PxWebApi.BigTests.TableController
             ICodelistResponseMapper codelistResponseMapper = new CodelistResponseMapper(linkCreator, pxApiConfigurationOptions);
             ISerializeManager serializeManager = new SerializeManager();
             ISelectionHandler selectionHandler = new SelectionHandler(pxApiConfigurationService);
+            
+            ISelectionResponseMapper selectionResponseMapper= new SelectionResponseMapper(linkCreator);
 
             return new PxWeb.Controllers.Api2.TableApiController(iDataSource, languageHelper, responseMapper,
                                                                     backend, pxApiConfigurationOptions, tablesResponseMapper, tableResponseMapper,
-                                                                    codelistResponseMapper, serializeManager, selectionHandler);
+                                                                    codelistResponseMapper, selectionResponseMapper, serializeManager, selectionHandler);
 
         }
 

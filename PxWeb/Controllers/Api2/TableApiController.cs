@@ -46,8 +46,9 @@ namespace PxWeb.Controllers.Api2
         private readonly ISerializeManager _serializeManager;
         private readonly PxApiConfigurationOptions _configOptions;
         private readonly ISelectionHandler _selectionHandler;
+        private readonly ISelectionResponseMapper _selectionResponseMapper;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, ITableMetadataResponseMapper responseMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler)
+        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, ITableMetadataResponseMapper responseMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler)
         {
             _dataSource = dataSource;
             _languageHelper = languageHelper;
@@ -59,6 +60,7 @@ namespace PxWeb.Controllers.Api2
             _codelistResponseMapper = codelistResponseMapper;
             _serializeManager = serializeManager;
             _selectionHandler = selectionHandler;
+            _selectionResponseMapper = selectionResponseMapper;
         }
 
 
@@ -288,8 +290,8 @@ namespace PxWeb.Controllers.Api2
             }
 
             //TODO Map selection to SelectionResponse
-            //SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection);
-            return Ok();
+            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, builder.Model.Meta, id, lang);
+            return Ok(selectionResponse);
 
 
         }
