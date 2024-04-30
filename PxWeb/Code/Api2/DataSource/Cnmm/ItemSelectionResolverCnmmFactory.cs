@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
 
 using PCAxis.Menu;
 using PCAxis.Paxiom;
 using PCAxis.Sql.DbConfig;
+
+using Px.Abstractions.Interfaces;
 
 namespace PxWeb.Code.Api2.DataSource.Cnmm
 {
