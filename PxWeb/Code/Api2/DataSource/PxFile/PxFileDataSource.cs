@@ -54,7 +54,34 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             }
         }
 
+        public TableLink? CreateMenuTableLink(string id, string language)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveTable(language, id, out bool selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel);
+
+            return (TableLink?)outItem;
+        }
+
         public Item? CreateMenu(string id, string language, out bool selectionExists)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, id, out selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel);
+
+            return outItem;
+
+        }
+
+        private Item? CreateMenu(string language, ItemSelection itmSel)
         {
 
             MenuXmlFile menuXmlFile = new MenuXmlFile(_hostingEnvironment);
@@ -63,7 +90,6 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             var xNavigator = xmlDocument.CreateNavigator();
             XDocument xDocument = xNavigator != null ? XDocument.Load(xNavigator.ReadSubtree()) : new XDocument();
 
-            ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
 
             XmlMenu menu = new XmlMenu(xDocument, language,
                     m =>
@@ -83,6 +109,8 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 {
                     if ((item is PxMenuItem) || (item is TableLink))
                     {
+                        //Hmm, doesnt this mean that a TableLink for TAB004  will differ when it is root and in a folder? It that ok?
+                        //Yes, it seems. item.ID.Selection is not used by CreateMenuTableLinnk client.  
                         item.ID.Selection = GetIdentifierWithoutPath(item.ID.Selection);
                     }
                 }
@@ -120,7 +148,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             bool selectionExists;
 
-            _itemSelectionResolver.Resolve(language, tableId, out selectionExists);
+            _itemSelectionResolver.ResolveTable(language, tableId, out selectionExists);
             return selectionExists;
 
         }

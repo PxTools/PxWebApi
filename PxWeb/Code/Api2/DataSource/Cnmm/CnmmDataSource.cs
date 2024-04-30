@@ -43,17 +43,42 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             }
         }
 
+
+        public TableLink? CreateMenuTableLink(string id, string language)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveTable(language, id, out bool selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel);
+
+            return (TableLink?)outItem;
+        }
+
         public Item? CreateMenu(string id, string language, out bool selectionExists)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, id, out selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel);
+
+            return outItem;
+
+        }
+
+        private Item? CreateMenu(string language, ItemSelection itmSel)
         {
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
-            ItemSelection itmSel = _itemSelectionResolver.Resolve(language, id, out selectionExists);
             TableLink? tblFix = null;
 
-            if (selectionExists)
-            {
-                //Create database object to return
-                DatamodelMenu retMenu = ConfigDatamodelMenu.Create(
+            //Create database object to return
+            DatamodelMenu retMenu = ConfigDatamodelMenu.Create(
                     language,
                     PCAxis.Sql.DbConfig.SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID],
                     m =>
@@ -72,7 +97,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
                                 tbl.Text = CreateTableTitleWithInterval(tbl);
 
-                                if (string.Compare(tbl.ID.Selection, id, true) == 0)
+                                if (string.Compare(tbl.ID.Selection, itmSel.Selection, true) == 0
+                                 && string.Compare(tbl.ID.Menu, itmSel.Menu, true) == 0)
                                 {
                                     tblFix = tbl;
                                 }
@@ -92,10 +118,10 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                         };
                         m.Restriction = item => { return true; }; // TODO: Will show all tables! Even though they are not published...
                     });
-                retMenu.RootItem.Sort();
-                return tblFix != null ? tblFix : retMenu.CurrentItem;
-            }
-            return null;
+            retMenu.RootItem.Sort();
+
+            return tblFix != null ? tblFix : retMenu.CurrentItem;
+
         }
 
         public Codelist? GetCodelist(string id, string language)
@@ -123,7 +149,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         {
             bool selectionExists;
 
-            _itemSelectionResolver.Resolve(language, tableId, out selectionExists);
+            _itemSelectionResolver.ResolveTable(language, tableId, out selectionExists);
             return selectionExists;
         }
 
