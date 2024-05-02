@@ -3,8 +3,6 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-using DocumentFormat.OpenXml.Wordprocessing;
-
 using Px.Abstractions.Interfaces;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
