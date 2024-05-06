@@ -12,5 +12,6 @@ namespace PxWeb.Mappers
         Link GetTableDataLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true);
         Link GetCodelistLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true);
         Link GetFolderLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true);
+        Link GetDefaultSelectionLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true);
     }
 }

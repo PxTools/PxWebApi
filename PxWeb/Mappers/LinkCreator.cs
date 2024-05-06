@@ -75,6 +75,16 @@ namespace PxWeb.Mappers
             return link;
         }
 
+        public Link GetDefaultSelectionLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
+        {
+            var link = new Link();
+            link.Rel = relation.ToString();
+            link.Hreflang = language;
+            link.Href = CreateURL($"tables/{id}/defaultselection", language, showLangParam);
+
+            return link;
+        }
+
         public Link GetFolderLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
         {
             var link = new Link();

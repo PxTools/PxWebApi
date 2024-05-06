@@ -1,6 +1,4 @@
-﻿using PCAxis.Menu;
-
-namespace PxWeb.Code.Api2.DataSource.Cnmm
+﻿namespace Px.Abstractions.Interfaces
 {
     public interface IItemSelectionResolverFactory
     {

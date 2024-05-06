@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Microsoft.Extensions.Logging;
-
 public class TestLogger<T> : ILogger<T>, IDisposable
 {
     private readonly List<string> _logMessages = new List<string>();

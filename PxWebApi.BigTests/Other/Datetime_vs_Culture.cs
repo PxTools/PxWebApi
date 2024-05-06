@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Routing.Constraints;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.Extensions.Options;
-
-using PxWeb.Code.BackgroundWorker;
-using PxWeb.Controllers.Api2.Admin;
 
 namespace PxWebApi.BigTests.Other
 {

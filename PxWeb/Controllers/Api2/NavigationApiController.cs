@@ -35,10 +35,8 @@ namespace PxWeb.Controllers.Api2
         private readonly ILanguageHelper _languageHelper;
         private readonly IFolderResponseMapper _folderResponseMapper;
 
-        public NavigationApiController(IDataSource dataSource, ISearchBackend backend, ILanguageHelper languageHelper, IFolderResponseMapper folderMapper)
+        public NavigationApiController(IDataSource dataSource, ILanguageHelper languageHelper, IFolderResponseMapper folderMapper)
         {
-            //TODO Remove  _backend = backend; from constructor
-
             _dataSource = dataSource;
             _languageHelper = languageHelper;
             _folderResponseMapper = folderMapper;
