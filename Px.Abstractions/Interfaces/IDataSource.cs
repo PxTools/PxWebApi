@@ -11,6 +11,15 @@
         /// <returns></returns>
         Item? CreateMenu(string id, string language, out bool selectionExists);
 
+
+        /// <summary>
+        /// Gets a TableLink from the Menu. (This is only usen when Updating the search Index) 
+        /// </summary>
+        /// <param name="id">The "url"-id for the table</param>
+        /// <param name="language"></param>
+        /// <returns>The TableLink data or null if it does not exist</returns>
+        TableLink? CreateMenuTableLink(string id, string language);
+
         /// <summary>
         /// Create builder
         /// </summary>

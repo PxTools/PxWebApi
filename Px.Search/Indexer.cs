@@ -125,8 +125,6 @@
         /// <param name="languages">list of languages codes that the search index will be able to be searched for</param>
         public void UpdateTableEntries(List<string> tables, List<string> languages)
         {
-            bool exists;
-
             using (var index = _backend.GetIndex())
             {
                 foreach (var language in languages)
@@ -135,11 +133,11 @@
 
                     foreach (var table in tables)
                     {
-                        Item? item = _source.CreateMenu(table, language, out exists);
+                        TableLink? tableLinkItem = _source.CreateMenuTableLink(table, language);
 
-                        if (exists && item != null && item is TableLink)
+                        if (tableLinkItem != null)
                         {
-                            UpdateTable(table, (TableLink)item, language, index);
+                            UpdateTable(table, tableLinkItem, language, index);
                         }
                         else
                         {
