@@ -137,17 +137,19 @@ namespace PxWeb
 
             var app = builder.Build();
 
-            app.UseMiddleware<GlobalRoutePrefixMiddleware>("/pxapi2-beta");
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>("/api/v2");
 
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0");
-                options.RoutePrefix = "/pxapi2-beta";
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0-beta");
+                //options.RoutePrefix = "/api/v2";
             });
 
             app.UseHttpsRedirection();
+
+            app.UsePathBase(new PathString("/api/v2"));
 
             if (corsEnbled)
             {
@@ -165,7 +167,6 @@ namespace PxWeb
                     appBuilder.UseAdminProtectionKey();
                 });
             }
-            app.UsePathBase(new PathString("/pxapi2-beta"));
             app.MapControllers();
 
             if (!app.Environment.IsDevelopment())
