@@ -68,8 +68,6 @@ namespace PxWeb.Controllers.Api2
             lang = _languageHelper.HandleLanguage(lang);
             IPXModelBuilder? builder = _dataSource.CreateBuilder(id, lang);
 
-
-
             if (builder != null)
             {
                 try
