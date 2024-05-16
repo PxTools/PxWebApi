@@ -9,9 +9,9 @@ We are currently developing PxWebApi 2.0
 ## Development notes
 
 ```sh
-curl -i -H "API_ADMIN_KEY: test" -X 'PUT'  https://localhost:5001/api/v2/admin/database
-curl -i -H "API_ADMIN_KEY: test" -X 'POST' https://localhost:5001/api/v2/admin/searchindex
-curl -i -H "API_ADMIN_KEY: test" -X 'PATCH' -H 'Content-Type: application/json' -d '["TAB001", "TAB004"]' https://localhost:5001/api/v2/admin/searchindex
+curl -i -H "API_ADMIN_KEY: test" -X 'PUT'  https://localhost:8443/api/v2/admin/database
+curl -i -H "API_ADMIN_KEY: test" -X 'POST' https://localhost:8443/api/v2/admin/searchindex
+curl -i -H "API_ADMIN_KEY: test" -X 'PATCH' -H 'Content-Type: application/json' -d '["TAB001", "TAB004"]' https://localhost:8443/api/v2/admin/searchindex
 ```
 
 ### Code formatting
