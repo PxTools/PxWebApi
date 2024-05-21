@@ -141,11 +141,15 @@ namespace PxWeb
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(routePrefix);
             app.UsePathBase(new PathString(routePrefix));
 
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0-beta");
-            });
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0-beta");
+                });
+            }
 
             app.UseHttpsRedirection();
 
