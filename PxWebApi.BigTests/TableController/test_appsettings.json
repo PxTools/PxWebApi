@@ -41,6 +41,7 @@
     "SearchEngine": "Lucene",
     "PageSize": 20,
     "BaseURL": "https://www.pxapi.com/api/v2",
+    "RoutePrefix": "/api/v2",
     "OutputFormats": [
       "xlsx",
       "xlsx_doublecolumn",
