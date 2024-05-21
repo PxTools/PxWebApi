@@ -153,7 +153,6 @@ namespace PxWeb
 
             app.UseHttpsRedirection();
 
-
             if (corsEnbled)
             {
                 app.UseCors();
