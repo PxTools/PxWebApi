@@ -15,6 +15,7 @@ namespace PxWeb.Config.Api2
         public int CacheTime { get; set; } = 5;
         public int PageSize { get; set; }
         public string BaseURL { get; set; } = String.Empty;
+        public string RoutePrefix { get; set; } = String.Empty;
         public List<string> OutputFormats { get; set; } = new List<string>();
         public string DefaultOutputFormat { get; set; } = String.Empty;
 
