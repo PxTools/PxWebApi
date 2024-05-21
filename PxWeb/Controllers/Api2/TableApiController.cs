@@ -63,12 +63,10 @@ namespace PxWeb.Controllers.Api2
             _selectionResponseMapper = selectionResponseMapper;
         }
 
-
-        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
+        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] MetadataOutputFormatType? outputFormat)
         {
             lang = _languageHelper.HandleLanguage(lang);
             IPXModelBuilder? builder = _dataSource.CreateBuilder(id, lang);
-
 
             if (builder != null)
             {
@@ -77,9 +75,15 @@ namespace PxWeb.Controllers.Api2
                     builder.BuildForSelection();
                     var model = builder.Model;
 
-                    TableMetadataResponse tm = _tableMetadataResponseMapper.Map(model, id, lang);
-
-                    return new ObjectResult(tm);
+                    if (outputFormat != null && outputFormat == MetadataOutputFormatType.Stat2Enum)
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        TableMetadataResponse tm = _tableMetadataResponseMapper.Map(model, id, lang);
+                        return new ObjectResult(tm);
+                    }
                 }
                 catch (Exception)
                 {
@@ -295,6 +299,7 @@ namespace PxWeb.Controllers.Api2
 
 
         }
+
     }
 
 }
