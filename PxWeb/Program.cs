@@ -136,20 +136,19 @@ namespace PxWeb
             bool corsEnbled = builder.Services.ConfigurePxCORS(builder, _logger);
 
             var app = builder.Build();
+            var routePrefix = builder.Configuration.GetSection("PxApiConfiguration:RoutePrefix").Value;
 
-            app.UseMiddleware<GlobalRoutePrefixMiddleware>("/api/v2");
-
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>(routePrefix);
+            app.UsePathBase(new PathString(routePrefix));
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0-beta");
-                //options.RoutePrefix = "/api/v2";
             });
 
             app.UseHttpsRedirection();
 
-            app.UsePathBase(new PathString("/api/v2"));
 
             if (corsEnbled)
             {
