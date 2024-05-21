@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -129,6 +130,12 @@ namespace PxWeb
             {
                 // Sort endpoints
                 c.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
+                c.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Title = "PxWebApi",
+                    Version = "v2-beta"
+                }
+                );
             });
 
 
@@ -147,7 +154,7 @@ namespace PxWeb
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "PxWebApi 2.0-beta");
+                    options.SwaggerEndpoint("/swagger/v2/swagger.json", "PxWebApi 2.0-beta");
                 });
             }
 
