@@ -45,7 +45,7 @@ namespace PxWeb.Controllers.Api2.Admin
         }
 
         [HttpPut]
-        [Route("/api/v2/admin/database")]
+        [Route("/admin/database")]
         [SwaggerOperation("Database")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
@@ -109,7 +109,7 @@ namespace PxWeb.Controllers.Api2.Admin
         }
 
         [HttpGet]
-        [Route("/api/v2/admin/database")]
+        [Route("/admin/database")]
         [SwaggerOperation("Database")]
         [SwaggerResponse(statusCode: 200, description: "Success")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]

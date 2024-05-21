@@ -15,7 +15,7 @@ namespace PxWeb.Controllers.Api2.Admin
         }
 
         [HttpDelete]
-        [Route("/api/v2/admin/cache")]
+        [Route("/admin/cache")]
         public IActionResult Clear()
         {
             _pxCache.Clear();

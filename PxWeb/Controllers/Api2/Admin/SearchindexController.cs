@@ -43,7 +43,7 @@ namespace PxWeb.Controllers.Api2.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [Route("/api/v2/admin/searchindex")]
+        [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
@@ -84,7 +84,7 @@ namespace PxWeb.Controllers.Api2.Admin
         /// <param name="tables"></param>
         /// <returns></returns>
         [HttpPatch]
-        [Route("/api/v2/admin/searchindex")]
+        [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
@@ -135,7 +135,7 @@ namespace PxWeb.Controllers.Api2.Admin
         }
 
         [HttpGet]
-        [Route("/api/v2/admin/searchindex")]
+        [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 200, description: "Success")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
