@@ -153,6 +153,7 @@ namespace PxWebApi.BigTests.TableController
 
             ILinkCreator linkCreator = new LinkCreator(pxApiConfigurationOptions);
             ITableMetadataResponseMapper responseMapper = new TableMetadataResponseMapper(linkCreator, pxApiConfigurationOptions);
+            IDatasetMapper datasetMapper = new DatasetMapper(linkCreator, pxApiConfigurationOptions);
 
             IOptions<LuceneConfigurationOptions> luceneConfigurationOptions = Util.GetIOptions<LuceneConfigurationOptions>(configuration, "LuceneConfiguration");
             ILuceneConfigurationService luceneConfigurationService = new LuceneConfigurationService(luceneConfigurationOptions, hostingEnvironmentMock.Object);
@@ -167,7 +168,7 @@ namespace PxWebApi.BigTests.TableController
 
             ISelectionResponseMapper selectionResponseMapper = new SelectionResponseMapper(linkCreator);
 
-            return new PxWeb.Controllers.Api2.TableApiController(iDataSource, languageHelper, responseMapper,
+            return new PxWeb.Controllers.Api2.TableApiController(iDataSource, languageHelper, responseMapper, datasetMapper,
                                                                     backend, pxApiConfigurationOptions, tablesResponseMapper, tableResponseMapper,
                                                                     codelistResponseMapper, selectionResponseMapper, serializeManager, selectionHandler);
 
