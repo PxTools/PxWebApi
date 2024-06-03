@@ -170,7 +170,7 @@ namespace PxWeb
             {
                 app.UseAuthorization();
 
-                app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v2/admin"), appBuilder =>
+                app.UseWhen(context => context.Request.Path.StartsWithSegments(routePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
@@ -183,7 +183,7 @@ namespace PxWeb
                 app.UseIpRateLimiting();
             }
 
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/v2/admin"), appBuilder =>
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments(routePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
             {
                 appBuilder.UseCacheMiddleware();
             });
