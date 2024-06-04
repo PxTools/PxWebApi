@@ -30,8 +30,4 @@
     <ProjectReference Include="..\PxWeb\PxWeb.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TableController\" />
-  </ItemGroup>
-
 </Project>

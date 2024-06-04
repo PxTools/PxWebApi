@@ -75,14 +75,6 @@ namespace PxWeb.Mappers
                     AddValueNotes(variableValue, dataset, dimensionValue);
 
 
-                    //Codelists
-                    var codeLists = new System.Collections.Generic.List<CodeListInformation>();
-                    MapCodelists(codeLists, variable);
-                    if (codeLists != null)
-                    {
-                        dataset.AddCodelist(dimensionValue, codeLists);
-                    }
-
                     if (!variable.IsContentVariable) continue;
 
                     var unitDecimals = (variableValue.HasPrecision()) ? variableValue.Precision : model.Meta.ShowDecimals;
@@ -117,12 +109,23 @@ namespace PxWeb.Mappers
                 //Variable notes
                 AddVariableNotes(variable, dataset, dimensionValue);
 
+                //MetaID
                 CollectMetaIdsForVariable(variable, ref metaIdsHelper);
 
                 if (metaIdsHelper.Count > 0)
                 {
                     dataset.AddDimensionLink(dimensionValue, metaIdsHelper);
                 }
+
+
+                //Codelists
+                var codeLists = new System.Collections.Generic.List<CodeListInformation>();
+                MapCodelists(codeLists, variable);
+                if (codeLists != null)
+                {
+                    dataset.AddCodelist(dimensionValue, codeLists);
+                }
+
 
                 dataset.Size.Add(variable.Values.Count);
                 dataset.Id.Add(variable.Code);
@@ -182,7 +185,14 @@ namespace PxWeb.Mappers
                     .FirstOrDefault();
 
                 // ReSharper disable once PossibleNullReferenceException
-                tempDateTime = lastUpdatedContentsVariable.ContentInfo.LastUpdated.PxDateStringToDateTime();
+                if (lastUpdatedContentsVariable != null)
+                {
+                    tempDateTime = lastUpdatedContentsVariable.ContentInfo.LastUpdated.PxDateStringToDateTime();
+                }
+                else
+                {
+                    tempDateTime = model.Meta.CreationDate.PxDateStringToDateTime();
+                }
             }
             else if (model.Meta.ContentInfo.LastUpdated != null)
             {
