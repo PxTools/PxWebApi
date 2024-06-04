@@ -1,0 +1,212 @@
+{
+  "language": "en",
+  "tables": [
+    {
+      "type": "Table",
+      "id": "TAB004",
+      "label": "Total air emissions by sector, greenhouse gas, contents and year",
+      "description": "",
+      "updated": "2023-05-25T13:42:00Z",
+      "firstPeriod": "1990",
+      "lastPeriod": "2017",
+      "category": "public",
+      "variableNames": [
+        "sector",
+        "greenhouse gas",
+        "contents",
+        "year"
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-px"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-stat2"
+        },
+        {
+          "rel": "data",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "id": "TAB005",
+      "label": "Land use in Sweden, hectares by region, land use, contents and year",
+      "description": "",
+      "updated": "2023-08-31T13:42:00Z",
+      "firstPeriod": "2010",
+      "lastPeriod": "2015",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "land use",
+        "contents",
+        "year"
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB005?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB005/metadata?lang=en&outputFormat=json-px"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB005/metadata?lang=en&outputFormat=json-stat2"
+        },
+        {
+          "rel": "data",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB005/data?lang=en&outputFormat=px"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "id": "TAB003",
+      "label": "Disposal facilities by treatment category, waste category, contents and year",
+      "description": "",
+      "updated": "2023-05-25T14:13:00Z",
+      "firstPeriod": "2010",
+      "lastPeriod": "2016",
+      "category": "public",
+      "variableNames": [
+        "treatment category",
+        "waste category",
+        "contents",
+        "year"
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB003?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en&outputFormat=json-px"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en&outputFormat=json-stat2"
+        },
+        {
+          "rel": "data",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB003/data?lang=en&outputFormat=px"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "id": "TAB001",
+      "label": "Population by region, sex, age, contents and year",
+      "description": "",
+      "updated": "2023-05-25T13:42:00Z",
+      "firstPeriod": "1981",
+      "lastPeriod": "2001",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "sex",
+        "age",
+        "contents",
+        "year"
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB001?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en&outputFormat=json-px"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en&outputFormat=json-stat2"
+        },
+        {
+          "rel": "data",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB001/data?lang=en&outputFormat=px"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "id": "TAB002",
+      "label": "Population by region, sex, age, citizenship, contents and year",
+      "description": "",
+      "updated": "2023-05-25T13:42:00Z",
+      "firstPeriod": "1991",
+      "lastPeriod": "2001",
+      "category": "public",
+      "variableNames": [
+        "region",
+        "sex",
+        "age",
+        "citizenship",
+        "contents",
+        "year"
+      ],
+      "links": [
+        {
+          "rel": "self",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB002?lang=en"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB002/metadata?lang=en&outputFormat=json-px"
+        },
+        {
+          "rel": "metadata",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB002/metadata?lang=en&outputFormat=json-stat2"
+        },
+        {
+          "rel": "data",
+          "hreflang": "en",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB002/data?lang=en&outputFormat=px"
+        }
+      ]
+    }
+  ],
+  "page": {
+    "pageNumber": 1,
+    "pageSize": 20,
+    "totalElements": 5,
+    "totalPages": 1,
+    "links": []
+  },
+  "links": [
+    {
+      "rel": "self",
+      "hreflang": "en",
+      "href": "https://www.pxapi.com/api/v2/tables/?lang=en&pagesize=20&pageNumber=1"
+    }
+  ]
+}
