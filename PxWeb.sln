@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Px.Search.Lucene", "Px.Sear
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWebApi.BigTests", "PxWebApi.BigTests\PxWebApi.BigTests.csproj", "{E52A7944-28C6-4004-9282-1AE8BC539F8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxWeb.Api2.Server", "PxWeb.Api2.Server\PxWeb.Api2.Server.csproj", "{24C58402-46B8-4042-90C2-74B38B847862}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{E52A7944-28C6-4004-9282-1AE8BC539F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E52A7944-28C6-4004-9282-1AE8BC539F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E52A7944-28C6-4004-9282-1AE8BC539F8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{24C58402-46B8-4042-90C2-74B38B847862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24C58402-46B8-4042-90C2-74B38B847862}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24C58402-46B8-4042-90C2-74B38B847862}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24C58402-46B8-4042-90C2-74B38B847862}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

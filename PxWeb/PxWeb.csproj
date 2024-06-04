@@ -39,7 +39,7 @@
     <PackageReference Include="PCAxis.Menu.ConfigDatamodelMenu" Version="1.0.8" />
     <PackageReference Include="PCAxis.Serializers" Version="1.3.0" />
     <PackageReference Include="PcAxis.Sql" Version="1.2.4" />
-    <PackageReference Include="PxWeb.Api2.Server" Version="0.0.2-alpha.0.38" />
+    <PackageReference Include="PxWeb.Api2.Server" Version="0.0.2-alpha.0.44" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.6.2" />
@@ -63,7 +63,6 @@
     <ProjectReference Include="..\Px.Abstractions\Px.Abstractions.csproj" />
     <ProjectReference Include="..\Px.Search.Lucene\Px.Search.Lucene.csproj" />
     <ProjectReference Include="..\Px.Search\Px.Search.csproj" />
-    <ProjectReference Include="..\PxWeb.Api2.Server\PxWeb.Api2.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
