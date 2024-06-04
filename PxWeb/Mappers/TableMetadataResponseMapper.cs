@@ -65,7 +65,7 @@ namespace PxWeb.Mappers
             tm.Links = new System.Collections.Generic.List<Link>();
 
             // Links to metadata
-            tm.Links.Add(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.self, id.ToUpper(), language, true));
+            tm.Links.AddRange(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.self, id.ToUpper(), language, true));
 
             // Links to data
             tm.Links.Add(_linkCreator.GetTableDataLink(LinkCreator.LinkRelationEnum.data, id.ToUpper(), language, true));
