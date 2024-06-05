@@ -9,7 +9,7 @@
     }
   },
   "PxApiConfiguration": {
-	"AAAAAAA":"BBBBBBBBB",
+    "AAAAAAA": "BBBBBBBBB",
     "Languages": [
       {
         "Id": "en",
@@ -64,7 +64,8 @@
       "relational_table",
       "px"
     ],
-    "DefaultOutputFormat": "px"
+    "DefaultOutputFormat": "px",
+    "EnableSwaggerUI": false
   },
   "LuceneConfiguration": {
     "IndexDirectory": "Database"
