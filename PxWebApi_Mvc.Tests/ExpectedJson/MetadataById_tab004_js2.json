@@ -1,0 +1,250 @@
+{
+  "version": "2.0",
+  "class": "dataset",
+  "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-stat2",
+  "label": "Total air emissions by sector, greenhouse gas, contents and year",
+  "source": "Statistics Sweden",
+  "updated": "2023-05-25T13:42:00Z",
+  "link": {
+    "data": [
+      {
+        "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
+      }
+    ]
+  },
+  "note": [
+    "Footnote text",
+    ".. = Data not available"
+  ],
+  "role": {
+    "time": [
+      "TIME"
+    ],
+    "metric": [
+      "ContentsCode"
+    ]
+  },
+  "id": [
+    "SECTOR",
+    "GREENHOUSEGAS",
+    "ContentsCode",
+    "TIME"
+  ],
+  "size": [
+    14,
+    11,
+    1,
+    28
+  ],
+  "dimension": {
+    "SECTOR": {
+      "label": "sector",
+      "note": [
+        "Footnote text"
+      ],
+      "category": {
+        "index": {
+          "0.1": 0,
+          "0.2": 1,
+          "0.3": 2,
+          "0.4": 3,
+          "1.0": 4,
+          "10.0": 5,
+          "2.0": 6,
+          "3.0": 7,
+          "4.0": 8,
+          "5.0": 9,
+          "6.0": 10,
+          "7.0": 11,
+          "8.0": 12,
+          "9.0": 13
+        },
+        "label": {
+          "0.1": "NATIONAL TOTAL (excluding LULUCF, excluding international transports)",
+          "0.2": "NATIONAL TOTAL (excluding LULUCF, including international transports)",
+          "0.3": "NATIONAL TOTAL (including LULUCF, excluding international transports)",
+          "0.4": "NATIONAL TOTAL (including LULUCF, including international transports)",
+          "1.0": "OFF-ROAD VEHICLES AND OTHER MACHINERY, TOTAL",
+          "10.0": "LAND-USE, LAND-USE CHANGE AND FORESTRY (LULUCF), TOTAL",
+          "2.0": "WASTE, TOTAL",
+          "3.0": "ELECTRICITY AND DISTRICT HEATING, TOTAL",
+          "4.0": "INDUSTRY, TOTAL",
+          "5.0": "INTERNATIONAL TRANSPORT, TOTAL",
+          "6.0": "AGRICULTURE, TOTAL",
+          "7.0": "SOLVENT USE AND OTHER PRODUCT USE, TOTAL",
+          "8.0": "DOMESTIC TRANSPORT, TOTAL",
+          "9.0": "HEATING OF HOUSES AND PREMISES, TOTAL"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codeLists": []
+      }
+    },
+    "GREENHOUSEGAS": {
+      "label": "greenhouse gas",
+      "category": {
+        "index": {
+          "CH4": 0,
+          "CH4_CO2-ekv.": 1,
+          "CO2": 2,
+          "CO2-BIO": 3,
+          "CO2-ekv.": 4,
+          "HFC": 5,
+          "N2O": 6,
+          "N2O_CO2-ekv.": 7,
+          "PFC": 8,
+          "SF6": 9,
+          "SF6_CO2-ekv.": 10
+        },
+        "label": {
+          "CH4": "Methane (CH4) (t)",
+          "CH4_CO2-ekv.": "Methane (CH4) (kt CO2-eqv.)",
+          "CO2": "Carbon Dioxide (CO2) (kt)",
+          "CO2-BIO": "Biogenic carbon dioxide (CO2) from fuels (kt)",
+          "CO2-ekv.": "Total Greenhouse Gases (kt CO2-eqv.)",
+          "HFC": "Hydrofluorocarbons (HFCs) (kt CO2-eqv.)",
+          "N2O": "Nitrous Oxide (N2O) (t)",
+          "N2O_CO2-ekv.": "Nitrous Oxide (N2O) (kt CO2-eqv.)",
+          "PFC": "Perfluorocarbons (PFCs) (kt CO2-eqv.)",
+          "SF6": "Sulphur Hexafluoride (SF6) (kg)",
+          "SF6_CO2-ekv.": "Sulphur Hexafluoride (SF6) (kt CO2-eqv.)"
+        },
+        "note": {
+          "SF6_CO2-ekv.": [
+            "Footnote text"
+          ]
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codeLists": []
+      }
+    },
+    "ContentsCode": {
+      "label": "contents",
+      "category": {
+        "index": {
+          "Emission": 0
+        },
+        "label": {
+          "Emission": "Substance"
+        },
+        "unit": {
+          "Emission": {
+            "base": "Device varies with the subject",
+            "decimals": 0
+          }
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codeLists": []
+      }
+    },
+    "TIME": {
+      "label": "year",
+      "category": {
+        "index": {
+          "1990": 0,
+          "1991": 1,
+          "1992": 2,
+          "1993": 3,
+          "1994": 4,
+          "1995": 5,
+          "1996": 6,
+          "1997": 7,
+          "1998": 8,
+          "1999": 9,
+          "2000": 10,
+          "2001": 11,
+          "2002": 12,
+          "2003": 13,
+          "2004": 14,
+          "2005": 15,
+          "2006": 16,
+          "2007": 17,
+          "2008": 18,
+          "2009": 19,
+          "2010": 20,
+          "2011": 21,
+          "2012": 22,
+          "2013": 23,
+          "2014": 24,
+          "2015": 25,
+          "2016": 26,
+          "2017": 27
+        },
+        "label": {
+          "1990": "1990",
+          "1991": "1991",
+          "1992": "1992",
+          "1993": "1993",
+          "1994": "1994",
+          "1995": "1995",
+          "1996": "1996",
+          "1997": "1997",
+          "1998": "1998",
+          "1999": "1999",
+          "2000": "2000",
+          "2001": "2001",
+          "2002": "2002",
+          "2003": "2003",
+          "2004": "2004",
+          "2005": "2005",
+          "2006": "2006",
+          "2007": "2007",
+          "2008": "2008",
+          "2009": "2009",
+          "2010": "2010",
+          "2011": "2011",
+          "2012": "2012",
+          "2013": "2013",
+          "2014": "2014",
+          "2015": "2015",
+          "2016": "2016",
+          "2017": "2017"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "code",
+        "codeLists": []
+      }
+    }
+  },
+  "extension": {
+    "px": {
+      "infofile": "ENVIRONMENT",
+      "tableid": "TAB004",
+      "decimals": 0,
+      "official-statistics": false,
+      "aggregallowed": false,
+      "language": "en",
+      "contents": "Total air emissions",
+      "descriptiondefault": false,
+      "heading": [
+        "contents",
+        "year"
+      ],
+      "stub": [
+        "sector",
+        "greenhouse gas"
+      ],
+      "matrix": "TAB004",
+      "subject-code": "EN",
+      "subject-area": "Environment"
+    },
+    "contact": [
+      {
+        "raw": "Test Testsson, SCB#Tel: 08-111 222 33#Fax: 08-222 333 44#E-mail: test.testsson@scb.se"
+      },
+      {
+        "raw": "Test2 Testsson2, SCB#Tel: 08-333 444 55#Fax: 08-444 555 66#E-mail: test2.testsson2@scb.se"
+      }
+    ]
+  }
+}

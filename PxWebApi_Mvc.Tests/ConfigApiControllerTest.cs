@@ -10,14 +10,13 @@ namespace PxWebApi_Mvc.Tests
     public class ConfigApiControllerTest
     {
 
-
         [TestMethod]
         public async Task GetApiConfiguration()
         {
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            var response = await client.GetAsync("/api/v2/config");
+            var response = await client.GetAsync("/config");
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
 
