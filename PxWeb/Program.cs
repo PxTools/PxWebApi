@@ -6,10 +6,12 @@ using AspNetCoreRateLimit;
 using log4net;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -129,6 +131,12 @@ namespace PxWeb
             {
                 // Sort endpoints
                 c.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
+                c.SwaggerDoc("v2", new OpenApiInfo
+                {
+                    Title = "PxWebApi",
+                    Version = "v2-beta"
+                }
+                );
             });
 
 
@@ -136,12 +144,19 @@ namespace PxWeb
             bool corsEnbled = builder.Services.ConfigurePxCORS(builder, _logger);
 
             var app = builder.Build();
+            var routePrefix = builder.Configuration.GetSection("PxApiConfiguration:RoutePrefix").Value;
+
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>(routePrefix);
+            app.UsePathBase(new PathString(routePrefix));
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v2/swagger.json", "PxWebApi 2.0-beta");
+                });
             }
 
             app.UseHttpsRedirection();
@@ -156,7 +171,7 @@ namespace PxWeb
             {
                 app.UseAuthorization();
 
-                app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v2/admin"), appBuilder =>
+                app.UseWhen(context => context.Request.Path.StartsWithSegments(routePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
@@ -169,7 +184,7 @@ namespace PxWeb
                 app.UseIpRateLimiting();
             }
 
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/v2/admin"), appBuilder =>
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments(routePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
             {
                 appBuilder.UseCacheMiddleware();
             });
