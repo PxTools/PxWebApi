@@ -110,6 +110,7 @@ namespace PxWeb.Mappers
             StringBuilder sb = new StringBuilder();
 
             sb.Append(_urlBase);
+            sb.Append("/");
             sb.Append(endpointUrl);
 
             if (showLangParam)
@@ -139,6 +140,7 @@ namespace PxWeb.Mappers
             StringBuilder sb = new StringBuilder();
 
             sb.Append(_urlBase);
+            sb.Append("/");
             sb.Append(endpointUrl);
 
             if (!string.IsNullOrEmpty(query) && showLangParam)

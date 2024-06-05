@@ -45,7 +45,7 @@ namespace PxWeb.Controllers.Api2
         /// <summary>
         /// Gets navigation item with the given id.
         /// HttpGet
-        /// Route /api/v2/navigation/{id}
+        /// Route /navigation/{id}
         /// </summary>
         /// <param name="id">Id</param>
         /// <param name="lang">The language if the default is not what you want.</param>
@@ -61,7 +61,7 @@ namespace PxWeb.Controllers.Api2
         /// <summary>
         /// Browse the database structure
         /// HttpGet
-        /// Route /api/v2/navigation
+        /// Route /navigation
         /// </summary>
         /// <param name="lang">The language if the default is not what you want.</param>
         /// <response code="200">Success</response>
