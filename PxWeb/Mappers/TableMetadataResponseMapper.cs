@@ -505,6 +505,10 @@ namespace PxWeb.Mappers
 
         private ContentValue.MeasuringTypeEnum GetMeasuringType(string stockfa)
         {
+            if (stockfa == null)
+            {
+                return ContentValue.MeasuringTypeEnum.OtherEnum;
+            }
             switch (stockfa.ToUpper())
             {
                 case "S":
