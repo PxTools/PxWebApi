@@ -285,7 +285,7 @@ namespace PxWeb.Models.Api2
             {
                 if (link.Rel == "self")
                 {
-                    this.Href = link.Href + "&outputFormat=json-stat2";
+                    this.Href = link.Href;
                 }
                 else
                 {

@@ -1,0 +1,63 @@
+{
+  "apiVersion": "2.0",
+  "languages": [
+    {
+      "id": "en",
+      "label": "English"
+    },
+    {
+      "id": "sv",
+      "label": "Svenska"
+    }
+  ],
+  "defaultLanguage": "en",
+  "maxDataCells": 10000,
+  "maxCallsPerTimeWindow": 30,
+  "timeWindow": 10,
+  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+  "sourceReferences": [
+    {
+      "language": "en",
+      "text": "Source: Statistics Sweden"
+    },
+    {
+      "language": "sv",
+      "text": "Källa: SCB"
+    }
+  ],
+  "defaultMetadataFormat": 0,
+  "defaultDataFormat": "px",
+  "dataFormats": [
+    "xlsx",
+    "xlsx_doublecolumn",
+    "csv",
+    "csv_tab",
+    "csv_tabhead",
+    "csv_comma",
+    "csv_commahead",
+    "csv_space",
+    "csv_spacehead",
+    "csv_semicolon",
+    "csv_semicolonhead",
+    "csv2",
+    "csv3",
+    "json",
+    "json-stat",
+    "json-stat2",
+    "parquet",
+    "html5_table",
+    "relational_table",
+    "px"
+  ],
+  "features": [
+    {
+      "id": "CORS",
+      "params": [
+        {
+          "key": "enabled",
+          "value": "True"
+        }
+      ]
+    }
+  ]
+}

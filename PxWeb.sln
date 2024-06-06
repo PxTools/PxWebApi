@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Px.Search.Lucene", "Px.Sear
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWebApi.BigTests", "PxWebApi.BigTests\PxWebApi.BigTests.csproj", "{E52A7944-28C6-4004-9282-1AE8BC539F8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxWebApi_Mvc.Tests", "PxWebApi_Mvc.Tests\PxWebApi_Mvc.Tests.csproj", "{DE680238-98E9-4FCE-9D55-9B849F893238}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E52A7944-28C6-4004-9282-1AE8BC539F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E52A7944-28C6-4004-9282-1AE8BC539F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E52A7944-28C6-4004-9282-1AE8BC539F8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE680238-98E9-4FCE-9D55-9B849F893238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE680238-98E9-4FCE-9D55-9B849F893238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE680238-98E9-4FCE-9D55-9B849F893238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE680238-98E9-4FCE-9D55-9B849F893238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

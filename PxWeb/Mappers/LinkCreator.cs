@@ -20,10 +20,14 @@ namespace PxWeb.Mappers
         }
 
         private readonly string _urlBase;
+        private readonly string _defaultDataFormat;
+        private readonly List<string> _metaFormats = new List<string> { "json-px", "json-stat2" };
+        //Could not get the strings cleanly from MetadataOutputFormatType. Anybody?
 
         public LinkCreator(IOptions<PxApiConfigurationOptions> configOptions)
         {
             _urlBase = configOptions.Value.BaseURL;
+            _defaultDataFormat = configOptions.Value.DefaultOutputFormat;
         }
         public Link GetTablesLink(LinkRelationEnum relation, string language, string? query, int pagesize, int pageNumber, bool showLangParam = true)
         {
@@ -40,19 +44,26 @@ namespace PxWeb.Mappers
             var link = new Link();
             link.Rel = relation.ToString();
             link.Hreflang = language;
-            link.Href = CreateURL($"tables/{id}", language, showLangParam);
+            link.Href = CreateURL($"tables/{id}", language, showLangParam, null);
 
             return link;
         }
 
-        public Link GetTableMetadataJsonLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
+        public List<Link> GetTableMetadataJsonLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
         {
-            var link = new Link();
-            link.Rel = relation.ToString();
-            link.Hreflang = language;
-            link.Href = CreateURL($"tables/{id}/metadata", language, showLangParam);
+            List<Link> links = new List<Link>();
 
-            return link;
+            foreach (string outFormat in _metaFormats)
+            {
+                var link = new Link();
+                link.Rel = relation.ToString();
+                link.Hreflang = language;
+
+                link.Href = CreateURL($"tables/{id}/metadata", language, showLangParam, outFormat);
+                links.Add(link);
+            }
+
+            return links;
         }
 
         public Link GetTableDataLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
@@ -60,7 +71,7 @@ namespace PxWeb.Mappers
             var link = new Link();
             link.Rel = relation.ToString();
             link.Hreflang = language;
-            link.Href = CreateURL($"tables/{id}/data", language, showLangParam);
+            link.Href = CreateURL($"tables/{id}/data", language, showLangParam, _defaultDataFormat);
 
             return link;
         }
@@ -70,7 +81,7 @@ namespace PxWeb.Mappers
             var link = new Link();
             link.Rel = relation.ToString();
             link.Hreflang = language;
-            link.Href = CreateURL($"codeLists/{id}", language, showLangParam);
+            link.Href = CreateURL($"codeLists/{id}", language, showLangParam, null);
 
             return link;
         }
@@ -80,7 +91,7 @@ namespace PxWeb.Mappers
             var link = new Link();
             link.Rel = relation.ToString();
             link.Hreflang = language;
-            link.Href = CreateURL($"tables/{id}/defaultselection", language, showLangParam);
+            link.Href = CreateURL($"tables/{id}/defaultselection", language, showLangParam, null);
 
             return link;
         }
@@ -90,11 +101,11 @@ namespace PxWeb.Mappers
             var link = new Link();
             link.Rel = relation.ToString();
             link.Hreflang = language;
-            link.Href = CreateURL($"navigation/{id}", language, showLangParam);
+            link.Href = CreateURL($"navigation/{id}", language, showLangParam, null);
 
             return link;
         }
-        private string CreateURL(string endpointUrl, string language, bool showLangParam)
+        private string CreateURL(string endpointUrl, string language, bool showLangParam, string? outputFormat)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -106,6 +117,20 @@ namespace PxWeb.Mappers
             {
                 sb.Append("?lang=");
                 sb.Append(language);
+            }
+
+            if (!string.IsNullOrEmpty(outputFormat))
+            {
+                if (showLangParam)
+                {
+                    sb.Append('&');
+                }
+                else
+                {
+                    sb.Append('?');
+                }
+                sb.Append("outputFormat=");
+                sb.Append(outputFormat);
             }
 
             return sb.ToString();
