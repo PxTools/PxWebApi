@@ -143,14 +143,17 @@ namespace PxWeb
             // Handle CORS configuration from appsettings.json
             bool corsEnbled = builder.Services.ConfigurePxCORS(builder, _logger);
 
-            var app = builder.Build();
-            var routePrefix = builder.Configuration.GetSection("PxApiConfiguration:RoutePrefix").Value;
+            // Bind the configuration to the PxApiConfigurationOptions class
+            var pxApiConfiguration = new PxApiConfigurationOptions();
+            builder.Configuration.Bind("PxApiConfiguration", pxApiConfiguration);
 
-            app.UseMiddleware<GlobalRoutePrefixMiddleware>(routePrefix);
-            app.UsePathBase(new PathString(routePrefix));
+            var app = builder.Build();
+
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>(pxApiConfiguration.RoutePrefix);
+            app.UsePathBase(new PathString(pxApiConfiguration.RoutePrefix));
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (pxApiConfiguration.EnableSwaggerUI || app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
@@ -171,7 +174,7 @@ namespace PxWeb
             {
                 app.UseAuthorization();
 
-                app.UseWhen(context => context.Request.Path.StartsWithSegments(routePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
+                app.UseWhen(context => context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
@@ -184,7 +187,7 @@ namespace PxWeb
                 app.UseIpRateLimiting();
             }
 
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments(routePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
             {
                 appBuilder.UseCacheMiddleware();
             });
