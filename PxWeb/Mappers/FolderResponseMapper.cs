@@ -117,7 +117,7 @@ namespace PxWeb.Mappers
             table.Links.Add(_linkCreator.GetTableLink(LinkCreator.LinkRelationEnum.self, tableId, _language, true));
 
             // Links to metadata
-            table.Links.Add(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.metadata, tableId, _language, true));
+            table.Links.AddRange(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.metadata, tableId, _language, true));
 
             // Links to data
             table.Links.Add(_linkCreator.GetTableDataLink(LinkCreator.LinkRelationEnum.data, tableId, _language, true));

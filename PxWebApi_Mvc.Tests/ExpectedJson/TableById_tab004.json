@@ -1,0 +1,40 @@
+{
+  "type": "Table",
+  "id": "TAB004",
+  "label": "Total air emissions by sector, greenhouse gas, contents and year",
+  "description": "",
+  "sortCode": "TAB004",
+  "updated": "2023-05-25T13:42:00Z",
+  "firstPeriod": "1990",
+  "lastPeriod": "2017",
+  "category": "public",
+  "variableNames": [
+    "sector",
+    "greenhouse gas",
+    "contents",
+    "year"
+  ],
+  "links": [
+    {
+      "rel": "self",
+      "hreflang": "en",
+      "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=en"
+    },
+    {
+      "rel": "metadata",
+      "hreflang": "en",
+      "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-px"
+    },
+    {
+      "rel": "metadata",
+      "hreflang": "en",
+      "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-stat2"
+    },
+    {
+      "rel": "data",
+      "hreflang": "en",
+      "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
+    }
+  ],
+  "language": "en"
+}
