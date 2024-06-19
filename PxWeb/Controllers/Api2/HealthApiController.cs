@@ -19,8 +19,8 @@ namespace PxWeb.Controllers.Api2
         {
             _logger = logger;
             string root = env.ContentRootPath;
-            string healthPath = Path.Combine(root, "wwwroot", "health");
-            _alivePath = Path.Combine(healthPath, "alive", "alive.json");
+            string healthPath = Path.Combine(root, "wwwroot", "Health");
+            _alivePath = Path.Combine(healthPath, "Alive", "alive.json");
             _applicationState = applicationState;
         }
 
