@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using PxWeb.Models.Api2;
+
 namespace PxWeb.Controllers.Api2
 {
     [ApiController]
@@ -11,15 +13,15 @@ namespace PxWeb.Controllers.Api2
     {
         private readonly ILogger<HealthApiController> _logger;
         private readonly string _alivePath;
-        private readonly string _readyPath;
+        private readonly IApplicationState _applicationState;
 
-        public HealthApiController(IWebHostEnvironment env, ILogger<HealthApiController> logger)
+        public HealthApiController(IWebHostEnvironment env, ILogger<HealthApiController> logger, IApplicationState applicationState)
         {
             _logger = logger;
             string root = env.ContentRootPath;
             string healthPath = Path.Combine(root, "wwwroot", "health");
             _alivePath = Path.Combine(healthPath, "alive", "alive.json");
-            _readyPath = Path.Combine(healthPath, "ready", "yes.json");
+            _applicationState = applicationState;
         }
 
 
@@ -45,7 +47,7 @@ namespace PxWeb.Controllers.Api2
         {
             try
             {
-                bool isReady = System.IO.File.Exists(_readyPath);
+                bool isReady = !_applicationState.MarkedForShutdown;
                 if (isReady)
                 {
                     //TODO chech extenal dependencies

@@ -30,6 +30,7 @@ using PxWeb.Filters.Api2;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
 using PxWeb.Middleware;
+using PxWeb.Models.Api2;
 
 
 namespace PxWeb
@@ -75,6 +76,7 @@ namespace PxWeb
             builder.Services.AddSingleton<ILinkCreator, LinkCreator>();
             builder.Services.AddSingleton<ISelectionHandler, SelectionHandler>();
             builder.Services.AddSingleton<IControllerStateProvider, ControllerStateProvider>();
+            builder.Services.AddSingleton<IApplicationState, ApplicationState>();
 
             builder.Services.AddPxDataSource(builder);
 
