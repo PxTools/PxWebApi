@@ -8,14 +8,19 @@ There are 2 health endpoints:
 Their usefullness depend on how Pxwebapi is installed. 
 If you have a single pxwebapi instance and install it as a package,
  you will not find them very usefull. 
+ 
+If you run Pxwebapi as Docker in a kubernetes cluster 
 
 ## Ready
 The purpose of the ready endpoint is to be the target of loadbalancer probes.
 
-It returns 503 if the node is being stopped for maintainence, 200 otherwise.
+It returns 503 if the node is being stopped for maintainence or 
+the application has problems reaching this external dependencies, 200 otherwise.
 
 Technically: It returns 200 if there exist a file called yes.json 
              in wwwroot/health/ready  , 503 otherwise.
+			 
+Todo: if datasource is CNMM then a simple db connection test is made.
 
 ## Alive
 The purpose of the alive endpoint is to show which increment of pxwebapi
