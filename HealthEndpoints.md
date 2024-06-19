@@ -26,7 +26,8 @@ The purpose of the ready endpoint is to be the target of loadbalancer probes.
 It returns 503 if the node is being stopped for maintainence or 
 the application has problems reaching this external dependencies, 200 otherwise.
 
-Technically: MarkForShutdown sets a flag in config which is read by this endpoint.
+Technically: MarkForShutdown sets a flag in ApplicationState which is read by this endpoint.
+It may take some seconds to have effect.           
 			 
 Todo: if datasource is CNMM then a simple db connection test is made.
 
@@ -39,6 +40,7 @@ It typically returns some details of how this increment was made, i.e. tags of s
 Technically: It returns the current content of the file alive.json 
              in wwwroot/health/alive. The content of alive.json need not be json.
 			 When building the application overwrite the alive.json in the package/artefact with the info you find usefull
+
 
 
 			 
