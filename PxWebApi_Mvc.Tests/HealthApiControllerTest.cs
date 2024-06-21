@@ -36,20 +36,20 @@ namespace PxWebApi_Mvc.Tests
             var response = await client.GetAsync("/health/ready");
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "First call to ready");
 
-            var response2 = await client2.PostAsync("/admin/EnterMaintanceMode", null);
-            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to EnterMaintanceMode");
+            var response2 = await client2.PostAsync("/admin/enter-maintance-mode", null);
+            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to enter-maintance-mode");
 
             await Task.Delay(waitForMilliSeconds);
             response = await client.GetAsync("/health/ready");
-            Assert.AreEqual(HttpStatusCode.ServiceUnavailable, response.StatusCode, "The call to ready after EnterMaintanceMode");
+            Assert.AreEqual(HttpStatusCode.ServiceUnavailable, response.StatusCode, "The call to ready after Enter-maintance-mode");
 
             await Task.Delay(waitForMilliSeconds);
-            response2 = await client2.PostAsync("/admin/ExitMaintanceMode", null);
-            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to ExitMaintanceMode");
+            response2 = await client2.PostAsync("/admin/exit-maintance-mode", null);
+            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to exit-maintance-mode");
 
             await Task.Delay(waitForMilliSeconds);
             response = await client.GetAsync("/health/ready");
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "The call to ready after ExitMaintanceMode");
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "The call to ready after exit-maintance-mode");
         }
 
     }

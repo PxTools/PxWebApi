@@ -16,7 +16,7 @@ namespace PxWeb.Controllers.Api2.Admin
         }
 
         [HttpPost]
-        [Route("/admin/EnterMaintanceMode")]
+        [Route("/admin/enter-maintance-mode")]
         public IActionResult EnterMaintanceMode()
         {
             _applicationState.InMaintanceMode = true;
@@ -24,7 +24,7 @@ namespace PxWeb.Controllers.Api2.Admin
         }
 
         [HttpPost]
-        [Route("/admin/ExitMaintanceMode")]
+        [Route("/admin/exit-maintance-mode")]
         public IActionResult ExitMaintanceMode()
         {
             _applicationState.InMaintanceMode = false;

@@ -16,8 +16,8 @@ have more than one server behind a loadbalancer.
 
 For the later usecase there are 2 more:
 ```
-/admin/EnterMaintanceMode
-/admin/ExitMaintanceMode
+/admin/enter-maintance-mode
+/admin/exit-maintance-mode
 ```
 Which allows you to tell one of your servers to tell the loadbalancer 
 it needs to stop for maintainence.
