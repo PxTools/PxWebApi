@@ -31,7 +31,18 @@ namespace PxWeb.Controllers.Api2
         {
             try
             {
-                string aliveBody = System.IO.File.ReadAllText(_alivePath);
+                string aliveBody = "I'm alive.";
+                try
+                {
+                    if (System.IO.File.Exists(_alivePath))
+                    {
+                        aliveBody = System.IO.File.ReadAllText(_alivePath);
+                    }
+                }
+                catch (NullReferenceException ex)
+                {
+                    _logger.LogWarning(ex, "IsAlive() has problems");
+                }
                 return new ObjectResult(aliveBody);
             }
             catch (NullReferenceException ex)
