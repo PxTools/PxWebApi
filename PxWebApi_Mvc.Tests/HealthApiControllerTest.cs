@@ -18,7 +18,7 @@ namespace PxWebApi_Mvc.Tests
 
             var response = await client.GetAsync("/health/alive");
 
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
 
@@ -36,20 +36,20 @@ namespace PxWebApi_Mvc.Tests
             var response = await client.GetAsync("/health/ready");
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "First call to ready");
 
-            var response2 = await client2.PostAsync("/admin/MarkForShutdown", null);
-            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to MarkForShutdown");
+            var response2 = await client2.PostAsync("/admin/EnterMaintanceMode", null);
+            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to EnterMaintanceMode");
 
             await Task.Delay(waitForMilliSeconds);
             response = await client.GetAsync("/health/ready");
-            Assert.AreEqual(HttpStatusCode.ServiceUnavailable, response.StatusCode, "The call to ready after MarkForShutdown");
+            Assert.AreEqual(HttpStatusCode.ServiceUnavailable, response.StatusCode, "The call to ready after EnterMaintanceMode");
 
             await Task.Delay(waitForMilliSeconds);
-            response2 = await client2.PostAsync("/admin/MarkForShutdownUndo", null);
-            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to MarkForShutdownUndo");
+            response2 = await client2.PostAsync("/admin/ExitMaintanceMode", null);
+            Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to ExitMaintanceMode");
 
             await Task.Delay(waitForMilliSeconds);
             response = await client.GetAsync("/health/ready");
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "The call to ready after MarkForShutdown Undo");
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "The call to ready after ExitMaintanceMode");
         }
 
     }

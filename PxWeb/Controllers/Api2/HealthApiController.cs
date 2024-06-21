@@ -58,7 +58,7 @@ namespace PxWeb.Controllers.Api2
         {
             try
             {
-                bool isReady = !_applicationState.MarkedForShutdown;
+                bool isReady = !_applicationState.InMaintanceMode;
                 if (isReady)
                 {
                     //TODO chech extenal dependencies

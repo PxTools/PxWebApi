@@ -2,12 +2,12 @@
 {
     public interface IApplicationState
     {
-        public bool MarkedForShutdown { get; set; }
+        public bool InMaintanceMode { get; set; }
     }
 
     public class ApplicationState : IApplicationState
     {
-        public bool MarkedForShutdown { get; set; } = false;
+        public bool InMaintanceMode { get; set; } = false;
     }
 
 }
