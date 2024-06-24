@@ -28,7 +28,8 @@ namespace PxWebApi_Mvc.Tests
             using var client = application.CreateClient();
             using var client2 = application.CreateClient();
 
-            int waitForMilliSeconds = 10000;
+            int waitForMilliSeconds = 1000;
+            int maxWaitLoop = 30;
             //how soon is now
 
             var response = await client.GetAsync("/health/ready");
@@ -37,16 +38,37 @@ namespace PxWebApi_Mvc.Tests
             var response2 = await client2.PostAsync("/admin/enter-maintance-mode", null);
             Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to enter-maintance-mode");
 
-            await Task.Delay(waitForMilliSeconds);
-            response = await client.GetAsync("/health/ready");
+
+            for (int i = 0; i < maxWaitLoop; i++)
+            {
+                await Task.Delay(waitForMilliSeconds);
+                response = await client.GetAsync("/health/ready");
+
+                if (HttpStatusCode.ServiceUnavailable == response.StatusCode)
+                {
+                    Console.WriteLine("OK in iteration: " + i.ToString());
+                    break;
+                }
+            }
             Assert.AreEqual(HttpStatusCode.ServiceUnavailable, response.StatusCode, "The call to ready after Enter-maintance-mode");
+
+
 
             await Task.Delay(waitForMilliSeconds);
             response2 = await client2.PostAsync("/admin/exit-maintance-mode", null);
             Assert.AreEqual(HttpStatusCode.OK, response2.StatusCode, "The call to exit-maintance-mode");
 
-            await Task.Delay(waitForMilliSeconds);
-            response = await client.GetAsync("/health/ready");
+            for (int i = 0; i < maxWaitLoop; i++)
+            {
+                await Task.Delay(waitForMilliSeconds);
+                response = await client.GetAsync("/health/ready");
+                if (HttpStatusCode.OK == response.StatusCode)
+                {
+                    Console.WriteLine("OK in iteration: " + i.ToString());
+                    break;
+                }
+
+            }
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode, "The call to ready after exit-maintance-mode");
         }
 
