@@ -1,7 +1,4 @@
-﻿using System.IO;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using PxWeb.Models.Api2;
@@ -12,15 +9,11 @@ namespace PxWeb.Controllers.Api2
     public class HealthApiController : ControllerBase
     {
         private readonly ILogger<HealthApiController> _logger;
-        private readonly string _alivePath;
         private readonly IApplicationState _applicationState;
 
-        public HealthApiController(IWebHostEnvironment env, ILogger<HealthApiController> logger, IApplicationState applicationState)
+        public HealthApiController(ILogger<HealthApiController> logger, IApplicationState applicationState)
         {
             _logger = logger;
-            string root = env.ContentRootPath;
-            string healthPath = Path.Combine(root, "wwwroot", "Health");
-            _alivePath = Path.Combine(healthPath, "Alive", "alive.json");
             _applicationState = applicationState;
         }
 
@@ -31,18 +24,7 @@ namespace PxWeb.Controllers.Api2
         {
             try
             {
-                string aliveBody = "I'm alive.";
-                try
-                {
-                    if (System.IO.File.Exists(_alivePath))
-                    {
-                        aliveBody = System.IO.File.ReadAllText(_alivePath);
-                    }
-                }
-                catch (NullReferenceException ex)
-                {
-                    _logger.LogWarning(ex, "IsAlive() has problems");
-                }
+                string aliveBody = "yes";
                 return new ObjectResult(aliveBody);
             }
             catch (NullReferenceException ex)

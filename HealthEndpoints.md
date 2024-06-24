@@ -34,15 +34,8 @@ It may take some seconds to have effect.
 Todo: if datasource is CNMM then a simple db connection test is made.
 
 ## Alive
-The purpose of the alive endpoint is to provide for kubernetes and also to show which increment of pxwebapi
- is running.
-
-It typically returns 200 and optionally some details of how this increment was made, i.e. tags of source and config repos
- 
-Technically: If a file called wwwroot/health/alive/alive.json does not exists it returns something like "alive". 
-             if the file exists it returns the current content of the file. The content of need not be json.
-			 When building the application overwrite the alive.json in the package/artefact with the info you find usefull
-
+The purpose of the alive endpoint is to provide for kubernetes 
+It returns 200 (with something like "yes" in body)
 
 
 

@@ -15,9 +15,7 @@ namespace PxWebApi_Mvc.Tests
         {
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
-
             var response = await client.GetAsync("/health/alive");
-
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
