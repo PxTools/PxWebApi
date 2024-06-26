@@ -23,7 +23,8 @@ namespace PxWebApi_Mvc.Tests
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "GetApiConfiguration.json"));
 
-            Util.AssertJson(rawExpected, rawActual);
+            // "apiVersion" points is api-spec version, so it changes often. Will become more stable    
+            Util.AssertJson(rawExpected, rawActual, ["apiVersion"]);
         }
 
     }

@@ -1,10 +1,24 @@
-﻿using PxWeb.Api2.Server.Models;
+﻿using System.Reflection;
+
+using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Config.Api2
 {
     public class PxApiConfigurationOptions
     {
-        public string ApiVersion { get; set; } = "2.0";
+        private readonly string _apiVersion;
+
+        public PxApiConfigurationOptions()
+        {
+            Assembly myLibAssembly = Assembly.Load("PxWeb.Api2.Server");
+            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(myLibAssembly.Location);
+
+            string specVersion = fvi.ProductVersion ?? "0.0";
+            _apiVersion = specVersion;
+        }
+
+        public string ApiVersion => _apiVersion;
+
         public List<Language> Languages { get; set; } = new List<Language>();
         public string DefaultLanguage { get; set; } = String.Empty;
         public int MaxDataCells { get; set; } = 1;
