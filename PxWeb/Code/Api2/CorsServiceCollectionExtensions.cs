@@ -55,11 +55,11 @@ namespace PxWeb.Code.Api2
                     {
                         if (allowAnyOrigin)
                         {
-                            policy.AllowAnyOrigin();
+                            policy.AllowAnyOrigin().AllowAnyHeader();
                         }
                         else
                         {
-                            policy.WithOrigins(origins);
+                            policy.WithOrigins(origins).AllowAnyHeader();
                         }
                     });
                 });
