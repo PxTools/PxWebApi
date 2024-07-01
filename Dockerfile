@@ -13,7 +13,7 @@ RUN dotnet publish -a $TARGETARCH --no-restore -o /app "PxWeb/PxWeb.csproj"
 # Enable globalization and time zones:
 # https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.3-alpine3.19
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-alpine3.19
 EXPOSE 8080
 
 ENV \
