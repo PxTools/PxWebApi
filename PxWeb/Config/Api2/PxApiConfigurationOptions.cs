@@ -10,11 +10,9 @@ namespace PxWeb.Config.Api2
 
         public PxApiConfigurationOptions()
         {
-            Assembly myLibAssembly = Assembly.Load("PxWeb.Api2.Server");
-            System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(myLibAssembly.Location);
-
-            string specVersion = fvi.ProductVersion ?? "0.0";
-            _apiVersion = specVersion;
+            Assembly api2ServerAssembly = Assembly.Load("PxWeb.Api2.Server");
+            var fileVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(api2ServerAssembly.Location);
+            _apiVersion = fileVersionInfo.ProductVersion ?? "2.0.0";
         }
 
         public string ApiVersion => _apiVersion;
