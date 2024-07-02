@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 
 namespace PxWebApi_Mvc.Tests
 {
@@ -26,14 +27,23 @@ namespace PxWebApi_Mvc.Tests
             return folderProjectLevel;
         }
 
-
-        internal static void AssertJson(string inExpected, string inActual)
+        private static string replaceValueInProblemFields(string inString, string[]? replaceValuesNamed)
         {
-            //RegexOptions options = RegexOptions.None;
-            //Regex regex = new Regex("[ ]{2,}", options);
 
-            //string expected = regex.Replace(inExpected.Replace(Environment.NewLine, ""), " ");
-            //string actual = regex.Replace(inActual.Replace(Environment.NewLine, ""), " ");
+            string[] replaceThese = replaceValuesNamed ?? new string[0];
+
+            foreach (var name in replaceThese)
+            {
+                string pattern = $@"""{name}"":\s*""[^""]*""";
+                inString = Regex.Replace(inString, pattern, $@"""{name}"": ""VALUE_HAS_BEEN_REPLACED""");
+            }
+
+            return inString;
+        }
+
+
+        internal static void AssertJson(string inExpected, string inActual, string[]? keysExcludedFromTest = null)
+        {
 
 
             // prettyprints, but changes & to \u0026, so it has to be applied to expected as well
@@ -43,14 +53,8 @@ namespace PxWebApi_Mvc.Tests
             JsonNode? jsonNodeExpected = System.Text.Json.Nodes.JsonNode.Parse(inExpected);
             string expected = jsonNodeExpected != null ? jsonNodeExpected.ToString() : "jsonNodeExpected is null";
 
-            //updated causes problems. When expected and actual is made in different places and input is in localtime.
-            int posOfUpdatedString = expected.IndexOf("2023-05-25T13:42:00");
-            if (posOfUpdatedString != -1)
-            {
-                actual = actual.Substring(0, posOfUpdatedString) + "XXXX-XX-XXTXX" + actual.Substring(posOfUpdatedString + 13);
-                expected = expected.Substring(0, posOfUpdatedString) + "XXXX-XX-XXTXX" + expected.Substring(posOfUpdatedString + 13);
-            }
-
+            actual = replaceValueInProblemFields(actual, keysExcludedFromTest);
+            expected = replaceValueInProblemFields(expected, keysExcludedFromTest);
 
             Assert.AreEqual(expected.Substring(0, 5), actual.Substring(0, 5), "Diff in first 5.");
 

@@ -23,7 +23,8 @@ namespace PxWebApi_Mvc.Tests
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "ListAllTables.json"));
 
-            Util.AssertJson(rawExpected, rawActual);
+            //updated causes problems. When expected and actual is made in different places and input is in localtime.
+            Util.AssertJson(rawExpected, rawActual, ["updated"]);
         }
 
 
@@ -41,7 +42,7 @@ namespace PxWebApi_Mvc.Tests
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "TableById_tab004.json"));
 
-            Util.AssertJson(rawExpected, rawActual);
+            Util.AssertJson(rawExpected, rawActual, ["updated"]);
 
         }
 
@@ -58,7 +59,7 @@ namespace PxWebApi_Mvc.Tests
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab004.json"));
 
-            Util.AssertJson(rawExpected, rawActual);
+            Util.AssertJson(rawExpected, rawActual, ["updated"]);
 
         }
 
@@ -75,7 +76,7 @@ namespace PxWebApi_Mvc.Tests
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab004_js2.json"));
 
-            Util.AssertJson(rawExpected, rawActual);
+            Util.AssertJson(rawExpected, rawActual, ["updated"]);
 
         }
 
