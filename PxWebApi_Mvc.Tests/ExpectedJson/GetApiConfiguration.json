@@ -1,5 +1,6 @@
 {
   "apiVersion": "2.0",
+  "appVersion": "1.0.0",
   "languages": [
     {
       "id": "en",
