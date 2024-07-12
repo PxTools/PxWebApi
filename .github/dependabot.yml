@@ -16,11 +16,10 @@ updates:
     groups:
       small-change:
         patterns:
-        - "*"
+          - "*"
         update-types:
-        - "minor"
-        - "patch" 
-      
+          - "minor"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
