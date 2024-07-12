@@ -11,7 +11,7 @@ namespace PxWeb.Code.Api2.Serialization
             var matrix = model.Meta.Matrix ?? "data";
 
             response.ContentType = "application/octet-stream";
-            response.Headers.Add("Content-Disposition", $"attachment; filename=\"{matrix}.parquet\"");
+            response.Headers.Append("Content-Disposition", $"attachment; filename=\"{matrix}.parquet\"");
             IPXModelStreamSerializer serializer = new PCAxis.Serializers.ParquetSerializer();
             serializer.Serialize(model, response.Body);
         }
