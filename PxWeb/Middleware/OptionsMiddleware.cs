@@ -36,7 +36,7 @@ namespace PxWeb.Middleware
                         if (headers.TryGetValue("Allow", out allowHeaderValue))
                         {
                             context.Response.Headers.Remove("Allow");
-                            context.Response.Headers.Add("Allow", allowHeaderValue + ", OPTIONS");
+                            context.Response.Headers.Append("Allow", allowHeaderValue + ", OPTIONS");
                         }
                         context.Response.StatusCode = 200;
                     }
