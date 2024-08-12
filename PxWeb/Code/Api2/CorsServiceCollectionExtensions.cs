@@ -9,7 +9,7 @@ namespace PxWeb.Code.Api2
         /// <summary>
         /// Extension method to handle CORS configuration
         /// </summary>
-        public static bool ConfigurePxCORS(this IServiceCollection services, WebApplicationBuilder builder, ILogger logger)
+        public static bool ConfigurePxCORS(this IServiceCollection services, WebApplicationBuilder builder)
         {
             bool corsEnbled = false;
 
@@ -22,7 +22,7 @@ namespace PxWeb.Code.Api2
             catch (System.Exception)
             {
                 corsEnbled = false;
-                logger.LogError("Could not read CORS Enabled configuration");
+                Console.WriteLine("Could not read CORS Enabled configuration");
                 return false;
             }
 
@@ -38,7 +38,7 @@ namespace PxWeb.Code.Api2
                 }
                 catch (System.Exception)
                 {
-                    logger.LogError("Could not read CORS origins configuration");
+                    Console.WriteLine("Could not read CORS origins configuration");
                     return false;
                 }
 
