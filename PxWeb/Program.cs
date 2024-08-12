@@ -106,7 +106,7 @@ namespace PxWeb
             var langList = builder.Configuration.GetSection("PxApiConfiguration:Languages")
                 .AsEnumerable()
                 .Where(p => p.Value != null && p.Key.ToLower().Contains("id"))
-                .Select(p => p.Value)
+                .Select(p => p.Value??"")
                 .ToList();
 
 

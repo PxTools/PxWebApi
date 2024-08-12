@@ -42,7 +42,9 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                                     System.Xml.XPath.XPathResultType[] argTypes)
         {
             // Return null if none of the functions match name.
+#pragma warning disable CS8603 // Possible null reference return.
             return null;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
 

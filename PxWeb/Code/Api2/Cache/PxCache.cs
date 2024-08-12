@@ -61,7 +61,12 @@ namespace PxWeb.Code.Api2.Cache
                 }
             }
 
-            return (T)_cache.Get(key);
+            var value = _cache.Get(key);
+            if (value is null)
+            {
+                return default;
+            }
+            return (T)value;
         }
 
         /// <summary>

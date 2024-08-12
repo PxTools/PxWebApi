@@ -16,7 +16,8 @@ namespace PxWeb.Code.Api2
             try
             {
                 // Read configuration for CORS enabled
-                bool.TryParse(builder.Configuration.GetSection("PxApiConfiguration:Cors:Enabled").Value.Trim(), out corsEnbled);
+                var corsEnabled = builder.Configuration.GetSection("PxApiConfiguration:Cors:Enabled").Value ?? "false";
+                bool.TryParse(corsEnabled.Trim(), out corsEnbled);
             }
             catch (System.Exception)
             {
@@ -32,7 +33,7 @@ namespace PxWeb.Code.Api2
                 try
                 {
                     // Read configuration for CORS origins
-                    var originsConfig = builder.Configuration.GetSection("PxApiConfiguration:Cors:Origins").Value;
+                    var originsConfig = builder.Configuration.GetSection("PxApiConfiguration:Cors:Origins").Value??"";
                     origins = originsConfig.Split(',', System.StringSplitOptions.TrimEntries);
                 }
                 catch (System.Exception)
