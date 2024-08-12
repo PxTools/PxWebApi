@@ -3,14 +3,11 @@ using System.Text;
 
 using AspNetCoreRateLimit;
 
-using log4net;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 using Newtonsoft.Json.Converters;
@@ -98,7 +95,7 @@ namespace PxWeb
             var langList = builder.Configuration.GetSection("PxApiConfiguration:Languages")
                 .AsEnumerable()
                 .Where(p => p.Value != null && p.Key.ToLower().Contains("id"))
-                .Select(p => p.Value??"")
+                .Select(p => p.Value ?? "")
                 .ToList();
 
 

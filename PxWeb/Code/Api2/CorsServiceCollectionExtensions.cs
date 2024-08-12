@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace PxWeb.Code.Api2
 {
@@ -33,7 +32,7 @@ namespace PxWeb.Code.Api2
                 try
                 {
                     // Read configuration for CORS origins
-                    var originsConfig = builder.Configuration.GetSection("PxApiConfiguration:Cors:Origins").Value??"";
+                    var originsConfig = builder.Configuration.GetSection("PxApiConfiguration:Cors:Origins").Value ?? "";
                     origins = originsConfig.Split(',', System.StringSplitOptions.TrimEntries);
                 }
                 catch (System.Exception)

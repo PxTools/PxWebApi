@@ -17,7 +17,6 @@ using Newtonsoft.Json;
 using PCAxis.Menu;
 
 using Px.Abstractions.Interfaces;
-using Px.Search;
 
 using PxWeb.Api2.Server.Models;
 using PxWeb.Helper.Api2;

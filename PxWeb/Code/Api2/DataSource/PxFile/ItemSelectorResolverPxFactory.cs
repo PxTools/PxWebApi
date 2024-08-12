@@ -7,8 +7,6 @@ using PCAxis.Menu;
 
 using Px.Abstractions.Interfaces;
 
-using PxWeb.Code.Api2.DataSource.Cnmm;
-
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
     public class ItemSelectorResolverPxFactory : IItemSelectionResolverFactory
