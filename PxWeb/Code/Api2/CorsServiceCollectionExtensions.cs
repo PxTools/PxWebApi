@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace PxWeb.Code.Api2
 {
@@ -9,19 +8,20 @@ namespace PxWeb.Code.Api2
         /// <summary>
         /// Extension method to handle CORS configuration
         /// </summary>
-        public static bool ConfigurePxCORS(this IServiceCollection services, WebApplicationBuilder builder, ILogger logger)
+        public static bool ConfigurePxCORS(this IServiceCollection services, WebApplicationBuilder builder)
         {
             bool corsEnbled = false;
 
             try
             {
                 // Read configuration for CORS enabled
-                bool.TryParse(builder.Configuration.GetSection("PxApiConfiguration:Cors:Enabled").Value.Trim(), out corsEnbled);
+                var corsEnabled = builder.Configuration.GetSection("PxApiConfiguration:Cors:Enabled").Value ?? "false";
+                bool.TryParse(corsEnabled.Trim(), out corsEnbled);
             }
             catch (System.Exception)
             {
                 corsEnbled = false;
-                logger.LogError("Could not read CORS Enabled configuration");
+                Console.WriteLine("Could not read CORS Enabled configuration");
                 return false;
             }
 
@@ -32,12 +32,12 @@ namespace PxWeb.Code.Api2
                 try
                 {
                     // Read configuration for CORS origins
-                    var originsConfig = builder.Configuration.GetSection("PxApiConfiguration:Cors:Origins").Value;
+                    var originsConfig = builder.Configuration.GetSection("PxApiConfiguration:Cors:Origins").Value ?? "";
                     origins = originsConfig.Split(',', System.StringSplitOptions.TrimEntries);
                 }
                 catch (System.Exception)
                 {
-                    logger.LogError("Could not read CORS origins configuration");
+                    Console.WriteLine("Could not read CORS origins configuration");
                     return false;
                 }
 

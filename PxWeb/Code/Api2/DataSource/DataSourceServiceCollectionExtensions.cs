@@ -14,7 +14,7 @@ namespace PxWeb.Code.Api2.DataSource
         {
             var dataSource = builder.Configuration.GetSection("DataSource:DataSourceType");
 
-            if (dataSource.Value.ToUpper() == "PX")
+            if (dataSource.Value != null && dataSource.Value.ToUpper() == "PX")
             {
                 // Px-file data source
                 builder.Services.AddTransient<IDataSource, PxFileDataSource>();

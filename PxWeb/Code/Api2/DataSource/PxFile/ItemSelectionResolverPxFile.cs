@@ -3,7 +3,6 @@
 using Px.Abstractions.Interfaces;
 
 using PxWeb.Code.Api2.Cache;
-using PxWeb.Code.Api2.DataSource.Cnmm;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {

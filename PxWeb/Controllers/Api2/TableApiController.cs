@@ -292,12 +292,12 @@ namespace PxWeb.Controllers.Api2
             //No variable selection is provided, so we will return the default selection    
             var selection = _selectionHandler.GetSelection(builder, null, out problem);
 
-            if (problem is not null)
+            if (problem is not null || selection is null)
             {
                 return BadRequest(problem);
             }
 
-            //TODO Map selection to SelectionResponse
+            //Map selection to SelectionResponse
             SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, builder.Model.Meta, id, lang);
             return Ok(selectionResponse);
 

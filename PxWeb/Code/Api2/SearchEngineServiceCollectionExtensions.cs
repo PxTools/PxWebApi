@@ -11,9 +11,9 @@ namespace PxWeb.Code.Api2
     {
         public static void AddPxSearchEngine(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            var searchEngine = builder.Configuration.GetSection("PxApiConfiguration:SearchEngine");
+            var searchEngine = builder.Configuration.GetSection("PxApiConfiguration:SearchEngine").Value ?? "";
 
-            if (searchEngine.Value.ToUpper() == "LUCENE")
+            if (searchEngine.ToUpper() == "LUCENE")
             {
                 // Lucene search engine
                 builder.Services.AddTransient<ISearchBackend, LuceneBackend>();

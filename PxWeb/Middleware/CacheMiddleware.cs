@@ -35,7 +35,7 @@ namespace PxWeb.Middleware
 
                 httpContext.Response.Body = originalStream;
 
-                string contentType = httpContext.Response.ContentType;
+                string? contentType = httpContext.Response.ContentType;
                 int responseCode = httpContext.Response.StatusCode;
                 CachedResponse response = new CachedResponse(body, contentType, responseCode);
                 return response;

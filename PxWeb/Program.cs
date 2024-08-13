@@ -3,14 +3,11 @@ using System.Text;
 
 using AspNetCoreRateLimit;
 
-using log4net;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 using Newtonsoft.Json.Converters;
@@ -36,9 +33,6 @@ namespace PxWeb
 {
     public class Program
     {
-        private static ILogger<Program>? _logger;
-        private static readonly ILog _log = LogManager.GetLogger(typeof(Program));
-
         public static void Main(string[] args)
         {
 
@@ -47,12 +41,7 @@ namespace PxWeb
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            _logger = builder.Logging.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
-            builder.Logging.AddLog4Net();
-
-            _log.Info("Starting!");
-
-
+            Console.WriteLine("Starting!");
 
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
@@ -106,7 +95,7 @@ namespace PxWeb
             var langList = builder.Configuration.GetSection("PxApiConfiguration:Languages")
                 .AsEnumerable()
                 .Where(p => p.Value != null && p.Key.ToLower().Contains("id"))
-                .Select(p => p.Value)
+                .Select(p => p.Value ?? "")
                 .ToList();
 
 
@@ -141,7 +130,7 @@ namespace PxWeb
 
 
             // Handle CORS configuration from appsettings.json
-            bool corsEnbled = builder.Services.ConfigurePxCORS(builder, _logger);
+            bool corsEnbled = builder.Services.ConfigurePxCORS(builder);
 
             // Bind the configuration to the PxApiConfigurationOptions class
             var pxApiConfiguration = new PxApiConfigurationOptions();
