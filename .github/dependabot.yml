@@ -16,16 +16,24 @@ updates:
     groups:
       small-change:
         patterns:
-        - "*"
+          - "*"
         update-types:
-        - "minor"
-        - "patch" 
-      
+          - "minor"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    reviewers:
+      - "JohannesFinsveen"
+      - "likp"
+      - "runejo"
+
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "daily"
+    reviewers:
+      - "JohannesFinsveen"
+      - "likp"
+      - "runejo"
