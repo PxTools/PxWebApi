@@ -43,7 +43,7 @@ namespace PxWeb.Controllers.Api2
 
                 try
                 {
-                    //Set the values for time window and max calls per time window if they exist in appsetting                    
+                    //Set the values for time window and max calls per time window if they exist in appsetting
                     if (_rateLimitOptions.GeneralRules != null)
                     {
                         var generalRules = _rateLimitOptions.GeneralRules.Where(x => x.Endpoint == "*").First();
@@ -70,6 +70,7 @@ namespace PxWeb.Controllers.Api2
                 var configResponse = new ConfigResponse
                 {
                     ApiVersion = op.ApiVersion,
+                    AppVersion = op.AppVersion,
                     Languages = op.Languages.Select(x => new Language
                     {
                         Id = x.Id,
