@@ -90,7 +90,7 @@ namespace PxWeb.Code.Api2.Cache
                 {
                     if (_cache.Get(key) is null)
                     {
-                        _cache.Set(key, value, new MemoryCacheEntryOptions() { SlidingExpiration = lifetime});
+                        _cache.Set(key, value, new MemoryCacheEntryOptions() { SlidingExpiration = lifetime });
                     }
                 }
             }
