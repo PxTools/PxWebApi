@@ -35,7 +35,7 @@ namespace PxWeb.Code.Api2.Cache
             _logger = logger;
             _cache = new MemoryCache(new MemoryCacheOptions());
             _enableCache = true;
-            _cacheTime = TimeSpan.FromSeconds(10);
+            _cacheTime = TimeSpan.FromSeconds(300);
         }
 
         /// <summary>
