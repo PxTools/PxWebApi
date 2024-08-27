@@ -35,7 +35,7 @@ namespace PxWeb.Code.Api2.Cache
             _logger = logger;
             _cache = new MemoryCache(new MemoryCacheOptions());
             _enableCache = true;
-            _cacheTime = TimeSpan.FromSeconds(10);
+            _cacheTime = TimeSpan.FromSeconds(300);
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace PxWeb.Code.Api2.Cache
                 {
                     if (_cache.Get(key) is null)
                     {
-                        _cache.Set(key, value, lifetime);
+                        _cache.Set(key, value, new MemoryCacheEntryOptions() { SlidingExpiration = lifetime });
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace PxWeb.Code.Api2.Cache
         {
             lock (_cacheLock)
             {
-                _cache.Compact(1.0);
+                _cache.Clear();
             }
         }
 
