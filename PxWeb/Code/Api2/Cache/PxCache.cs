@@ -103,7 +103,7 @@ namespace PxWeb.Code.Api2.Cache
         {
             lock (_cacheLock)
             {
-                _cache.Compact(1.0);
+                _cache.Clear();
             }
         }
 
