@@ -1,10 +1,7 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
-
 using Lucene.Net.Util;
-
 using PCAxis.Paxiom;
-
 using PxWeb.Api2.Server.Models;
 using PxWeb.Helper.Api2;
 

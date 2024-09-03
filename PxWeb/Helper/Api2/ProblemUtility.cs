@@ -66,5 +66,35 @@ namespace PxWeb.Helper.Api2
             p.Title = "Too many cells selected";
             return p;
         }
+
+        public static Problem NonExistentTable()
+        {
+            Problem p = new Problem();
+            p.Type = "Parameter error";
+            p.Status = 404;
+            p.Title = "Non-existent table";
+            return p;
+        }
+
+
+        public static Problem OutOfRange()
+        {
+            Problem p = new Problem();
+            p.Type = "Parameter error";
+            p.Detail = "Non-existent page";
+            p.Status = 404;
+            p.Title = "Non-existent page";
+            return p;
+        }
+
+        public static Problem UnsupportedOutputFormat()
+        {
+            Problem p = new Problem();
+            p.Type = "Parameter error";
+            p.Detail = "Unsupported output format";
+            p.Status = 400;
+            p.Title = "Unsupported output format";
+            return p;
+        }
     }
 }

@@ -9,18 +9,13 @@
  */
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
 using Newtonsoft.Json;
-
 using PCAxis.Paxiom;
-
 using Px.Abstractions;
 using Px.Abstractions.Interfaces;
 using Px.Search;
-
 using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
@@ -91,12 +86,12 @@ namespace PxWeb.Controllers.Api2
                 }
                 catch (Exception)
                 {
-                    return NotFound(NonExistentTable());
+                    return NotFound(ProblemUtility.NonExistentTable());
                 }
             }
             else
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
         }
 
@@ -113,7 +108,7 @@ namespace PxWeb.Controllers.Api2
             }
             else
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
 
         }
@@ -129,7 +124,7 @@ namespace PxWeb.Controllers.Api2
             }
             else
             {
-                return NotFound(NonExistentCodelist());
+                return NotFound(ProblemUtility.NonExistentCodelist());
             }
         }
 
@@ -149,7 +144,7 @@ namespace PxWeb.Controllers.Api2
 
             if (searchResultContainer.outOfRange == true)
             {
-                return NotFound(OutOfRange());
+                return NotFound(ProblemUtility.OutOfRange());
             }
 
             return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query));
@@ -176,7 +171,7 @@ namespace PxWeb.Controllers.Api2
             var builder = _dataSource.CreateBuilder(id, lang);
             if (builder == null)
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
 
             builder.BuildForSelection();
@@ -196,7 +191,7 @@ namespace PxWeb.Controllers.Api2
             }
             else if (!_configOptions.OutputFormats.Contains(outputFormat, StringComparer.OrdinalIgnoreCase))
             {
-                return BadRequest(UnsupportedOutputFormat());
+                return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
             var serializer = _serializeManager.GetSerializer(outputFormat);
@@ -238,42 +233,7 @@ namespace PxWeb.Controllers.Api2
             return selections;
         }
 
-        private Problem NonExistentTable()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 404;
-            p.Title = "Non-existent table";
-            return p;
-        }
-        private Problem NonExistentCodelist()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 404;
-            p.Title = "Non-existent codelist";
-            return p;
-        }
 
-        private Problem OutOfRange()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Detail = "Non-existent page";
-            p.Status = 404;
-            p.Title = "Non-existent page";
-            return p;
-        }
-
-        private Problem UnsupportedOutputFormat()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Detail = "Unsupported output format";
-            p.Status = 400;
-            p.Title = "Unsupported output format";
-            return p;
-        }
 
         public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
@@ -284,7 +244,7 @@ namespace PxWeb.Controllers.Api2
             var builder = _dataSource.CreateBuilder(id, lang);
             if (builder == null)
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
 
             builder.BuildForSelection();
