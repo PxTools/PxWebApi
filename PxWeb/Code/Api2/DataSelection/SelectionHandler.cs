@@ -51,7 +51,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             Selection[]? selections;
 
-            if (variablesSelection is not null && HasSelection(variablesSelection))
+            if (!UseDefaultSelection(variablesSelection) && variablesSelection is not null)
             {
                 //Add variables that the user did not post
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
@@ -92,7 +92,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             problem = null;
 
-            if (variablesSelection is not null && HasSelection(variablesSelection))
+            if (!UseDefaultSelection(variablesSelection) && variablesSelection is not null)
             {
                 //Verify that variable exists
                 foreach (var variable in variablesSelection.Selection)
@@ -1398,5 +1398,9 @@ namespace PxWeb.Code.Api2.DataSelection
             return p;
         }
 
+        public bool UseDefaultSelection(VariablesSelection? variablesSelection)
+        {
+            return variablesSelection is null || HasSelection(variablesSelection);
+        }
     }
 }
