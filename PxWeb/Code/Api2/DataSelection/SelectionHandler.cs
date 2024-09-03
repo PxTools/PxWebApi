@@ -1342,7 +1342,18 @@ namespace PxWeb.Code.Api2.DataSelection
 
         public Selection[]? GetDefaultSelection(IPXModelBuilder builder, out Problem? problem)
         {
+            var meta = builder.Model.Meta;
             //TODO: Apply default groupings and value sets
+            // Default groupings and value sets are applied in the SQL parser by default
+            // Only apply first valueset if no grouping or valueset is applied and multiple valuesets exists
+            foreach (var variable in meta.Variables)
+            {
+                if (variable.HasValuesets() && variable.CurrentGrouping is null && variable.CurrentValueSet is null)
+                {
+                    builder.ApplyValueSet(variable.Code, variable.ValueSets[0]);
+                }
+            }
+
             //TODO: implement algorithm for default selection
 
             //Verify that valid selections could be made for mandatory variables
