@@ -6,6 +6,7 @@ using Lucene.Net.Util;
 using PCAxis.Paxiom;
 
 using PxWeb.Api2.Server.Models;
+using PxWeb.Helper.Api2;
 
 namespace PxWeb.Code.Api2.DataSelection
 {
@@ -67,14 +68,14 @@ namespace PxWeb.Code.Api2.DataSelection
             //Verify that valid selections could be made for mandatory variables
             if (!VerifyMadeSelection(builder, selections))
             {
-                problem = IllegalSelection();
+                problem = ProblemUtility.IllegalSelection();
                 return null;
             }
 
             if (!CheckNumberOfCells(selections))
             {
                 selections = null;
-                problem = TooManyCellsSelected();
+                problem = ProblemUtility.TooManyCellsSelected();
             }
 
             return selections;
@@ -125,7 +126,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
                     if (pxVariable is null)
                     {
-                        problem = NonExistentVariable();
+                        problem = ProblemUtility.NonExistentVariable();
                         return false;
                     }
 
@@ -140,7 +141,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     if (!variablesSelection.Selection.Any(x => x.VariableCode.Equals(mandatoryVariable.Code, System.StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        problem = MissingSelection();
+                        problem = ProblemUtility.MissingSelection();
                         return false;
                     }
                 }
@@ -177,7 +178,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else
                 {
-                    problem = NonExistentCodelist();
+                    problem = ProblemUtility.NonExistentCodelist();
                     return false;
                 }
             }
@@ -191,7 +192,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (string.IsNullOrWhiteSpace(variable.CodeList))
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -199,7 +200,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (grpInfo is null)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -216,7 +217,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
             catch (Exception)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -229,7 +230,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (string.IsNullOrWhiteSpace(variable.CodeList))
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -237,7 +238,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (vsInfo is null)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -247,7 +248,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
             catch (Exception)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -272,7 +273,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var mandatory = Mandatory(model, variable);
                 if (variable.ValueCodes.Count().Equals(0) && mandatory)
                 {
-                    problem = NonExistentValue();
+                    problem = ProblemUtility.NonExistentValue();
                     return false;
                 }
 
@@ -300,7 +301,7 @@ namespace PxWeb.Code.Api2.DataSelection
                                 }
                                 else
                                 {
-                                    problem = NonExistentValue();
+                                    problem = ProblemUtility.NonExistentValue();
                                     return false;
                                 }
                             }
@@ -309,7 +310,7 @@ namespace PxWeb.Code.Api2.DataSelection
                         {
                             if (!VerifySelectionExpression(variable.ValueCodes[i]))
                             {
-                                problem = IllegalSelectionExpression();
+                                problem = ProblemUtility.IllegalSelectionExpression();
                                 return false;
                             }
                         }
@@ -1335,68 +1336,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return cells;
         }
 
-        private Problem NonExistentVariable()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Non-existent variable";
-            return p;
-        }
-
-        private Problem NonExistentCodelist()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Non-existent codelist";
-            return p;
-        }
-
-        private Problem NonExistentValue()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Non-existent value";
-            return p;
-        }
-
-        private Problem MissingSelection()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Missing selection for mandantory variable";
-            return p;
-        }
-        private Problem IllegalSelection()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Illegal selection for mandantory variable";
-            return p;
-        }
-
-        private Problem IllegalSelectionExpression()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Illegal selection expression";
-            return p;
-        }
-
-        private Problem TooManyCellsSelected()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Detail = "Too many cells selected";
-            p.Status = 400;
-            p.Title = "Too many cells selected";
-            return p;
-        }
+       
 
         public bool UseDefaultSelection(VariablesSelection? variablesSelection)
         {
