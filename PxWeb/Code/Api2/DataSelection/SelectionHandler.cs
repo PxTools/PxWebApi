@@ -1,5 +1,8 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
+
+using DocumentFormat.OpenXml.Math;
+
 using Lucene.Net.Util;
 using PCAxis.Paxiom;
 using PxWeb.Api2.Server.Models;
@@ -1354,7 +1357,53 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
             }
 
+
+            var contents = meta.Variables.FirstOrDefault(v => v.IsContentVariable);
+            var time = meta.Variables.FirstOrDefault(v => v.IsTime);
+            var selections = new List<Selection>();
+
             //TODO: implement algorithm for default selection
+
+            // Case A according to algorithm
+            //TODO: Pivot information missing
+            if (meta.Variables.Count == 2)
+            {
+                if (contents is not null && time is not null)
+                {
+                    // PX table using good practice och CNMM datasource
+                    if (contents.Values.Count < 6)
+                    {
+                        var selection = new Selection(contents.Code);
+                        selection.ValueCodes.AddRange(contents.Values.Select(v => v.Code).ToArray());
+                        selections.Add(selection);
+
+                        selection = new Selection(time.Code);
+                        selection.ValueCodes.AddRange(GetTimeCodes(time, 1500));
+                    }
+                    else
+                    {
+                        var selection = new Selection(contents.Code);
+                        selection.ValueCodes.AddRange(GetCodes(contents, 1500));
+                        selections.Add(selection);
+
+                        selection = new Selection(time.Code);
+                        selection.ValueCodes.AddRange(GetCodes(time, 300));
+                    }
+                }
+                else
+                {
+                    //Just take the the right amount of values from each variable
+                    var selection = new Selection(meta.Variables[0].Code);
+                    selection.ValueCodes.AddRange(GetCodes(meta.Variables[0], 1500));
+                    selections.Add(selection);
+
+                    selection = new Selection(meta.Variables[1].Code);
+                    selection.ValueCodes.AddRange(GetCodes(meta.Variables[1], 300));
+                }
+            }
+            
+
+            
 
             //Verify that valid selections could be made for mandatory variables
             //if (!VerifyMadeSelection(builder, selections))
