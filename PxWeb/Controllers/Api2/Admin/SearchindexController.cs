@@ -59,7 +59,7 @@ namespace PxWeb.Controllers.Api2.Admin
 
                     if (config.Languages.Count == 0)
                     {
-                        _logger.LogError("No languages configured for PxApi");
+                        _logger.LogError("No languages configured for PxApi. New index will not be created.");
                         return;
                     }
                     foreach (var lang in config.Languages)
@@ -72,7 +72,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 }
                 catch (System.Exception ex)
                 {
-                    _logger.LogError(ex, "Error when building serach index");
+                    _logger.LogError(ex, "Error when building search index");
                 }
             });
             return new AcceptedResult();
@@ -101,7 +101,7 @@ namespace PxWeb.Controllers.Api2.Admin
 
                     if (tableList.Count == 0)
                     {
-                        string message = "No languages configured for PxApi";
+                        string message = "Incoming list with table id's to be updated is empty. Index will not be updated.";
                         _logger.LogError(message);
                         _responseState.AddEvent(new Event("Error", message));
                         return;
@@ -111,7 +111,7 @@ namespace PxWeb.Controllers.Api2.Admin
 
                     if (config.Languages.Count == 0)
                     {
-                        string message = "No languages configured for PxApi";
+                        string message = "No languages configured for PxApi. Index will not be updated.";
                         _logger.LogError(message);
                         _responseState.AddEvent(new Event("Error", message));
                         return;
