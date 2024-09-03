@@ -164,7 +164,8 @@ namespace PxWeb.Controllers.Api2
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat)
         {
-            Problem? problem;
+            Problem? problem = null;
+
 
             lang = _languageHelper.HandleLanguage(lang);
 
@@ -176,12 +177,35 @@ namespace PxWeb.Controllers.Api2
 
             builder.BuildForSelection();
 
-            var selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
+            Selection[]? selection = null;
+            bool IsDefaultSelection = false;
+            if (_selectionHandler.UseDefaultSelection(variablesSelection))
+            {
+                //TODO: Call GetDefaultSelection
+                selection = _selectionHandler.GetDefaultSelection(builder, out problem);
+                IsDefaultSelection = true;
+            }
+            else
+            {
+                if (variablesSelection is not null)
+                {
+                    selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
+                }
+            }
+
+
 
             if (problem is not null)
             {
                 return BadRequest(problem);
             }
+
+            
+            if (IsDefaultSelection)
+            {
+                //TODO: Check if selection is default selection if so pivot the table    
+            }
+
 
             builder.BuildForPresentation(selection);
 
@@ -250,7 +274,7 @@ namespace PxWeb.Controllers.Api2
             builder.BuildForSelection();
 
             //No variable selection is provided, so we will return the default selection    
-            var selection = _selectionHandler.GetSelection(builder, null, out problem);
+            var selection = _selectionHandler.GetDefaultSelection(builder, out problem);
 
             if (problem is not null || selection is null)
             {

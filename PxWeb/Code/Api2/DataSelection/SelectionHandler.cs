@@ -40,7 +40,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variablesSelection">VariablesSelection object describing wanted variables and values</param>
         /// <param name="problem">Null if everything is ok, otherwise it describes whats wrong</param>
         /// <returns>If everything was ok, an array of selection objects, else null</returns>
-        public Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection? variablesSelection, out Problem? problem)
+        public Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
         {
             if (!VerifyAndApplyCodelists(builder, variablesSelection, out problem))
             {
@@ -49,7 +49,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             Selection[]? selections;
 
-            if (!UseDefaultSelection(variablesSelection) && variablesSelection is not null)
+            if (!UseDefaultSelection(variablesSelection))
             {
                 //Add variables that the user did not post
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
@@ -1338,6 +1338,26 @@ namespace PxWeb.Code.Api2.DataSelection
         public bool UseDefaultSelection(VariablesSelection? variablesSelection)
         {
             return variablesSelection is null || !HasSelection(variablesSelection);
+        }
+
+        public Selection[]? GetDefaultSelection(IPXModelBuilder builder, out Problem? problem)
+        {
+            //TODO: Apply default groupings and value sets
+            //TODO: implement algorithm for default selection
+
+            //Verify that valid selections could be made for mandatory variables
+            //if (!VerifyMadeSelection(builder, selections))
+            //{
+            //    problem = ProblemUtility.IllegalSelection();
+            //    return null;
+            //}
+
+            //if (!CheckNumberOfCells(selections))
+            //{
+            //    selections = null;
+            //    problem = ProblemUtility.TooManyCellsSelected();
+            //}
+            throw new NotImplementedException();
         }
     }
 }
