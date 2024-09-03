@@ -1400,7 +1400,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
         public bool UseDefaultSelection(VariablesSelection? variablesSelection)
         {
-            return variablesSelection is null || HasSelection(variablesSelection);
+            return variablesSelection is null || !HasSelection(variablesSelection);
         }
     }
 }
