@@ -9,13 +9,18 @@
  */
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+
 using Newtonsoft.Json;
+
 using PCAxis.Paxiom;
+
 using Px.Abstractions;
 using Px.Abstractions.Interfaces;
 using Px.Search;
+
 using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
@@ -200,7 +205,7 @@ namespace PxWeb.Controllers.Api2
                 return BadRequest(problem);
             }
 
-            
+
             if (IsDefaultSelection)
             {
                 //TODO: Check if selection is default selection if so pivot the table    
