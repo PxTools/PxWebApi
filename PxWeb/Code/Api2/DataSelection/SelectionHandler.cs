@@ -1360,9 +1360,8 @@ namespace PxWeb.Code.Api2.DataSelection
 
             var contents = meta.Variables.FirstOrDefault(v => v.IsContentVariable);
             var time = meta.Variables.FirstOrDefault(v => v.IsTime);
-            List<Selection> selections = new List<Selection>();
+            List<Selection> selections;
 
-            //TODO: implement algorithm for default selection
             if (contents is not null && time is not null)
             {
                 //PX file using good practice or CNMM datasource
@@ -1378,18 +1377,21 @@ namespace PxWeb.Code.Api2.DataSelection
 
 
             //Verify that valid selections could be made for mandatory variables
-            //if (!VerifyMadeSelection(builder, selections))
-            //{
-            //    problem = ProblemUtility.IllegalSelection();
-            //    return null;
-            //}
+            if (!VerifyMadeSelection(builder, selections.ToArray()))
+            {
+                problem = ProblemUtility.IllegalSelection();
+                return null;
+            }
 
-            //if (!CheckNumberOfCells(selections))
-            //{
-            //    selections = null;
-            //    problem = ProblemUtility.TooManyCellsSelected();
-            //}
-            throw new NotImplementedException();
+            if (!CheckNumberOfCells(selections.ToArray()))
+            {
+                problem = ProblemUtility.TooManyCellsSelected();
+                return null;
+            }
+
+            problem = null;
+            return selections.ToArray();    
+
         }
 
         private List<Selection> GetDefaultSelectionByAlgorithmFallback(PXMeta meta)
@@ -1542,7 +1544,6 @@ namespace PxWeb.Code.Api2.DataSelection
                     var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
                     selections.AddStubVariable(stub, GetCodes);
                     selections.AddHeadingVariable(heading, GetCodes);
-
 
                     foreach (var variable in noneMandatoryClassificationVariables)
                     {
