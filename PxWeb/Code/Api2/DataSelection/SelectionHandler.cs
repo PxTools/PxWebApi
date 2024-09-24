@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 
+using J2N;
+
 using Lucene.Net.Util;
 
 using PCAxis.Paxiom;
@@ -1337,7 +1339,6 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
 
-
         public bool UseDefaultSelection(VariablesSelection? variablesSelection)
         {
             return variablesSelection is null || !HasSelection(variablesSelection);
@@ -1393,7 +1394,66 @@ namespace PxWeb.Code.Api2.DataSelection
 
         private List<Selection> GetDefaultSelectionByAlgorithmFallback(PXMeta meta)
         {
-            throw new NotImplementedException();
+            var selections = new List<Selection>();
+
+            //Only one variable put it in the stub
+            if (meta.Variables.Count == 1)
+            {
+                selections.AddStubVariable(meta.Variables[0], GetCodes);
+                return selections;
+            }
+    
+            var mandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == false).ToList();
+            var noneMandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == true).ToList();
+
+            if (mandatoryClassificationVariables.Count == 1) //Only one mandantory classification variable
+            {
+                //Take the mandantory and the last none mandantory classification variable
+                // place the one with most values in the stub
+                var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                //Eliminate all none mandatory classification variables
+                for (int i = 1; i < noneMandatoryClassificationVariables.Count - 1; i++)
+                {
+                    selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
+                }
+            }
+            else if (noneMandatoryClassificationVariables.Count > 1) // Two or more mandatory classification variable
+            {
+                //Take the first and last mandantory classification variable
+                //and place the one with most values in the stub
+                var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables.Last());
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                //select firt value for all remaining mandatory classification variables
+                for (int i = 1; i < mandatoryClassificationVariables.Count -1; i++)
+                {
+                    selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
+                }
+
+                //Eliminate all none mandatory classification variables
+                for (int i = 1; i < noneMandatoryClassificationVariables.Count; i++)
+                {
+                    selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
+                }
+            }
+            else //No mandantory variables and at leat two of them
+            {
+                //Take the first and last none mandantory classification variable
+                //and place the one with most values in the stub
+                var (stub, heading) = StubOrHeading(noneMandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+
+                //Eliminate all none mandatory classification variables
+                for (int i = 1; i < noneMandatoryClassificationVariables.Count - 1; i++)
+                {
+                    selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
+                }
+            }
+
+            return selections;
         }
 
         private List<Selection> GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
