@@ -1470,8 +1470,8 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else
                 {
-                    selections.AddHeadingVariable(contents, GetCodes);
-                    selections.AddStubVariable(time, GetTimeCodes);
+                    selections.AddStubVariable(contents, GetCodes);
+                    selections.AddHeadingVariable(time, GetTimeCodes, 13);
                 }
             }
             else if (meta.Variables.Count == 3) // Case B 
@@ -1538,7 +1538,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else if (mandatoryClassificationVariables.Count == 1)
                 {
-                    var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
+                    var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables.Last();
                     var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
                     selections.AddStubVariable(stub, GetCodes);
                     selections.AddHeadingVariable(heading, GetCodes);
@@ -1553,7 +1553,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else //No mandatory classification variables
                 {
-                    var firstNoneMandantoryClassificationVariable = classificationVariables.Last();
+                    var firstNoneMandantoryClassificationVariable = classificationVariables.First();
                     var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
                     var (stub, heading) = StubOrHeading(firstNoneMandantoryClassificationVariable, lastNoneMandantoryClassificationVariable);
                     selections.AddStubVariable(stub, GetCodes);
