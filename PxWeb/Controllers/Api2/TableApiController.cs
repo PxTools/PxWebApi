@@ -186,7 +186,6 @@ namespace PxWeb.Controllers.Api2
             bool IsDefaultSelection = false;
             if (_selectionHandler.UseDefaultSelection(variablesSelection))
             {
-                //TODO: Call GetDefaultSelection
                 selection = _selectionHandler.GetDefaultSelection(builder, out problem);
                 IsDefaultSelection = true;
             }
@@ -289,8 +288,6 @@ namespace PxWeb.Controllers.Api2
             //Map selection to SelectionResponse
             SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, builder.Model.Meta, id, lang);
             return Ok(selectionResponse);
-
-
         }
 
     }

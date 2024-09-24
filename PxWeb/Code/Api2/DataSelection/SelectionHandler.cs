@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
 
-using J2N;
-
 using Lucene.Net.Util;
 
 using PCAxis.Paxiom;
@@ -1390,7 +1388,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
 
             problem = null;
-            return selections.ToArray();    
+            return selections.ToArray();
 
         }
 
@@ -1404,7 +1402,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 selections.AddStubVariable(meta.Variables[0], GetCodes);
                 return selections;
             }
-    
+
             var mandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == false).ToList();
             var noneMandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == true).ToList();
 
@@ -1417,12 +1415,12 @@ namespace PxWeb.Code.Api2.DataSelection
                 selections.AddHeadingVariable(heading, GetCodes);
 
                 //Eliminate all none mandatory classification variables
-                for (int i = 1; i < noneMandatoryClassificationVariables.Count - 1; i++)
+                for (int i = 0; i < noneMandatoryClassificationVariables.Count - 1; i++)
                 {
                     selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
                 }
             }
-            else if (noneMandatoryClassificationVariables.Count > 1) // Two or more mandatory classification variable
+            else if (mandatoryClassificationVariables.Count > 1) // Two or more mandatory classification variable
             {
                 //Take the first and last mandantory classification variable
                 //and place the one with most values in the stub
@@ -1431,13 +1429,13 @@ namespace PxWeb.Code.Api2.DataSelection
                 selections.AddHeadingVariable(heading, GetCodes);
 
                 //select firt value for all remaining mandatory classification variables
-                for (int i = 1; i < mandatoryClassificationVariables.Count -1; i++)
+                for (int i = 1; i < mandatoryClassificationVariables.Count - 1; i++)
                 {
                     selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
                 }
 
                 //Eliminate all none mandatory classification variables
-                for (int i = 1; i < noneMandatoryClassificationVariables.Count; i++)
+                for (int i = 0; i < noneMandatoryClassificationVariables.Count; i++)
                 {
                     selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
                 }

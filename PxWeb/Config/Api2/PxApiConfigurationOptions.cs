@@ -20,7 +20,7 @@ namespace PxWeb.Config.Api2
 
         public List<Language> Languages { get; set; } = new List<Language>();
         public string DefaultLanguage { get; set; } = String.Empty;
-        public int MaxDataCells { get; set; } = 1;
+        public virtual int MaxDataCells { get; set; } = 1;
         public List<ApiFeature> Features { get; set; } = new List<ApiFeature>();
         public string License { get; set; } = String.Empty;
         public List<SourceReference>? SourceReferences { get; set; }
