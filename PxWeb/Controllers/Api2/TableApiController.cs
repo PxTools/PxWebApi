@@ -208,7 +208,7 @@ namespace PxWeb.Controllers.Api2
 
             builder.BuildForPresentation(selection);
 
-            var model = builder.Model;  
+            var model = builder.Model;
 
             if (IsDefaultSelection)
             {
@@ -219,13 +219,13 @@ namespace PxWeb.Controllers.Api2
                 var descriptions = new List<PivotDescription>();
                 if (variables.Count > 0)
                 {
-                    descriptions.Add(new PivotDescription() { VariableName = variables[0].Code, VariablePlacement = PlacementType.Stub  });
+                    descriptions.Add(new PivotDescription() { VariableName = variables[0].Code, VariablePlacement = PlacementType.Stub });
 
                     foreach (var variable in variables.Skip(1).Reverse())
                     {
                         descriptions.Add(new PivotDescription() { VariableName = variable.Code, VariablePlacement = PlacementType.Heading });
                     }
-                    
+
                     var pivot = new PCAxis.Paxiom.Operations.Pivot();
                     model = pivot.Execute(model, descriptions.ToArray());
                 }
