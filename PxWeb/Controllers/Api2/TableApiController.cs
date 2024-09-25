@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 using PCAxis.Paxiom;
+using PCAxis.Paxiom.Operations;
 
 using Px.Abstractions;
 using Px.Abstractions.Interfaces;
@@ -205,13 +206,31 @@ namespace PxWeb.Controllers.Api2
             }
 
 
+            builder.BuildForPresentation(selection);
+
+            var model = builder.Model;  
+
             if (IsDefaultSelection)
             {
-                //TODO: Check if selection is default selection if so pivot the table    
+                //TODO: Check if selection is default selection if so pivot the table
+                var variables = model.Meta.Variables.Select(v => new { Code = v.Name, NumberOfValues = v.Values.Count }).ToList();
+                variables.Sort((a, b) => a.NumberOfValues.CompareTo(b.NumberOfValues));
+
+                var descriptions = new List<PivotDescription>();
+                if (variables.Count > 0)
+                {
+                    descriptions.Add(new PivotDescription() { VariableName = variables[0].Code, VariablePlacement = PlacementType.Stub  });
+
+                    foreach (var variable in variables.Skip(1).Reverse())
+                    {
+                        descriptions.Add(new PivotDescription() { VariableName = variable.Code, VariablePlacement = PlacementType.Heading });
+                    }
+                    
+                    var pivot = new PCAxis.Paxiom.Operations.Pivot();
+                    model = pivot.Execute(model, descriptions.ToArray());
+                }
             }
 
-
-            builder.BuildForPresentation(selection);
 
             if (outputFormat == null)
             {
@@ -223,7 +242,7 @@ namespace PxWeb.Controllers.Api2
             }
 
             var serializer = _serializeManager.GetSerializer(outputFormat);
-            serializer.Serialize(builder.Model, Response);
+            serializer.Serialize(model, Response);
 
             return Ok();
         }
