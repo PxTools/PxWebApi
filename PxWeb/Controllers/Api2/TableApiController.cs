@@ -214,7 +214,7 @@ namespace PxWeb.Controllers.Api2
             {
                 //TODO: Check if selection is default selection if so pivot the table
                 var variables = model.Meta.Variables.Select(v => new { Code = v.Name, NumberOfValues = v.Values.Count }).ToList();
-                variables.Sort((a, b) => a.NumberOfValues.CompareTo(b.NumberOfValues));
+                variables.Sort((a, b) => b.NumberOfValues.CompareTo(a.NumberOfValues));
 
                 var descriptions = new List<PivotDescription>();
                 if (variables.Count > 0)
