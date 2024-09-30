@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 using PCAxis.Paxiom;
+using PCAxis.Paxiom.Operations;
 
 using Px.Abstractions;
 using Px.Abstractions.Interfaces;
@@ -91,12 +92,12 @@ namespace PxWeb.Controllers.Api2
                 }
                 catch (Exception)
                 {
-                    return NotFound(NonExistentTable());
+                    return NotFound(ProblemUtility.NonExistentTable());
                 }
             }
             else
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
         }
 
@@ -113,7 +114,7 @@ namespace PxWeb.Controllers.Api2
             }
             else
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
 
         }
@@ -129,7 +130,7 @@ namespace PxWeb.Controllers.Api2
             }
             else
             {
-                return NotFound(NonExistentCodelist());
+                return NotFound(ProblemUtility.NonExistentCodelist());
             }
         }
 
@@ -149,7 +150,7 @@ namespace PxWeb.Controllers.Api2
 
             if (searchResultContainer.outOfRange == true)
             {
-                return NotFound(OutOfRange());
+                return NotFound(ProblemUtility.OutOfRange());
             }
 
             return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query));
@@ -169,26 +170,67 @@ namespace PxWeb.Controllers.Api2
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat)
         {
-            Problem? problem;
+            Problem? problem = null;
+
 
             lang = _languageHelper.HandleLanguage(lang);
 
             var builder = _dataSource.CreateBuilder(id, lang);
             if (builder == null)
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
 
             builder.BuildForSelection();
 
-            var selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
+            Selection[]? selection = null;
+            bool IsDefaultSelection = false;
+            if (_selectionHandler.UseDefaultSelection(variablesSelection))
+            {
+                selection = _selectionHandler.GetDefaultSelection(builder, out problem);
+                IsDefaultSelection = true;
+            }
+            else
+            {
+                if (variablesSelection is not null)
+                {
+                    selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
+                }
+            }
+
+
 
             if (problem is not null)
             {
                 return BadRequest(problem);
             }
 
+
             builder.BuildForPresentation(selection);
+
+            var model = builder.Model;
+
+            if (IsDefaultSelection)
+            {
+                //TODO: Check if selection is default selection if so pivot the table
+                var variables = model.Meta.Variables.Select(v => new { Code = v.Name, NumberOfValues = v.Values.Count }).ToList();
+                variables.Sort((a, b) => b.NumberOfValues.CompareTo(a.NumberOfValues));
+
+                var descriptions = new List<PivotDescription>();
+                if (variables.Count > 0)
+                {
+                    descriptions.Add(new PivotDescription() { VariableName = variables[0].Code, VariablePlacement = PlacementType.Stub });
+
+                    foreach (var variable in variables.Skip(1).Reverse())
+                    {
+                        descriptions.Add(new PivotDescription() { VariableName = variable.Code, VariablePlacement = PlacementType.Heading });
+                    }
+
+                    var pivot = new PCAxis.Paxiom.Operations.Pivot();
+                    model = pivot.Execute(model, descriptions.ToArray());
+                }
+            }
+
 
             if (outputFormat == null)
             {
@@ -196,11 +238,11 @@ namespace PxWeb.Controllers.Api2
             }
             else if (!_configOptions.OutputFormats.Contains(outputFormat, StringComparer.OrdinalIgnoreCase))
             {
-                return BadRequest(UnsupportedOutputFormat());
+                return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
             var serializer = _serializeManager.GetSerializer(outputFormat);
-            serializer.Serialize(builder.Model, Response);
+            serializer.Serialize(model, Response);
 
             return Ok();
         }
@@ -238,42 +280,7 @@ namespace PxWeb.Controllers.Api2
             return selections;
         }
 
-        private Problem NonExistentTable()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 404;
-            p.Title = "Non-existent table";
-            return p;
-        }
-        private Problem NonExistentCodelist()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 404;
-            p.Title = "Non-existent codelist";
-            return p;
-        }
 
-        private Problem OutOfRange()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Detail = "Non-existent page";
-            p.Status = 404;
-            p.Title = "Non-existent page";
-            return p;
-        }
-
-        private Problem UnsupportedOutputFormat()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Detail = "Unsupported output format";
-            p.Status = 400;
-            p.Title = "Unsupported output format";
-            return p;
-        }
 
         public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
@@ -284,13 +291,13 @@ namespace PxWeb.Controllers.Api2
             var builder = _dataSource.CreateBuilder(id, lang);
             if (builder == null)
             {
-                return NotFound(NonExistentTable());
+                return NotFound(ProblemUtility.NonExistentTable());
             }
 
             builder.BuildForSelection();
 
             //No variable selection is provided, so we will return the default selection    
-            var selection = _selectionHandler.GetSelection(builder, null, out problem);
+            var selection = _selectionHandler.GetDefaultSelection(builder, out problem);
 
             if (problem is not null || selection is null)
             {
@@ -300,8 +307,6 @@ namespace PxWeb.Controllers.Api2
             //Map selection to SelectionResponse
             SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, builder.Model.Meta, id, lang);
             return Ok(selectionResponse);
-
-
         }
 
     }

@@ -6,6 +6,7 @@ using Lucene.Net.Util;
 using PCAxis.Paxiom;
 
 using PxWeb.Api2.Server.Models;
+using PxWeb.Helper.Api2;
 
 namespace PxWeb.Code.Api2.DataSelection
 {
@@ -42,7 +43,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variablesSelection">VariablesSelection object describing wanted variables and values</param>
         /// <param name="problem">Null if everything is ok, otherwise it describes whats wrong</param>
         /// <returns>If everything was ok, an array of selection objects, else null</returns>
-        public Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection? variablesSelection, out Problem? problem)
+        public Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
         {
             if (!VerifyAndApplyCodelists(builder, variablesSelection, out problem))
             {
@@ -51,7 +52,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             Selection[]? selections;
 
-            if (variablesSelection is not null && HasSelection(variablesSelection))
+            if (!UseDefaultSelection(variablesSelection))
             {
                 //Add variables that the user did not post
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
@@ -67,14 +68,14 @@ namespace PxWeb.Code.Api2.DataSelection
             //Verify that valid selections could be made for mandatory variables
             if (!VerifyMadeSelection(builder, selections))
             {
-                problem = IllegalSelection();
+                problem = ProblemUtility.IllegalSelection();
                 return null;
             }
 
             if (!CheckNumberOfCells(selections))
             {
                 selections = null;
-                problem = TooManyCellsSelected();
+                problem = ProblemUtility.TooManyCellsSelected();
             }
 
             return selections;
@@ -92,7 +93,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             problem = null;
 
-            if (variablesSelection is not null && HasSelection(variablesSelection))
+            if (!UseDefaultSelection(variablesSelection) && variablesSelection is not null)
             {
                 //Verify that variable exists
                 foreach (var variable in variablesSelection.Selection)
@@ -125,7 +126,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
                     if (pxVariable is null)
                     {
-                        problem = NonExistentVariable();
+                        problem = ProblemUtility.NonExistentVariable();
                         return false;
                     }
 
@@ -140,7 +141,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     if (!variablesSelection.Selection.Any(x => x.VariableCode.Equals(mandatoryVariable.Code, System.StringComparison.InvariantCultureIgnoreCase)))
                     {
-                        problem = MissingSelection();
+                        problem = ProblemUtility.MissingSelection();
                         return false;
                     }
                 }
@@ -177,7 +178,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else
                 {
-                    problem = NonExistentCodelist();
+                    problem = ProblemUtility.NonExistentCodelist();
                     return false;
                 }
             }
@@ -191,7 +192,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (string.IsNullOrWhiteSpace(variable.CodeList))
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -199,7 +200,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (grpInfo is null)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -216,7 +217,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
             catch (Exception)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -229,7 +230,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (string.IsNullOrWhiteSpace(variable.CodeList))
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -237,7 +238,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (vsInfo is null)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -247,7 +248,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
             catch (Exception)
             {
-                problem = NonExistentCodelist();
+                problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
@@ -272,7 +273,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var mandatory = Mandatory(model, variable);
                 if (variable.ValueCodes.Count().Equals(0) && mandatory)
                 {
-                    problem = NonExistentValue();
+                    problem = ProblemUtility.NonExistentValue();
                     return false;
                 }
 
@@ -300,7 +301,7 @@ namespace PxWeb.Code.Api2.DataSelection
                                 }
                                 else
                                 {
-                                    problem = NonExistentValue();
+                                    problem = ProblemUtility.NonExistentValue();
                                     return false;
                                 }
                             }
@@ -309,7 +310,7 @@ namespace PxWeb.Code.Api2.DataSelection
                         {
                             if (!VerifySelectionExpression(variable.ValueCodes[i]))
                             {
-                                problem = IllegalSelectionExpression();
+                                problem = ProblemUtility.IllegalSelectionExpression();
                                 return false;
                             }
                         }
@@ -1085,7 +1086,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else if (variable.IsTime)
                 {
-                    // Time - Take the 12 last values
+                    // Time - Take the 12 lastNoneMandantoryClassificationVariable values
                     selection.ValueCodes.AddRange(GetTimeCodes(variable, 12));
                 }
                 else
@@ -1120,7 +1121,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else if (variable.IsTime)
                 {
-                    // Time - Take the 12 last values
+                    // Time - Take the 12 lastNoneMandantoryClassificationVariable values
                     selection.ValueCodes.AddRange(GetTimeCodes(variable, 12));
                 }
                 else if (!variable.Elimination)
@@ -1160,7 +1161,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else if (variable.IsTime)
                 {
-                    // Time - Take the last value
+                    // Time - Take the lastNoneMandantoryClassificationVariable value
                     selection.ValueCodes.AddRange(GetTimeCodes(variable, 1));
                 }
                 else if (!variable.Elimination)
@@ -1200,7 +1201,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else if (variable.IsTime)
                 {
-                    // Time - Take the last value
+                    // Time - Take the lastNoneMandantoryClassificationVariable value
                     selection.ValueCodes.AddRange(GetTimeCodes(variable, 1));
                 }
                 else if (!variable.Elimination && (variableNumber == 1 || variableNumber == 2))
@@ -1335,67 +1336,284 @@ namespace PxWeb.Code.Api2.DataSelection
             return cells;
         }
 
-        private Problem NonExistentVariable()
+
+        public bool UseDefaultSelection(VariablesSelection? variablesSelection)
         {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Non-existent variable";
-            return p;
+            return variablesSelection is null || !HasSelection(variablesSelection);
         }
 
-        private Problem NonExistentCodelist()
+        public Selection[]? GetDefaultSelection(IPXModelBuilder builder, out Problem? problem)
         {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Non-existent codelist";
-            return p;
+            var meta = builder.Model.Meta;
+            // Default groupings and value sets are applied in the SQL parser by default
+            // Only apply first valueset if no grouping or valueset is applied and multiple valuesets exists
+            foreach (var variable in meta.Variables)
+            {
+                if (variable.HasValuesets() && variable.CurrentGrouping is null && variable.CurrentValueSet is null)
+                {
+                    builder.ApplyValueSet(variable.Code, variable.ValueSets[0]);
+                }
+            }
+
+
+            var contents = meta.Variables.FirstOrDefault(v => v.IsContentVariable);
+            var time = meta.Variables.FirstOrDefault(v => v.IsTime);
+            List<Selection> selections;
+
+            if (contents is not null && time is not null)
+            {
+                //PX file using good practice or CNMM datasource
+                selections = GetDefaultSelectionByAlgorithm(meta, contents, time);
+            }
+            else
+            {
+                selections = GetDefaultSelectionByAlgorithmFallback(meta);
+            }
+
+            // Case A according to algorithm
+            //TODO: Pivot information missing
+
+
+            //Verify that valid selections could be made for mandatory variables
+            if (!VerifyMadeSelection(builder, selections.ToArray()))
+            {
+                problem = ProblemUtility.IllegalSelection();
+                return null;
+            }
+
+            if (!CheckNumberOfCells(selections.ToArray()))
+            {
+                problem = ProblemUtility.TooManyCellsSelected();
+                return null;
+            }
+
+            problem = null;
+            return selections.ToArray();
+
         }
 
-        private Problem NonExistentValue()
+        private List<Selection> GetDefaultSelectionByAlgorithmFallback(PXMeta meta)
         {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Non-existent value";
-            return p;
+            var selections = new List<Selection>();
+
+            //Only one variable put it in the stub
+            if (meta.Variables.Count == 1)
+            {
+                selections.AddStubVariable(meta.Variables[0], GetCodes);
+                return selections;
+            }
+
+            var mandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == false).ToList();
+            var noneMandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == true).ToList();
+
+            if (mandatoryClassificationVariables.Count == 1) //Only one mandantory classification variable
+            {
+                //Take the mandantory and the last none mandantory classification variable
+                // place the one with most values in the stub
+                var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                //Eliminate all none mandatory classification variables
+                for (int i = 0; i < noneMandatoryClassificationVariables.Count - 1; i++)
+                {
+                    selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
+                }
+            }
+            else if (mandatoryClassificationVariables.Count > 1) // Two or more mandatory classification variable
+            {
+                //Take the first and last mandantory classification variable
+                //and place the one with most values in the stub
+                var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables.Last());
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                //select firt value for all remaining mandatory classification variables
+                for (int i = 1; i < mandatoryClassificationVariables.Count - 1; i++)
+                {
+                    selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
+                }
+
+                //Eliminate all none mandatory classification variables
+                for (int i = 0; i < noneMandatoryClassificationVariables.Count; i++)
+                {
+                    selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
+                }
+            }
+            else //No mandantory variables and at leat two of them
+            {
+                //Take the first and last none mandantory classification variable
+                //and place the one with most values in the stub
+                var (stub, heading) = StubOrHeading(noneMandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+
+                //Eliminate all none mandatory classification variables
+                for (int i = 1; i < noneMandatoryClassificationVariables.Count - 1; i++)
+                {
+                    selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
+                }
+            }
+
+            return selections;
         }
 
-        private Problem MissingSelection()
+        private List<Selection> GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
         {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Missing selection for mandantory variable";
-            return p;
-        }
-        private Problem IllegalSelection()
-        {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Illegal selection for mandantory variable";
-            return p;
+            var selections = new List<Selection>();
+
+            if (meta.Variables.Count == 2)
+            {
+                // PX table using good practice och CNMM datasource
+                if (contents.Values.Count < 6)
+                {
+                    selections.AddHeadingVariable(contents, GetCodes);
+                    selections.AddStubVariable(time, GetTimeCodes);
+                }
+                else
+                {
+                    selections.AddStubVariable(contents, GetCodes);
+                    selections.AddHeadingVariable(time, GetTimeCodes, 13);
+                }
+            }
+            else if (meta.Variables.Count == 3) // Case B 
+            {
+                if (contents.Values.Count == 1)
+                {
+                    // select the contents and 13 latest time values
+                    selections.AddVariableToHeading(contents, GetCodes);
+                    selections.AddHeadingVariable(time, GetTimeCodes, 13);
+
+                    var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
+                    if (variable != null)
+                    {
+                        selections.AddStubVariable(variable, GetCodes);
+                    }
+                }
+                else
+                {
+                    var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
+                    if (variable is null)
+                    {
+                        throw new Exception("Douplicate time or contents variables");
+                    }
+
+                    //Add the latest time value
+                    selections.AddVariableToHeading(time, GetTimeCodes);
+
+                    //Check if contents of classification should be in stub or heading
+                    var (stub, heading) = StubOrHeading(contents, variable);
+                    selections.AddStubVariable(stub, GetCodes);
+                    selections.AddHeadingVariable(heading, GetCodes);
+
+                }
+            }
+            else // Case C
+            {
+                //First content and lastNoneMandantoryClassificationVariable time period
+                selections.AddVariableToHeading(contents, GetCodes);
+                selections.AddVariableToHeading(time, GetTimeCodes);
+
+
+                var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
+                var mandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == false).ToList();
+                var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == true).ToList();
+
+                if (mandatoryClassificationVariables.Count > 1)
+                {
+                    for (int i = 1; i < (mandatoryClassificationVariables.Count - 1); i++)
+                    {
+                        selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
+                    }
+
+                    //The variable with the most values should be in the heading
+                    var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables[mandatoryClassificationVariables.Count - 1]);
+
+                    selections.AddStubVariable(stub, GetCodes);
+                    selections.AddHeadingVariable(heading, GetCodes);
+
+                    //Add the none mandatory classification variables without any selected values
+                    foreach (var variable in noneMandatoryClassificationVariables)
+                    {
+                        selections.EliminateVariable(variable);
+                    }
+                }
+                else if (mandatoryClassificationVariables.Count == 1)
+                {
+                    var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables.Last();
+                    var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
+                    selections.AddStubVariable(stub, GetCodes);
+                    selections.AddHeadingVariable(heading, GetCodes);
+
+                    foreach (var variable in noneMandatoryClassificationVariables)
+                    {
+                        if (variable != lastNoneMandantoryClassificationVariable)
+                        {
+                            selections.EliminateVariable(variable);
+                        }
+                    }
+                }
+                else //No mandatory classification variables
+                {
+                    var firstNoneMandantoryClassificationVariable = classificationVariables.First();
+                    var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
+                    var (stub, heading) = StubOrHeading(firstNoneMandantoryClassificationVariable, lastNoneMandantoryClassificationVariable);
+                    selections.AddStubVariable(stub, GetCodes);
+                    selections.AddHeadingVariable(heading, GetCodes);
+
+
+                    foreach (var variable in noneMandatoryClassificationVariables)
+                    {
+                        if (variable != firstNoneMandantoryClassificationVariable && variable != lastNoneMandantoryClassificationVariable)
+                        {
+                            selections.EliminateVariable(variable);
+                        }
+                    }
+                }
+            }
+
+            return selections;
         }
 
-        private Problem IllegalSelectionExpression()
+        private static (Variable, Variable) StubOrHeading(Variable one, Variable two)
         {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Status = 400;
-            p.Title = "Illegal selection expression";
-            return p;
+            if (one.Values.Count > two.Values.Count)
+            {
+                return (one, two);
+            }
+            else
+            {
+                return (two, one);
+            }
+        }
+    }
+
+
+    public static class SelectionsExtensions
+    {
+        public static void AddStubVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction)
+        {
+            var selection = new Selection(variable.Code);
+            selection.ValueCodes.AddRange(valuesFunction(variable, 1500));
+            selections.Add(selection);
         }
 
-        private Problem TooManyCellsSelected()
+        public static void AddHeadingVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 30)
         {
-            Problem p = new Problem();
-            p.Type = "Parameter error";
-            p.Detail = "Too many cells selected";
-            p.Status = 400;
-            p.Title = "Too many cells selected";
-            return p;
+            var selection = new Selection(variable.Code);
+            selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
+            selections.Add(selection);
+        }
+
+        public static void AddVariableToHeading(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction)
+        {
+            var selection = new Selection(variable.Code);
+            selection.ValueCodes.AddRange(valuesFunction(variable, 1));
+            selections.Add(selection);
+        }
+
+        public static void EliminateVariable(this List<Selection> selections, Variable variable)
+        {
+            var selection = new Selection(variable.Code);
+            selections.Add(selection);
         }
 
     }
