@@ -19,14 +19,14 @@ namespace PxWeb.Mappers
             last
         }
 
-        private readonly string _urlBase;
+        private readonly string _urlPrefix;
         private readonly string _defaultDataFormat;
         private readonly List<string> _metaFormats = new List<string> { "json-px", "json-stat2" };
         //Could not get the strings cleanly from MetadataOutputFormatType. Anybody?
 
         public LinkCreator(IOptions<PxApiConfigurationOptions> configOptions)
         {
-            _urlBase = configOptions.Value.BaseURL;
+            _urlPrefix = configOptions.Value.BaseURL + configOptions.Value.RoutePrefix;
             _defaultDataFormat = configOptions.Value.DefaultOutputFormat;
         }
         public Link GetTablesLink(LinkRelationEnum relation, string language, string? query, int pagesize, int pageNumber, bool showLangParam = true)
@@ -109,7 +109,7 @@ namespace PxWeb.Mappers
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(_urlBase);
+            sb.Append(_urlPrefix);
             sb.Append("/");
             sb.Append(endpointUrl);
 
@@ -139,7 +139,7 @@ namespace PxWeb.Mappers
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(_urlBase);
+            sb.Append(_urlPrefix);
             sb.Append("/");
             sb.Append(endpointUrl);
 
