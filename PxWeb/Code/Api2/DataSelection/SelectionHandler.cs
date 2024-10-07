@@ -1264,7 +1264,6 @@ namespace PxWeb.Code.Api2.DataSelection
         private string[] GetTimeCodes(Variable variable, int count)
         {
             var lstCodes = variable.Values.TakeLast(count).Select(value => value.Code).ToList();
-            lstCodes.Sort((a, b) => b.CompareTo(a)); // Descending sort
             var codes = lstCodes.ToArray();
 
             return codes;
