@@ -7,7 +7,7 @@
     "PxWeb": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger/",
+      "launchUrl": "",
       "applicationUrl": "https://localhost:8443;http://localhost:8080",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

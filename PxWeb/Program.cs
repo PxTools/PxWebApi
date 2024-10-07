@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Readers;
 
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -118,7 +120,8 @@ namespace PxWeb
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+            // builder.Services.AddEndpointsApiExplorer(); //only needed for minimal APIS according to
+            // https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio 
             builder.Services.AddSwaggerGen(c =>
             {
                 // Sort endpoints
@@ -144,16 +147,30 @@ namespace PxWeb
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(pxApiConfiguration.RoutePrefix);
             app.UsePathBase(new PathString(pxApiConfiguration.RoutePrefix));
 
-            // Configure the HTTP request pipeline.
-            if (pxApiConfiguration.EnableSwaggerUI || app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/swagger/v2/swagger.json", "PxWebApi 2.0-beta");
-                });
-            }
 
+
+            app.UseSwagger(options =>
+            {
+                options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
+                    if (!(pxApiConfiguration.EnableSwaggerUI || app.Environment.IsDevelopment()))
+                    {
+                        Program.LoadFileIntoSwaggerDoc(swaggerDoc, Path.Combine(AppContext.BaseDirectory, "swagger_v2.json"));
+
+                    }
+                    swaggerDoc.Servers = Program.GetOpenApiServers(pxApiConfiguration.BaseURL, pxApiConfiguration.RoutePrefix);
+                });
+            });
+
+
+
+            app.UseSwaggerUI(options =>
+                {
+                    options.RoutePrefix = string.Empty;
+                    options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0-beta");
+                });
+
+            // Configure the HTTP request pipeline.
             app.UseHttpsRedirection();
 
             if (corsEnbled)
@@ -185,6 +202,43 @@ namespace PxWeb
             });
 
             app.Run();
+        }
+
+        private static void LoadFileIntoSwaggerDoc(OpenApiDocument swaggerDoc, string? jsonFilePath)
+        {
+            if (File.Exists(jsonFilePath))
+            {
+
+                using var stream = new FileStream(jsonFilePath, FileMode.Open, FileAccess.Read);
+                var openApiDocument = new OpenApiStreamReader().Read(stream, out var diagnostic);
+                if (openApiDocument == null)
+                {
+                    throw new Exception("Bad bug");
+                }
+                swaggerDoc.Info = openApiDocument.Info;
+                swaggerDoc.Paths = openApiDocument.Paths;
+                swaggerDoc.Components = openApiDocument.Components;
+                swaggerDoc.Tags = openApiDocument.Tags;
+                //swaggerDoc.Servers = openApiDocument.Servers;
+                swaggerDoc.ExternalDocs = openApiDocument.ExternalDocs;
+                //swaggerDoc.SecurityRequirements = openApiDocument.SecurityRequirements;
+                swaggerDoc.Extensions = openApiDocument.Extensions;
+            }
+        }
+
+        private static List<OpenApiServer> GetOpenApiServers(string pxApiConfiguration_BaseURL, string pxApiConfiguration_RoutePrepix)
+        {
+            var part1 = (new Uri(pxApiConfiguration_BaseURL)).PathAndQuery;
+            if (part1.Equals("/"))
+            {
+                part1 = "";    // To aviod double /
+            }
+
+            return
+            [
+                new OpenApiServer { Url = part1 + pxApiConfiguration_RoutePrepix }
+            ];
+
         }
     }
 }
