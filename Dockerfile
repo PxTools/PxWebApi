@@ -1,6 +1,6 @@
 # Learn about building .NET container images:
 # https://github.com/dotnet/dotnet-docker/blob/main/samples/README.md
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0.402-alpine3.19 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0.401-alpine3.19 AS build
 ARG TARGETARCH
 WORKDIR /source
 
@@ -35,5 +35,7 @@ WORKDIR /app
 #USER 1000
 
 COPY --from=build /app .
+RUN chown -R $APP_UID:$APP_UID /app//wwwroot/ControllerStates/PxWeb.Controllers.Api2.Admin.DatabaseController.json && chmod 755 /app/wwwroot/ControllerStates/PxWeb.Controllers.Api2.Admin.DatabaseController.json
+RUN chown -R $APP_UID:$APP_UID /app//wwwroot/ControllerStates/PxWeb.Controllers.Api2.Admin.SearchindexController.json && chmod 755 /app/wwwroot/ControllerStates/PxWeb.Controllers.Api2.Admin.SearchindexController.json
 USER $APP_UID
 ENTRYPOINT [ "./PxWeb" ]
