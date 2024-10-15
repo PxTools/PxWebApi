@@ -1285,6 +1285,15 @@ namespace PxWeb.Code.Api2.DataSelection
             return (new List<Selection>(), new List<string>(), new List<string>());
         }
 
+        /// <summary>
+        /// Case C according to the algorithm when more then three variables are present and where contents and time are two of them
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <param name="time"></param>
+        /// <param name="classificationVariables"></param>
+        /// <param name="mandatoryClassificationVariables"></param>
+        /// <param name="noneMandatoryClassificationVariables"></param>
+        /// <returns></returns>
         private (List<Selection>, List<string>, List<string>) WithMoreThenTreeDimensions(Variable contents, Variable time, List<Variable> classificationVariables, List<Variable> mandatoryClassificationVariables, List<Variable> noneMandatoryClassificationVariables)
         {
             var selections = new List<Selection>();
