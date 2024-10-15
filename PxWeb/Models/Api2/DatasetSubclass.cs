@@ -19,6 +19,11 @@ namespace PxWeb.Models.Api2
 
         public void AddToTimeRole(string variableCode)
         {
+            if (Role is null)
+            {
+                Role = new DatasetRole();
+            }
+
             if (Role.Time == null)
             {
                 Role.Time = new List<string>();
@@ -29,6 +34,10 @@ namespace PxWeb.Models.Api2
 
         public void AddToMetricRole(string variableCode)
         {
+            if (Role is null)
+            {
+                Role = new DatasetRole();
+            }
             if (Role.Metric == null)
             {
                 Role.Metric = new List<string>();
@@ -39,6 +48,10 @@ namespace PxWeb.Models.Api2
 
         public void AddToGeoRole(string variableCode)
         {
+            if (Role is null)
+            {
+                Role = new DatasetRole();
+            }
             if (Role.Geo == null)
             {
                 Role.Geo = new List<string>();
@@ -51,6 +64,16 @@ namespace PxWeb.Models.Api2
         {
             if (infoFile != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Infofile = infoFile;
             }
         }
@@ -59,6 +82,16 @@ namespace PxWeb.Models.Api2
         {
             if (tableId != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Tableid = tableId;
             }
         }
@@ -67,6 +100,15 @@ namespace PxWeb.Models.Api2
         {
             if (decimals != -1)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
                 Extension.Px.Decimals = decimals;
             }
         }
@@ -75,6 +117,16 @@ namespace PxWeb.Models.Api2
         {
             if (language != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Language = language;
             }
         }
@@ -83,6 +135,16 @@ namespace PxWeb.Models.Api2
         {
             if (contents != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Contents = contents;
             }
         }
@@ -91,6 +153,16 @@ namespace PxWeb.Models.Api2
         {
             if (heading != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Heading = heading;
             }
         }
@@ -98,11 +170,31 @@ namespace PxWeb.Models.Api2
         {
             if (stub != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Stub = stub;
             }
         }
         public void AddOfficialStatistics(bool isOfficialStatistics)
         {
+            if (Extension is null)
+            {
+                Extension = new ExtensionRoot();
+            }
+
+            if (Extension.Px is null)
+            {
+                Extension.Px = new ExtensionRootPx();
+            }
+
             Extension.Px.OfficialStatistics = isOfficialStatistics;
         }
 
@@ -110,6 +202,16 @@ namespace PxWeb.Models.Api2
         {
             if (matrix != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Matrix = matrix;
             }
         }
@@ -118,6 +220,15 @@ namespace PxWeb.Models.Api2
         {
             if (subjectCode != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
                 Extension.Px.SubjectCode = subjectCode;
             }
         }
@@ -126,12 +237,31 @@ namespace PxWeb.Models.Api2
         {
             if (subjectArea != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.SubjectArea = subjectArea;
             }
         }
 
         public void AddAggRegAllowed(bool isAggRegAllowed)
         {
+            if (Extension is null)
+            {
+                Extension = new ExtensionRoot();
+            }
+
+            if (Extension.Px is null)
+            {
+                Extension.Px = new ExtensionRootPx();
+            }
             Extension.Px.Aggregallowed = isAggRegAllowed;
         }
 
@@ -139,12 +269,32 @@ namespace PxWeb.Models.Api2
         {
             if (description != null)
             {
+                if (Extension is null)
+                {
+                    Extension = new ExtensionRoot();
+                }
+
+                if (Extension.Px is null)
+                {
+                    Extension.Px = new ExtensionRootPx();
+                }
+
                 Extension.Px.Description = description;
             }
         }
 
         public void AddDescriptiondefault(bool isDescriptiondefault)
         {
+            if (Extension is null)
+            {
+                Extension = new ExtensionRoot();
+            }
+
+            if (Extension.Px is null)
+            {
+                Extension.Px = new ExtensionRootPx();
+            }
+
             Extension.Px.Descriptiondefault = isDescriptiondefault;
         }
 
@@ -175,6 +325,11 @@ namespace PxWeb.Models.Api2
 
         public void AddIsMandatoryForTableNote(string index)
         {
+            if (Extension is null)
+            {
+                Extension = new ExtensionRoot();
+            }
+
             if (Extension.NoteMandatory == null) Extension.NoteMandatory = new Dictionary<string, bool>();
 
             Extension.NoteMandatory.Add(index, true);
@@ -206,6 +361,11 @@ namespace PxWeb.Models.Api2
 
         public void AddIsMandatoryForDimensionNote(DatasetDimensionValue dimensionValue, string index)
         {
+            if (dimensionValue.Extension is null)
+            {
+                dimensionValue.Extension = new ExtensionDimension();
+            }
+
             if (dimensionValue.Extension.NoteMandatory == null) dimensionValue.Extension.NoteMandatory = new Dictionary<string, bool>();
 
             dimensionValue.Extension.NoteMandatory.Add(index, true);
@@ -213,6 +373,7 @@ namespace PxWeb.Models.Api2
 
         public void AddValueNoteToCategory(DatasetDimensionValue dimensionValue, string valueNoteKey, string text)
         {
+            if (dimensionValue.Category is null) { dimensionValue.Category = new JsonstatCategory(); }
             if (dimensionValue.Category.Note == null) dimensionValue.Category.Note = new Dictionary<string, List<string>>();
 
             if (dimensionValue.Category.Note.ContainsKey(valueNoteKey))
@@ -229,6 +390,10 @@ namespace PxWeb.Models.Api2
 
         public void AddIsMandatoryForCategoryNote(DatasetDimensionValue dimensionValue, string valueNoteKey, string index)
         {
+            if (dimensionValue.Extension is null)
+            {
+                dimensionValue.Extension = new ExtensionDimension();
+            }
             if (dimensionValue.Extension.CategoryNoteMandatory == null) dimensionValue.Extension.CategoryNoteMandatory = new Dictionary<string, Dictionary<string, bool>>();
 
             if (dimensionValue.Extension.CategoryNoteMandatory.ContainsKey(valueNoteKey))
@@ -254,6 +419,11 @@ namespace PxWeb.Models.Api2
         {
             if (refPeriod == null) return;
 
+            if (dimensionValue.Extension is null)
+            {
+                dimensionValue.Extension = new ExtensionDimension();
+            }
+
             if (dimensionValue.Extension.Refperiod == null)
                 dimensionValue.Extension.Refperiod = new Dictionary<string, string>();
 
@@ -271,6 +441,10 @@ namespace PxWeb.Models.Api2
 
         public void AddCodelist(DatasetDimensionValue dimensionValue, List<CodeListInformation> codeLists)
         {
+            if (dimensionValue.Extension is null)
+            {
+                dimensionValue.Extension = new ExtensionDimension();
+            }
             if (dimensionValue.Extension.CodeLists == null)
             {
                 dimensionValue.Extension.CodeLists = new List<CodeListInformation>();

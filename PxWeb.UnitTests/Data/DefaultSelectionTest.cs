@@ -13,7 +13,7 @@
             Problem? problem;
 
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -31,7 +31,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -49,7 +49,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -66,7 +66,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -98,7 +98,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -130,7 +130,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -162,7 +162,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -177,7 +177,7 @@
             Assert.IsNotNull(contens);
             Assert.AreEqual(contens.ValueCodes.Count, 3);
             Assert.IsNotNull(time);
-            Assert.AreEqual(time.ValueCodes.Count, 30);
+            Assert.AreEqual(time.ValueCodes.Count, 13);
         }
 
         [TestMethod]
@@ -189,7 +189,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -216,7 +216,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -246,7 +246,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -276,7 +276,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -312,7 +312,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -348,7 +348,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);
@@ -384,7 +384,7 @@
 
             Problem? problem;
             // Act
-            var selection = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
+            var (selection, heading, stub) = selectionHandler.GetDefaultSelection(builderMock.Object, out problem);
 
             // Assert
             Assert.IsNull(problem);

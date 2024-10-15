@@ -292,7 +292,12 @@ namespace PxWeb.Mappers
             }
 
             // Only display unique contact once
-            if (!tm.Contacts.Exists(x => x.Mail.Equals(c.Mail) && x.Name.Equals(c.Name) && x.Phone.Equals(c.Phone)))
+            if (!tm.Contacts.Exists(x => x.Mail is not null &&
+                                         x.Name is not null &&
+                                         x.Phone is not null &&
+                                         x.Mail.Equals(c.Mail) &&
+                                         x.Name.Equals(c.Name) &&
+                                         x.Phone.Equals(c.Phone)))
             {
                 tm.Contacts.Add(c);
             }

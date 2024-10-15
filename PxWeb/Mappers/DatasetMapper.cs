@@ -66,8 +66,11 @@ namespace PxWeb.Mappers
 
                 foreach (var variableValue in variable.Values)
                 {
-                    dimensionValue.Category.Label.Add(variableValue.Code, variableValue.Value);
-                    dimensionValue.Category.Index.Add(variableValue.Code, indexCounter++);
+                    if (dimensionValue.Category is not null)
+                    {
+                        dimensionValue.Category.Label.Add(variableValue.Code, variableValue.Value);
+                        dimensionValue.Category.Index.Add(variableValue.Code, indexCounter++);
+                    }
 
                     CollectMetaIdsForValue(variableValue, ref metaIdsHelper);
 
@@ -78,26 +81,30 @@ namespace PxWeb.Mappers
                     if (!variable.IsContentVariable) continue;
 
                     var unitDecimals = (variableValue.HasPrecision()) ? variableValue.Precision : model.Meta.ShowDecimals;
-                    dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
-
-                    if (variableValue.ContentInfo != null)
+                    if (dimensionValue.Category is not null)
                     {
-                        unitValue.Base = variableValue.ContentInfo.Units;
-                        unitValue.Decimals = unitDecimals;
+                        dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
 
-                        //refPeriod extension dimension
-                        dataset.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
+                        if (variableValue.ContentInfo != null)
+                        {
+                            unitValue.Base = variableValue.ContentInfo.Units;
+                            unitValue.Decimals = unitDecimals;
 
-                        // Contact
-                        AddContact(dataset, variableValue.ContentInfo);
+                            //refPeriod extension dimension
+                            dataset.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
+
+                            // Contact
+                            AddContact(dataset, variableValue.ContentInfo);
+                        }
+                        else
+                        {
+                            //TODO
+                            //  _logger.Warn("Category" + variableValue.Code + " lacks ContentInfo. Unit, refPeriod and contact not set");
+                        }
+
+                        dimensionValue.Category.Unit.Add(variableValue.Code, unitValue);
                     }
-                    else
-                    {
-                        //TODO
-                        //  _logger.Warn("Category" + variableValue.Code + " lacks ContentInfo. Unit, refPeriod and contact not set");
-                    }
 
-                    dimensionValue.Category.Unit.Add(variableValue.Code, unitValue);
                 }
 
                 //elimination
@@ -157,16 +164,21 @@ namespace PxWeb.Mappers
         private void AddInfoForEliminatedContentVariable(PXModel model, DatasetSubclass dataset)
         {
             dataset.AddDimensionValue("ContentsCode", "EliminatedContents", out var dimensionValue);
-            dimensionValue.Category.Label.Add("EliminatedValue", model.Meta.Contents);
-            dimensionValue.Category.Index.Add("EliminatedValue", 0);
+            if (dimensionValue.Category is not null)
+            {
+                dimensionValue.Category.Label.Add("EliminatedValue", model.Meta.Contents);
+                dimensionValue.Category.Index.Add("EliminatedValue", 0);
 
-            dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
-            unitValue.Base = model.Meta.ContentInfo.Units;
-            unitValue.Decimals = model.Meta.Decimals;
+                dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
+                unitValue.Base = model.Meta.ContentInfo.Units;
+                unitValue.Decimals = model.Meta.Decimals;
 
-            dimensionValue.Category.Unit.Add("EliminatedValue", unitValue);
-
-            dimensionValue.Extension.Elimination = true;
+                dimensionValue.Category.Unit.Add("EliminatedValue", unitValue);
+            }
+            if (dimensionValue.Extension is not null)
+            {
+                dimensionValue.Extension.Elimination = true;
+            }
 
             //refPeriod extension dimension
             dataset.AddRefPeriod(dimensionValue, "EliminatedValue", model.Meta.ContentInfo.RefPeriod);
@@ -258,6 +270,10 @@ namespace PxWeb.Mappers
 
         private void AddEliminationInfo(DatasetDimensionValue dimensionValue, Variable variable)
         {
+            if (dimensionValue.Extension is null)
+            {
+                dimensionValue.Extension = new ExtensionDimension();
+            }
             dimensionValue.Extension.Elimination = variable.Elimination;
 
             if (!variable.Elimination || variable.EliminationValue == null) return;
@@ -270,6 +286,10 @@ namespace PxWeb.Mappers
         {
             if (Enum.TryParse(variable.PresentationText.ToString(), out PresentationFormType presentationForm))
             {
+                if (dimensionValue.Extension is null)
+                {
+                    dimensionValue.Extension = new ExtensionDimension();
+                }
                 dimensionValue.Extension.Show = presentationForm.ToString().ToLower();
             }
         }
@@ -325,7 +345,7 @@ namespace PxWeb.Mappers
         private void MapContact(DatasetSubclass dataset, PCAxis.Paxiom.Contact contact, ContInfo contInfo)
         {
 
-            if (dataset.Extension.Contact == null)
+            if (dataset.Extension is not null && dataset.Extension.Contact == null)
             {
                 dataset.Extension.Contact = new List<Api2.Server.Models.Contact>();
             }
@@ -354,7 +374,16 @@ namespace PxWeb.Mappers
             }
 
             // Only display unique contact once
-            if (!dataset.Extension.Contact.Exists(x => x.Mail.Equals(jsonContact.Mail) && x.Name.Equals(jsonContact.Name) && x.Phone.Equals(jsonContact.Phone)))
+            if (dataset.Extension is null)
+            {
+                dataset.Extension = new ExtensionRoot();
+            }
+            if (!dataset.Extension.Contact.Exists(x => x.Mail is not null &&
+                                                       x.Name is not null &&
+                                                       x.Phone is not null &&
+                                                       x.Mail.Equals(jsonContact.Mail) &&
+                                                       x.Name.Equals(jsonContact.Name) &&
+                                                       x.Phone.Equals(jsonContact.Phone)))
             {
                 dataset.Extension.Contact.Add(jsonContact);
             }
@@ -364,6 +393,11 @@ namespace PxWeb.Mappers
         {
             if (contactString != null)
             {
+                if (dataset.Extension is null)
+                {
+                    dataset.Extension = new ExtensionRoot();
+                }
+
                 if (dataset.Extension.Contact == null)
                 {
                     dataset.Extension.Contact = new List<Api2.Server.Models.Contact>();
