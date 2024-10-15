@@ -1025,7 +1025,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
         }
 
-    
+
         private List<Variable> GetAllMandatoryVariables(PXModel model)
         {
             var mandatoryVariables = model.Meta.Variables.Where(x => x.Elimination.Equals(false)).ToList();
@@ -1277,12 +1277,12 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns></returns>
         private (List<Selection>, List<string>, List<string>) GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
         {
-            if (meta.Variables.Count == 2) 
+            if (meta.Variables.Count == 2)
             {
                 // Case A according to algorithm
                 return OnlyContentsAndTime(contents, time);
             }
-            else if (meta.Variables.Count == 3) 
+            else if (meta.Variables.Count == 3)
             {
                 // Case B according to algorithm
                 var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
@@ -1291,7 +1291,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     return WithThreeDimensions(contents, time, variable);
                 }
             }
-            else 
+            else
             {
                 // Case C according to algorithm
                 var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
@@ -1428,7 +1428,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 placmentStub.Add(stub.Code);
             }
 
-            return (selections, placmentHeading, placmentStub); 
+            return (selections, placmentHeading, placmentStub);
         }
 
         /// <summary>
