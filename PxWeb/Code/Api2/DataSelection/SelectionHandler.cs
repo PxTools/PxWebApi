@@ -1259,145 +1259,187 @@ namespace PxWeb.Code.Api2.DataSelection
 
         private (List<Selection>, List<string>, List<string>) GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
         {
+            if (meta.Variables.Count == 2) 
+            {
+                // Case A according to algorithm
+                return OnlyContentsAndTime(contents, time);
+            }
+            else if (meta.Variables.Count == 3) 
+            {
+                // Case B according to algorithm
+                var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
+                if (variable is not null)
+                {
+                    return WithThreeDimensions(contents, time, variable);
+                }
+            }
+            else 
+            {
+                // Case C according to algorithm
+                var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
+                var mandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == false).ToList();
+                var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == true).ToList();
+                return WithMoreThenTreeDimensions(contents, time, classificationVariables, mandatoryClassificationVariables, noneMandatoryClassificationVariables);
+            }
+
+            return (new List<Selection>(), new List<string>(), new List<string>());
+        }
+
+        private (List<Selection>, List<string>, List<string>) WithMoreThenTreeDimensions(Variable contents, Variable time, List<Variable> classificationVariables, List<Variable> mandatoryClassificationVariables, List<Variable> noneMandatoryClassificationVariables)
+        {
             var selections = new List<Selection>();
             List<string> placmentHeading = new List<string>();
             List<string> placmentStub = new List<string>();
 
-            if (meta.Variables.Count == 2) // Case A according to algorithm
+            //First content and lastNoneMandantoryClassificationVariable time period
+            selections.AddVariableToHeading(contents, GetCodes);
+            selections.AddVariableToHeading(time, GetTimeCodes);
+            placmentHeading.Add(contents.Code);
+
+            if (mandatoryClassificationVariables.Count > 1)
             {
-                // PX table using good practice och CNMM datasource
-                if (contents.Values.Count < 6)
+                for (int i = 1; i < (mandatoryClassificationVariables.Count - 1); i++)
                 {
-                    selections.AddHeadingVariable(contents, GetCodes);
-                    selections.AddStubVariable(time, GetTimeCodes, 13);
-                    placmentHeading.Add(contents.Code);
-                    placmentStub.Add(time.Code);
+                    selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
+                    placmentHeading.Add(mandatoryClassificationVariables[i].Code);
                 }
-                else
+
+                //The variable with the most values should be in the placmentHeading
+                var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables[mandatoryClassificationVariables.Count - 1]);
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
+
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                //Add the none mandatory classification variables without any selected values
+                foreach (var variable in noneMandatoryClassificationVariables)
                 {
-                    selections.AddStubVariable(contents, GetCodes);
-                    selections.AddHeadingVariable(time, GetTimeCodes, 13);
-                    placmentHeading.Add(time.Code);
-                    placmentStub.Add(contents.Code);
+                    selections.EliminateVariable(variable);
                 }
             }
-            else if (meta.Variables.Count == 3) // Case B 
+            else if (mandatoryClassificationVariables.Count == 1)
             {
-                if (contents.Values.Count == 1)
+                var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables.Last();
+                var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
+
+
+                foreach (var variable in noneMandatoryClassificationVariables)
                 {
-                    // select the contents and 13 latest time values
-                    selections.AddVariableToHeading(contents, GetCodes);
-                    selections.AddHeadingVariable(time, GetTimeCodes, 13);
-                    placmentHeading.Add(contents.Code);
-                    placmentHeading.Add(time.Code);
-
-                    var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
-                    if (variable != null)
-                    {
-                        selections.AddStubVariable(variable, GetCodes);
-                        placmentStub.Add(variable.Code);
-                    }
-                }
-                else
-                {
-                    var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
-                    if (variable is null)
-                    {
-                        throw new Exception("Douplicate time or contents variables");
-                    }
-
-                    //Add the latest time value
-                    selections.AddVariableToHeading(time, GetTimeCodes);
-                    placmentHeading.Add(time.Code);
-
-                    //Check if contents of classification should be in placmentStub or placmentHeading
-                    var (stub, heading) = StubOrHeading(contents, variable);
-                    selections.AddStubVariable(stub, GetCodes);
-                    selections.AddHeadingVariable(heading, GetCodes);
-
-                    placmentHeading.Add(heading.Code);
-                    placmentStub.Add(stub.Code);
-                }
-            }
-            else // Case C
-            {
-                //First content and lastNoneMandantoryClassificationVariable time period
-                selections.AddVariableToHeading(contents, GetCodes);
-                selections.AddVariableToHeading(time, GetTimeCodes);
-                placmentHeading.Add(contents.Code);
-
-
-                var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
-                var mandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == false).ToList();
-                var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == true).ToList();
-
-                if (mandatoryClassificationVariables.Count > 1)
-                {
-                    for (int i = 1; i < (mandatoryClassificationVariables.Count - 1); i++)
-                    {
-                        selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
-                        placmentHeading.Add(mandatoryClassificationVariables[i].Code);
-                    }
-
-                    //The variable with the most values should be in the placmentHeading
-                    var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables[mandatoryClassificationVariables.Count - 1]);
-                    placmentHeading.Add(heading.Code);
-                    placmentStub.Add(stub.Code);
-
-                    selections.AddStubVariable(stub, GetCodes);
-                    selections.AddHeadingVariable(heading, GetCodes);
-
-                    //Add the none mandatory classification variables without any selected values
-                    foreach (var variable in noneMandatoryClassificationVariables)
+                    if (variable != lastNoneMandantoryClassificationVariable)
                     {
                         selections.EliminateVariable(variable);
                     }
                 }
-                else if (mandatoryClassificationVariables.Count == 1)
+            }
+            else //No mandatory classification variables
+            {
+                var firstNoneMandantoryClassificationVariable = classificationVariables.First();
+                var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
+                var (stub, heading) = StubOrHeading(firstNoneMandantoryClassificationVariable, lastNoneMandantoryClassificationVariable);
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
+
+
+                foreach (var variable in noneMandatoryClassificationVariables)
                 {
-                    var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables.Last();
-                    var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
-                    selections.AddStubVariable(stub, GetCodes);
-                    selections.AddHeadingVariable(heading, GetCodes);
-
-                    placmentHeading.Add(heading.Code);
-                    placmentStub.Add(stub.Code);
-
-
-                    foreach (var variable in noneMandatoryClassificationVariables)
+                    if (variable != firstNoneMandantoryClassificationVariable && variable != lastNoneMandantoryClassificationVariable)
                     {
-                        if (variable != lastNoneMandantoryClassificationVariable)
-                        {
-                            selections.EliminateVariable(variable);
-                        }
+                        selections.EliminateVariable(variable);
                     }
                 }
-                else //No mandatory classification variables
-                {
-                    var firstNoneMandantoryClassificationVariable = classificationVariables.First();
-                    var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
-                    var (stub, heading) = StubOrHeading(firstNoneMandantoryClassificationVariable, lastNoneMandantoryClassificationVariable);
-                    selections.AddStubVariable(stub, GetCodes);
-                    selections.AddHeadingVariable(heading, GetCodes);
-                    placmentHeading.Add(heading.Code);
-                    placmentStub.Add(stub.Code);
+            }
+            //place time as last variable in heading
+            placmentHeading.Add(time.Code);
+            return (selections, placmentHeading, placmentStub);
+        }
 
+        /// <summary>
+        /// Case B according to the algorithm when three variables are present and where contents and time are two of them
+        /// </summary>
+        /// <param name="meta"></param>
+        /// <param name="contents"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private (List<Selection>, List<string>, List<string>) WithThreeDimensions(Variable contents, Variable time, Variable variable)
+        {
+            var selections = new List<Selection>();
+            List<string> placmentHeading = new List<string>();
+            List<string> placmentStub = new List<string>();
 
-                    foreach (var variable in noneMandatoryClassificationVariables)
-                    {
-                        if (variable != firstNoneMandantoryClassificationVariable && variable != lastNoneMandantoryClassificationVariable)
-                        {
-                            selections.EliminateVariable(variable);
-                        }
-                    }
-                }
-                //place time as last variable in heading
+            if (contents.Values.Count == 1)
+            {
+                // select the contents and 13 latest time values
+                selections.AddVariableToHeading(contents, GetCodes);
+                selections.AddHeadingVariable(time, GetTimeCodes, 13);
+                placmentHeading.Add(contents.Code);
                 placmentHeading.Add(time.Code);
+                selections.AddStubVariable(variable, GetCodes);
+                placmentStub.Add(variable.Code);
+
+            }
+            else
+            {
+                //Add the latest time value
+                selections.AddVariableToHeading(time, GetTimeCodes);
+                placmentHeading.Add(time.Code);
+
+                //Check if contents of classification should be in placmentStub or placmentHeading
+                var (stub, heading) = StubOrHeading(contents, variable);
+                selections.AddStubVariable(stub, GetCodes);
+                selections.AddHeadingVariable(heading, GetCodes);
+
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
+            }
+
+            return (selections, placmentHeading, placmentStub); 
+        }
+
+        /// <summary>
+        /// Case A according to the algorithm when oly contents and time variables are present
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        private (List<Selection>, List<string>, List<string>) OnlyContentsAndTime(Variable contents, Variable time)
+        {
+            var selections = new List<Selection>();
+            List<string> placmentHeading = new List<string>();
+            List<string> placmentStub = new List<string>();
+
+            if (contents.Values.Count < 6)
+            {
+                selections.AddHeadingVariable(contents, GetCodes);
+                selections.AddStubVariable(time, GetTimeCodes, 13);
+                placmentHeading.Add(contents.Code);
+                placmentStub.Add(time.Code);
+            }
+            else
+            {
+                selections.AddStubVariable(contents, GetCodes);
+                selections.AddHeadingVariable(time, GetTimeCodes, 13);
+                placmentHeading.Add(time.Code);
+                placmentStub.Add(contents.Code);
             }
 
             return (selections, placmentHeading, placmentStub);
         }
 
+        /// <summary>
+        /// Helper function that determis which variable should to the Stub or Heading
+        /// </summary>
+        /// <param name="one">first variable</param>
+        /// <param name="two">second variable</param>
+        /// <returns>variable that should go to the stub and the variable hat should go to the heading</returns>
         private static (Variable, Variable) StubOrHeading(Variable one, Variable two)
         {
             if (one.Values.Count > two.Values.Count)
