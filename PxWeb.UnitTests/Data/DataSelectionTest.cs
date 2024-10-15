@@ -5,7 +5,7 @@ namespace PxWeb.UnitTests.Data
     [TestClass]
     public class DataSelectionTest
     {
-       
+
         [TestMethod]
         public void ShouldReturnWildcardStarSelection()
         {
@@ -216,7 +216,7 @@ namespace PxWeb.UnitTests.Data
 
 
         // Helper methods
-        
+
         private PCAxis.Paxiom.Value CreateValue(string code)
         {
             PCAxis.Paxiom.Value value = new PCAxis.Paxiom.Value(code);
