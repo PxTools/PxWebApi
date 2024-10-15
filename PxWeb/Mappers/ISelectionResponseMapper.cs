@@ -6,6 +6,6 @@ namespace PxWeb.Mappers
 {
     public interface ISelectionResponseMapper
     {
-        SelectionResponse Map(Selection[] selections, PXMeta meta, string tableId, string lang);
+        SelectionResponse Map(Selection[] selections, List<string> heading, List<string> stub, PXMeta meta, string tableId, string lang);
     }
 }

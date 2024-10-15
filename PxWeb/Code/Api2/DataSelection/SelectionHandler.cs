@@ -1341,7 +1341,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return variablesSelection is null || !HasSelection(variablesSelection);
         }
 
-        public Selection[]? GetDefaultSelection(IPXModelBuilder builder, out Problem? problem)
+        public (Selection[]?, List<string>, List<string>) GetDefaultSelection(IPXModelBuilder builder, out Problem? problem)
         {
             var meta = builder.Model.Meta;
             // Default groupings and value sets are applied in the SQL parser by default
@@ -1354,52 +1354,52 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
             }
 
-
             var contents = meta.Variables.FirstOrDefault(v => v.IsContentVariable);
             var time = meta.Variables.FirstOrDefault(v => v.IsTime);
             List<Selection> selections;
+            List<string> heading;
+            List<string> stub;
 
             if (contents is not null && time is not null)
             {
                 //PX file using good practice or CNMM datasource
-                selections = GetDefaultSelectionByAlgorithm(meta, contents, time);
+                (selections, heading, stub) = GetDefaultSelectionByAlgorithm(meta, contents, time);
             }
             else
             {
-                selections = GetDefaultSelectionByAlgorithmFallback(meta);
+                (selections, heading, stub) = GetDefaultSelectionByAlgorithmFallback(meta);
             }
-
-            // Case A according to algorithm
-            //TODO: Pivot information missing
-
 
             //Verify that valid selections could be made for mandatory variables
             if (!VerifyMadeSelection(builder, selections.ToArray()))
             {
                 problem = ProblemUtility.IllegalSelection();
-                return null;
+                return (null, new List<string>(), new List<string>());
             }
 
             if (!CheckNumberOfCells(selections.ToArray()))
             {
                 problem = ProblemUtility.TooManyCellsSelected();
-                return null;
+                return (null, new List<string>(), new List<string>());
             }
 
             problem = null;
-            return selections.ToArray();
+            return (selections.ToArray(), heading, stub);
 
         }
 
-        private List<Selection> GetDefaultSelectionByAlgorithmFallback(PXMeta meta)
+        private (List<Selection>, List<string>, List<string>) GetDefaultSelectionByAlgorithmFallback(PXMeta meta)
         {
             var selections = new List<Selection>();
+            List<string> placmentHeading = new List<string>();
+            List<string> placmentStub = new List<string>();
 
-            //Only one variable put it in the stub
+            //Only one variable put it in the placmentStub
             if (meta.Variables.Count == 1)
             {
                 selections.AddStubVariable(meta.Variables[0], GetCodes);
-                return selections;
+                placmentStub.Add(meta.Variables[0].Code);
+                return (selections, placmentHeading, placmentStub);
             }
 
             var mandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == false).ToList();
@@ -1408,10 +1408,13 @@ namespace PxWeb.Code.Api2.DataSelection
             if (mandatoryClassificationVariables.Count == 1) //Only one mandantory classification variable
             {
                 //Take the mandantory and the last none mandantory classification variable
-                // place the one with most values in the stub
+                // place the one with most values in the placmentStub
                 var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
                 selections.AddStubVariable(stub, GetCodes);
                 selections.AddHeadingVariable(heading, GetCodes);
+
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
 
                 //Eliminate all none mandatory classification variables
                 for (int i = 0; i < noneMandatoryClassificationVariables.Count - 1; i++)
@@ -1422,7 +1425,7 @@ namespace PxWeb.Code.Api2.DataSelection
             else if (mandatoryClassificationVariables.Count > 1) // Two or more mandatory classification variable
             {
                 //Take the first and last mandantory classification variable
-                //and place the one with most values in the stub
+                //and place the one with most values in the placmentStub
                 var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables.Last());
                 selections.AddStubVariable(stub, GetCodes);
                 selections.AddHeadingVariable(heading, GetCodes);
@@ -1431,6 +1434,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 for (int i = 1; i < mandatoryClassificationVariables.Count - 1; i++)
                 {
                     selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
+                    placmentHeading.Add(mandatoryClassificationVariables[i].Code);
                 }
 
                 //Eliminate all none mandatory classification variables
@@ -1438,12 +1442,17 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     selections.EliminateVariable(noneMandatoryClassificationVariables[i]);
                 }
+
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
             }
             else //No mandantory variables and at leat two of them
             {
                 //Take the first and last none mandantory classification variable
-                //and place the one with most values in the stub
+                //and place the one with most values in the placmentStub
                 var (stub, heading) = StubOrHeading(noneMandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+                placmentHeading.Add(heading.Code);
+                placmentStub.Add(stub.Code);
 
                 //Eliminate all none mandatory classification variables
                 for (int i = 1; i < noneMandatoryClassificationVariables.Count - 1; i++)
@@ -1452,25 +1461,31 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
             }
 
-            return selections;
+            return (selections, placmentHeading, placmentStub);
         }
 
-        private List<Selection> GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
+        private (List<Selection>, List<string>, List<string>) GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
         {
             var selections = new List<Selection>();
+            List<string> placmentHeading = new List<string>();
+            List<string> placmentStub = new List<string>();
 
-            if (meta.Variables.Count == 2)
+            if (meta.Variables.Count == 2) // Case A according to algorithm
             {
                 // PX table using good practice och CNMM datasource
                 if (contents.Values.Count < 6)
                 {
                     selections.AddHeadingVariable(contents, GetCodes);
-                    selections.AddStubVariable(time, GetTimeCodes);
+                    selections.AddStubVariable(time, GetTimeCodes, 13);
+                    placmentHeading.Add(contents.Code);
+                    placmentStub.Add(time.Code);
                 }
                 else
                 {
                     selections.AddStubVariable(contents, GetCodes);
                     selections.AddHeadingVariable(time, GetTimeCodes, 13);
+                    placmentHeading.Add(time.Code);
+                    placmentStub.Add(contents.Code);
                 }
             }
             else if (meta.Variables.Count == 3) // Case B 
@@ -1480,11 +1495,14 @@ namespace PxWeb.Code.Api2.DataSelection
                     // select the contents and 13 latest time values
                     selections.AddVariableToHeading(contents, GetCodes);
                     selections.AddHeadingVariable(time, GetTimeCodes, 13);
+                    placmentHeading.Add(contents.Code);
+                    placmentHeading.Add(time.Code);
 
                     var variable = meta.Variables.FirstOrDefault(v => v.Code != contents.Code && v.Code != time.Code);
                     if (variable != null)
                     {
                         selections.AddStubVariable(variable, GetCodes);
+                        placmentStub.Add(variable.Code);
                     }
                 }
                 else
@@ -1497,12 +1515,15 @@ namespace PxWeb.Code.Api2.DataSelection
 
                     //Add the latest time value
                     selections.AddVariableToHeading(time, GetTimeCodes);
+                    placmentHeading.Add(time.Code);
 
-                    //Check if contents of classification should be in stub or heading
+                    //Check if contents of classification should be in placmentStub or placmentHeading
                     var (stub, heading) = StubOrHeading(contents, variable);
                     selections.AddStubVariable(stub, GetCodes);
                     selections.AddHeadingVariable(heading, GetCodes);
 
+                    placmentHeading.Add(heading.Code);
+                    placmentStub.Add(stub.Code);
                 }
             }
             else // Case C
@@ -1510,6 +1531,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 //First content and lastNoneMandantoryClassificationVariable time period
                 selections.AddVariableToHeading(contents, GetCodes);
                 selections.AddVariableToHeading(time, GetTimeCodes);
+                placmentHeading.Add(contents.Code);
 
 
                 var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
@@ -1521,10 +1543,13 @@ namespace PxWeb.Code.Api2.DataSelection
                     for (int i = 1; i < (mandatoryClassificationVariables.Count - 1); i++)
                     {
                         selections.AddVariableToHeading(mandatoryClassificationVariables[i], GetCodes);
+                        placmentHeading.Add(mandatoryClassificationVariables[i].Code);
                     }
 
-                    //The variable with the most values should be in the heading
+                    //The variable with the most values should be in the placmentHeading
                     var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables[mandatoryClassificationVariables.Count - 1]);
+                    placmentHeading.Add(heading.Code);
+                    placmentStub.Add(stub.Code);
 
                     selections.AddStubVariable(stub, GetCodes);
                     selections.AddHeadingVariable(heading, GetCodes);
@@ -1542,6 +1567,10 @@ namespace PxWeb.Code.Api2.DataSelection
                     selections.AddStubVariable(stub, GetCodes);
                     selections.AddHeadingVariable(heading, GetCodes);
 
+                    placmentHeading.Add(heading.Code);
+                    placmentStub.Add(stub.Code);
+
+
                     foreach (var variable in noneMandatoryClassificationVariables)
                     {
                         if (variable != lastNoneMandantoryClassificationVariable)
@@ -1557,6 +1586,8 @@ namespace PxWeb.Code.Api2.DataSelection
                     var (stub, heading) = StubOrHeading(firstNoneMandantoryClassificationVariable, lastNoneMandantoryClassificationVariable);
                     selections.AddStubVariable(stub, GetCodes);
                     selections.AddHeadingVariable(heading, GetCodes);
+                    placmentHeading.Add(heading.Code);
+                    placmentStub.Add(stub.Code);
 
 
                     foreach (var variable in noneMandatoryClassificationVariables)
@@ -1567,9 +1598,11 @@ namespace PxWeb.Code.Api2.DataSelection
                         }
                     }
                 }
+                //place time as last variable in heading
+                placmentHeading.Add(time.Code);
             }
 
-            return selections;
+            return (selections, placmentHeading, placmentStub);
         }
 
         private static (Variable, Variable) StubOrHeading(Variable one, Variable two)
@@ -1588,10 +1621,10 @@ namespace PxWeb.Code.Api2.DataSelection
 
     public static class SelectionsExtensions
     {
-        public static void AddStubVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction)
+        public static void AddStubVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 1500)
         {
             var selection = new Selection(variable.Code);
-            selection.ValueCodes.AddRange(valuesFunction(variable, 1500));
+            selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
             selections.Add(selection);
         }
 

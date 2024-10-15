@@ -24,7 +24,6 @@ using Px.Search;
 
 using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
-using PxWeb.Code.Api2.ModelBinder;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
@@ -157,9 +156,9 @@ namespace PxWeb.Controllers.Api2
 
         }
 
-        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat)
+        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes")] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "heading")] List<string>? heading, [FromQuery(Name = "stub")] List<string>? stub)
         {
-            VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues);
+            VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
             return GetData(id, lang, variablesSelection, outputFormat);
         }
 
@@ -184,53 +183,59 @@ namespace PxWeb.Controllers.Api2
             builder.BuildForSelection();
 
             Selection[]? selection = null;
-            bool IsDefaultSelection = false;
+            //bool IsDefaultSelection = false;
+            VariablePlacementType? placment = null;
+
             if (_selectionHandler.UseDefaultSelection(variablesSelection))
             {
-                selection = _selectionHandler.GetDefaultSelection(builder, out problem);
-                IsDefaultSelection = true;
+                List<string> heading, stub;
+                (selection, heading, stub) = _selectionHandler.GetDefaultSelection(builder, out problem);
+                placment = new VariablePlacementType() { Heading = heading, Stub = stub };
+
+                //IsDefaultSelection = true;
             }
             else
             {
                 if (variablesSelection is not null)
                 {
                     selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
+
+                    if (problem is not null)
+                    {
+                        //Check if we should pivot the table
+                        placment = GetPlacment(variablesSelection, builder, out problem);
+                    }
                 }
             }
-
-
 
             if (problem is not null)
             {
                 return BadRequest(problem);
             }
 
-
             builder.BuildForPresentation(selection);
 
             var model = builder.Model;
 
-            if (IsDefaultSelection)
+            if (placment is not null)
             {
-                //TODO: Check if selection is default selection if so pivot the table
-                var variables = model.Meta.Variables.Select(v => new { Code = v.Name, NumberOfValues = v.Values.Count }).ToList();
-                variables.Sort((a, b) => b.NumberOfValues.CompareTo(a.NumberOfValues));
-
                 var descriptions = new List<PivotDescription>();
-                if (variables.Count > 0)
+
+                descriptions.AddRange(placment.Heading.Select(h => new PivotDescription()
                 {
-                    descriptions.Add(new PivotDescription() { VariableName = variables[0].Code, VariablePlacement = PlacementType.Stub });
+                    VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
+                    VariablePlacement = PlacementType.Heading
+                }));
 
-                    foreach (var variable in variables.Skip(1).Reverse())
-                    {
-                        descriptions.Add(new PivotDescription() { VariableName = variable.Code, VariablePlacement = PlacementType.Heading });
-                    }
+                descriptions.AddRange(placment.Stub.Select(h => new PivotDescription()
+                {
+                    VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
+                    VariablePlacement = PlacementType.Stub
+                }));
 
-                    var pivot = new PCAxis.Paxiom.Operations.Pivot();
-                    model = pivot.Execute(model, descriptions.ToArray());
-                }
+                var pivot = new PCAxis.Paxiom.Operations.Pivot();
+                model = pivot.Execute(model, descriptions.ToArray());
             }
-
 
             if (outputFormat == null)
             {
@@ -247,6 +252,52 @@ namespace PxWeb.Controllers.Api2
             return Ok();
         }
 
+
+        private VariablePlacementType? GetPlacment(VariablesSelection variablesSelection, IPXModelBuilder builder, out Problem? problem)
+        {
+            VariablePlacementType? placment = null;
+            var p = variablesSelection.Palcement;
+            //Check if user have specified stub or heading
+            if (p is not null && (p.Heading.Count > 0 || p.Stub.Count > 0))
+            {
+                if ((p.Heading.Count + p.Stub.Count) != builder.Model.Meta.Variables.Count)
+                {
+                    //Check if only one variable is selected
+                    if (p.Heading.Count == 0 || p.Stub.Count == 0)
+                    {
+                        List<string> usedVariables = new List<string>();
+                        usedVariables.AddRange(p.Heading);
+                        usedVariables.AddRange(p.Stub);
+
+                        var unusedVariables = builder.Model.Meta.Variables.Select(v => v.Code).Except(usedVariables).ToList();
+
+                        if (p.Heading.Count == 0)
+                        {
+                            placment = new VariablePlacementType() { Heading = unusedVariables, Stub = p.Stub };
+                        }
+                        else
+                        {
+                            placment = new VariablePlacementType() { Heading = p.Heading, Stub = unusedVariables };
+                        }
+                    }
+                    else
+                    {
+                        //Not all variables are specified in placment
+                        problem = ProblemUtility.IllegalSelection();
+                        return null;
+                    }
+                }
+                else
+                {
+                    placment = p;
+                }
+            }
+
+            problem = null;
+            return placment;
+        }
+
+
         /// <summary>
         /// Map querystring parameters to VariablesSelection object
         /// </summary>
@@ -254,7 +305,7 @@ namespace PxWeb.Controllers.Api2
         /// <param name="codelist"></param>
         /// <param name="outputvalues"></param>
         /// <returns></returns>
-        private VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, Dictionary<string, CodeListOutputValuesType>? outputvalues)
+        private VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, Dictionary<string, CodeListOutputValuesType>? outputvalues, List<string>? heading, List<string>? stub)
         {
             VariablesSelection selections = new VariablesSelection();
             if (valuecodes != null)
@@ -277,6 +328,10 @@ namespace PxWeb.Controllers.Api2
                 }
             }
 
+            selections.Palcement = new VariablePlacementType();
+            selections.Palcement.Heading = heading ?? new List<string>();
+            selections.Palcement.Stub = stub ?? new List<string>();
+
             return selections;
         }
 
@@ -296,8 +351,9 @@ namespace PxWeb.Controllers.Api2
 
             builder.BuildForSelection();
 
-            //No variable selection is provided, so we will return the default selection    
-            var selection = _selectionHandler.GetDefaultSelection(builder, out problem);
+            //No variable selection is provided, so we will return the default selection
+
+            var (selection, heading, stub) = _selectionHandler.GetDefaultSelection(builder, out problem);
 
             if (problem is not null || selection is null)
             {
@@ -305,7 +361,7 @@ namespace PxWeb.Controllers.Api2
             }
 
             //Map selection to SelectionResponse
-            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, builder.Model.Meta, id, lang);
+            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, heading, stub, builder.Model.Meta, id, lang);
             return Ok(selectionResponse);
         }
 
