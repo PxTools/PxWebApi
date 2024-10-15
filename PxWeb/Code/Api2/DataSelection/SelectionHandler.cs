@@ -1134,6 +1134,12 @@ namespace PxWeb.Code.Api2.DataSelection
             return variablesSelection is null || !HasSelection(variablesSelection);
         }
 
+        /// <summary>
+        /// Gets the default selection for a table
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="problem"></param>
+        /// <returns></returns>
         public (Selection[]?, List<string>, List<string>) GetDefaultSelection(IPXModelBuilder builder, out Problem? problem)
         {
             var meta = builder.Model.Meta;
@@ -1181,6 +1187,11 @@ namespace PxWeb.Code.Api2.DataSelection
 
         }
 
+        /// <summary>
+        /// Fallback method for getting default selection when contents and time are not present
+        /// </summary>
+        /// <param name="meta"></param>
+        /// <returns></returns>
         private (List<Selection>, List<string>, List<string>) GetDefaultSelectionByAlgorithmFallback(PXMeta meta)
         {
             var selections = new List<Selection>();
@@ -1257,6 +1268,13 @@ namespace PxWeb.Code.Api2.DataSelection
             return (selections, placmentHeading, placmentStub);
         }
 
+        /// <summary>
+        /// Gets the default selection by the algorithm when both contents and time are present
+        /// </summary>
+        /// <param name="meta"></param>
+        /// <param name="contents"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         private (List<Selection>, List<string>, List<string>) GetDefaultSelectionByAlgorithm(PXMeta meta, Variable contents, Variable time)
         {
             if (meta.Variables.Count == 2) 
