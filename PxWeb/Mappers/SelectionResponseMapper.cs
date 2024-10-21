@@ -16,7 +16,7 @@ namespace PxWeb.Mappers
             _linkCreator = linkCreator;
         }
 
-        public SelectionResponse Map(Selection[] selections, PXMeta meta, string tableId, string lang)
+        public SelectionResponse Map(Selection[] selections, List<string> heading, List<string> stub, PXMeta meta, string tableId, string lang)
         {
             var response = new SelectionResponse();
             response.Selection = new VariablesSelection();
@@ -27,6 +27,12 @@ namespace PxWeb.Mappers
                 OutputValues = CodeListOutputValuesType.SingleEnum,
                 ValueCodes = selection.ValueCodes.Cast<string>().ToList(),
             }).ToList();
+
+            response.Selection.Palcement = new VariablePlacementType()
+            {
+                Heading = heading,
+                Stub = stub
+            };
 
             response.Links = new List<Link>();
 

@@ -8,6 +8,6 @@ namespace PxWeb.Code.Api2.DataSelection
     {
         public bool UseDefaultSelection(VariablesSelection? variablesSelection);
         public Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem);
-        public Selection[]? GetDefaultSelection(IPXModelBuilder builder, out Problem? problem);
+        public (Selection[]?, List<string>, List<string>) GetDefaultSelection(IPXModelBuilder builder, out Problem? problem);
     }
 }

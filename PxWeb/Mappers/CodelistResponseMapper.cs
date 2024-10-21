@@ -73,11 +73,11 @@ namespace PxWeb.Mappers
             map.Code = val.Code;
             map.Label = val.Label;
 
-            map._ValueMap = new System.Collections.Generic.List<string>();
+            map.VarValueMap = new System.Collections.Generic.List<string>();
 
             foreach (var v in val.ValueMap)
             {
-                map._ValueMap.Add(v.ToString());
+                map.VarValueMap.Add(v.ToString());
             }
 
             // TODO: Add later?
