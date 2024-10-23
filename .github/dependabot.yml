@@ -9,10 +9,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "JohannesFinsveen"
-      - "likp"
-      - "runejo"
     groups:
       small-change:
         patterns:
@@ -24,16 +20,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "JohannesFinsveen"
-      - "likp"
-      - "runejo"
 
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "JohannesFinsveen"
-      - "likp"
-      - "runejo"
