@@ -64,7 +64,7 @@
       "px"
     ],
     "DefaultOutputFormat": "px",
-    "EnableSwaggerUI": false
+    "EnableAllEndpointsSwaggerUI": false
   },
   "LuceneConfiguration": {
     "IndexDirectory": "Database"
