@@ -35,12 +35,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
 
             //Replace the text TIME with tid in list
-            var time = meta.Variables.Find(x => x.IsTime);
-            if (time != null)
-            {
-                p.Stub = p.Stub.Select(x => x.Equals("TIME", System.StringComparison.OrdinalIgnoreCase) ? time.Code : x).ToList();
-                p.Heading = p.Heading.Select(x => x.Equals("TIME", System.StringComparison.OrdinalIgnoreCase) ? time.Code : x).ToList();
-            }
+            ReplaceTimeConstant(meta, p);
 
             var selectedVariablesCode = selection.Where(x => x.ValueCodes.Count > 0).Select(x => x.VariableCode).ToList();
 
@@ -96,5 +91,14 @@ namespace PxWeb.Code.Api2.DataSelection
 
         }
 
+        private static void ReplaceTimeConstant(PXMeta meta, VariablePlacementType? p)
+        {
+            var time = meta.Variables.Find(x => x.IsTime);
+            if (time != null)
+            {
+                p.Stub = p.Stub.Select(x => x.Equals("TIME", System.StringComparison.OrdinalIgnoreCase) ? time.Code : x).ToList();
+                p.Heading = p.Heading.Select(x => x.Equals("TIME", System.StringComparison.OrdinalIgnoreCase) ? time.Code : x).ToList();
+            }
+        }
     }
 }
