@@ -27,7 +27,8 @@ namespace PxWeb.Code.Api2.ModelBinder
                     string? q = bindingContext.HttpContext.Request.Query[key];
                     if (q != null)
                     {
-                        var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))");
+                        var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.IgnoreCase,
+                                    TimeSpan.FromMilliseconds(100));
 
                         foreach (var item in items)
                         {
