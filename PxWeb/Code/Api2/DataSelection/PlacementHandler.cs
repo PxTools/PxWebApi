@@ -40,10 +40,7 @@ namespace PxWeb.Code.Api2.DataSelection
             var selectedVariablesCode = selection.Where(x => x.ValueCodes.Count > 0).Select(x => x.VariableCode).ToList();
 
             //Check if all variables are in the model
-            if (!(p.Stub.TrueForAll(variableCode => selectedVariablesCode.Exists(code =>
-                    code.Equals(variableCode, StringComparison.OrdinalIgnoreCase))) &&
-                  p.Heading.TrueForAll(variableCode => selectedVariablesCode.Exists(code =>
-                    code.Equals(variableCode, StringComparison.OrdinalIgnoreCase)))))
+            if (!AllVariablesExistsInSelection(p, selectedVariablesCode))
             {
                 problem = ProblemUtility.IllegalPlacementSelection();
                 return null;
@@ -65,8 +62,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
 
             //Check if user have specified stub or heading
-            if ((p.Heading.Count > 0 && p.Stub.Count == 0) ||
-                 p.Heading.Count == 0 && p.Stub.Count > 0)
+            if (OnlyHeadOrStubIsSpecified(p))
             {
 
                 List<string> usedVariables = new List<string>();
@@ -91,7 +87,21 @@ namespace PxWeb.Code.Api2.DataSelection
 
         }
 
-        private static void ReplaceTimeConstant(PXMeta meta, VariablePlacementType? p)
+        private static bool OnlyHeadOrStubIsSpecified(VariablePlacementType p)
+        {
+            return (p.Heading.Count > 0 && p.Stub.Count == 0) ||
+                             (p.Heading.Count == 0 && p.Stub.Count > 0);
+        }
+
+        private static bool AllVariablesExistsInSelection(VariablePlacementType p, List<string> selectedVariablesCode)
+        {
+            return (p.Stub.TrueForAll(variableCode => selectedVariablesCode.Exists(code =>
+                                code.Equals(variableCode, StringComparison.OrdinalIgnoreCase))) &&
+                              p.Heading.TrueForAll(variableCode => selectedVariablesCode.Exists(code =>
+                                code.Equals(variableCode, StringComparison.OrdinalIgnoreCase))));
+        }
+
+        private static void ReplaceTimeConstant(PXMeta meta, VariablePlacementType p)
         {
             var time = meta.Variables.Find(x => x.IsTime);
             if (time != null)
