@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PxWeb.UnitTests.Data
+﻿namespace PxWeb.UnitTests.Data
 {
 
     [TestClass]
@@ -30,7 +24,7 @@ namespace PxWeb.UnitTests.Data
             // Assert
             Assert.IsNull(problem);
             Assert.IsNull(placement);
-            
+
         }
 
         [TestMethod]
@@ -62,7 +56,7 @@ namespace PxWeb.UnitTests.Data
             // Arrange
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
-            
+
             variablesSelection.Palcement = new VariablePlacementType();
             variablesSelection.Palcement.Heading = new List<string>();
             variablesSelection.Palcement.Stub = new List<string>();

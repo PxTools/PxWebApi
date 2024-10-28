@@ -28,7 +28,7 @@ namespace PxWeb.Code.Api2.ModelBinder
                     if (q != null)
                     {
                         var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))");
-                        
+
                         foreach (var item in items)
                         {
                             var item2 = item.Trim();

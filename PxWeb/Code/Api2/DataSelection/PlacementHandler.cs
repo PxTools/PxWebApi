@@ -1,7 +1,9 @@
-﻿using PCAxis.Paxiom;
+﻿using System.Linq;
+
+using PCAxis.Paxiom;
+
 using PxWeb.Api2.Server.Models;
 using PxWeb.Helper.Api2;
-using System.Linq;
 
 namespace PxWeb.Code.Api2.DataSelection
 {
@@ -68,7 +70,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
 
             //Check if user have specified stub or heading
-            if ((p.Heading.Count > 0  && p.Stub.Count == 0) ||
+            if ((p.Heading.Count > 0 && p.Stub.Count == 0) ||
                  p.Heading.Count == 0 && p.Stub.Count > 0)
             {
 
@@ -93,6 +95,6 @@ namespace PxWeb.Code.Api2.DataSelection
             return null;
 
         }
-       
+
     }
 }

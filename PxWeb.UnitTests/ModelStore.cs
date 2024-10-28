@@ -1,7 +1,4 @@
-﻿using PCAxis.Paxiom.Operations;
-using PCAxis.Paxiom;
-
-namespace PxWeb.UnitTests
+﻿namespace PxWeb.UnitTests
 {
     internal static class ModelStore
     {
@@ -34,7 +31,7 @@ namespace PxWeb.UnitTests
             meta.Variables.Add(variable);
 
             //Create classification variable gender
-            
+
             name = "GENDER";
 
             variable = new Variable(name, PlacementType.Stub);

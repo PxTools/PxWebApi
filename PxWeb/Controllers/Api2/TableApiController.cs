@@ -9,9 +9,6 @@
  */
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net.NetworkInformation;
-
-using DocumentFormat.OpenXml.Office2013.Drawing.Chart;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -161,7 +158,7 @@ namespace PxWeb.Controllers.Api2
             return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query));
 
         }
-        
+
         public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
         {
             VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
@@ -259,7 +256,7 @@ namespace PxWeb.Controllers.Api2
             return Ok();
         }
 
-        
+
 
         /// <summary>
         /// Map querystring parameters to VariablesSelection object
