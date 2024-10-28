@@ -1,7 +1,53 @@
-﻿namespace PxWeb.UnitTests
+﻿using PCAxis.Paxiom.Operations;
+using PCAxis.Paxiom;
+
+namespace PxWeb.UnitTests
 {
     internal static class ModelStore
     {
+
+        public static PXModel CreateModelA()
+        {
+
+            PXModel model = new PXModel();
+            PXMeta meta = new PXMeta();
+
+            // Create time variable
+            var name = "PointOfTime";
+            Variable variable = new Variable(name, PlacementType.Heading);
+
+            for (int i = 1968; i < 2025; i++)
+            {
+                variable.Values.Add(CreateValue($"{i}"));
+            }
+            variable.TimeValue = $"TLIST(A, \"1968\"-\"2025\")";
+            variable.IsTime = true;
+            meta.AddVariable(variable);
+
+            // Create content variable
+            name = $"MEASURE";
+            variable = new Variable(name, PlacementType.Heading);
+            variable.Values.Add(CreateValue($"M1"));
+            variable.Values.Add(CreateValue($"M2"));
+            variable.Elimination = false;
+            variable.IsContentVariable = true;
+            meta.Variables.Add(variable);
+
+            //Create classification variable gender
+            
+            name = "GENDER";
+
+            variable = new Variable(name, PlacementType.Stub);
+            variable.Values.Add(CreateValue($"M"));
+            variable.Values.Add(CreateValue($"F"));
+            variable.Elimination = true;
+            meta.Variables.Add(variable);
+
+            model.Meta = meta;
+            return model;
+        }
+
+
         public static PXModel GetModelWithOnlyOneVariable(int numberOfValues)
         {
 

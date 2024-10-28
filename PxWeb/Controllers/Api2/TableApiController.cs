@@ -9,6 +9,9 @@
  */
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.NetworkInformation;
+
+using DocumentFormat.OpenXml.Office2013.Drawing.Chart;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -24,6 +27,7 @@ using Px.Search;
 
 using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
+using PxWeb.Code.Api2.ModelBinder;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
@@ -47,9 +51,10 @@ namespace PxWeb.Controllers.Api2
         private readonly ISerializeManager _serializeManager;
         private readonly PxApiConfigurationOptions _configOptions;
         private readonly ISelectionHandler _selectionHandler;
+        private readonly IPlacementHandler _placementHandler;
         private readonly ISelectionResponseMapper _selectionResponseMapper;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, ITableMetadataResponseMapper responseMapper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler)
+        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, ITableMetadataResponseMapper responseMapper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IPlacementHandler placementHandler)
         {
             _dataSource = dataSource;
             _languageHelper = languageHelper;
@@ -63,6 +68,7 @@ namespace PxWeb.Controllers.Api2
             _serializeManager = serializeManager;
             _selectionHandler = selectionHandler;
             _selectionResponseMapper = selectionResponseMapper;
+            _placementHandler = placementHandler;
         }
 
         public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] MetadataOutputFormatType? outputFormat)
@@ -155,8 +161,8 @@ namespace PxWeb.Controllers.Api2
             return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query));
 
         }
-
-        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes")] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "heading")] List<string>? heading, [FromQuery(Name = "stub")] List<string>? stub)
+        
+        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
         {
             VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
             return GetData(id, lang, variablesSelection, outputFormat);
@@ -200,10 +206,11 @@ namespace PxWeb.Controllers.Api2
                 {
                     selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
 
-                    if (problem is not null)
+                    if (problem is null && selection is not null)
                     {
                         //Check if we should pivot the table
-                        placment = GetPlacment(variablesSelection, builder, out problem);
+                        placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
+                        //GetPlacment(variablesSelection, selection, builder, out problem);
                     }
                 }
             }
@@ -223,7 +230,7 @@ namespace PxWeb.Controllers.Api2
 
                 descriptions.AddRange(placment.Heading.Select(h => new PivotDescription()
                 {
-                    VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
+                    VariableName = model.Meta.Variables.First(v => v.Code.Equals(h, StringComparison.OrdinalIgnoreCase)).Name,
                     VariablePlacement = PlacementType.Heading
                 }));
 
@@ -252,51 +259,7 @@ namespace PxWeb.Controllers.Api2
             return Ok();
         }
 
-
-        private VariablePlacementType? GetPlacment(VariablesSelection variablesSelection, IPXModelBuilder builder, out Problem? problem)
-        {
-            VariablePlacementType? placment = null;
-            var p = variablesSelection.Palcement;
-            //Check if user have specified stub or heading
-            if (p is not null && (p.Heading.Count > 0 || p.Stub.Count > 0))
-            {
-                if ((p.Heading.Count + p.Stub.Count) != builder.Model.Meta.Variables.Count)
-                {
-                    //Check if only one variable is selected
-                    if (p.Heading.Count == 0 || p.Stub.Count == 0)
-                    {
-                        List<string> usedVariables = new List<string>();
-                        usedVariables.AddRange(p.Heading);
-                        usedVariables.AddRange(p.Stub);
-
-                        var unusedVariables = builder.Model.Meta.Variables.Select(v => v.Code).Except(usedVariables).ToList();
-
-                        if (p.Heading.Count == 0)
-                        {
-                            placment = new VariablePlacementType() { Heading = unusedVariables, Stub = p.Stub };
-                        }
-                        else
-                        {
-                            placment = new VariablePlacementType() { Heading = p.Heading, Stub = unusedVariables };
-                        }
-                    }
-                    else
-                    {
-                        //Not all variables are specified in placment
-                        problem = ProblemUtility.IllegalSelection();
-                        return null;
-                    }
-                }
-                else
-                {
-                    placment = p;
-                }
-            }
-
-            problem = null;
-            return placment;
-        }
-
+        
 
         /// <summary>
         /// Map querystring parameters to VariablesSelection object
@@ -304,6 +267,8 @@ namespace PxWeb.Controllers.Api2
         /// <param name="valuecodes"></param>
         /// <param name="codelist"></param>
         /// <param name="outputvalues"></param>
+        /// <param name="heading"></param>
+        /// <param name="stub"></param> 
         /// <returns></returns>
         private VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, Dictionary<string, CodeListOutputValuesType>? outputvalues, List<string>? heading, List<string>? stub)
         {
