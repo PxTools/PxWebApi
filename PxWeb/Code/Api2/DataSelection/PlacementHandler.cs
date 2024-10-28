@@ -35,7 +35,7 @@ namespace PxWeb.Code.Api2.DataSelection
             }
 
             //Replace the text TIME with tid in list
-            var time = meta.Variables.FirstOrDefault(x => x.IsTime);
+            var time = meta.Variables.Find(x => x.IsTime);
             if (time != null)
             {
                 p.Stub = p.Stub.Select(x => x.Equals("TIME", System.StringComparison.OrdinalIgnoreCase) ? time.Code : x).ToList();
@@ -45,9 +45,9 @@ namespace PxWeb.Code.Api2.DataSelection
             var selectedVariablesCode = selection.Where(x => x.ValueCodes.Count > 0).Select(x => x.VariableCode).ToList();
 
             //Check if all variables are in the model
-            if (!(p.Stub.All(variableCode => selectedVariablesCode.Exists(code =>
+            if (!(p.Stub.TrueForAll(variableCode => selectedVariablesCode.Exists(code =>
                     code.Equals(variableCode, StringComparison.OrdinalIgnoreCase))) &&
-                  p.Heading.All(variableCode => selectedVariablesCode.Exists(code =>
+                  p.Heading.TrueForAll(variableCode => selectedVariablesCode.Exists(code =>
                     code.Equals(variableCode, StringComparison.OrdinalIgnoreCase)))))
             {
                 problem = ProblemUtility.IllegalPlacementSelection();

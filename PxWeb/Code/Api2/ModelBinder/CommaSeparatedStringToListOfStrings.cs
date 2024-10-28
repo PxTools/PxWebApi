@@ -18,31 +18,21 @@ namespace PxWeb.Code.Api2.ModelBinder
 
             var result = new List<string>();
 
-            var keys = bindingContext.HttpContext.Request.Query.Keys.ToList().Where(x => x.Equals(modelName, StringComparison.InvariantCultureIgnoreCase)).ToList();
+            var keys = bindingContext.HttpContext.Request.Query.Keys.Where(x => x.Equals(modelName, StringComparison.InvariantCultureIgnoreCase));
 
             foreach (var key in keys)
             {
-                if (key != null)
+                string? q = bindingContext.HttpContext.Request.Query[key];
+                if (q != null)
                 {
-                    string? q = bindingContext.HttpContext.Request.Query[key];
-                    if (q != null)
-                    {
-                        var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.IgnoreCase,
-                                    TimeSpan.FromMilliseconds(100));
+                    var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.IgnoreCase,
+                                TimeSpan.FromMilliseconds(100));
 
-                        foreach (var item in items)
-                        {
-                            var item2 = item.Trim();
-                            if (item.StartsWith("[") && item.EndsWith("]"))
-                            {
-                                result.Add(item.Substring(1, item.Length - 2));
-                            }
-                            else
-                            {
-                                result.Add(item2);
-                            }
-                        }
+                    foreach (var item in items)
+                    {
+                        result.Add(CleanValue(item));
                     }
+
                 }
             }
 
@@ -50,6 +40,17 @@ namespace PxWeb.Code.Api2.ModelBinder
             bindingContext.Result = ModelBindingResult.Success(result);
 
             return Task.CompletedTask;
+        }
+
+        private static string CleanValue(string value)
+        {
+            var item2 = value.Trim();
+            if (item2.StartsWith('[') && item2.EndsWith(']'))
+            {
+                return value.Substring(1, item2.Length - 2);
+            }
+            return item2;
+
         }
     }
 }
