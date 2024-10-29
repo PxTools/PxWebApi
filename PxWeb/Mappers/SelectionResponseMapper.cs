@@ -50,12 +50,12 @@ namespace PxWeb.Mappers
 
             if (variable.CurrentGrouping != null)
             {
-                return variable.CurrentGrouping.ID;
+                return "agg_" + variable.CurrentGrouping.ID;
             }
 
             if (variable.CurrentValueSet != null)
             {
-                return variable.CurrentValueSet.ID;
+                return "vs_" + variable.CurrentValueSet.ID;
             }
 
             return null;
