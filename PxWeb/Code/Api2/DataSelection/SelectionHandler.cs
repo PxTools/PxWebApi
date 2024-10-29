@@ -1556,7 +1556,7 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.Add(selection);
         }
 
-        public static void AddHeadingVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 30)
+        public static void AddHeadingVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 11)
         {
             var selection = new Selection(variable.Code);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));

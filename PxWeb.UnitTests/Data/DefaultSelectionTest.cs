@@ -80,7 +80,7 @@
             var o3 = selection.FirstOrDefault(x => x.VariableCode == meta.Variables[3].Code);
 
             Assert.IsNotNull(m1);
-            Assert.AreEqual(m1.ValueCodes.Count, 30);
+            Assert.AreEqual(m1.ValueCodes.Count, 11);
             Assert.IsNotNull(o1);
             Assert.AreEqual(o1.ValueCodes.Count, 0);
             Assert.IsNotNull(o2);
@@ -296,7 +296,7 @@
             Assert.IsNotNull(time);
             Assert.AreEqual(time.ValueCodes.Count, 1);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(cls1.ValueCodes.Count, 20);
+            Assert.AreEqual(cls1.ValueCodes.Count, 11);
             Assert.IsNotNull(cls2);
             Assert.AreEqual(cls2.ValueCodes.Count, 0);
             Assert.IsNotNull(cls3);
@@ -336,7 +336,7 @@
             Assert.IsNotNull(cls2);
             Assert.AreEqual(cls2.ValueCodes.Count, 20);
             Assert.IsNotNull(cls3m);
-            Assert.AreEqual(cls3m.ValueCodes.Count, 20);
+            Assert.AreEqual(cls3m.ValueCodes.Count, 11);
         }
 
         [TestMethod]
@@ -370,7 +370,7 @@
             Assert.IsNotNull(cls1);
             Assert.AreEqual(cls1.ValueCodes.Count, 0);
             Assert.IsNotNull(cls2m);
-            Assert.AreEqual(cls2m.ValueCodes.Count, 20);
+            Assert.AreEqual(cls2m.ValueCodes.Count, 11);
             Assert.IsNotNull(cls3m);
             Assert.AreEqual(cls3m.ValueCodes.Count, 20);
         }
@@ -407,7 +407,7 @@
             Assert.IsNotNull(cls1);
             Assert.AreEqual(cls1.ValueCodes.Count, 0);
             Assert.IsNotNull(cls2m);
-            Assert.AreEqual(cls2m.ValueCodes.Count, 20);
+            Assert.AreEqual(cls2m.ValueCodes.Count, 11);
             Assert.IsNotNull(cls3m);
             Assert.AreEqual(cls3m.ValueCodes.Count, 1);
             Assert.IsNotNull(cls4m);
