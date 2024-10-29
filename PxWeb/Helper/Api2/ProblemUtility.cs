@@ -57,6 +57,15 @@ namespace PxWeb.Helper.Api2
             return p;
         }
 
+        public static Problem IllegalPlacementSelection()
+        {
+            Problem p = new Problem();
+            p.Type = "Parameter error";
+            p.Status = 400;
+            p.Title = "Illegal placment";
+            return p;
+        }
+
         public static Problem TooManyCellsSelected()
         {
             Problem p = new Problem();
