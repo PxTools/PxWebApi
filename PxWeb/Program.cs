@@ -153,7 +153,7 @@ namespace PxWeb
             {
                 options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
-                    if (!(pxApiConfiguration.EnableSwaggerUI || app.Environment.IsDevelopment()))
+                    if (!(pxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
                     {
                         Program.LoadFileIntoSwaggerDoc(swaggerDoc, Path.Combine(AppContext.BaseDirectory, "swagger_v2.json"));
 

@@ -31,7 +31,7 @@ namespace PxWeb.Config.Api2
         public string RoutePrefix { get; set; } = String.Empty;
         public List<string> OutputFormats { get; set; } = new List<string>();
         public string DefaultOutputFormat { get; set; } = String.Empty;
-        public bool EnableSwaggerUI { get; set; } = false;
+        public bool EnableAllEndpointsSwaggerUI { get; set; } = false;
 
     }
 }
