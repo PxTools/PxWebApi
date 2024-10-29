@@ -8,6 +8,7 @@ namespace PxWeb.Code.Api2.ModelBinder
 {
     public class CommaSeparatedStringToListOfStrings : IModelBinder
     {
+
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
 
@@ -25,14 +26,14 @@ namespace PxWeb.Code.Api2.ModelBinder
                 string? q = bindingContext.HttpContext.Request.Query[key];
                 if (q != null)
                 {
-                    var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.IgnoreCase,
-                                TimeSpan.FromMilliseconds(100));
+                    var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.None,
+                            TimeSpan.FromMilliseconds(100));
+
 
                     foreach (var item in items)
                     {
                         result.Add(CleanValue(item));
                     }
-
                 }
             }
 
@@ -47,7 +48,7 @@ namespace PxWeb.Code.Api2.ModelBinder
             var item2 = value.Trim();
             if (item2.StartsWith('[') && item2.EndsWith(']'))
             {
-                return value.Substring(1, item2.Length - 2);
+                return value.Substring(1, item2.Length - 2).Trim();
             }
             return item2;
 
