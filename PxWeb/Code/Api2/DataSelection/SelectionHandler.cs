@@ -1347,6 +1347,7 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.AddVariableToHeading(contents, GetCodes);
             selections.AddVariableToHeading(time, GetTimeCodes);
             placmentHeading.Add(contents.Code);
+            placmentHeading.Add(time.Code);
 
             for (int i = 1; i < (mandatoryClassificationVariables.Count - 1); i++)
             {
@@ -1368,8 +1369,6 @@ namespace PxWeb.Code.Api2.DataSelection
                 selections.EliminateVariable(variable);
             }
 
-            //place time as last variable in heading
-            placmentHeading.Add(time.Code);
             return (selections, placmentHeading, placmentStub);
         }
 
@@ -1392,6 +1391,7 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.AddVariableToHeading(contents, GetCodes);
             selections.AddVariableToHeading(time, GetTimeCodes);
             placmentHeading.Add(contents.Code);
+            placmentHeading.Add(time.Code);
 
             var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables.Last();
             var (stub, heading) = StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
@@ -1408,8 +1408,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     selections.EliminateVariable(variable);
                 }
             }
-            //place time as last variable in heading
-            placmentHeading.Add(time.Code);
+
             return (selections, placmentHeading, placmentStub);
         }
 
@@ -1432,6 +1431,7 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.AddVariableToHeading(contents, GetCodes);
             selections.AddVariableToHeading(time, GetTimeCodes);
             placmentHeading.Add(contents.Code);
+            placmentHeading.Add(time.Code);
 
             var firstNoneMandantoryClassificationVariable = classificationVariables.First();
             var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
@@ -1449,8 +1449,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     selections.EliminateVariable(variable);
                 }
             }
-            //place time as last variable in heading
-            placmentHeading.Add(time.Code);
+
             return (selections, placmentHeading, placmentStub);
         }
 
@@ -1556,7 +1555,7 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.Add(selection);
         }
 
-        public static void AddHeadingVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 30)
+        public static void AddHeadingVariable(this List<Selection> selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 11)
         {
             var selection = new Selection(variable.Code);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
