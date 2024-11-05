@@ -9,14 +9,9 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "JohannesFinsveen"
-      - "likp"
-      - "runejo"
     groups:
-      small-change:
-        patterns:
-          - "*"
+      minor-version-updates:
+        applies-to: version-updates
         update-types:
           - "minor"
 
@@ -24,16 +19,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "JohannesFinsveen"
-      - "likp"
-      - "runejo"
 
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "daily"
-    reviewers:
-      - "JohannesFinsveen"
-      - "likp"
-      - "runejo"
