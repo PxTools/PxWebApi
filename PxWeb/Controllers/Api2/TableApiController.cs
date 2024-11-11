@@ -68,10 +68,12 @@ namespace PxWeb.Controllers.Api2
             _placementHandler = placementHandler;
         }
 
-        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] MetadataOutputFormatType? outputFormat)
+        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] MetadataOutputFormatType? outputFormat, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
         {
             lang = _languageHelper.HandleLanguage(lang);
             IPXModelBuilder? builder = _dataSource.CreateBuilder(id, lang);
+
+
 
             if (builder != null)
             {
@@ -79,6 +81,14 @@ namespace PxWeb.Controllers.Api2
                 {
                     builder.BuildForSelection();
                     var model = builder.Model;
+
+                    if (defaultSelection is not null && defaultSelection == true)
+                    {
+                        //apply the default selection
+                        Problem? problem;
+                        var selectionx = _selectionHandler.GetDefaultSelection(builder, out problem);
+                    }
+
 
                     if (outputFormat != null && outputFormat == MetadataOutputFormatType.Stat2Enum)
                     {
