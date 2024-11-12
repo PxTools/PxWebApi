@@ -11,7 +11,7 @@ namespace PxWeb.Code.Api2.DataSelection
     {
         VariablePlacementType? IPlacementHandler.GetPlacment(VariablesSelection variablesSelection, Selection[] selection, PXMeta meta, out Problem? problem)
         {
-            var p = variablesSelection.Palcement;
+            var p = variablesSelection.Placement;
 
             //No placement is specified
             if (p is null)
