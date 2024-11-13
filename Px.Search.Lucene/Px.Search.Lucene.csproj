@@ -18,7 +18,7 @@
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00017" />
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00017" />
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00017" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
