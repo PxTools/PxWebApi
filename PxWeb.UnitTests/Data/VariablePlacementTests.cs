@@ -10,7 +10,7 @@
             // Arrange
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
-            variablesSelection.Palcement = null;
+            variablesSelection.Placement = null;
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
             Problem? problem;
@@ -33,7 +33,7 @@
             // Arrange
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
-            variablesSelection.Palcement = new VariablePlacementType();
+            variablesSelection.Placement = new VariablePlacementType();
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
             Problem? problem;
@@ -57,9 +57,9 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Stub = new List<string>();
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Stub = new List<string>();
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -84,10 +84,10 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("Age");
-            variablesSelection.Palcement.Stub = new List<string>();
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("Age");
+            variablesSelection.Placement.Stub = new List<string>();
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -111,12 +111,12 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("PointOfTime");
-            variablesSelection.Palcement.Heading.Add("MEASURE");
-            variablesSelection.Palcement.Stub = new List<string>();
-            variablesSelection.Palcement.Stub.Add("PointOfTime");
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("PointOfTime");
+            variablesSelection.Placement.Heading.Add("MEASURE");
+            variablesSelection.Placement.Stub = new List<string>();
+            variablesSelection.Placement.Stub.Add("PointOfTime");
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -140,12 +140,12 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("TIME");
-            variablesSelection.Palcement.Heading.Add("MEASURE");
-            variablesSelection.Palcement.Stub = new List<string>();
-            variablesSelection.Palcement.Stub.Add("PointOfTime");
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("TIME");
+            variablesSelection.Placement.Heading.Add("MEASURE");
+            variablesSelection.Placement.Stub = new List<string>();
+            variablesSelection.Placement.Stub.Add("PointOfTime");
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -169,13 +169,13 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("TIME");
-            variablesSelection.Palcement.Heading.Add("MEASURE");
-            variablesSelection.Palcement.Stub = new List<string>();
-            variablesSelection.Palcement.Stub.Add("Measure");
-            variablesSelection.Palcement.Stub.Add("X");
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("TIME");
+            variablesSelection.Placement.Heading.Add("MEASURE");
+            variablesSelection.Placement.Stub = new List<string>();
+            variablesSelection.Placement.Stub.Add("Measure");
+            variablesSelection.Placement.Stub.Add("X");
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -200,12 +200,12 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("TIME");
-            variablesSelection.Palcement.Heading.Add("MEASURE");
-            variablesSelection.Palcement.Stub = new List<string>();
-            variablesSelection.Palcement.Stub.Add("GENDER");
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("TIME");
+            variablesSelection.Placement.Heading.Add("MEASURE");
+            variablesSelection.Placement.Stub = new List<string>();
+            variablesSelection.Placement.Stub.Add("GENDER");
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -230,10 +230,10 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("MEASURE");
-            variablesSelection.Palcement.Stub = new List<string>();
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("MEASURE");
+            variablesSelection.Placement.Stub = new List<string>();
             Selection[]? selection = GetSelectionForAllVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
@@ -258,10 +258,10 @@
             IPlacementHandler placementHandler = new PlacementHandler();
             VariablesSelection variablesSelection = new VariablesSelection();
 
-            variablesSelection.Palcement = new VariablePlacementType();
-            variablesSelection.Palcement.Heading = new List<string>();
-            variablesSelection.Palcement.Heading.Add("MEASURE");
-            variablesSelection.Palcement.Stub = new List<string>();
+            variablesSelection.Placement = new VariablePlacementType();
+            variablesSelection.Placement.Heading = new List<string>();
+            variablesSelection.Placement.Heading.Add("MEASURE");
+            variablesSelection.Placement.Stub = new List<string>();
             Selection[]? selection = GetSelectionForMandantoryVariables();
             PXMeta meta = ModelStore.CreateModelA().Meta;
 
