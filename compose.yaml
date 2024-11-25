@@ -10,13 +10,10 @@ services:
       - ./docker/pxweb2/public/config:/usr/share/nginx/html/config:rw
       - ./docker/pxweb2/public/locales:/usr/share/nginx/html/locales:rw
       - ./docker/pxweb2/public/theme:/usr/share/nginx/html/theme:rw
-    #post_start:
-    #  - command: "sed -i -E 's|apiUrl:.+|apiUrl: \"//localhost:8081/api/v2\"|g' /usr/share/nginx/html/config/config.js"
-    #    user: root
 
   api:
     #image: ghcr.io/pxtools/pxwebapi:latest
-    build: github.com/PxTools/PxWebApi.git
+    build: .
     ports:
       - "8081:8080"
     environment:
