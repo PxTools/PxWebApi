@@ -19,8 +19,7 @@ namespace PxWeb.Mappers
         public SelectionResponse Map(Selection[] selections, List<string> heading, List<string> stub, PXMeta meta, string tableId, string lang)
         {
             var response = new SelectionResponse();
-            response.Selection = new VariablesSelection();
-            response.Selection.Selection = selections.Select(selection => new VariableSelection()
+            response.Selection = selections.Select(selection => new VariableSelection()
             {
                 VariableCode = selection.VariableCode,
                 CodeList = GetCodeList(meta.Variables.FirstOrDefault(v => string.Compare(v.Code, selection.VariableCode, true) == 0)),
@@ -28,7 +27,7 @@ namespace PxWeb.Mappers
                 ValueCodes = selection.ValueCodes.Cast<string>().ToList(),
             }).ToList();
 
-            response.Selection.Palcement = new VariablePlacementType()
+            response.Placement = new VariablePlacementType()
             {
                 Heading = heading,
                 Stub = stub

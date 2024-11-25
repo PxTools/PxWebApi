@@ -300,9 +300,9 @@ namespace PxWeb.Controllers.Api2
                 }
             }
 
-            selections.Palcement = new VariablePlacementType();
-            selections.Palcement.Heading = heading ?? new List<string>();
-            selections.Palcement.Stub = stub ?? new List<string>();
+            selections.Placement = new VariablePlacementType();
+            selections.Placement.Heading = heading ?? new List<string>();
+            selections.Placement.Stub = stub ?? new List<string>();
 
             return selections;
         }
