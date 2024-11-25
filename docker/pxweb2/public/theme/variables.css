@@ -1,0 +1,72 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --px-border-radius-none: 0;
+  --px-border-radius-xxsmall: 0.5px;
+  --px-border-radius-xsmall: 2px;
+  --px-border-radius-small: 4px;
+  --px-border-radius-medium: 8px;
+  --px-border-radius-large: 16px;
+  --px-border-radius-xlarge: 24px;
+  --px-border-radius-full: 9999px;
+  --px-color-background-default: #FFFFFF;
+  --px-color-background-subtle: #F0F8F9;
+  --px-color-base-white: #FFFFFF;
+  --px-color-blue-200: #C3E6FE;
+  --px-color-bluegray-300: #9BC4C5;
+  --px-color-bluegray-700: #2F555B;
+  --px-color-bluegray-900: #162327;
+  --px-color-surface-default: #FFFFFF;
+  --px-color-surface-subtle: #F0F8F9;
+  --px-color-surface-moderate: #DBEBEB;
+  --px-color-surface-inverted: #274247;
+  --px-color-surface-highlight: #ECFEED;
+  --px-color-surface-action: #274247;
+  --px-color-surface-action-hover: #274247;
+  --px-color-surface-action-active: #162327;
+  --px-color-surface-action-subtle-hover: #DBEBEB;
+  --px-color-surface-action-subtle-active: #C3DCDC;
+  --px-color-surface-info-subtle: #D7ECFE;
+  --px-color-surface-info-moderate: #C3E6FE;
+  --px-color-surface-success-subtle: #DBF5DC;
+  --px-color-surface-success-moderate: #B6E8B8;
+  --px-color-surface-warning-subtle: #FBF1C0;
+  --px-color-surface-warning-moderate: #FEEB9F;
+  --px-color-surface-error-subtle: #FFE4E0;
+  --px-color-surface-error-moderate: #FFCEC7;
+  --px-color-surface-scrim: #27424780;
+  --px-color-border-default: #162327;
+  --px-color-border-subtle: #C3DCDC;
+  --px-color-border-moderate: #62919A;
+  --px-color-border-divider: #62919A;
+  --px-color-border-divider-subtle: #C3DCDC;
+  --px-color-border-action: #274247;
+  --px-color-border-hover: #62919A;
+  --px-color-border-selected: #274247;
+  --px-color-border-info: #0179C8;
+  --px-color-border-success: #00824D;
+  --px-color-border-warning: #CB7603;
+  --px-color-border-error: #E23822;
+  --px-color-border-focus-outline: #7E4EF9;
+  --px-color-border-focus-boxshadow: #162327;
+  --px-color-border-focus: #9272FC;
+  --px-color-border-focus-on-inverted: #9272FC;
+  --px-color-border-on-inverted: #FFFFFF;
+  --px-color-text-default: #162327;
+  --px-color-text-subtle: #2D6975;
+  --px-color-text-on-inverted: #FFFFFF;
+  --px-color-text-action: #274247;
+  --px-color-text-on-action: #FFFFFF;
+  --px-color-text-on-action-subtle: #162327;
+  --px-color-icon-default: #162327;
+  --px-color-icon-on-inverted: #FFFFFF;
+  --px-color-icon-action: #274247;
+  --px-color-icon-on-action: #FFFFFF;
+  --px-color-icon-on-action-subtle: #162327;
+  --px-color-icon-info: #0179C8;
+  --px-color-icon-success: #00824D;
+  --px-color-icon-warning: #CB7603;
+  --px-color-icon-error: #E23822;
+}

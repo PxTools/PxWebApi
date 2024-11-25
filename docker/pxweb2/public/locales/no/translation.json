@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "languageName": "Norsk",
+    "shorthand": "no"
+  },
+  "common": {
+    "title": "Velkommen til PxWeb 2.0",
+    "header": {
+      "title": "PxWeb 2.0 [Main]",
+      "logo": "PxWeb 2.0"
+    },
+    "footer": {
+      "contact": {
+        "title": "Kontakt",
+        "description": "Beskrivelsestekst..."
+      },
+      "about": {
+        "title": "Om",
+        "description": "Beskrivelsestekst..."
+      },
+      "accessibility": {
+        "title": "Tilgjengelighet",
+        "description": "Beskrivelsestekst..."
+      },
+      "version": {
+        "title": "Versjon",
+        "description": "Beskrivelsestekst..."
+      }
+    },
+    "generic_buttons": {
+      "ok": "OK",
+      "cancel": "Avbryt",
+      "save": "Lagre",
+      "search": "Søk",
+      "close": "Lukk"
+    },
+    "generic_tags": {
+      "mandatory": "Må velges"
+    }
+  },
+  "start_page": {
+    "header": "Velkommen til appen!",
+    "welcome_trans_test": "Velkommen til <1>appen</1> for PxWeb 2.0!"
+  },
+  "presentation_page": {
+    "header": {
+      "searchbutton": "Søk",
+      "languagebutton": "språk",
+      "statistics": "Statistikkbanken"
+    },
+    "sidemenu": {
+      "hide": "Skjul",
+      "selection": {
+        "title": "Filtrer",
+        "variablebox": {
+          "search": {
+            "placeholder": "Søk i listen",
+            "label": "Søk",
+            "arialabelicontext": "Søkeikon",
+            "ariallabelclearbuttontext": "Ikon for å fjerne tekst i søkefeltet"
+          },
+          "header": {
+            "tag_selected": "{{selected}} av {{total}} valgt",
+            "tag_mandatory": "Må velges",
+            "alert_no_mandatory_values": "Du må velge noe i listen for at tabellen skal kunne vises"
+          },
+          "content": {
+            "select": {
+              "label": "Velg inndeling",
+              "placeholder": "Ikke valgt",
+              "modal": {
+                "cancel_button": "Avbryt",
+                "confirm_button": "Bekreft"
+              }
+            },
+            "mixed_checkbox": {
+              "select_all": "Velg alle",
+              "deselect_all": "Fjern alle"
+            },
+            "values_list": {
+              "aria_label": "Liste av {{total}} verdier.",
+              "aria_description": "Variabelens liste over {{total}} totale verdier. For å gå inn i listen, trykk på pil ned-tasten. Tab-tasten går ut av listen."
+            }
+          }
+        }
+      },
+      "view": {
+        "title": "Visning",
+        "table": {
+          "title": "Tabell"
+        },
+        "graph": {
+          "title": "Graf"
+        }
+      },
+      "edit": {
+        "title": "Rediger",
+        "customize": {
+          "title": "Tilpass",
+          "pivot": {
+            "title": "Pivot"
+          },
+          "rearrange": {
+            "title": "Omorganiser tabell",
+            "description": "Beskrivelsestekst..."
+          },
+          "change_order": {
+            "title": "Endre rekkefølge",
+            "description": "Beskrivelsestekst..."
+          }
+        },
+        "calculate": {
+          "title": "Beregn",
+          "sum": {
+            "title": "Sum",
+            "description": "Beskrivelsestekst..."
+          }
+        },
+        "hide_display": {
+          "title": "Skjul/vis"
+        }
+      },
+      "save": {
+        "title": "Lagre",
+        "file": {
+          "title": "Lagre som fil",
+          "excel": "Excel (xlsx)"
+        },
+        "imagefile": {
+          "title": "Lagre som graf",
+          "png": "Diagram (png)"
+        },
+        "link": {
+          "title": "Lagre som lenke",
+          "description": "Beskrivelsestekst..."
+        },
+        "api": {
+          "title": "API",
+          "description": "Beskrivelsestekst..."
+        }
+      },
+      "help": {
+        "title": "Hjelp"
+      }
+    },
+    "main_content": {
+      "last_updated": "Sist oppdatert",
+      "show_details": "Vis detaljer",
+      "table": {
+        "warnings": {
+          "missing_mandatory": {
+            "title": "Tabellen kan ikke vises",
+            "description": "Du må velge noe i filteret"
+          }
+        }
+      },
+      "about_table": {
+        "title": "Om tabellen",
+        "footnotes": {
+          "title": "Noter",
+          "show_all_footnotes": "Vis alle noter for tabellen"
+        },
+        "information": {
+          "title": "Informasjon",
+          "description": "Tabellen er en del av statistikken {{statistics}}"
+        },
+        "definition": {
+          "title": "Definisjoner",
+          "description": "Beskrivelsestekst..."
+        },
+        "metadata": {
+          "title": "Metadata",
+          "description": "Beskrivelsestekst..."
+        }
+      },
+      "related": {
+        "title": "Relatert",
+        "description": "Beskrivelsestekst..."
+      }
+    },
+    "footer": {
+      "description": "På denne siden kan du følge med når Statistiska centralbyrån (SCB) og Statistisk sentralbyrå (SSB) bygger et nytt og mer brukervennlig grensesnitt for PxWeb.",
+      "descriptionLink": "Les mer om prosjektet på GitHub",
+      "contact": "Kontakt",
+      "projectLeader": "Prosjektleder",
+      "scrumMaster": "Scrummaster",
+      "copyright": "Opphavsrett © 2024 Statistiska centralbyrån and Statistisk sentralbyrå"
+    }
+  }
+}

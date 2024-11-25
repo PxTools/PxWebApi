@@ -484,4 +484,8 @@ $RECYCLE.BIN/
 *.swp
 
 # PxWebApi
-PxWeb/wwwroot/ControllerStates/
+**/wwwroot/ControllerStates/*
+!.gitkeep
+docker/pxwebapi/database/*
+!docker/pxwebapi/database/README.md
+!docker/pxwebapi/database/tinydatabase.zip

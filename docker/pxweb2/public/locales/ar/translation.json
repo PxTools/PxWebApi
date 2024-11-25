@@ -1,0 +1,190 @@
+{
+  "meta": {
+    "languageName": "إنجليزي",
+    "shorthand": "ar"
+  },
+  "common": {
+    "title": "مرحبًا بك في PxWeb 2.0",
+    "header": {
+      "title": "PxWeb 2.0 [Main]",
+      "logo": "بيكس ويب 2.0"
+    },
+    "footer": {
+      "contact": {
+        "title": "اتصال",
+        "description": "نص الوصف..."
+      },
+      "about": {
+        "title": "عن",
+        "description": "نص الوصف..."
+      },
+      "accessibility": {
+        "title": "إمكانية الوصول",
+        "description": "نص الوصف..."
+      },
+      "version": {
+        "title": "إصدار",
+        "description": "نص الوصف..."
+      }
+    },
+    "generic_buttons": {
+      "ok": "نعم",
+      "cancel": "يلغي",
+      "save": "يحفظ",
+      "search": "يبحث",
+      "close": "يغلق"
+    },
+    "generic_tags": {
+      "mandatory": "إلزامي"
+    }
+  },
+  "start_page": {
+    "header": "مرحبا بكم في التطبيق!",
+    "welcome_trans_test": "مرحبا بكم في <1>برنامج</1> لبكسي ويب 2.0!"
+  },
+  "presentation_page": {
+    "header": {
+      "searchbutton": "يبحث",
+      "languagebutton": "اللغات",
+      "statistics": "بنك الإحصائيات"
+    },
+    "sidemenu": {
+      "hide": "يخفي",
+      "selection": {
+        "title": "فلتر",
+        "variablebox": {
+          "search": {
+            "placeholder": "البحث في القائمة",
+            "label": "يبحث",
+            "arialabelicontext": "أيقونة البحث",
+            "ariallabelclearbuttontext": "مسح أيقونة البحث"
+          },
+          "header": {
+            "tag_selected": "{{selected}} ل {{total}} مختارة",
+            "tag_mandatory": "إلزامي",
+            "alert_no_mandatory_values": "يجب عليك تحديد شيء ما في القائمة حتى يتم عرض الجدول"
+          },
+          "content": {
+            "select": {
+              "label": "حدد التجميع",
+              "placeholder": "قم بالاختيار",
+              "modal": {
+                "cancel_button": "يلغي",
+                "confirm_button": "يحفظ"
+              }
+            },
+            "mixed_checkbox": {
+              "select_all": "حدد الكل",
+              "deselect_all": "قم بإلغاء تحديد الكل"
+            },
+            "values_list": {
+              "aria_label": "قائمة {{total}} قيم.",
+              "aria_description": "قائمة المتغير {{total}} القيم الإجمالية. "
+            }
+          }
+        }
+      },
+      "view": {
+        "title": "عرض",
+        "table": {
+          "title": "طاولة"
+        },
+        "graph": {
+          "title": "رسم بياني"
+        }
+      },
+      "edit": {
+        "title": "يحرر",
+        "customize": {
+          "title": "تخصيص",
+          "pivot": {
+            "title": "المحور"
+          },
+          "rearrange": {
+            "title": "إعادة ترتيب الجدول",
+            "description": "نص الوصف..."
+          },
+          "change_order": {
+            "title": "تغيير الترتيب",
+            "description": "نص الوصف..."
+          }
+        },
+        "calculate": {
+          "title": "احسب",
+          "sum": {
+            "title": "مجموع",
+            "description": "نص الوصف..."
+          }
+        },
+        "hide_display": {
+          "title": "إخفاء/إظهار"
+        }
+      },
+      "save": {
+        "title": "يحفظ",
+        "file": {
+          "title": "حفظ كملف",
+          "excel": "اكسل (xlsx)"
+        },
+        "imagefile": {
+          "title": "حفظ كرسم بياني",
+          "png": "الرسم البياني (بابوا نيو غينيا)"
+        },
+        "link": {
+          "title": "حفظ كرابط",
+          "description": "نص الوصف..."
+        },
+        "api": {
+          "title": "واجهة برمجة التطبيقات",
+          "description": "نص الوصف..."
+        }
+      },
+      "help": {
+        "title": "يساعد"
+      }
+    },
+    "main_content": {
+      "last_updated": "آخر تحديث",
+      "show_details": "إظهار التفاصيل",
+      "table": {
+        "warnings": {
+          "missing_mandatory": {
+            "title": "لا يمكن عرض الجدول",
+            "description": "يجب عليك تحديد شيء ما في الفلتر"
+          }
+        }
+      },
+      "about_table": {
+        "title": "حول الطاولة",
+        "footnotes": {
+          "title": "ملحوظات",
+          "show_all_footnotes": "إظهار كافة الملاحظات للجدول"
+        },
+        "information": {
+          "title": "معلومة",
+          "description": "الجدول جزء من الإحصائيات {{statistics}}"
+        },
+        "definition": {
+          "title": "التعاريف",
+          "description": "نص الوصف..."
+        },
+        "metadata": {
+          "title": "البيانات الوصفية",
+          "description": "نص الوصف..."
+        }
+      },
+      "related": {
+        "title": "متعلق ب",
+        "description": "نص الوصف..."
+      }
+    },
+    "footer": {
+      "description": "على هذا الموقع، يمكنك متابعة قيام هيئة إحصاءات السويد (SCB) وهيئة إحصاءات النرويج (SSB) ببناء واجهة جديدة وأكثر سهولة في الاستخدام لـ PxWeb.",
+      "descriptionLink": "اقرأ المزيد عن المشروع على جيثب",
+      "contact": "اتصال",
+      "projectLeader": "قائد المشروع",
+      "scrumMaster": "سيد سكروم",
+      "copyright": "حقوق الطبع والنشر © 2024 هيئة إحصاءات السويد وهيئة إحصاءات النرويج"
+    }
+  }
+}
