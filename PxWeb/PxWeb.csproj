@@ -53,10 +53,10 @@
     <PackageReference Include="PcAxis.Sql" Version="1.2.4" />
     <PackageReference Include="PxWeb.Api2.Server" Version="2.0.0-beta.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.9.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.9.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.9.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="7.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="7.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.1.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
