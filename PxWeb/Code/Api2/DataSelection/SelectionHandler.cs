@@ -691,7 +691,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="wildcard">The wildcard string</param>
         private void AddWildcardQuestionmarkValues(Variable variable, bool aggregatedSingle, List<string> values, string wildcard)
         {
-            string regexPattern = string.Concat("^", Regex.Escape(wildcard).Replace("\\?", "."), "$", RegexOptions.None, TimeSpan.FromMilliseconds(100));
+            string regexPattern = string.Concat("^", Regex.Escape(wildcard).Replace("\\?", "."), "$");
             var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100))).Select(v => v.Code);
             foreach (var variableValue in variableValues)
             {
