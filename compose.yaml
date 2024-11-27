@@ -1,0 +1,29 @@
+services:
+  web:
+    depends_on:
+      - api
+    image: ghcr.io/pxtools/pxweb2:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/pxweb2/public/config:/usr/share/nginx/html/config:rw
+      - ./docker/pxweb2/public/locales:/usr/share/nginx/html/locales:rw
+      - ./docker/pxweb2/public/theme:/usr/share/nginx/html/theme:rw
+
+  api:
+    image: ghcr.io/pxtools/pxwebapi:latest
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ./docker/pxwebapi/appsettings.json:/app/appsettings.json:ro
+      - ./docker/pxwebapi/wwwroot/ControllerStates:/app/wwwroot/ControllerStates:rw
+      - ./docker/pxwebapi/Database:/app/wwwroot/Database:rw
+    post_start:
+      - command: apk add curl
+        user: root
+      - command: curl -is -X PUT http://api:8080/api/v2/admin/database
+      - command: curl -is -X POST http://api:8080/api/v2/admin/searchindex
+      - command: apk del curl
+        user: root
