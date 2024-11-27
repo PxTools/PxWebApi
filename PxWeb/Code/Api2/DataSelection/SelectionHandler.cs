@@ -57,7 +57,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 //Add variables that the user did not post
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
 
-                //Map VariablesSelection to PCaxis.Paxiom.Selection[] 
+                //Map VariablesSelection to PCaxis.Paxiom.Selection[]
                 selections = MapCustomizedSelection(builder, builder.Model, variablesSelection).ToArray();
             }
             else
@@ -410,7 +410,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns>True if the expression is valid, else false</returns>
         private bool VerifyTopExpression(string expression)
         {
-            return Regex.IsMatch(expression, REGEX_TOP, RegexOptions.IgnoreCase);
+            return Regex.IsMatch(expression, REGEX_TOP, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns>True if the expression is valid, else false</returns>
         private bool VerifyBottomExpression(string expression)
         {
-            return Regex.IsMatch(expression, REGEX_BOTTOM, RegexOptions.IgnoreCase);
+            return Regex.IsMatch(expression, REGEX_BOTTOM, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         /// <summary>
@@ -430,7 +430,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns>True if the expression is valid, else false</returns>
         private bool VerifyRangeExpression(string expression)
         {
-            return Regex.IsMatch(expression, REGEX_RANGE, RegexOptions.IgnoreCase);
+            return Regex.IsMatch(expression, REGEX_RANGE, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         /// <summary>
@@ -440,7 +440,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns>True if the expression is valid, else false</returns>
         private bool VerifyFromExpression(string expression)
         {
-            return Regex.IsMatch(expression, REGEX_FROM, RegexOptions.IgnoreCase);
+            return Regex.IsMatch(expression, REGEX_FROM, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         /// <summary>
@@ -450,7 +450,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns>True if the expression is valid, else false</returns>
         private bool VerifyToExpression(string expression)
         {
-            return Regex.IsMatch(expression, REGEX_TO, RegexOptions.IgnoreCase);
+            return Regex.IsMatch(expression, REGEX_TO, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         /// <summary>
@@ -691,8 +691,8 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="wildcard">The wildcard string</param>
         private void AddWildcardQuestionmarkValues(Variable variable, bool aggregatedSingle, List<string> values, string wildcard)
         {
-            string regexPattern = string.Concat("^", Regex.Escape(wildcard).Replace("\\?", "."), "$");
-            var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase)).Select(v => v.Code);
+            string regexPattern = string.Concat("^", Regex.Escape(wildcard).Replace("\\?", "."), "$", RegexOptions.None, TimeSpan.FromMilliseconds(100));
+            var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100))).Select(v => v.Code);
             foreach (var variableValue in variableValues)
             {
                 AddValue(variable, aggregatedSingle, values, variableValue);
@@ -700,7 +700,7 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
         /// <summary>
-        /// Add values for variable based on TOP(xxx) and TOP(xxx,yyy) selection expression. 
+        /// Add values for variable based on TOP(xxx) and TOP(xxx,yyy) selection expression.
         /// </summary>
         /// <param name="variable">Paxiom variable</param>
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
@@ -733,7 +733,7 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
         /// <summary>
-        /// Add values for variable based on BOTTOM(xxx) and BOTTOM(xxx,yyy) selection expression. 
+        /// Add values for variable based on BOTTOM(xxx) and BOTTOM(xxx,yyy) selection expression.
         /// </summary>
         /// <param name="variable">Paxiom variable</param>
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
@@ -772,7 +772,7 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
         /// <summary>
-        /// Add values for variable based on RANGE(xxx,yyy) selection expression. 
+        /// Add values for variable based on RANGE(xxx,yyy) selection expression.
         /// </summary>
         /// <param name="variable">Paxiom variable</param>
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
@@ -817,7 +817,7 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
         /// <summary>
-        /// Add values for variable based on FROM(xxx) selection expression. 
+        /// Add values for variable based on FROM(xxx) selection expression.
         /// </summary>
         /// <param name="variable">Paxiom variable</param>
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
@@ -851,7 +851,7 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
         /// <summary>
-        /// Add values for variable based on TO(xxx) selection expression. 
+        /// Add values for variable based on TO(xxx) selection expression.
         /// </summary>
         /// <param name="variable">Paxiom variable</param>
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
@@ -971,7 +971,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
         /// <summary>
         /// Find index of code in code array.
-        /// First tries to find code as specified. If it is not found the method tries to find the code in a case insensitive way. 
+        /// First tries to find code as specified. If it is not found the method tries to find the code in a case insensitive way.
         /// </summary>
         /// <param name="codes">Array of codes</param>
         /// <param name="code">Code to find index for</param>
