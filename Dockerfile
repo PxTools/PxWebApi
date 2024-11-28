@@ -5,9 +5,9 @@ ARG TARGETARCH
 WORKDIR /source
 
 COPY . .
-RUN dotnet restore -a $TARGETARCH
 
-RUN dotnet publish -a $TARGETARCH --no-restore -o /app "PxWeb/PxWeb.csproj"
+RUN mv docker/pxwebapi/app.config PxWeb/ && \
+    dotnet publish -a "$TARGETARCH" -o /app "PxWeb/PxWeb.csproj"
 
 
 # Enable globalization and time zones:
@@ -28,11 +28,6 @@ RUN apk add --no-cache \
     icu-libs
 
 WORKDIR /app
-
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
-#RUN adduser -u 1000 --disabled-password --gecos "" appuser && chown -R appuser /app
-#USER 1000
 
 COPY --from=build /app .
 USER $APP_UID
