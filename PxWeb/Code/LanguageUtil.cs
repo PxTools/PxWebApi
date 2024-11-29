@@ -13,7 +13,7 @@ namespace PxWeb.Code
 
         public static string SanitizeLangueCode(string languageCode)
         {
-            return Regex.Replace(languageCode, @"[^a-zA-Z-]+", "?");
+            return Regex.Replace(languageCode, @"[^a-z-]+", "?", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
     }
 }
