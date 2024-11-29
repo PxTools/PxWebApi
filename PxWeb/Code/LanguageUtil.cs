@@ -8,7 +8,7 @@ namespace PxWeb.Code
         {
             //Language code are either XX or XX-XX
             var pattern = @"^[a-z]{2}-[a-z]{2}$|^[a-z]{2}$";
-            return Regex.IsMatch(languageCode, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            return Regex.IsMatch(languageCode, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
 
         public static string SanitizeLangueCode(string languageCode)

@@ -96,7 +96,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 {
                     List<string> languages = new List<string>();
                     List<string> tableList = tables
-                        .Select(table => Regex.Replace(table.Trim(), @"[^0-9a-zA-Z]+", ""))
+                        .Select(table => Regex.Replace(table.Trim(), @"[^0-9a-zA-Z]+", "", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                         .ToList();
 
                     if (tableList.Count == 0)

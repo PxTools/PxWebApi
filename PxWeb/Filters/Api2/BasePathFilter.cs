@@ -42,7 +42,7 @@ namespace PxWeb.Filters.Api2
             {
                 if (path.Key.StartsWith(this.BasePath))
                 {
-                    string newKey = Regex.Replace(path.Key, $"^{this.BasePath}", string.Empty);
+                    string newKey = Regex.Replace(path.Key, $"^{this.BasePath}", string.Empty, RegexOptions.None, TimeSpan.FromMilliseconds(100));
                     swaggerDoc.Paths.Remove(path.Key);
                     swaggerDoc.Paths.Add(newKey, path.Value);
                 }
