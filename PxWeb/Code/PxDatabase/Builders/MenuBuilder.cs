@@ -64,7 +64,7 @@ namespace PXWeb.Database
         /// <param name="path"></param>
         public void BeginBuild(string path, DatabaseLogger logger)
         {
-            _logger.LogInformation("Start building menu for {path}", path);
+            _logger.LogInformation("Start building menu for {Path}", path);
             _buildLogger = logger;
             //TODO set use Date format
             _buildLogger(new DatabaseMessage() { MessageType = DatabaseMessage.BuilderMessageType.Information, Message = "Menu build started " + DateTime.Now.ToString() });
@@ -104,7 +104,7 @@ namespace PXWeb.Database
             try
             {
                 doc.Save(System.IO.Path.Combine(path, "Menu.xml"));
-                _logger.LogInformation("Finished building menu for {path}", path);
+                _logger.LogInformation("Finished building menu for {Path}", path);
             }
             catch (Exception e)
             {
@@ -312,7 +312,7 @@ namespace PXWeb.Database
         #endregion
 
         /// <summary>
-        /// Checks if a link shall be added or not. If this check is not done a link may be added 
+        /// Checks if a link shall be added or not. If this check is not done a link may be added
         /// twice for the default language - which is wrong.
         /// </summary>
         /// <param name="path">Path to the .link-file</param>
