@@ -273,7 +273,7 @@ namespace PxWeb.Mappers
 
             StringBuilder sb = new StringBuilder();
             sb.Append(contact.Forname);
-            sb.Append(" ");
+            sb.Append(' ');
             sb.Append(contact.Surname);
 
             c.Name = sb.ToString();
