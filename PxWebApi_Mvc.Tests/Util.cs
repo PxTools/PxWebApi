@@ -22,7 +22,7 @@ namespace PxWebApi_Mvc.Tests
             string pathAssembly = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string directoryName = System.IO.Path.GetDirectoryName(pathAssembly) ?? throw new System.Exception("GetDirectoryName(pathAssembly) is null for:" + pathAssembly);
             string folderAssembly = directoryName.Replace("\\", "/");
-            if (folderAssembly.EndsWith('/')) folderAssembly = folderAssembly + "/";
+            if (!folderAssembly.EndsWith('/')) folderAssembly = folderAssembly + "/";
             string folderProjectLevel = System.IO.Path.GetFullPath(folderAssembly + "../../../../");
             return folderProjectLevel;
         }
