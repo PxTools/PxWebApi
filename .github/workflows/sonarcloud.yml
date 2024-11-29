@@ -1,0 +1,42 @@
+name: SonarQube Cloud
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: "./global.json"
+
+      - name: Install dotnet-coverage
+        run: dotnet tool install -g dotnet-coverage
+
+      - name: Install SonarCloud scanner
+        run: dotnet tool install -g dotnet-sonarscanner
+
+      - name: Begin SonarScanner
+        run: dotnet sonarscanner begin /k:PxTools_PxWebApi
+          /o:pxtools
+          /d:sonar.token=${{ secrets.SONAR_TOKEN }}
+          /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+
+      - name: Build
+        run: dotnet build --no-incremental
+
+      - name: Run coverage test
+        run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+
+      - name: End SonarScanner
+        run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
