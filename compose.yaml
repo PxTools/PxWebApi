@@ -1,3 +1,5 @@
+name: pxweb-demo
+
 services:
   web:
     depends_on:
