@@ -6,7 +6,9 @@ WORKDIR /source
 
 COPY . .
 
-RUN mv docker/pxwebapi/app.config PxWeb/ && \
+RUN \
+    mv docker/pxwebapi/app.config PxWeb && \
+    mv docker/pxwebapi/log4net.config PxWeb && \
     dotnet publish -a "$TARGETARCH" -o /app "PxWeb/PxWeb.csproj"
 
 

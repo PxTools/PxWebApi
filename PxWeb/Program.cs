@@ -43,6 +43,7 @@ namespace PxWeb
 
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.ClearProviders();
             builder.Logging.AddLog4Net();
 
             // Add services to the container.
@@ -122,7 +123,7 @@ namespace PxWeb
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             // builder.Services.AddEndpointsApiExplorer(); //only needed for minimal APIS according to
-            // https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio 
+            // https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio
             builder.Services.AddSwaggerGen(c =>
             {
                 // Sort endpoints
