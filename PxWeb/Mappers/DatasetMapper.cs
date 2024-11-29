@@ -352,7 +352,7 @@ namespace PxWeb.Mappers
 
             StringBuilder sb = new StringBuilder();
             sb.Append(contact.Forname);
-            sb.Append(" ");
+            sb.Append(' ');
             sb.Append(contact.Surname);
 
             Api2.Server.Models.Contact jsonContact = new Api2.Server.Models.Contact

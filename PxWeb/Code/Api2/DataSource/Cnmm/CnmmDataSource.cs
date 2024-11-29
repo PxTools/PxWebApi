@@ -179,7 +179,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             }
             if (child.StartTime == child.EndTime) //Starttime and Endtime are the same, only starttime should be added
             {
-                sb.Append(" ");
+                sb.Append(' ');
                 sb.Append(child.StartTime);
                 return sb.ToString();
             }
@@ -190,13 +190,13 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 sb.Append(child.StartTime);
                 sb.Append(")-(");
                 sb.Append(child.EndTime);
-                sb.Append(")");
+                sb.Append(')');
             }
             else
             {
-                sb.Append(" ");
+                sb.Append(' ');
                 sb.Append(child.StartTime);
-                sb.Append("-");
+                sb.Append('-');
                 sb.Append(child.EndTime);
             }
 

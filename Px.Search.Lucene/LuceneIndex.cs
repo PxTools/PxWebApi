@@ -196,7 +196,7 @@
             foreach (string tag in tags)
             {
                 builder.Append(tag);
-                builder.Append(" ");
+                builder.Append(' ');
             }
             return builder.ToString();
         }
