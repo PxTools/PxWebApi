@@ -17,7 +17,7 @@ namespace PxWeb.Code.Api2.Cache
         private Func<bool>? _coherenceChecker;
 
         private readonly ILogger<PxCache> _logger;
-        private readonly string _cacheLock = "lock";
+        private readonly object _cacheLock = new();
         private readonly MemoryCache _cache;
         private bool _enableCache;
         private readonly TimeSpan _cacheTime;
