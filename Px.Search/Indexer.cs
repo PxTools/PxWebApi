@@ -33,7 +33,7 @@
 
                     index.BeginWrite(language);
                     _indexedTables = new List<string>();
-                    _logger.LogInformation($"Indexing starting for {language}.");
+                    _logger.LogInformation("Indexing starting for {Language}.", language);
 
                     //Get the root item from the database
                     var item = _source.CreateMenu("", language, out selectionExisits);
@@ -46,12 +46,12 @@
                             return;
                         }
 
-                        if (item != null && item is PxMenuItem)
+                        if (item is PxMenuItem)
                         {
                             TraverseDatabase(item.ID.Selection, language, index);
                         }
                     }
-                    _logger.LogInformation($"Done for {language}. Indexed total of {_indexedTables.Count} tables.");
+                    _logger.LogInformation("Done for {Language}. Indexed total of {Count} tables.", language, _indexedTables.Count);
                     index.EndWrite(language);
                 }
             }
@@ -75,13 +75,14 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError($"TraverseDatabase : Could not CreateMenu for id {id} for language {language}", ex);
+                _logger.LogError(ex, "TraverseDatabase : Could not CreateMenu for id {Id} for language {Language}", id, language);
+
                 return;
             }
 
             if (item == null || !exists)
             {
-                _logger.LogError($"TraverseDatabase : Could not get database level with id {id} for language {language}");
+                _logger.LogError("TraverseDatabase : Could not get database level with id {Id} for language {Language}", id, language);
                 return;
             }
 
@@ -103,12 +104,12 @@
                             _indexedTables.Add(tableId);
                             if (_indexedTables.Count % 100 == 0)
                             {
-                                _logger.LogInformation($"Indexed {_indexedTables.Count} tables ...");
+                                _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
                             }
                         }
                         else
                         {
-                            _logger.LogDebug($"Table {tableId} is already indexed.");
+                            _logger.LogDebug("Table {TableId} is already indexed.", tableId);
                         }
 
                     }
@@ -164,14 +165,14 @@
 
                     index.AddEntry(tbl, model.Meta);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    _logger.LogError($"IndexTable : Could not build table with id {id} for language {language}");
+                    _logger.LogError(ex, "IndexTable : Could not build table with id {Id} for language {Language}", id, language);
                 }
             }
             else
             {
-                _logger.LogError($"IndexTable : Could not build table with id {id} for language {language}");
+                _logger.LogError("IndexTable : Could not build table with id {Id} for language {Language}", id, language);
             }
 
         }
@@ -189,14 +190,14 @@
 
                     index.UpdateEntry(tbl, model.Meta);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    _logger.LogError($"UpdateTable : Could not build table with id {id} for language {language}");
+                    _logger.LogError(ex, "UpdateTable : Could not build table with id {Id} for language {Language}", id, language);
                 }
             }
             else
             {
-                _logger.LogError($"UpdateTable : Could not build table with id {id} for language {language}");
+                _logger.LogError("UpdateTable : Could not build table with id {Id} for language {Language}", id, language);
             }
         }
 
