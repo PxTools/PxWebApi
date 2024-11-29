@@ -43,6 +43,7 @@ namespace PxWeb
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // Only use Log4Net provider
             builder.Logging.ClearProviders();
             builder.Logging.AddLog4Net();
 
