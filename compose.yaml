@@ -20,6 +20,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     volumes:
       - ./docker/pxwebapi/appsettings.json:/app/appsettings.json:ro
+      - ./docker/pxwebapi/SqlDb.config:/app/SqlDb.config:ro
       - ./docker/pxwebapi/wwwroot/ControllerStates:/app/wwwroot/ControllerStates:rw
       - ./docker/pxwebapi/Database:/app/wwwroot/Database:rw
     post_start:
