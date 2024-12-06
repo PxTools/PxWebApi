@@ -58,7 +58,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             if (!LanguageUtil.HasValidLanguageCodePattern(language))
             {
-                _logger.LogWarning($"Unsupported language: {LanguageUtil.SanitizeLangueCode(language)}");
+                _logger.LogWarning("Unsupported language: {Code}", LanguageUtil.SanitizeLangueCode(language));
                 return tableLookup;
             }
 
@@ -88,7 +88,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error loading TablePathLookup table for language {LanguageUtil.SanitizeLangueCode(language)}");
+                _logger.LogError(e, "Error loading TablePathLookup table for language {Code}", LanguageUtil.SanitizeLangueCode(language));
             }
 
             return tableLookup;

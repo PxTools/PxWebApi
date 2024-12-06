@@ -110,7 +110,7 @@ namespace PxWeb.Mappers
             StringBuilder sb = new StringBuilder();
 
             sb.Append(_urlPrefix);
-            sb.Append("/");
+            sb.Append('/');
             sb.Append(endpointUrl);
 
             if (showLangParam)
@@ -140,7 +140,7 @@ namespace PxWeb.Mappers
             StringBuilder sb = new StringBuilder();
 
             sb.Append(_urlPrefix);
-            sb.Append("/");
+            sb.Append('/');
             sb.Append(endpointUrl);
 
             if (!string.IsNullOrEmpty(query) && showLangParam)
@@ -152,13 +152,13 @@ namespace PxWeb.Mappers
             }
             if (!string.IsNullOrEmpty(query) && !showLangParam)
             {
-                sb.Append("?");
+                sb.Append('?');
                 sb.Append("query=" + query);
                 sb.Append("&pagesize=" + pagesize);
             }
             if (string.IsNullOrEmpty(query) && !showLangParam)
             {
-                sb.Append("?");
+                sb.Append('?');
                 sb.Append("pagesize=" + pagesize);
             }
             if (string.IsNullOrEmpty(query) && showLangParam)

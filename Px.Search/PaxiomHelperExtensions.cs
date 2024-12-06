@@ -94,7 +94,7 @@
                     foreach (var val in var.Values)
                     {
                         builder.Append(val.Value);
-                        builder.Append(" ");
+                        builder.Append(' ');
                     }
                 }
             }
@@ -113,7 +113,7 @@
                         if (!var.Values.IsCodesFictional)
                         {
                             builder.Append(val.Code);
-                            builder.Append(" ");
+                            builder.Append(' ');
                         }
                     }
                 }
@@ -131,7 +131,7 @@
                     foreach (GroupingInfo gi in var.Groupings)
                     {
                         builder.Append(gi.Name);
-                        builder.Append(" ");
+                        builder.Append(' ');
                     }
                 }
             }
@@ -148,7 +148,7 @@
                     foreach (GroupingInfo gi in var.Groupings)
                     {
                         builder.Append(gi.ID);
-                        builder.Append(" ");
+                        builder.Append(' ');
                     }
                 }
             }
@@ -164,7 +164,7 @@
                     foreach (ValueSetInfo vi in var.ValueSets)
                     {
                         builder.Append(vi.Name);
-                        builder.Append(" ");
+                        builder.Append(' ');
                     }
                 }
             }
@@ -180,7 +180,7 @@
                     foreach (ValueSetInfo vi in var.ValueSets)
                     {
                         builder.Append(vi.ID);
-                        builder.Append(" ");
+                        builder.Append(' ');
                     }
                 }
             }
