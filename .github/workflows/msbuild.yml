@@ -37,8 +37,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: pxtools/pxwebapi:latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -52,12 +51,12 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: false
-          tags: ${{ env.IMAGE_NAME }}
+          tags: ${{ github.repository }}
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: image
-          image-ref: ${{ env.IMAGE_NAME }}
+          image-ref: ${{ github.repository }}
           format: sarif
           output: trivy-results.sarif
       - name: Upload Trivy scan results to GitHub Security tab
