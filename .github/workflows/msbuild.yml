@@ -38,7 +38,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: pxtools/pxwebapi:latest
+      IMAGE_NAME: pxtools/pxwebapi:${{ github.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
           push: false
           tags: ${{ env.IMAGE_NAME }}
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: image
           image-ref: ${{ env.IMAGE_NAME }}
