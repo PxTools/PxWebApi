@@ -221,8 +221,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 id = id.Substring(4);
             }
 
-            PCAxis.Sql.Repositories.GroupingRepository repo = new PCAxis.Sql.Repositories.GroupingRepository(cnmmOptions.DatabaseID);
-            PCAxis.Sql.Models.Grouping grouping = repo.GetGrouping(id, language);
+            var util = new PCAxis.Sql.ApiUtils.ApiUtil();
+            PCAxis.Sql.Models.Grouping grouping = util.GetGrouping(id, language);
 
             if (grouping != null)
             {
@@ -243,8 +243,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 id = id.Substring(3);
             }
 
-            PCAxis.Sql.Repositories.ValueSetRepository repo = new PCAxis.Sql.Repositories.ValueSetRepository(cnmmOptions.DatabaseID);
-            PCAxis.Sql.Models.ValueSet valueset = repo.GetValueSet(id, language);
+            var util = new PCAxis.Sql.ApiUtils.ApiUtil();
+            PCAxis.Sql.Models.ValueSet valueset = util.GetValueSet(id, language);
 
             if (valueset != null)
             {
