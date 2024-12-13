@@ -39,6 +39,8 @@ jobs:
         run: dotnet test --verbosity normal
 
   docker:
+    permissions:
+      security-events: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
