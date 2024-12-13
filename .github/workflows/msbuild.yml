@@ -20,6 +20,9 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/.dotnet
+          DOTNET_ROOT: ${{ runner.temp }}/.dotnet
         with:
           global-json-file: "./global.json"
 
