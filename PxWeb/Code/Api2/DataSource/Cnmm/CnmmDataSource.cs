@@ -213,7 +213,6 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         private Codelist? GetGrouping(string id, string language)
         {
             Codelist? codelist = null;
-            var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
             if (id.StartsWith("agg_", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -235,7 +234,6 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         private Codelist? GetValueset(string id, string language)
         {
             Codelist? codelist = null;
-            var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
             if (id.StartsWith("vs_", System.StringComparison.InvariantCultureIgnoreCase))
             {
