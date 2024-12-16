@@ -1151,6 +1151,10 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     builder.ApplyValueSet(variable.Code, variable.ValueSets[0]);
                 }
+                else if (variable.CurrentGrouping != null)
+                {
+                    builder.ApplyGrouping(variable.Code, variable.GetGroupingInfoById(variable.CurrentGrouping.ID), GroupingIncludesType.AggregatedValues);
+                }
             }
 
             var contents = meta.Variables.FirstOrDefault(v => v.IsContentVariable);
