@@ -9,6 +9,7 @@
       "title": "PxWeb 2.0 [Main]",
       "logo": "بيكس ويب 2.0"
     },
+    "skip_to_main": "انتقل إلى المحتوى الرئيسي",
     "footer": {
       "contact": {
         "title": "اتصال",
@@ -79,7 +80,9 @@
             },
             "values_list": {
               "aria_label": "قائمة {{total}} قيم.",
-              "aria_description": "قائمة المتغير {{total}} القيم الإجمالية. "
+              "aria_description": "قائمة المتغير {{total}} القيم الإجمالية. ",
+              "no_results_heading": "“{{search}}” لا توجد نتائج ل",
+              "no_results_bodyshort": "جرّب كلمة رئيسية أو تهجئة مختلفة."
             }
           }
         }
