@@ -220,8 +220,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 id = id.Substring(4);
             }
 
-            var util = new PCAxis.Sql.ApiUtils.ApiUtil();
-            PCAxis.Sql.Models.Grouping grouping = util.GetGrouping(id, language);
+            PCAxis.Sql.Models.Grouping grouping = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetGrouping(id, language);
 
             if (grouping != null)
             {
@@ -241,8 +240,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 id = id.Substring(3);
             }
 
-            var util = new PCAxis.Sql.ApiUtils.ApiUtil();
-            PCAxis.Sql.Models.ValueSet valueset = util.GetValueSet(id, language);
+            PCAxis.Sql.Models.ValueSet valueset = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetValueSet(id, language);
 
             if (valueset != null)
             {
