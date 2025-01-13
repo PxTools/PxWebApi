@@ -37,7 +37,7 @@ namespace PxWeb.Code.Api2.Serialization
                 else if (param.Equals("UseCodesAndTexts", StringComparison.InvariantCultureIgnoreCase))
                 {
                     _serializer.ValueLablesDisplay = HtmlSerializer.LablePreference.BothCodeAndText;
-                }   
+                }
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
 using PCAxis.Paxiom;
-using PCAxis.Serializers;
 
 namespace PxWeb.Code.Api2.Serialization
 {
@@ -40,7 +39,7 @@ namespace PxWeb.Code.Api2.Serialization
                 }
                 else if (param.Equals("SeparatorTab", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _serializer.ValueDelimiter  = CsvSerializer.Delimiters.Tab;
+                    _serializer.ValueDelimiter = CsvSerializer.Delimiters.Tab;
                 }
                 else if (param.Equals("SeparatorSpace", StringComparison.InvariantCultureIgnoreCase))
                 {
