@@ -175,10 +175,9 @@ namespace PxWeb.Controllers.Api2
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
         }
 
-        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromBody] VariablesSelection? variablesSelection)
+        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams")] List<string>? outputFormatParams, [FromBody] VariablesSelection? variablesSelection)
         {
-            //OutputFormatParams should be added as input to the API
-            return GetData(id, lang, variablesSelection, outputFormat, new List<string>());
+            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null?new List<string>():outputFormatParams);
         }
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat, List<string> outputFormatParams)
