@@ -5,7 +5,7 @@ using PCAxis.Serializers;
 
 namespace PxWeb.Code.Api2.Serialization
 {
-    public class JsonDataSerializer : IDataSerializer
+    public class PxJsonDataSerializer : IDataSerializer
     {
         public void Serialize(PXModel model, HttpResponse response)
         {

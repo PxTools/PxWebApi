@@ -29,12 +29,13 @@
   "defaultMetadataFormat": 0,
   "defaultDataFormat": "px",
   "dataFormats": [
+    "json-stat2",
+    "csv",
+    "px",
     "xlsx",
     "html",
-    "csv",
-    "json-stat2",
-    "parquet",
-    "px"
+    "json-px",
+    "parquet"
   ],
   "features": [
     {

@@ -3,22 +3,21 @@
 using PCAxis.Paxiom;
 using PCAxis.Serializers;
 
-using ZstdSharp.Unsafe;
-
 namespace PxWeb.Code.Api2.Serialization
 {
-    public class XlsxDataSerializer : IDataSerializer
+    public class HtmlDataSerializer : IDataSerializer
     {
-        private readonly Xlsx2Serializer _serializer;
 
-        public XlsxDataSerializer()
+        private readonly HtmlSerializer _serializer;
+
+        public HtmlDataSerializer()
         {
-            _serializer = new Xlsx2Serializer();
+            _serializer = new HtmlSerializer();
         }
 
-        public XlsxDataSerializer(List<string> outputFormatParams)
+        public HtmlDataSerializer(List<string> outputFormatParams)
         {
-            _serializer = new Xlsx2Serializer();
+            _serializer = new HtmlSerializer();
 
             foreach (var param in outputFormatParams)
             {
@@ -29,24 +28,23 @@ namespace PxWeb.Code.Api2.Serialization
                 }
                 else if (param.Equals("UseCodes", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _serializer.ValueLablesDisplay = Xlsx2Serializer.LablePreference.Code;
+                    _serializer.ValueLablesDisplay = HtmlSerializer.LablePreference.Code;
                 }
                 else if (param.Equals("UseTexts", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _serializer.ValueLablesDisplay = Xlsx2Serializer.LablePreference.Text;
+                    _serializer.ValueLablesDisplay = HtmlSerializer.LablePreference.Text;
                 }
                 else if (param.Equals("UseCodesAndTexts", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _serializer.ValueLablesDisplay = Xlsx2Serializer.LablePreference.BothCodeAndText;
-                }
+                    _serializer.ValueLablesDisplay = HtmlSerializer.LablePreference.BothCodeAndText;
+                }   
             }
         }
 
         public void Serialize(PXModel model, HttpResponse response)
         {
-            response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            IPXModelStreamSerializer serializer = new XlsxSerializer();
-            serializer.Serialize(model, response.Body);
+            response.ContentType = "text/html; charset=" + System.Text.Encoding.GetEncoding(model.Meta.CodePage).WebName;
+            _serializer.Serialize(model, response.Body);
         }
     }
 }

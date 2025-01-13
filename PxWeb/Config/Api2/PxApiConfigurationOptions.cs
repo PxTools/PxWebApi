@@ -13,6 +13,9 @@ namespace PxWeb.Config.Api2
         {
             _apiVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.Load("PxWeb.Api2.Server").Location).ProductVersion ?? "2.0.0";
             _appVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).ProductVersion ?? "2.0.0";
+            OutputFormats.Add("json-stat2");
+            OutputFormats.Add("csv");
+            OutputFormats.Add("px");
         }
 
         public string ApiVersion => _apiVersion;
