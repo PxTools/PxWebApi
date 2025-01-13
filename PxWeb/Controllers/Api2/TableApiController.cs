@@ -177,7 +177,7 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams")] List<string>? outputFormatParams, [FromBody] VariablesSelection? variablesSelection)
         {
-            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null?new List<string>():outputFormatParams);
+            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
         }
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat, List<string> outputFormatParams)
