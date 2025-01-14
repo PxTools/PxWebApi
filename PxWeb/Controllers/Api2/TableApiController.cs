@@ -170,13 +170,13 @@ namespace PxWeb.Controllers.Api2
 
         }
 
-        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams")] List<string>? outputFormatParams, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
+        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? outputFormatParams, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
         {
             VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
         }
 
-        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams")] List<string>? outputFormatParams, [FromBody] VariablesSelection? variablesSelection)
+        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? outputFormatParams, [FromBody] VariablesSelection? variablesSelection)
         {
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
         }
