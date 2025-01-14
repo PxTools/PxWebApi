@@ -1,4 +1,6 @@
-﻿namespace PxWeb.UnitTests.Serialization
+﻿using PCAxis.Serializers;
+
+namespace PxWeb.UnitTests.Serialization
 {
     [TestClass]
     public class SerializationTest
@@ -10,36 +12,10 @@
 
             var serializeManager = new SerializeManager();
             string outputFormat = "px";
-            var serializer = serializeManager.GetSerializer(outputFormat, new List<string>());
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", new List<string>());
 
-            Assert.AreEqual(serializer.GetType().Name, "PxDataSerializer");
-        }
-
-        [TestMethod, Ignore]
-        public void ShouldSerializeToPxMime()
-        {
-            PXModel pxModel = TestFactory.GetMinimalModel();
-
-            var serializeManager = new SerializeManager();
-            string outputFormat = "px";
-            var serializer = serializeManager.GetSerializer(outputFormat, new List<string>());
-
-            var response = new Mock<HttpResponse>();
-            response.Setup(x => x.StatusCode).Returns(1);
-            HeaderDictionary headers = new HeaderDictionary();
-
-            response.Setup(x => x.Headers).Returns(headers);
-
-            response.Setup(x => x.Body).Returns(Stream.Null);
-
-            string contentType = "";
-            response.SetupProperty(x => x.ContentType, contentType);
-
-
-
-            serializer.Serialize(pxModel, response.Object);
-
-            Assert.IsTrue(contentType.StartsWith("application/octet-stream", System.StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsInstanceOfType(info.Serializer, typeof(PXFileSerializer));
+            Assert.IsTrue(info.ContentType.StartsWith("application/octet-stream", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -47,9 +23,10 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "csv";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("CsvDataSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
+            Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -57,9 +34,10 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "xlsx";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("XlsxDataSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(Xlsx2Serializer));
+            Assert.IsTrue(info.ContentType.Equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -67,9 +45,10 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "json-stat2";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("JsonStat2DataSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(JsonStat2Serializer));
+            Assert.IsTrue(info.ContentType.Equals("application/json; charset=UTF-8", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -77,9 +56,10 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "html";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("HtmlDataSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(HtmlSerializer));
+            Assert.IsTrue(info.ContentType.StartsWith("text/html", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -87,9 +67,10 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "Parquet";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("ParquetSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(ParquetSerializer));
+            Assert.IsTrue(info.ContentType.Equals("application/octet-stream", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -97,9 +78,10 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "json-px";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("PxJsonDataSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(JsonSerializer));
+            Assert.IsTrue(info.ContentType.Equals("application/json; charset=UTF-8", System.StringComparison.InvariantCultureIgnoreCase));
         }
 
         [TestMethod]
@@ -107,9 +89,9 @@
         {
             var serializeManager = new SerializeManager();
             string outputFormat = "this-serializer-does-not-exist";
-            var serializer = serializeManager.GetSerializer(outputFormat, []);
+            var info = serializeManager.GetSerializer(outputFormat, "ISO-8859-1", []);
 
-            Assert.AreEqual("PxDataSerializer", serializer.GetType().Name);
+            Assert.IsInstanceOfType(info.Serializer, typeof(PXFileSerializer));
         }
 
     }

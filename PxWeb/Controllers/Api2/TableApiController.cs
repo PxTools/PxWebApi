@@ -10,6 +10,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -259,8 +260,11 @@ namespace PxWeb.Controllers.Api2
                 return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
-            var serializer = _serializeManager.GetSerializer(outputFormat, outputFormatParams);
-            serializer.Serialize(model, Response);
+            var serializationInfo = _serializeManager.GetSerializer(outputFormat, model.Meta.CodePage, outputFormatParams);
+
+            Response.ContentType = serializationInfo.ContentType;
+            Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
+            serializationInfo.Serializer.Serialize(model, Response.Body);
 
             return Ok();
         }
