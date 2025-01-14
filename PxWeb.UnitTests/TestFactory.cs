@@ -99,6 +99,31 @@ namespace PxWeb.UnitTests
 
             Variable timeVar = new Variable("Period", PlacementType.Heading);
             timeVar.IsTime = true;
+
+            timeVar.Values.Add(new Value("2018M01"));
+            timeVar.Values.Add(new Value("2018M02"));
+            timeVar.Values.Add(new Value("2018M03"));
+            timeVar.Values.Add(new Value("2018M04"));
+            timeVar.Values.Add(new Value("2018M05"));
+            timeVar.Values.Add(new Value("2018M06"));
+            timeVar.Values.Add(new Value("2018M07"));
+            timeVar.Values.Add(new Value("2018M08"));
+            timeVar.Values.Add(new Value("2018M09"));
+            timeVar.Values.Add(new Value("2018M10"));
+            timeVar.Values.Add(new Value("2018M11"));
+            timeVar.Values.Add(new Value("2018M12"));
+
+            pxModel.Meta.AddVariable(timeVar);
+
+            return pxModel;
+        }
+
+        public static PXModel GetMinimalModel()
+        {
+            PXModel pxModel = new PXModel();
+
+            Variable timeVar = new Variable("Period", PlacementType.Heading);
+            timeVar.IsTime = true;
             timeVar.Values.Add(new Value("2018M01"));
 
             pxModel.Meta.AddVariable(timeVar);
@@ -133,34 +158,6 @@ namespace PxWeb.UnitTests
 
             pxModel.Data.WriteElement(0, 100);
 
-            return pxModel;
-        }
-
-        public static PXModel GetMinimalModel()
-        {
-            PXModel pxModel = new PXModel();
-
-            Variable timeVar = new Variable("Period", PlacementType.Heading);
-            timeVar.IsTime = true;
-            timeVar.Values.Add(new Value("2018M01"));
-
-            pxModel.Meta.AddVariable(timeVar);
-
-            pxModel.Meta.AxisVersion = "2018";
-            pxModel.Meta.Language = "en";
-            pxModel.Meta.SubjectArea = "TST";
-            pxModel.Meta.SubjectCode = "TST";
-            pxModel.Meta.Matrix = "TST01";
-            pxModel.Meta.Title = "Test data";
-            pxModel.Meta.Source = "PxTools";
-            pxModel.Meta.Contents = "Test data";
-            pxModel.Meta.Decimals = 0;
-            pxModel.Meta.Description = "Test file";
-            pxModel.Meta.DescriptionDefault = false;
-            pxModel.Meta.ContentInfo = new ContInfo() { Units = "Amount" };
-            pxModel.IsComplete = true;
-
-            pxModel.Data.WriteElement(1, 100);
             return pxModel;
         }
     }
