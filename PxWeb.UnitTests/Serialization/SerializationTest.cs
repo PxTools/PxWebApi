@@ -35,7 +35,7 @@
             string contentType = "";
             response.SetupProperty(x => x.ContentType, contentType);
 
-            
+
 
             serializer.Serialize(pxModel, response.Object);
 

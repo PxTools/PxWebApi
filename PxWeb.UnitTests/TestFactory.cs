@@ -151,7 +151,7 @@ namespace PxWeb.UnitTests
             pxModel.Meta.SubjectArea = "TST";
             pxModel.Meta.SubjectCode = "TST";
             pxModel.Meta.Matrix = "TST01";
-            pxModel.Meta.Title = "Test data";   
+            pxModel.Meta.Title = "Test data";
             pxModel.Meta.Source = "PxTools";
             pxModel.Meta.Contents = "Test data";
             pxModel.Meta.Decimals = 0;
