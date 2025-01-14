@@ -21,7 +21,7 @@ namespace PxWeb.Mappers
 
         public Codelist Map(PCAxis.Sql.Models.Grouping grouping)
         {
-            Codelist codelist = new Codelist(grouping.Id, grouping.Name);
+            Codelist codelist = new Codelist(grouping.Id, grouping.Label);
             codelist.CodelistType = Codelist.CodelistTypeEnum.Aggregation;
 
             foreach (PCAxis.Sql.Models.GroupedValue group in grouping.Values)
@@ -34,7 +34,7 @@ namespace PxWeb.Mappers
 
         public Codelist Map(PCAxis.Sql.Models.ValueSet valueset)
         {
-            Codelist codelist = new Codelist(valueset.Id, valueset.Name);
+            Codelist codelist = new Codelist(valueset.Id, valueset.Label);
             codelist.CodelistType = Codelist.CodelistTypeEnum.ValueSet;
 
             foreach (var value in valueset.Values)
