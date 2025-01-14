@@ -44,7 +44,6 @@ namespace PxWeb.Code.Api2.Serialization
                     suffix = ".html";
                     serializer = CreateHtmlSerializer(outputFormatParams);
                     break;
-                case "px":
                 default:
                     contentType = "application/octet-stream; charset=" + EncodingUtil.GetEncoding(codePage).WebName;
                     suffix = ".px";
