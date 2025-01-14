@@ -45,10 +45,6 @@ namespace PxWeb.Code.Api2.Serialization
                     serializer = CreateHtmlSerializer(outputFormatParams);
                     break;
                 case "px":
-                    contentType = "application/octet-stream; charset=" + EncodingUtil.GetEncoding(codePage).WebName;
-                    suffix = ".px";
-                    serializer = new PXFileSerializer();
-                    break;
                 default:
                     contentType = "application/octet-stream; charset=" + EncodingUtil.GetEncoding(codePage).WebName;
                     suffix = ".px";
@@ -59,7 +55,7 @@ namespace PxWeb.Code.Api2.Serialization
             return new SerializationInformation(contentType, suffix, serializer);
         }
 
-        private CsvSerializer CreateCsvSerializer(List<string> outputFormatParams)
+        private static CsvSerializer CreateCsvSerializer(List<string> outputFormatParams)
         {
             var serializer = new CsvSerializer();
 
@@ -100,7 +96,7 @@ namespace PxWeb.Code.Api2.Serialization
             return serializer;
         }
 
-        private Xlsx2Serializer CreateXlsxSerializer(List<string> outputFormatParams)
+        private static Xlsx2Serializer CreateXlsxSerializer(List<string> outputFormatParams)
         {
             var serializer = new Xlsx2Serializer();
 
@@ -127,7 +123,7 @@ namespace PxWeb.Code.Api2.Serialization
             return serializer;
         }
 
-        private HtmlSerializer CreateHtmlSerializer(List<string> outputFormatParams)
+        private static HtmlSerializer CreateHtmlSerializer(List<string> outputFormatParams)
         {
             var serializer = new HtmlSerializer();
 
