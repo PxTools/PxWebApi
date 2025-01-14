@@ -38,8 +38,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.IsTrue(csv?.IncludeTitle);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.IsTrue(csv.IncludeTitle);
         }
 
         [TestMethod]
@@ -51,8 +51,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.LablePreference.Code, csv?.ValueLablesDisplay);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.LablePreference.Code, csv.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -64,8 +64,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.LablePreference.Text, csv?.ValueLablesDisplay);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.LablePreference.Text, csv.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -77,8 +77,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.LablePreference.BothCodeAndText, csv?.ValueLablesDisplay);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.LablePreference.BothCodeAndText, csv.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -90,8 +90,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.Delimiters.Comma, csv?.ValueDelimiter);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.Delimiters.Comma, csv.ValueDelimiter);
         }
 
         [TestMethod]
@@ -103,8 +103,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.Delimiters.Tab, csv?.ValueDelimiter);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.Delimiters.Tab, csv.ValueDelimiter);
         }
 
         [TestMethod]
@@ -116,8 +116,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.Delimiters.Space, csv?.ValueDelimiter);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.Delimiters.Space, csv.ValueDelimiter);
         }
 
         [TestMethod]
@@ -129,8 +129,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(CsvSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/csv", System.StringComparison.InvariantCultureIgnoreCase));
-            CsvSerializer? csv = info.Serializer as CsvSerializer;
-            Assert.AreEqual(CsvSerializer.Delimiters.Semicolon, csv?.ValueDelimiter);
+            CsvSerializer csv = (CsvSerializer)info.Serializer;
+            Assert.AreEqual(CsvSerializer.Delimiters.Semicolon, csv.ValueDelimiter);
         }
 
         [TestMethod]
@@ -153,8 +153,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(Xlsx2Serializer));
             Assert.IsTrue(info.ContentType.Equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", System.StringComparison.InvariantCultureIgnoreCase));
-            Xlsx2Serializer? csv = info.Serializer as Xlsx2Serializer;
-            Assert.IsTrue(csv?.IncludeTitle);
+            Xlsx2Serializer xlsx = (Xlsx2Serializer)info.Serializer;
+            Assert.IsTrue(xlsx.IncludeTitle);
         }
 
         [TestMethod]
@@ -166,8 +166,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(Xlsx2Serializer));
             Assert.IsTrue(info.ContentType.Equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", System.StringComparison.InvariantCultureIgnoreCase));
-            Xlsx2Serializer? xlsx = info.Serializer as Xlsx2Serializer;
-            Assert.AreEqual(Xlsx2Serializer.LablePreference.Code, xlsx?.ValueLablesDisplay);
+            Xlsx2Serializer xlsx = (Xlsx2Serializer)info.Serializer;
+            Assert.AreEqual(Xlsx2Serializer.LablePreference.Code, xlsx.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -179,8 +179,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(Xlsx2Serializer));
             Assert.IsTrue(info.ContentType.Equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", System.StringComparison.InvariantCultureIgnoreCase));
-            Xlsx2Serializer? xlsx = info.Serializer as Xlsx2Serializer;
-            Assert.AreEqual(Xlsx2Serializer.LablePreference.Text, xlsx?.ValueLablesDisplay);
+            Xlsx2Serializer xlsx = (Xlsx2Serializer)info.Serializer;
+            Assert.AreEqual(Xlsx2Serializer.LablePreference.Text, xlsx.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -192,8 +192,8 @@ namespace PxWeb.UnitTests.Serialization
 
             Assert.IsInstanceOfType(info.Serializer, typeof(Xlsx2Serializer));
             Assert.IsTrue(info.ContentType.Equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", System.StringComparison.InvariantCultureIgnoreCase));
-            Xlsx2Serializer? xlsx = info.Serializer as Xlsx2Serializer;
-            Assert.AreEqual(Xlsx2Serializer.LablePreference.BothCodeAndText, xlsx?.ValueLablesDisplay);
+            Xlsx2Serializer xlsx = (Xlsx2Serializer)info.Serializer;
+            Assert.AreEqual(Xlsx2Serializer.LablePreference.BothCodeAndText, xlsx.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -228,8 +228,8 @@ namespace PxWeb.UnitTests.Serialization
             Assert.IsInstanceOfType(info.Serializer, typeof(HtmlSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/html", System.StringComparison.InvariantCultureIgnoreCase));
 
-            HtmlSerializer? html = info.Serializer as HtmlSerializer;
-            Assert.IsTrue(html?.IncludeTitle);
+            HtmlSerializer html = (HtmlSerializer)info.Serializer;
+            Assert.IsTrue(html.IncludeTitle);
         }
 
         [TestMethod]
@@ -242,8 +242,8 @@ namespace PxWeb.UnitTests.Serialization
             Assert.IsInstanceOfType(info.Serializer, typeof(HtmlSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/html", System.StringComparison.InvariantCultureIgnoreCase));
 
-            HtmlSerializer? html = info.Serializer as HtmlSerializer;
-            Assert.AreEqual(HtmlSerializer.LablePreference.Code, html?.ValueLablesDisplay);
+            HtmlSerializer html = (HtmlSerializer)info.Serializer;
+            Assert.AreEqual(HtmlSerializer.LablePreference.Code, html.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -256,8 +256,8 @@ namespace PxWeb.UnitTests.Serialization
             Assert.IsInstanceOfType(info.Serializer, typeof(HtmlSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/html", System.StringComparison.InvariantCultureIgnoreCase));
 
-            HtmlSerializer? html = info.Serializer as HtmlSerializer;
-            Assert.AreEqual(HtmlSerializer.LablePreference.Text, html?.ValueLablesDisplay);
+            HtmlSerializer html = (HtmlSerializer)info.Serializer;
+            Assert.AreEqual(HtmlSerializer.LablePreference.Text, html.ValueLablesDisplay);
         }
 
         [TestMethod]
@@ -270,8 +270,8 @@ namespace PxWeb.UnitTests.Serialization
             Assert.IsInstanceOfType(info.Serializer, typeof(HtmlSerializer));
             Assert.IsTrue(info.ContentType.StartsWith("text/html", System.StringComparison.InvariantCultureIgnoreCase));
 
-            HtmlSerializer? html = info.Serializer as HtmlSerializer;
-            Assert.AreEqual(HtmlSerializer.LablePreference.BothCodeAndText, html?.ValueLablesDisplay);
+            HtmlSerializer html = (HtmlSerializer)info.Serializer;
+            Assert.AreEqual(HtmlSerializer.LablePreference.BothCodeAndText, html.ValueLablesDisplay);
         }
 
 
