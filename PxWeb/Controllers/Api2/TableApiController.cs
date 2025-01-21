@@ -10,6 +10,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -169,21 +170,20 @@ namespace PxWeb.Controllers.Api2
 
         }
 
-        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
+        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? outputFormatParams, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
         {
             VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
-            return GetData(id, lang, variablesSelection, outputFormat);
+            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
         }
 
-        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromBody] VariablesSelection? variablesSelection)
+        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? outputFormatParams, [FromBody] VariablesSelection? variablesSelection)
         {
-            return GetData(id, lang, variablesSelection, outputFormat);
+            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
         }
 
-        private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat)
+        private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat, List<string> outputFormatParams)
         {
             Problem? problem = null;
-
 
             lang = _languageHelper.HandleLanguage(lang);
 
@@ -260,8 +260,11 @@ namespace PxWeb.Controllers.Api2
                 return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
-            var serializer = _serializeManager.GetSerializer(outputFormat);
-            serializer.Serialize(model, Response);
+            var serializationInfo = _serializeManager.GetSerializer(outputFormat, model.Meta.CodePage, outputFormatParams);
+
+            Response.ContentType = serializationInfo.ContentType;
+            Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
+            serializationInfo.Serializer.Serialize(model, Response.Body);
 
             return Ok();
         }
