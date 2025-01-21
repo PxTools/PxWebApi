@@ -50,7 +50,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PCAxis.Menu.ConfigDatamodelMenu" Version="1.0.8" />
     <PackageReference Include="PCAxis.Serializers" Version="1.4.1" />
-    <PackageReference Include="PcAxis.Sql" Version="1.2.7" />
+    <PackageReference Include="PcAxis.Sql" Version="1.2.8" />
     <PackageReference Include="PxWeb.Api2.Server" Version="2.0.0-beta.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.2.0" />
