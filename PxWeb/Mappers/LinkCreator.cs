@@ -11,6 +11,7 @@ namespace PxWeb.Mappers
         public enum LinkRelationEnum
         {
             self,
+            alternate,
             data,
             describedby,
             metadata,

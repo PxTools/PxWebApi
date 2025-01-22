@@ -49,6 +49,14 @@ namespace PxWeb.Mappers
 
             // Links 
             codeListResponse.Links.Add(_linkCreator.GetCodelistLink(LinkCreator.LinkRelationEnum.self, id, language, true));
+            foreach (string alternateLang in codelist.AvailableLanguages)
+            {
+                if (alternateLang != language)
+                {
+                    codeListResponse.Links.Add(_linkCreator.GetCodelistLink(LinkCreator.LinkRelationEnum.alternate, id, alternateLang, true));
+                }
+            }
+
 
             return codeListResponse;
         }

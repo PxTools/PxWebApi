@@ -42,6 +42,8 @@ namespace PxWeb.Mappers
                 codelist.Values.Add(MapValuesetValue(value));
             }
 
+            codelist.AvailableLanguages = valueset.AvailableLanguages;
+
             return codelist;
         }
 
