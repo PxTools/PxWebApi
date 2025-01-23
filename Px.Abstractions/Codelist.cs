@@ -20,7 +20,10 @@
             Values = new List<CodelistValue>();
             Id = id;
             Label = label;
+            AvailableLanguages = new List<string>();
         }
+
+        public List<string> AvailableLanguages { get; set; }
 
     }
 
