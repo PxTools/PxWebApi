@@ -478,11 +478,7 @@ namespace PXWeb.Database
                 for (int i = 0; i < 4; i++)
                 {
                     names.Append(variable.Values[i].Value);
-                    if (i < 5 || i == variable.Values.Count)
-                    {
-                        names.Append(", ");
-                    }
-
+                    names.Append(", ");
                 }
                 names.Append("..., ");
                 names.Append(variable.Values[variable.Values.Count - 1].Value);

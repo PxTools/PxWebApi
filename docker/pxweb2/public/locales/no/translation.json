@@ -9,6 +9,7 @@
       "title": "PxWeb 2.0 [Main]",
       "logo": "PxWeb 2.0"
     },
+    "skip_to_main": "Hopp til hovedinnhold",
     "footer": {
       "contact": {
         "title": "Kontakt",
@@ -79,7 +80,9 @@
             },
             "values_list": {
               "aria_label": "Liste av {{total}} verdier.",
-              "aria_description": "Variabelens liste over {{total}} totale verdier. For å gå inn i listen, trykk på pil ned-tasten. Tab-tasten går ut av listen."
+              "aria_description": "Variabelens liste over {{total}} totale verdier. For å gå inn i listen, trykk på pil ned-tasten. Tab-tasten går ut av listen.",
+              "no_results_heading": "Ingen treff på <<{{search}}>>",
+              "no_results_bodyshort": "Prøv med et annet søkeord eller en annen stavemåte."
             }
           }
         }
