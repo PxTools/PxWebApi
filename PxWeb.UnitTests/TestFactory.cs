@@ -117,5 +117,48 @@ namespace PxWeb.UnitTests
 
             return pxModel;
         }
+
+        public static PXModel GetMinimalModel()
+        {
+            PXModel pxModel = new PXModel();
+
+            Variable timeVar = new Variable("Period", PlacementType.Heading);
+            timeVar.IsTime = true;
+            timeVar.Values.Add(new Value("2018M01"));
+
+            pxModel.Meta.AddVariable(timeVar);
+
+
+            Variable regionVar = new Variable("Region", PlacementType.Stub);
+            regionVar.IsTime = false;
+            regionVar.Values.Add(new Value("A"));
+            regionVar.Values.Add(new Value("B"));
+
+            pxModel.Meta.AddVariable(regionVar);
+
+
+            pxModel.Meta.AxisVersion = "2018";
+            pxModel.Meta.Language = "en";
+            pxModel.Meta.SubjectArea = "TST";
+            pxModel.Meta.SubjectCode = "TST";
+            pxModel.Meta.Matrix = "TST01";
+            pxModel.Meta.Title = "Test data";
+            pxModel.Meta.Source = "PxTools";
+            pxModel.Meta.Contents = "Test data";
+            pxModel.Meta.Decimals = 0;
+            pxModel.Meta.Description = "Test file";
+            pxModel.Meta.DescriptionDefault = false;
+            var contentInfo = new ContInfo();
+            contentInfo.Units = "Amount";
+
+            pxModel.Meta.ContentInfo = contentInfo;
+            pxModel.IsComplete = true;
+
+            pxModel.Data.SetMatrixSize(1, 1);
+
+            pxModel.Data.WriteElement(0, 100);
+
+            return pxModel;
+        }
     }
 }

@@ -29,26 +29,13 @@
   "defaultMetadataFormat": 0,
   "defaultDataFormat": "px",
   "dataFormats": [
-    "xlsx",
-    "xlsx_doublecolumn",
-    "csv",
-    "csv_tab",
-    "csv_tabhead",
-    "csv_comma",
-    "csv_commahead",
-    "csv_space",
-    "csv_spacehead",
-    "csv_semicolon",
-    "csv_semicolonhead",
-    "csv2",
-    "csv3",
-    "json",
-    "json-stat",
     "json-stat2",
-    "parquet",
-    "html5_table",
-    "relational_table",
-    "px"
+    "csv",
+    "px",
+    "xlsx",
+    "html",
+    "json-px",
+    "parquet"
   ],
   "features": [
     {

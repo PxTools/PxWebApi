@@ -2,6 +2,6 @@
 {
     public interface ISerializeManager
     {
-        IDataSerializer GetSerializer(string outputFormat);
+        SerializationInformation GetSerializer(string outputFormat, string codePage, List<string> outputFormatParams);
     }
 }
