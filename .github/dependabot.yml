@@ -14,7 +14,9 @@ updates:
         applies-to: version-updates
         update-types:
           - "minor"
-
+    ignore:
+      - dependency-name: "Microsoft.OpenApi.Readers"
+        versions: ["1.6.23"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
