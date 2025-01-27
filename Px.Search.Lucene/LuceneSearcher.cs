@@ -103,7 +103,7 @@ namespace Px.Search.Lucene
         /// </summary>
         /// <param name="tableId"></param>
         /// <returns></returns>
-        public SearchResult FindTable(string tableId)
+        public SearchResult? FindTable(string tableId)
         {
 
             string[] field = new[] { SearchConstants.SEARCH_FIELD_SEARCHID };
@@ -115,6 +115,10 @@ namespace Px.Search.Lucene
             luceneQuery = queryParser.Parse(tableId);
 
             TopDocs topDocs = _indexSearcher.Search(luceneQuery, 1);
+            if (topDocs.TotalHits == 0)
+            {
+                return null;
+            }
 
             Document doc = _indexSearcher.Doc(topDocs.ScoreDocs[0].Doc);
             return GetSearchResult(doc);
