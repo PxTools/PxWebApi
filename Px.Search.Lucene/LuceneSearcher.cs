@@ -64,7 +64,7 @@ namespace Px.Search.Lucene
             }
 
             TopDocs topDocs;
-            topDocs = filter.Count() > 0 ? _indexSearcher.Search(luceneQuery, filter, skipRecords + pageSize)
+            topDocs = filter.Any() ? _indexSearcher.Search(luceneQuery, filter, skipRecords + pageSize)
                 : _indexSearcher.Search(luceneQuery, skipRecords + pageSize);
 
             ScoreDoc[] scoreDocs = topDocs.ScoreDocs;
