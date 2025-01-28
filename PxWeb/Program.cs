@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Readers;
 
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -158,8 +157,7 @@ namespace PxWeb
                 {
                     if (!(pxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
                     {
-                        Program.LoadFileIntoSwaggerDoc(swaggerDoc, Path.Combine(AppContext.BaseDirectory, "swagger_v2.json"));
-
+                        swaggerDoc.Paths = RemoveAdminEndpoints(swaggerDoc.Paths);
                     }
                     swaggerDoc.Servers = Program.GetOpenApiServers(pxApiConfiguration.BaseURL, pxApiConfiguration.RoutePrefix);
                 });
@@ -207,26 +205,17 @@ namespace PxWeb
             app.Run();
         }
 
-        private static void LoadFileIntoSwaggerDoc(OpenApiDocument swaggerDoc, string? jsonFilePath)
+        private static OpenApiPaths RemoveAdminEndpoints(OpenApiPaths paths)
         {
-            if (File.Exists(jsonFilePath))
+            OpenApiPaths openApiPaths = [];
+            foreach (var path in paths)
             {
-
-                using var stream = new FileStream(jsonFilePath, FileMode.Open, FileAccess.Read);
-                var openApiDocument = new OpenApiStreamReader().Read(stream, out var diagnostic);
-                if (openApiDocument == null)
+                if (!path.Key.StartsWith("/admin"))
                 {
-                    throw new Exception("Bad bug");
+                    openApiPaths.Add(path.Key, path.Value);
                 }
-                swaggerDoc.Info = openApiDocument.Info;
-                swaggerDoc.Paths = openApiDocument.Paths;
-                swaggerDoc.Components = openApiDocument.Components;
-                swaggerDoc.Tags = openApiDocument.Tags;
-                //swaggerDoc.Servers = openApiDocument.Servers;
-                swaggerDoc.ExternalDocs = openApiDocument.ExternalDocs;
-                //swaggerDoc.SecurityRequirements = openApiDocument.SecurityRequirements;
-                swaggerDoc.Extensions = openApiDocument.Extensions;
             }
+            return openApiPaths;
         }
 
         private static List<OpenApiServer> GetOpenApiServers(string pxApiConfiguration_BaseURL, string pxApiConfiguration_RoutePrepix)
