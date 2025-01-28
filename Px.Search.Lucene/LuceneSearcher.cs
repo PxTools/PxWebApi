@@ -130,7 +130,7 @@ namespace Px.Search.Lucene
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        private SearchResult GetSearchResult(Document doc)
+        private static SearchResult GetSearchResult(Document doc)
         {
             DateTime updated;
             bool discontinued;
@@ -167,7 +167,7 @@ namespace Px.Search.Lucene
         /// Get fields in index to search in
         /// </summary>
         /// <returns></returns>
-        private string[] GetSearchFields()
+        private static string[] GetSearchFields()
         {
             string[] fields;
 
