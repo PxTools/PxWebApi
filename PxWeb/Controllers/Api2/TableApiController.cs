@@ -119,16 +119,19 @@ namespace PxWeb.Controllers.Api2
             Searcher searcher = new Searcher(_dataSource, _backend);
             lang = _languageHelper.HandleLanguage(lang);
 
-            if (_dataSource.TableExists(id, lang))
-            {
-                var searchResult = searcher.FindTable(id, lang);
-
-                return Ok(_tableResponseMapper.Map(searchResult, lang));
-            }
-            else
+            if (!_dataSource.TableExists(id, lang))
             {
                 return NotFound(ProblemUtility.NonExistentTable());
             }
+
+            SearchResult? searchResult = searcher.FindTable(id, lang);
+            if (searchResult == null)
+            {
+                return NotFound(ProblemUtility.NonExistentTable());
+            }
+
+            return Ok(_tableResponseMapper.Map(searchResult, lang));
+
 
         }
 
