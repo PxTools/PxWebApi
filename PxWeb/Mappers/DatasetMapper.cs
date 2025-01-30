@@ -77,7 +77,6 @@ namespace PxWeb.Mappers
                     // ValueNote
                     AddValueNotes(variableValue, dataset, dimensionValue);
 
-
                     if (!variable.IsContentVariable) continue;
 
                     var unitDecimals = (variableValue.HasPrecision()) ? variableValue.Precision : model.Meta.ShowDecimals;
@@ -160,7 +159,6 @@ namespace PxWeb.Mappers
             return dataset;
         }
 
-
         private void AddInfoForEliminatedContentVariable(PXModel model, DatasetSubclass dataset)
         {
             dataset.AddDimensionValue("ContentsCode", "EliminatedContents", out var dimensionValue);
@@ -185,6 +183,10 @@ namespace PxWeb.Mappers
 
             // Contact
             AddContact(dataset, model.Meta.ContentInfo);
+
+            dataset.AddToMetricRole("ContentsCode");
+            dataset.Size.Add(1);
+            dataset.Id.Add("ContentsCode");
         }
 
         private void AddUpdated(PXModel model, DatasetSubclass dataset)
@@ -240,8 +242,8 @@ namespace PxWeb.Mappers
             dataset.AddContents(model.Meta.Contents);
             dataset.AddDescription(model.Meta.Description);
             dataset.AddDescriptiondefault(model.Meta.DescriptionDefault);
-            dataset.AddStub(model.Meta.Stub.Select(v => v.Name).ToList());
-            dataset.AddHeading(model.Meta.Heading.Select(v => v.Name).ToList());
+            dataset.AddStub(model.Meta.Stub.Select(v => v.Code).ToList());
+            dataset.AddHeading(model.Meta.Heading.Select(v => v.Code).ToList());
             dataset.AddLanguage(model.Meta.Language);
             dataset.AddOfficialStatistics(model.Meta.OfficialStatistics);
             dataset.AddMatrix(model.Meta.Matrix);
@@ -476,7 +478,7 @@ namespace PxWeb.Mappers
 
 
 
-        private Api2.Server.Models.CodeListInformation Map(PCAxis.Paxiom.GroupingInfo grouping)
+        private CodeListInformation Map(PCAxis.Paxiom.GroupingInfo grouping)
         {
             CodeListInformation codelist = new CodeListInformation();
 
@@ -488,7 +490,7 @@ namespace PxWeb.Mappers
 
             return codelist;
         }
-        private Api2.Server.Models.CodeListInformation Map(PCAxis.Paxiom.ValueSetInfo valueset)
+        private CodeListInformation Map(PCAxis.Paxiom.ValueSetInfo valueset)
         {
             CodeListInformation codelist = new CodeListInformation();
 
