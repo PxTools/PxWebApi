@@ -1,14 +1,14 @@
 {
   "version": "2.0",
   "class": "dataset",
-  "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-stat2",
+  "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en\u0026outputFormat=json-stat2",
   "label": "Total air emissions by sector, greenhouse gas, contents and year",
   "source": "Statistics Sweden",
-  "updated": "2023-05-25T13:42:00Z",
+  "updated": "VALUE_HAS_BEEN_REPLACED",
   "link": {
     "data": [
       {
-        "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
+        "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en\u0026outputFormat=px"
       }
     ]
   },
@@ -79,7 +79,8 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codeLists": [],
+        "timeUnit": 0
       }
     },
     "GREENHOUSEGAS": {
@@ -120,7 +121,8 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codeLists": [],
+        "timeUnit": 0
       }
     },
     "ContentsCode": {
@@ -142,7 +144,8 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codeLists": [],
+        "timeUnit": 0
       }
     },
     "TIME": {
@@ -212,7 +215,8 @@
       "extension": {
         "elimination": false,
         "show": "code",
-        "codeLists": []
+        "codeLists": [],
+        "timeUnit": 0
       }
     }
   },
