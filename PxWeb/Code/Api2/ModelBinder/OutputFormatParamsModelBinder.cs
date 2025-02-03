@@ -4,9 +4,12 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
+using PxWeb.Api2.Server.Models;
+using PxWeb.Converters;
+
 namespace PxWeb.Code.Api2.ModelBinder
 {
-    public class CommaSeparatedStringToListOfStrings : IModelBinder
+    public class OutputFormatParamsModelBinder : IModelBinder
     {
 
         public Task BindModelAsync(ModelBindingContext bindingContext)
@@ -16,7 +19,7 @@ namespace PxWeb.Code.Api2.ModelBinder
 
             var modelName = bindingContext.ModelName;
 
-            var result = new List<string>();
+            var result = new List<OutputFormatParamType>();
 
             var keys = bindingContext.HttpContext.Request.Query.Keys.Where(x => x.Equals(modelName, StringComparison.InvariantCultureIgnoreCase));
 
@@ -31,7 +34,16 @@ namespace PxWeb.Code.Api2.ModelBinder
 
                     foreach (var item in items)
                     {
-                        result.Add(CleanValue(item));
+                        try
+                        {
+                            result.Add(EnumConverter.ToEnum<OutputFormatParamType>(CleanValue(item)));
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            bindingContext.ModelState.AddModelError(bindingContext.ModelName, "Invalid value for enum.");
+                            bindingContext.Result = ModelBindingResult.Failed();
+                            return Task.CompletedTask;
+                        }
                     }
                 }
             }
