@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -25,32 +24,15 @@ namespace PxWeb.Code.Api2.ModelBinder
                 string? q = bindingContext.HttpContext.Request.Query[key];
                 if (q != null)
                 {
-                    var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.None,
-                            TimeSpan.FromMilliseconds(100));
-
-
-                    foreach (var item in items)
-                    {
-                        result.Add(CleanValue(item));
-                    }
+                    var list = CommaSeparatedListToListConverter.ToList<string>(q, x => x);
+                    result.AddRange(list);
                 }
             }
-
 
             bindingContext.Result = ModelBindingResult.Success(result);
 
             return Task.CompletedTask;
         }
 
-        private static string CleanValue(string value)
-        {
-            var item2 = value.Trim();
-            if (item2.StartsWith('[') && item2.EndsWith(']'))
-            {
-                return value.Substring(1, item2.Length - 2).Trim();
-            }
-            return item2;
-
-        }
     }
 }
