@@ -39,11 +39,11 @@ namespace PxWeb.UnitTests.Helpers
 
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertFromStringOutputFormatParam_InvalidValue_ThrowsException()
         {
             // Act
-            EnumConverter.ToEnum<OutputFormatParamType>("X");
+            Assert.ThrowsException<InvalidOperationException>(() => EnumConverter.ToEnum<OutputFormatParamType>("X"));
+
         }
 
         [TestMethod]

@@ -2,7 +2,7 @@
 
 namespace PxWeb.Code.Api2.ModelBinder
 {
-    public class CommaSeparatedListToListConverter
+    public static class CommaSeparatedListToListConverter
     {
         public static List<T> ToList<T>(string values, Func<string, T> converter)
         {
