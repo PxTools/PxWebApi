@@ -8,7 +8,7 @@ namespace PxWeb.UnitTests.Helpers
     public class EnumConverterTests
     {
         [TestMethod]
-        public void OutputFormatParam_IncludeTile()
+        public void ConvertFromStringOutputFormatParam_IncludeTile()
         {
             var expected = OutputFormatParamType.IncludeTitleEnum;
             // Act
@@ -18,7 +18,7 @@ namespace PxWeb.UnitTests.Helpers
         }
 
         [TestMethod]
-        public void OutputFormatParam_CaseInsensitiveLowerCase()
+        public void ConvertFromStringOutputFormatParam_CaseInsensitiveLowerCase()
         {
             var expected = OutputFormatParamType.IncludeTitleEnum;
             // Act
@@ -28,7 +28,7 @@ namespace PxWeb.UnitTests.Helpers
         }
 
         [TestMethod]
-        public void OutputFormatParam_CaseInsensitiveUpperCase()
+        public void ConvertFromStringOutputFormatParam_CaseInsensitiveUpperCase()
         {
             var expected = OutputFormatParamType.IncludeTitleEnum;
             // Act
@@ -40,10 +40,20 @@ namespace PxWeb.UnitTests.Helpers
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void OutputFormatParam_InvalidValue_ThrowsException()
+        public void ConvertFromStringOutputFormatParam_InvalidValue_ThrowsException()
         {
             // Act
             EnumConverter.ToEnum<OutputFormatParamType>("X");
+        }
+
+        [TestMethod]
+        public void ConvertToStringOutputFormatParam_CaseInsensitiveUpperCase()
+        {
+            var expected = "IncludeTitle";
+            // Act
+            var actual = EnumConverter.ToEnumString<OutputFormatParamType>(OutputFormatParamType.IncludeTitleEnum);
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
 
