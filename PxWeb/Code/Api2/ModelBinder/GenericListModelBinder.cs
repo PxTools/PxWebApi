@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace PxWeb.Code.Api2.ModelBinder
 {
-    public class GenericListModelBinder<T>
+    public class GenericListModelBinder<T> : IModelBinder
     {
         public GenericListModelBinder(Func<string, T> func)
         {
