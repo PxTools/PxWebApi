@@ -2,7 +2,6 @@
 global using System.IO;
 global using System.Linq;
 
-global using Microsoft.AspNetCore.Http;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.VisualStudio.TestTools.UnitTesting;
 

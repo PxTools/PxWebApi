@@ -27,6 +27,7 @@ using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
 using PxWeb.Code.Api2.Serialization;
+using PxWeb.Converters;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
 
@@ -91,7 +92,7 @@ namespace PxWeb.Controllers.Api2
                     }
 
 
-                    if (outputFormat != null && outputFormat == MetadataOutputFormatType.Stat2Enum)
+                    if (outputFormat != null && outputFormat == MetadataOutputFormatType.JsonStat2Enum)
                     {
 
                         Dataset ds = _datasetMapper.Map(model, id, lang);
@@ -173,22 +174,48 @@ namespace PxWeb.Controllers.Api2
 
         }
 
-        public override IActionResult GetTableData([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist, [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? outputFormatParams, [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading, [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
+        public override IActionResult GetTableData(
+            [FromRoute(Name = "id"), Required] string id,
+            [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes,
+            [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist,
+            [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues,
+            [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
+            //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
+            [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(OutputFormatParamsModelBinder))] List<OutputFormatParamType>? outputFormatParams,
+            [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading,
+            [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
         {
             VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
-            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
+            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<OutputFormatParamType>() : outputFormatParams);
         }
 
-        public override IActionResult GetTableDataByPost([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] string? outputFormat, [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? outputFormatParams, [FromBody] VariablesSelection? variablesSelection)
+        public override IActionResult GetTableDataByPost(
+            [FromRoute(Name = "id"), Required] string id,
+            [FromQuery(Name = "lang")] string? lang,
+            [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
+            //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
+            [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams,
+            [FromBody] VariablesSelection? variablesSelection)
         {
-            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<string>() : outputFormatParams);
+            return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<OutputFormatParamType>() : outputFormatParams);
         }
 
-        private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, string? outputFormat, List<string> outputFormatParams)
+        private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, OutputFormatType? outputFormat, List<OutputFormatParamType> outputFormatParams)
         {
             Problem? problem = null;
 
             lang = _languageHelper.HandleLanguage(lang);
+
+            bool paramError;
+            string outputFormatStr;
+            List<string> outputFormatParamsStr;
+
+            (outputFormatStr, outputFormatParamsStr) = TranslateOutputParamters(outputFormat, outputFormatParams, out paramError);
+
+            if (paramError)
+            {
+                return BadRequest(ProblemUtility.UnsupportedOutputFormat());
+            }
 
             var builder = _dataSource.CreateBuilder(id, lang);
             if (builder == null)
@@ -254,16 +281,7 @@ namespace PxWeb.Controllers.Api2
                 model = pivot.Execute(model, descriptions.ToArray());
             }
 
-            if (outputFormat == null)
-            {
-                outputFormat = _configOptions.DefaultOutputFormat;
-            }
-            else if (!_configOptions.OutputFormats.Contains(outputFormat, StringComparer.OrdinalIgnoreCase))
-            {
-                return BadRequest(ProblemUtility.UnsupportedOutputFormat());
-            }
-
-            var serializationInfo = _serializeManager.GetSerializer(outputFormat, model.Meta.CodePage, outputFormatParams);
+            var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
 
             Response.ContentType = serializationInfo.ContentType;
             Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
@@ -272,6 +290,46 @@ namespace PxWeb.Controllers.Api2
             return Ok();
         }
 
+        private (string, List<string>) TranslateOutputParamters(OutputFormatType? outputFormat, List<OutputFormatParamType>? outputFormatParams, out bool paramError)
+        {
+            paramError = false;
+            string format;
+            List<string> formatParams;
+            try
+            {
+                if (outputFormat is not null)
+                {
+                    format = EnumConverter.ToEnumString(outputFormat.Value);
+                }
+                else
+                {
+                    format = _configOptions.DefaultOutputFormat;
+                }
+
+                if (outputFormatParams is not null)
+                {
+                    formatParams = outputFormatParams.Select(p => EnumConverter.ToEnumString(p)).ToList();
+                }
+                else
+                {
+                    formatParams = new List<string>();
+                }
+
+                if (!format.Equals("CSV", StringComparison.OrdinalIgnoreCase))
+                {
+                    //Check if there is a invalid parameter
+                    paramError = (formatParams.Select(p => p.StartsWith("separator", StringComparison.OrdinalIgnoreCase)).ToList().Count > 0);
+                }
+
+            }
+            catch (ArgumentException)
+            {
+                paramError = true;
+                format = "";
+                formatParams = new List<string>();
+            }
+            return (format, formatParams);
+        }
 
 
         /// <summary>
