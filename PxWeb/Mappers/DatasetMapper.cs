@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using PCAxis.Metadata;
@@ -18,15 +19,17 @@ namespace PxWeb.Mappers
     {
         private readonly ILinkCreator _linkCreator;
         private readonly PxApiConfigurationOptions _configOptions;
+        private readonly ILogger _logger;
         private string _language;
 
         private readonly MetaLinkManager _metaLinkManager = new MetaLinkManager();
 
-        public DatasetMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions)
+        public DatasetMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions, ILogger<DatasetMapper> logger)
         {
             _linkCreator = linkCreator;
             _configOptions = configOptions.Value;
             _language = _configOptions.DefaultLanguage;
+            _logger = logger;
         }
 
         public Dataset Map(PXModel model, string id, string language)
@@ -98,8 +101,7 @@ namespace PxWeb.Mappers
                         }
                         else
                         {
-                            //TODO
-                            //  _logger.Warn("Category" + variableValue.Code + " lacks ContentInfo. Unit, refPeriod and contact not set");
+                            _logger.LogWarning("Category {CategoryCode} lacks ContentInfo. Unit, refPeriod and contact not set", variableValue.Code);
                         }
 
                         dimensionValue.Category.Unit.Add(variableValue.Code, unitValue);
