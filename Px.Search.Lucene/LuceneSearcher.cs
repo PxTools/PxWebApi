@@ -64,7 +64,7 @@ namespace Px.Search.Lucene
             }
 
             TopDocs topDocs;
-            topDocs = filter.Count() > 0 ? _indexSearcher.Search(luceneQuery, filter, skipRecords + pageSize)
+            topDocs = filter.Any() ? _indexSearcher.Search(luceneQuery, filter, skipRecords + pageSize)
                 : _indexSearcher.Search(luceneQuery, skipRecords + pageSize);
 
             ScoreDoc[] scoreDocs = topDocs.ScoreDocs;
@@ -103,7 +103,7 @@ namespace Px.Search.Lucene
         /// </summary>
         /// <param name="tableId"></param>
         /// <returns></returns>
-        public SearchResult FindTable(string tableId)
+        public SearchResult? FindTable(string tableId)
         {
 
             string[] field = new[] { SearchConstants.SEARCH_FIELD_SEARCHID };
@@ -115,6 +115,10 @@ namespace Px.Search.Lucene
             luceneQuery = queryParser.Parse(tableId);
 
             TopDocs topDocs = _indexSearcher.Search(luceneQuery, 1);
+            if (topDocs.TotalHits == 0)
+            {
+                return null;
+            }
 
             Document doc = _indexSearcher.Doc(topDocs.ScoreDocs[0].Doc);
             return GetSearchResult(doc);
@@ -126,7 +130,7 @@ namespace Px.Search.Lucene
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        private SearchResult GetSearchResult(Document doc)
+        private static SearchResult GetSearchResult(Document doc)
         {
             DateTime updated;
             bool discontinued;
@@ -163,7 +167,7 @@ namespace Px.Search.Lucene
         /// Get fields in index to search in
         /// </summary>
         /// <returns></returns>
-        private string[] GetSearchFields()
+        private static string[] GetSearchFields()
         {
             string[] fields;
 
