@@ -23,7 +23,6 @@ namespace PxWeb.Mappers
             {
                 VariableCode = selection.VariableCode,
                 CodeList = GetCodeList(meta.Variables.FirstOrDefault(v => string.Compare(v.Code, selection.VariableCode, true) == 0)),
-                OutputValues = CodeListOutputValuesType.AggregatedEnum,
                 ValueCodes = selection.ValueCodes.Cast<string>().ToList(),
             }).ToList();
 

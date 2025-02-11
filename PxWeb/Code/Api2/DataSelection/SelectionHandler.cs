@@ -523,99 +523,57 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             var selection = new Selection(varSelection.VariableCode);
             var values = new List<string>();
-            bool aggregatedSingle = false;
-
-            if (variable.CurrentGrouping is not null && varSelection.OutputValues == CodeListOutputValuesType.SingleEnum)
-            {
-                // Single values from aggregation groups shall be added
-                aggregatedSingle = true;
-            }
 
             foreach (var value in varSelection.ValueCodes)
             {
                 if (value.Contains('*'))
                 {
-                    AddWildcardStarValues(variable, aggregatedSingle, values, value);
+                    AddWildcardStarValues(variable, values, value);
                 }
                 else if (value.Contains('?'))
                 {
-                    AddWildcardQuestionmarkValues(variable, aggregatedSingle, values, value);
+                    AddWildcardQuestionmarkValues(variable, values, value);
                 }
                 else if (value.StartsWith("TOP(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddTopValues(variable, aggregatedSingle, values, value);
+                    AddTopValues(variable, values, value);
                 }
                 else if (value.StartsWith("BOTTOM(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddBottomValues(variable, aggregatedSingle, values, value);
+                    AddBottomValues(variable, values, value);
                 }
                 else if (value.StartsWith("RANGE(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddRangeValues(variable, aggregatedSingle, values, value);
+                    AddRangeValues(variable, values, value);
                 }
                 else if (value.StartsWith("FROM(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddFromValues(variable, aggregatedSingle, values, value);
+                    AddFromValues(variable, values, value);
                 }
                 else if (value.StartsWith("TO(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddToValues(variable, aggregatedSingle, values, value);
+                    AddToValues(variable, values, value);
                 }
                 else
                 {
-                    AddValue(variable, aggregatedSingle, values, value);
+                    AddValue(variable, values, value);
                 }
             }
 
-            if (!aggregatedSingle)
-            {
-                var sortedValues = SortValues(variable, values);
-                selection.ValueCodes.AddRange(sortedValues.ToArray());
-            }
-            else
-            {
-                selection.ValueCodes.AddRange(values.ToArray());
-            }
 
-            if (aggregatedSingle)
-            {
-                // Need to restore original values before trying to get data
-                ValueSetInfo vsInfo = new ValueSetInfo();
-                vsInfo.ID = "_ALL_";
-                builder.ApplyValueSet(selection.VariableCode, vsInfo);
-            }
+            var sortedValues = SortValues(variable, values);
+            selection.ValueCodes.AddRange(sortedValues.ToArray());
 
             return selection;
         }
 
-        private void AddValue(Variable variable, bool aggregatedSingle, List<string> values, string value)
+        private void AddValue(Variable variable, List<string> values, string value)
         {
-            if (!aggregatedSingle)
+            if (!values.Contains(value))
             {
-                if (!values.Contains(value))
-                {
-                    values.Add(value);
-                }
+                values.Add(value);
             }
-            else
-            {
-                if (variable.CurrentGrouping is not null)
-                {
-                    PCAxis.Paxiom.Group? group = variable.CurrentGrouping.Groups.FirstOrDefault(x => x.GroupCode == value);
 
-                    if (group is not null)
-                    {
-                        foreach (var child in group.ChildCodes)
-                        {
-                            if (!values.Contains(child.Code))
-                            {
-                                values.Add(child.Code);
-                            }
-                        }
-                    }
-                }
-
-            }
         }
 
         /// <summary>
@@ -645,7 +603,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="wildcard">The wildcard string</param>
-        private void AddWildcardStarValues(Variable variable, bool aggregatedSingle, List<string> values, string wildcard)
+        private void AddWildcardStarValues(Variable variable, List<string> values, string wildcard)
         {
             if (wildcard.Equals("*"))
             {
@@ -653,7 +611,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(variable, values, variableValue);
                 }
             }
             else if (wildcard.StartsWith("*") && wildcard.EndsWith("*"))
@@ -661,7 +619,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.Contains(wildcard.Substring(1, wildcard.Length - 2), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(variable, values, variableValue);
                 }
             }
             else if (wildcard.StartsWith("*"))
@@ -669,7 +627,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.EndsWith(wildcard.Substring(1), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(variable, values, variableValue);
                 }
             }
             else if (wildcard.EndsWith("*"))
@@ -677,7 +635,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.StartsWith(wildcard.Substring(0, wildcard.Length - 1), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(variable, values, variableValue);
                 }
             }
         }
@@ -689,13 +647,13 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="wildcard">The wildcard string</param>
-        private void AddWildcardQuestionmarkValues(Variable variable, bool aggregatedSingle, List<string> values, string wildcard)
+        private void AddWildcardQuestionmarkValues(Variable variable, List<string> values, string wildcard)
         {
             string regexPattern = string.Concat("^", Regex.Escape(wildcard).Replace("\\?", "."), "$");
             var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100))).Select(v => v.Code);
             foreach (var variableValue in variableValues)
             {
-                AddValue(variable, aggregatedSingle, values, variableValue);
+                AddValue(variable, values, variableValue);
             }
         }
 
@@ -706,7 +664,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The TOP selection expression string</param>
-        private void AddTopValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private void AddTopValues(Variable variable, List<string> values, string expression)
         {
             int count;
             int offset;
@@ -727,7 +685,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 if (i < codes.Length)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(variable, values, codes[i]);
                 }
             }
         }
@@ -739,7 +697,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The BOTTOM selection expression string</param>
-        private void AddBottomValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private void AddBottomValues(Variable variable, List<string> values, string expression)
         {
             int count;
             int offset;
@@ -765,7 +723,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     if (i >= 0)
                     {
-                        AddValue(variable, aggregatedSingle, values, codes[i]);
+                        AddValue(variable, values, codes[i]);
                     }
                 }
             }
@@ -778,7 +736,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The RANGE selection expression string</param>
-        private void AddRangeValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private void AddRangeValues(Variable variable, List<string> values, string expression)
         {
             string code1 = "";
             string code2 = "";
@@ -811,7 +769,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = index1; i <= index2; i++)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(variable, values, codes[i]);
                 }
             }
         }
@@ -823,7 +781,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The FROM selection expression string</param>
-        private void AddFromValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private void AddFromValues(Variable variable, List<string> values, string expression)
         {
             string code = "";
 
@@ -845,7 +803,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = index1; i < codes.Length; i++)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(variable, values, codes[i]);
                 }
             }
         }
@@ -857,7 +815,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The TO selection expression string</param>
-        private void AddToValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private void AddToValues(Variable variable, List<string> values, string expression)
         {
             string code = "";
 
@@ -879,7 +837,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = 0; i <= index; i++)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(variable, values, codes[i]);
                 }
             }
         }
