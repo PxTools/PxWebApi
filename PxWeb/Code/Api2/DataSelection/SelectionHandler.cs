@@ -58,7 +58,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
 
                 //Map VariablesSelection to PCaxis.Paxiom.Selection[]
-                selections = MapCustomizedSelection(builder, builder.Model, variablesSelection).ToArray();
+                selections = MapCustomizedSelection(builder.Model, variablesSelection).ToArray();
             }
             else
             {
@@ -500,14 +500,14 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="variablesSelection"></param>
         /// <returns></returns>
-        private Selection[] MapCustomizedSelection(IPXModelBuilder builder, PXModel model, VariablesSelection variablesSelection)
+        private Selection[] MapCustomizedSelection(PXModel model, VariablesSelection variablesSelection)
         {
             var selections = new List<Selection>();
 
             foreach (var varSelection in variablesSelection.Selection)
             {
                 var variable = model.Meta.Variables.GetByCode(varSelection.VariableCode);
-                selections.Add(GetSelection(builder, variable, varSelection));
+                selections.Add(GetSelection(variable, varSelection));
             }
 
             return selections.ToArray();
@@ -519,7 +519,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variable">Paxiom variable</param>
         /// <param name="varSelection">VariableSelection object with wanted values from user</param>
         /// <returns></returns>
-        private Selection GetSelection(IPXModelBuilder builder, Variable variable, VariableSelection varSelection)
+        private Selection GetSelection(Variable variable, VariableSelection varSelection)
         {
             var selection = new Selection(varSelection.VariableCode);
             var values = new List<string>();
@@ -556,7 +556,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else
                 {
-                    AddValue(variable, values, value);
+                    AddValue(values, value);
                 }
             }
 
@@ -567,7 +567,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return selection;
         }
 
-        private void AddValue(Variable variable, List<string> values, string value)
+        private static void AddValue(List<string> values, string value)
         {
             if (!values.Contains(value))
             {
@@ -611,7 +611,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
             else if (wildcard.StartsWith("*") && wildcard.EndsWith("*"))
@@ -619,7 +619,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.Contains(wildcard.Substring(1, wildcard.Length - 2), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
             else if (wildcard.StartsWith("*"))
@@ -627,7 +627,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.EndsWith(wildcard.Substring(1), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
             else if (wildcard.EndsWith("*"))
@@ -635,7 +635,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.StartsWith(wildcard.Substring(0, wildcard.Length - 1), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
         }
@@ -653,7 +653,7 @@ namespace PxWeb.Code.Api2.DataSelection
             var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100))).Select(v => v.Code);
             foreach (var variableValue in variableValues)
             {
-                AddValue(variable, values, variableValue);
+                AddValue(values, variableValue);
             }
         }
 
@@ -685,7 +685,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 if (i < codes.Length)
                 {
-                    AddValue(variable, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -723,7 +723,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     if (i >= 0)
                     {
-                        AddValue(variable, values, codes[i]);
+                        AddValue(values, codes[i]);
                     }
                 }
             }
@@ -769,7 +769,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = index1; i <= index2; i++)
                 {
-                    AddValue(variable, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -803,7 +803,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = index1; i < codes.Length; i++)
                 {
-                    AddValue(variable, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -837,7 +837,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = 0; i <= index; i++)
                 {
-                    AddValue(variable, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
