@@ -260,7 +260,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variablesSelection">VariablesSelection with the wanted variables and values</param>
         /// <param name="problem">Will be null if everything is ok, oterwise it will describe the problem</param>
         /// <returns></returns>
-        private bool VerifyVariableValues(PXModel model, VariablesSelection variablesSelection, out Problem? problem)
+        private static bool VerifyVariableValues(PXModel model, VariablesSelection variablesSelection, out Problem? problem)
         {
             problem = null;
 
