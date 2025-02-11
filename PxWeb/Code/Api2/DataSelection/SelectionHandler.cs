@@ -52,7 +52,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             Selection[]? selections;
 
-            if (!UseDefaultSelection(variablesSelection))
+            if (!ParameterUtil.UseDefaultSelection(variablesSelection))
             {
                 //Add variables that the user did not post
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
@@ -94,7 +94,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             problem = null;
 
-            if (!UseDefaultSelection(variablesSelection) && variablesSelection is not null)
+            if (!ParameterUtil.UseDefaultSelection(variablesSelection) && variablesSelection is not null)
             {
                 //Verify that variable exists
                 foreach (var variable in variablesSelection.Selection)
@@ -1062,17 +1062,6 @@ namespace PxWeb.Code.Api2.DataSelection
             return codes;
         }
 
-        private bool HasSelection(VariablesSelection selection)
-        {
-            if (selection.Selection.Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
 
         /// <summary>
         /// Verifies that at least one valid value has been selected for mandatory variables
@@ -1126,12 +1115,6 @@ namespace PxWeb.Code.Api2.DataSelection
             }
 
             return cells;
-        }
-
-
-        public bool UseDefaultSelection(VariablesSelection? variablesSelection)
-        {
-            return variablesSelection is null || !HasSelection(variablesSelection);
         }
 
         /// <summary>

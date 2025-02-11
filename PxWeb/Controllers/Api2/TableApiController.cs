@@ -27,7 +27,6 @@ using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
 using PxWeb.Code.Api2.Serialization;
-using PxWeb.Converters;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
 
@@ -180,7 +179,6 @@ namespace PxWeb.Controllers.Api2
             [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist,
             [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
-            //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(OutputFormatParamsModelBinder))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading,
             [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
@@ -193,7 +191,6 @@ namespace PxWeb.Controllers.Api2
             [FromRoute(Name = "id"), Required] string id,
             [FromQuery(Name = "lang")] string? lang,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
-            //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams,
             [FromBody] VariablesSelection? variablesSelection)
         {
@@ -210,7 +207,7 @@ namespace PxWeb.Controllers.Api2
             string outputFormatStr;
             List<string> outputFormatParamsStr;
 
-            (outputFormatStr, outputFormatParamsStr) = TranslateOutputParamters(outputFormat, outputFormatParams, out paramError);
+            (outputFormatStr, outputFormatParamsStr) = ParameterUtil.TranslateOutputParamters(outputFormat, _configOptions.DefaultOutputFormat, outputFormatParams, out paramError);
 
             if (paramError)
             {
@@ -229,7 +226,7 @@ namespace PxWeb.Controllers.Api2
             //bool IsDefaultSelection = false;
             VariablePlacementType? placment = null;
 
-            if (_selectionHandler.UseDefaultSelection(variablesSelection))
+            if (ParameterUtil.UseDefaultSelection(variablesSelection))
             {
                 List<string> heading, stub;
                 (selection, heading, stub) = _selectionHandler.GetDefaultSelection(builder, out problem);
@@ -290,46 +287,7 @@ namespace PxWeb.Controllers.Api2
             return Ok();
         }
 
-        private (string, List<string>) TranslateOutputParamters(OutputFormatType? outputFormat, List<OutputFormatParamType>? outputFormatParams, out bool paramError)
-        {
-            paramError = false;
-            string format;
-            List<string> formatParams;
-            try
-            {
-                if (outputFormat is not null)
-                {
-                    format = EnumConverter.ToEnumString(outputFormat.Value);
-                }
-                else
-                {
-                    format = _configOptions.DefaultOutputFormat;
-                }
 
-                if (outputFormatParams is not null)
-                {
-                    formatParams = outputFormatParams.Select(p => EnumConverter.ToEnumString(p)).ToList();
-                }
-                else
-                {
-                    formatParams = new List<string>();
-                }
-
-                if (!format.Equals("CSV", StringComparison.OrdinalIgnoreCase))
-                {
-                    //Check if there is a invalid parameter
-                    paramError = (formatParams.Select(p => p.StartsWith("separator", StringComparison.OrdinalIgnoreCase)).ToList().Count > 0);
-                }
-
-            }
-            catch (ArgumentException)
-            {
-                paramError = true;
-                format = "";
-                formatParams = new List<string>();
-            }
-            return (format, formatParams);
-        }
 
 
         /// <summary>
