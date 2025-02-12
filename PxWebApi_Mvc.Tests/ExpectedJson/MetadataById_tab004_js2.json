@@ -79,8 +79,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     },
     "GREENHOUSEGAS": {
@@ -121,8 +120,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     },
     "ContentsCode": {
@@ -144,8 +142,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     },
     "TIME": {
@@ -215,8 +212,7 @@
       "extension": {
         "elimination": false,
         "show": "code",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     }
   },
