@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Net;
-using System.Numerics;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
@@ -59,29 +58,36 @@ namespace PxWeb.Middleware
 
         public static bool IsInRange(string ipAddress, string cidr)
         {
-            var parts = cidr.Split('/');
-            var baseAddress = IPAddress.Parse(parts[0]);
-            var address = IPAddress.Parse(ipAddress);
-            int bits = int.Parse(parts[1]);
+            string[] parts = cidr.Split('/');
+            if (parts.Length != 2) return false;
 
-            if (baseAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+            IPAddress? networkAddress;
+            if (!IPAddress.TryParse(parts[0], out networkAddress)) return false;
+            if (!int.TryParse(parts[1], out int prefixLength)) return false;
+
+            IPAddress? ip;
+            if (!IPAddress.TryParse(ipAddress, out ip)) return false;
+
+            if (networkAddress.AddressFamily != ip.AddressFamily) return false;
+
+            byte[] ipBytes = ip.GetAddressBytes();
+            byte[] networkBytes = networkAddress.GetAddressBytes();
+
+            int fullBytes = prefixLength / 8;
+            int remainingBits = prefixLength % 8;
+
+            for (int i = 0; i < fullBytes; i++)
             {
-                uint mask = ~(uint.MaxValue >> bits);
-                uint baseAddressInt = BitConverter.ToUInt32(baseAddress.GetAddressBytes(), 0);
-                uint addressInt = BitConverter.ToUInt32(address.GetAddressBytes(), 0);
-                return (baseAddressInt & mask) == (addressInt & mask);
+                if (ipBytes[i] != networkBytes[i]) return false;
             }
-            else if (baseAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+
+            if (remainingBits > 0)
             {
-                BigInteger mask = BigInteger.One << (128 - bits) - 1;
-                BigInteger baseAddressInt = new BigInteger(baseAddress.GetAddressBytes());
-                BigInteger addressInt = new BigInteger(address.GetAddressBytes());
-                return (baseAddressInt & mask) == (addressInt & mask);
+                int mask = (byte)(0xFF << (8 - remainingBits));
+                if ((ipBytes[fullBytes] & mask) != (networkBytes[fullBytes] & mask)) return false;
             }
-            else
-            {
-                throw new ArgumentException("Invalid address family");
-            }
+
+            return true;
         }
     }
 
