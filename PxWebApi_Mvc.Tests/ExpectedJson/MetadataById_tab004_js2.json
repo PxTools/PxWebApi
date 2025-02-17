@@ -79,8 +79,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     },
     "GREENHOUSEGAS": {
@@ -121,8 +120,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     },
     "ContentsCode": {
@@ -144,8 +142,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     },
     "TIME": {
@@ -215,8 +212,7 @@
       "extension": {
         "elimination": false,
         "show": "code",
-        "codeLists": [],
-        "timeUnit": 0
+        "codeLists": []
       }
     }
   },
@@ -231,12 +227,12 @@
       "contents": "Total air emissions",
       "descriptiondefault": false,
       "heading": [
-        "contents",
-        "year"
+        "ContentsCode",
+        "TIME"
       ],
       "stub": [
-        "sector",
-        "greenhouse gas"
+        "SECTOR",
+        "GREENHOUSEGAS"
       ],
       "matrix": "TAB004",
       "subject-code": "EN",

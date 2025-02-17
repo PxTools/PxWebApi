@@ -168,14 +168,13 @@ namespace PxWeb.Controllers.Api2
             [FromRoute(Name = "id"), Required] string id,
             [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes,
             [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist,
-            [FromQuery(Name = "outputvalues")] Dictionary<string, CodeListOutputValuesType>? outputvalues,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
             //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(OutputFormatParamsModelBinder))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading,
             [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
         {
-            VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, outputvalues, heading, stub);
+            VariablesSelection variablesSelection = MapDataParameters(valuecodes, codelist, heading, stub);
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<OutputFormatParamType>() : outputFormatParams);
         }
 
@@ -331,7 +330,7 @@ namespace PxWeb.Controllers.Api2
         /// <param name="heading"></param>
         /// <param name="stub"></param> 
         /// <returns></returns>
-        private VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, Dictionary<string, CodeListOutputValuesType>? outputvalues, List<string>? heading, List<string>? stub)
+        private VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, List<string>? heading, List<string>? stub)
         {
             VariablesSelection selections = new VariablesSelection();
             if (valuecodes != null)
@@ -345,10 +344,6 @@ namespace PxWeb.Controllers.Api2
                     if (codelist != null && codelist.ContainsKey(variableCode))
                     {
                         variableSelection.CodeList = codelist[variableCode];
-                    }
-                    if (outputvalues != null && outputvalues.ContainsKey(variableCode))
-                    {
-                        variableSelection.OutputValues = outputvalues[variableCode];
                     }
                     selections.Selection.Add(variableSelection);
                 }
