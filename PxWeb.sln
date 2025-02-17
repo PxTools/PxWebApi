@@ -17,10 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWebApi.BigTests", "PxWebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWebApi_Mvc.Tests", "PxWebApi_Mvc.Tests\PxWebApi_Mvc.Tests.csproj", "{DE680238-98E9-4FCE-9D55-9B849F893238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxWeb.Api2.Server", "..\PxApiSpecs\src\PxWeb.Api2.Server\PxWeb.Api2.Server.csproj", "{61E4C57E-F23D-49CF-B403-C0D9DAFD998A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PxWeb.Api2.Server.Models", "..\PxApiSpecs\src\PxWeb.Api2.Server.Models\PxWeb.Api2.Server.Models.csproj", "{38C649DE-D7BF-4512-9400-E207802B9670}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,14 +51,6 @@ Global
 		{DE680238-98E9-4FCE-9D55-9B849F893238}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE680238-98E9-4FCE-9D55-9B849F893238}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE680238-98E9-4FCE-9D55-9B849F893238}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61E4C57E-F23D-49CF-B403-C0D9DAFD998A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61E4C57E-F23D-49CF-B403-C0D9DAFD998A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61E4C57E-F23D-49CF-B403-C0D9DAFD998A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61E4C57E-F23D-49CF-B403-C0D9DAFD998A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{38C649DE-D7BF-4512-9400-E207802B9670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{38C649DE-D7BF-4512-9400-E207802B9670}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{38C649DE-D7BF-4512-9400-E207802B9670}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{38C649DE-D7BF-4512-9400-E207802B9670}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
