@@ -86,7 +86,7 @@ namespace PxWeb.UnitTests.Admin
         [TestMethod]
         public void IPv4LoopbackOutsideOfRange_ReturnsFalse()
         {
-            Assert.IsTrue(!AdminProtectionIpWhitelistMiddleware.IsInRange("127.0.0.1", "127.0.0.2/32"));
+            Assert.IsFalse(AdminProtectionIpWhitelistMiddleware.IsInRange("127.0.0.1", "127.0.0.2/32"));
         }
     }
 }
