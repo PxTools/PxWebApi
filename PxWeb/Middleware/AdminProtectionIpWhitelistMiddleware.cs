@@ -32,7 +32,7 @@ namespace PxWeb.Middleware
 
             foreach (string ipw in _ipWhitelist)
             {
-                if (ipw.Contains("/"))
+                if (ipw.Contains('/'))
                 {
                     // CIDR
                     match = _ipWhitelist.Any(cidr => IsInRange(ipadr, ipw));
