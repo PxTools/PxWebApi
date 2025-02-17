@@ -1,6 +1,6 @@
 ﻿using PxWeb.Middleware;
 
-namespace PxWeb.UnitTests
+namespace PxWeb.UnitTests.Admin
 {
     [TestClass]
     public class IPRangeTests
