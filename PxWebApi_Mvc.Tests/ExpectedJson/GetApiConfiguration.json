@@ -1,6 +1,6 @@
 {
-  "apiVersion": "2.0",
-  "appVersion": "1.0.0",
+  "apiVersion": "2.0.0-beta.12",
+  "appVersion": "17.12.0",
   "languages": [
     {
       "id": "en",
@@ -26,17 +26,8 @@
       "text": "Källa: SCB"
     }
   ],
-  "defaultMetadataFormat": 0,
   "defaultDataFormat": "px",
-  "dataFormats": [
-    "json-stat2",
-    "csv",
-    "px",
-    "xlsx",
-    "html",
-    "json-px",
-    "parquet"
-  ],
+  "dataFormats": [ "json-stat2", "csv", "px", "xlsx", "html", "json-px", "parquet" ],
   "features": [
     {
       "id": "CORS",

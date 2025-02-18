@@ -58,7 +58,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 variablesSelection = AddVariables(variablesSelection, builder.Model);
 
                 //Map VariablesSelection to PCaxis.Paxiom.Selection[]
-                selections = MapCustomizedSelection(builder, builder.Model, variablesSelection).ToArray();
+                selections = MapCustomizedSelection(builder.Model, variablesSelection).ToArray();
             }
             else
             {
@@ -157,7 +157,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return true;
         }
 
-        private bool ApplyCodelist(IPXModelBuilder builder, Variable pxVariable, VariableSelection variable, out Problem? problem)
+        private static bool ApplyCodelist(IPXModelBuilder builder, Variable pxVariable, VariableSelection variable, out Problem? problem)
         {
             problem = null;
 
@@ -187,7 +187,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return true;
         }
 
-        private bool ApplyGrouping(IPXModelBuilder builder, Variable pxVariable, VariableSelection variable, out Problem? problem)
+        private static bool ApplyGrouping(IPXModelBuilder builder, Variable pxVariable, VariableSelection variable, out Problem? problem)
         {
             problem = null;
 
@@ -221,7 +221,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return true;
         }
 
-        private bool ApplyValueset(IPXModelBuilder builder, Variable pxVariable, VariableSelection variable, out Problem? problem)
+        private static bool ApplyValueset(IPXModelBuilder builder, Variable pxVariable, VariableSelection variable, out Problem? problem)
         {
             problem = null;
 
@@ -260,7 +260,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variablesSelection">VariablesSelection with the wanted variables and values</param>
         /// <param name="problem">Will be null if everything is ok, oterwise it will describe the problem</param>
         /// <returns></returns>
-        private bool VerifyVariableValues(PXModel model, VariablesSelection variablesSelection, out Problem? problem)
+        private static bool VerifyVariableValues(PXModel model, VariablesSelection variablesSelection, out Problem? problem)
         {
             problem = null;
 
@@ -323,7 +323,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The selection expression to verify</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifySelectionExpression(string expression)
+        private static bool VerifySelectionExpression(string expression)
         {
             if (expression.Contains('*'))
             {
@@ -362,7 +362,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The wildcard selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyWildcardStarExpression(string expression)
+        private static bool VerifyWildcardStarExpression(string expression)
         {
             if (expression.Equals("*"))
             {
@@ -397,7 +397,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The wildcard selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyWildcardQuestionmarkExpression(string expression)
+        private static bool VerifyWildcardQuestionmarkExpression(string expression)
         {
             // What could be wrong?
             return true;
@@ -408,7 +408,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The TOP selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyTopExpression(string expression)
+        private static bool VerifyTopExpression(string expression)
         {
             return Regex.IsMatch(expression, REGEX_TOP, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
@@ -418,7 +418,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The BOTTOM selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyBottomExpression(string expression)
+        private static bool VerifyBottomExpression(string expression)
         {
             return Regex.IsMatch(expression, REGEX_BOTTOM, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
@@ -428,7 +428,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The RANGE selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyRangeExpression(string expression)
+        private static bool VerifyRangeExpression(string expression)
         {
             return Regex.IsMatch(expression, REGEX_RANGE, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
@@ -438,7 +438,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The FROM selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyFromExpression(string expression)
+        private static bool VerifyFromExpression(string expression)
         {
             return Regex.IsMatch(expression, REGEX_FROM, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
@@ -448,7 +448,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="expression">The TO selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        private bool VerifyToExpression(string expression)
+        private static bool VerifyToExpression(string expression)
         {
             return Regex.IsMatch(expression, REGEX_TO, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
@@ -458,7 +458,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private bool IsSelectionExpression(string value)
+        private static bool IsSelectionExpression(string value)
         {
             return value.Contains('*') ||
                    value.Contains('?') ||
@@ -475,7 +475,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variablesSelection"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        private VariablesSelection AddVariables(VariablesSelection variablesSelection, PXModel model)
+        private static VariablesSelection AddVariables(VariablesSelection variablesSelection, PXModel model)
         {
             foreach (var variable in model.Meta.Variables)
             {
@@ -500,14 +500,14 @@ namespace PxWeb.Code.Api2.DataSelection
         /// </summary>
         /// <param name="variablesSelection"></param>
         /// <returns></returns>
-        private Selection[] MapCustomizedSelection(IPXModelBuilder builder, PXModel model, VariablesSelection variablesSelection)
+        private static Selection[] MapCustomizedSelection(PXModel model, VariablesSelection variablesSelection)
         {
             var selections = new List<Selection>();
 
             foreach (var varSelection in variablesSelection.Selection)
             {
                 var variable = model.Meta.Variables.GetByCode(varSelection.VariableCode);
-                selections.Add(GetSelection(builder, variable, varSelection));
+                selections.Add(GetSelection(variable, varSelection));
             }
 
             return selections.ToArray();
@@ -519,103 +519,61 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variable">Paxiom variable</param>
         /// <param name="varSelection">VariableSelection object with wanted values from user</param>
         /// <returns></returns>
-        private Selection GetSelection(IPXModelBuilder builder, Variable variable, VariableSelection varSelection)
+        private static Selection GetSelection(Variable variable, VariableSelection varSelection)
         {
             var selection = new Selection(varSelection.VariableCode);
             var values = new List<string>();
-            bool aggregatedSingle = false;
-
-            if (variable.CurrentGrouping is not null && varSelection.OutputValues == CodeListOutputValuesType.SingleEnum)
-            {
-                // Single values from aggregation groups shall be added
-                aggregatedSingle = true;
-            }
 
             foreach (var value in varSelection.ValueCodes)
             {
                 if (value.Contains('*'))
                 {
-                    AddWildcardStarValues(variable, aggregatedSingle, values, value);
+                    AddWildcardStarValues(variable, values, value);
                 }
                 else if (value.Contains('?'))
                 {
-                    AddWildcardQuestionmarkValues(variable, aggregatedSingle, values, value);
+                    AddWildcardQuestionmarkValues(variable, values, value);
                 }
                 else if (value.StartsWith("TOP(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddTopValues(variable, aggregatedSingle, values, value);
+                    AddTopValues(variable, values, value);
                 }
                 else if (value.StartsWith("BOTTOM(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddBottomValues(variable, aggregatedSingle, values, value);
+                    AddBottomValues(variable, values, value);
                 }
                 else if (value.StartsWith("RANGE(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddRangeValues(variable, aggregatedSingle, values, value);
+                    AddRangeValues(variable, values, value);
                 }
                 else if (value.StartsWith("FROM(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddFromValues(variable, aggregatedSingle, values, value);
+                    AddFromValues(variable, values, value);
                 }
                 else if (value.StartsWith("TO(", System.StringComparison.InvariantCultureIgnoreCase))
                 {
-                    AddToValues(variable, aggregatedSingle, values, value);
+                    AddToValues(variable, values, value);
                 }
                 else
                 {
-                    AddValue(variable, aggregatedSingle, values, value);
+                    AddValue(values, value);
                 }
             }
 
-            if (!aggregatedSingle)
-            {
-                var sortedValues = SortValues(variable, values);
-                selection.ValueCodes.AddRange(sortedValues.ToArray());
-            }
-            else
-            {
-                selection.ValueCodes.AddRange(values.ToArray());
-            }
 
-            if (aggregatedSingle)
-            {
-                // Need to restore original values before trying to get data
-                ValueSetInfo vsInfo = new ValueSetInfo();
-                vsInfo.ID = "_ALL_";
-                builder.ApplyValueSet(selection.VariableCode, vsInfo);
-            }
+            var sortedValues = SortValues(variable, values);
+            selection.ValueCodes.AddRange(sortedValues.ToArray());
 
             return selection;
         }
 
-        private void AddValue(Variable variable, bool aggregatedSingle, List<string> values, string value)
+        private static void AddValue(List<string> values, string value)
         {
-            if (!aggregatedSingle)
+            if (!values.Contains(value))
             {
-                if (!values.Contains(value))
-                {
-                    values.Add(value);
-                }
+                values.Add(value);
             }
-            else
-            {
-                if (variable.CurrentGrouping is not null)
-                {
-                    PCAxis.Paxiom.Group? group = variable.CurrentGrouping.Groups.FirstOrDefault(x => x.GroupCode == value);
 
-                    if (group is not null)
-                    {
-                        foreach (var child in group.ChildCodes)
-                        {
-                            if (!values.Contains(child.Code))
-                            {
-                                values.Add(child.Code);
-                            }
-                        }
-                    }
-                }
-
-            }
         }
 
         /// <summary>
@@ -624,7 +582,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variable">The Paxiom variable</param>
         /// <param name="values">Unsorted list of selected values</param>
         /// <returns>Sorted list of selected values</returns>
-        private List<string> SortValues(Variable variable, List<string> values)
+        private static List<string> SortValues(Variable variable, List<string> values)
         {
             var sortedValues = new List<string>();
 
@@ -645,7 +603,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="wildcard">The wildcard string</param>
-        private void AddWildcardStarValues(Variable variable, bool aggregatedSingle, List<string> values, string wildcard)
+        private static void AddWildcardStarValues(Variable variable, List<string> values, string wildcard)
         {
             if (wildcard.Equals("*"))
             {
@@ -653,7 +611,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
             else if (wildcard.StartsWith("*") && wildcard.EndsWith("*"))
@@ -661,7 +619,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.Contains(wildcard.Substring(1, wildcard.Length - 2), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
             else if (wildcard.StartsWith("*"))
@@ -669,7 +627,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.EndsWith(wildcard.Substring(1), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
             else if (wildcard.EndsWith("*"))
@@ -677,7 +635,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var variableValues = variable.Values.Where(v => v.Code.StartsWith(wildcard.Substring(0, wildcard.Length - 1), StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 foreach (var variableValue in variableValues)
                 {
-                    AddValue(variable, aggregatedSingle, values, variableValue);
+                    AddValue(values, variableValue);
                 }
             }
         }
@@ -689,13 +647,13 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="wildcard">The wildcard string</param>
-        private void AddWildcardQuestionmarkValues(Variable variable, bool aggregatedSingle, List<string> values, string wildcard)
+        private static void AddWildcardQuestionmarkValues(Variable variable, List<string> values, string wildcard)
         {
             string regexPattern = string.Concat("^", Regex.Escape(wildcard).Replace("\\?", "."), "$");
             var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100))).Select(v => v.Code);
             foreach (var variableValue in variableValues)
             {
-                AddValue(variable, aggregatedSingle, values, variableValue);
+                AddValue(values, variableValue);
             }
         }
 
@@ -706,7 +664,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The TOP selection expression string</param>
-        private void AddTopValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private static void AddTopValues(Variable variable, List<string> values, string expression)
         {
             int count;
             int offset;
@@ -727,7 +685,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 if (i < codes.Length)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -739,7 +697,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The BOTTOM selection expression string</param>
-        private void AddBottomValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private static void AddBottomValues(Variable variable, List<string> values, string expression)
         {
             int count;
             int offset;
@@ -765,7 +723,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     if (i >= 0)
                     {
-                        AddValue(variable, aggregatedSingle, values, codes[i]);
+                        AddValue(values, codes[i]);
                     }
                 }
             }
@@ -778,7 +736,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The RANGE selection expression string</param>
-        private void AddRangeValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private static void AddRangeValues(Variable variable, List<string> values, string expression)
         {
             string code1 = "";
             string code2 = "";
@@ -811,7 +769,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = index1; i <= index2; i++)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -823,7 +781,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The FROM selection expression string</param>
-        private void AddFromValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private static void AddFromValues(Variable variable, List<string> values, string expression)
         {
             string code = "";
 
@@ -845,7 +803,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = index1; i < codes.Length; i++)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -857,7 +815,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="aggregatedSingle">Indicates if single values from aggregation groups shall be added</param>
         /// <param name="values">List that the values shall be added to</param>
         /// <param name="expression">The TO selection expression string</param>
-        private void AddToValues(Variable variable, bool aggregatedSingle, List<string> values, string expression)
+        private static void AddToValues(Variable variable, List<string> values, string expression)
         {
             string code = "";
 
@@ -879,7 +837,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 for (int i = 0; i <= index; i++)
                 {
-                    AddValue(variable, aggregatedSingle, values, codes[i]);
+                    AddValue(values, codes[i]);
                 }
             }
         }
@@ -891,7 +849,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="count">Set to the count value if it could be extracted, else 0</param>
         /// <param name="offset">Set to the offset value if it could be extracted, else 0</param>
         /// <returns>True if values could be extracted, false if something went wrong</returns>
-        private bool GetCountAndOffset(string expression, out int count, out int offset)
+        private static bool GetCountAndOffset(string expression, out int count, out int offset)
         {
             count = 0;
             offset = 0;
@@ -936,7 +894,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="code1">The firts code</param>
         /// <param name="code2">The second code</param>
         /// <returns>True if the codes could be extracted, false if something went wrong</returns>
-        private bool GetRangeCodes(string expression, out string code1, out string code2)
+        private static bool GetRangeCodes(string expression, out string code1, out string code2)
         {
             code1 = "";
             code2 = "";
@@ -976,7 +934,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="codes">Array of codes</param>
         /// <param name="code">Code to find index for</param>
         /// <returns>Index of the specified code within the codes array. If not found -1 is returned.</returns>
-        private int GetCodeIndex(string[] codes, string code)
+        private static int GetCodeIndex(string[] codes, string code)
         {
             // Try to get the value using the code specified by the API user
             int index = Array.IndexOf(codes, code);
@@ -1002,7 +960,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="expression">The Range selection expression to extract the code from</param>
         /// <param name="code">The code</param>
         /// <returns>True if teh code could be extracted, false if something went wrong</returns>
-        private bool GetSingleCode(string expression, out string code)
+        private static bool GetSingleCode(string expression, out string code)
         {
             code = "";
 
@@ -1026,13 +984,13 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
 
-        private List<Variable> GetAllMandatoryVariables(PXModel model)
+        private static List<Variable> GetAllMandatoryVariables(PXModel model)
         {
             var mandatoryVariables = model.Meta.Variables.Where(x => x.Elimination.Equals(false)).ToList();
             return mandatoryVariables;
         }
 
-        private bool Mandatory(PXModel model, VariableSelection variable)
+        private static bool Mandatory(PXModel model, VariableSelection variable)
         {
             bool mandatory = false;
             var mandatoryVariable = model.Meta.Variables.Where(x => x.Code.Equals(variable.VariableCode) && x.Elimination.Equals(false));
@@ -1069,7 +1027,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="builder">Paxiom model builder</param>
         /// <param name="selections">Selections made by the SelectionHandler</param>
         /// <returns>True if all mandatory variables have at least one selected value, else false</returns>
-        private bool VerifyMadeSelection(IPXModelBuilder builder, Selection[]? selections)
+        private static bool VerifyMadeSelection(IPXModelBuilder builder, Selection[]? selections)
         {
             if (selections is null)
             {
@@ -1102,7 +1060,7 @@ namespace PxWeb.Code.Api2.DataSelection
         }
 
 
-        private int CalculateCells(Selection[] selection)
+        private static int CalculateCells(Selection[] selection)
         {
             int cells = 1;
 

@@ -11,7 +11,7 @@ namespace PxWeb.Middleware
     public class CacheMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly string _cacheLock = "lock";
+        private readonly object _cacheLock = new();
         readonly CacheMiddlewareConfigurationOptions _configuration;
         private readonly TimeSpan _cacheTime;
 

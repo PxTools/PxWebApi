@@ -36,7 +36,7 @@ namespace PxWeb.Controllers.Api2
             throw new NotImplementedException();
         }
 
-        public override IActionResult RunSaveQuery([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat, [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams)
+        public override IActionResult RunSaveQuery([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat, [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams)
         {
             //TODO: Implement
             // 1. Get the SavedQuery from the database/file.
@@ -46,5 +46,6 @@ namespace PxWeb.Controllers.Api2
             // 5. Return the result
             throw new NotImplementedException();
         }
+
     }
 }
