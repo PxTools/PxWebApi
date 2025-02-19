@@ -188,6 +188,14 @@ namespace PxWeb.Controllers.Api2
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, OutputFormatType? outputFormat, List<OutputFormatParamType> outputFormatParams)
         {
+            //1. GetQuery()
+            //2. GetSelectionFromQuery()
+            //3. GetModelFromSelection()
+            //4. ApplyOperations()
+            //5. PivotModel()
+            //6. SerializeModel()
+
+
             Problem? problem = null;
 
             lang = _languageHelper.HandleLanguage(lang);
