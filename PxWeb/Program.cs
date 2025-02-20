@@ -83,7 +83,6 @@ namespace PxWeb
             builder.Services.AddTransient<ICacheMiddlewareConfigurationService, CacheMiddlewareConfigurationService>();
             builder.Services.AddTransient<ILanguageHelper, LanguageHelper>();
             builder.Services.AddTransient<IFolderResponseMapper, FolderResponseMapper>();
-            builder.Services.AddTransient<ITableMetadataResponseMapper, TableMetadataResponseMapper>();
             builder.Services.AddTransient<IDatasetMapper, DatasetMapper>();
             builder.Services.AddTransient<ITablesResponseMapper, TablesResponseMapper>();
             builder.Services.AddTransient<ITableResponseMapper, TableResponseMapper>();
@@ -92,6 +91,7 @@ namespace PxWeb
             builder.Services.AddTransient<ICodelistMapper, CodelistMapper>();
             builder.Services.AddTransient<ICodelistResponseMapper, CodelistResponseMapper>();
             builder.Services.AddTransient<ISelectionResponseMapper, SelectionResponseMapper>();
+            builder.Services.AddTransient<IDefaultSelectionAlgorithm, Bjarte3>();
 
             builder.Services.AddHostedService<LongRunningService>();
             builder.Services.AddSingleton<BackgroundWorkerQueue>();

@@ -27,7 +27,6 @@ using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
 using PxWeb.Code.Api2.Serialization;
-using PxWeb.Converters;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
 
@@ -41,7 +40,6 @@ namespace PxWeb.Controllers.Api2
     {
         private readonly IDataSource _dataSource;
         private readonly ILanguageHelper _languageHelper;
-        private readonly ITableMetadataResponseMapper _tableMetadataResponseMapper;
         private readonly IDatasetMapper _datasetMapper;
         private readonly ITablesResponseMapper _tablesResponseMapper;
         private readonly ITableResponseMapper _tableResponseMapper;
@@ -52,12 +50,12 @@ namespace PxWeb.Controllers.Api2
         private readonly ISelectionHandler _selectionHandler;
         private readonly IPlacementHandler _placementHandler;
         private readonly ISelectionResponseMapper _selectionResponseMapper;
+        private readonly IDefaultSelectionAlgorithm _defaultSelectionAlgorithm;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, ITableMetadataResponseMapper responseMapper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IPlacementHandler placementHandler)
+        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IPlacementHandler placementHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm)
         {
             _dataSource = dataSource;
             _languageHelper = languageHelper;
-            _tableMetadataResponseMapper = responseMapper;
             _datasetMapper = datasetMapper;
             _backend = backend;
             _configOptions = configOptions.Value;
@@ -68,9 +66,10 @@ namespace PxWeb.Controllers.Api2
             _selectionHandler = selectionHandler;
             _selectionResponseMapper = selectionResponseMapper;
             _placementHandler = placementHandler;
+            _defaultSelectionAlgorithm = defaultSelectionAlgorithm;
         }
 
-        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] MetadataOutputFormatType? outputFormat, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
+        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
         {
             lang = _languageHelper.HandleLanguage(lang);
             IPXModelBuilder? builder = _dataSource.CreateBuilder(id, lang);
@@ -87,22 +86,17 @@ namespace PxWeb.Controllers.Api2
                     if (defaultSelection is not null && defaultSelection == true)
                     {
                         //apply the default selection
-                        Problem? problem;
-                        var selectionx = _selectionHandler.GetDefaultSelection(builder, out problem);
+                        //Problem? problem;
+                        //var selectionx = _selectionHandler.GetDefaultSelection(builder, out problem);
+
+                        //TODO: Check if we have a saved query that should serv as default selection
+                        _defaultSelectionAlgorithm.GetDefaultSelection(builder);
                     }
 
 
-                    if (outputFormat != null && outputFormat == MetadataOutputFormatType.JsonStat2Enum)
-                    {
+                    Dataset ds = _datasetMapper.Map(model, id, lang);
+                    return new ObjectResult(ds);
 
-                        Dataset ds = _datasetMapper.Map(model, id, lang);
-                        return new ObjectResult(ds);
-                    }
-                    else
-                    {
-                        TableMetadataResponse tm = _tableMetadataResponseMapper.Map(model, id, lang);
-                        return new ObjectResult(tm);
-                    }
                 }
                 catch (Exception)
                 {
@@ -179,7 +173,6 @@ namespace PxWeb.Controllers.Api2
             [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes,
             [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
-            //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(OutputFormatParamsModelBinder))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "heading"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? heading,
             [FromQuery(Name = "stub"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<string>? stub)
@@ -192,7 +185,6 @@ namespace PxWeb.Controllers.Api2
             [FromRoute(Name = "id"), Required] string id,
             [FromQuery(Name = "lang")] string? lang,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
-            //[FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(CommaSeparatedStringToListOfStrings))] List<OutputFormatParamType>? outputFormatParams,
             [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams,
             [FromBody] VariablesSelection? variablesSelection)
         {
@@ -201,6 +193,14 @@ namespace PxWeb.Controllers.Api2
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, OutputFormatType? outputFormat, List<OutputFormatParamType> outputFormatParams)
         {
+            //1. GetQuery()
+            //2. GetSelectionFromQuery()
+            //3. GetModelFromSelection()
+            //4. ApplyOperations()
+            //5. PivotModel()
+            //6. SerializeModel()
+
+
             Problem? problem = null;
 
             lang = _languageHelper.HandleLanguage(lang);
@@ -209,7 +209,7 @@ namespace PxWeb.Controllers.Api2
             string outputFormatStr;
             List<string> outputFormatParamsStr;
 
-            (outputFormatStr, outputFormatParamsStr) = TranslateOutputParamters(outputFormat, outputFormatParams, out paramError);
+            (outputFormatStr, outputFormatParamsStr) = ParameterUtil.TranslateOutputParamters(outputFormat, _configOptions.DefaultOutputFormat, outputFormatParams, out paramError);
 
             if (paramError)
             {
@@ -228,13 +228,10 @@ namespace PxWeb.Controllers.Api2
             //bool IsDefaultSelection = false;
             VariablePlacementType? placment = null;
 
-            if (_selectionHandler.UseDefaultSelection(variablesSelection))
+            if (ParameterUtil.UseDefaultSelection(variablesSelection))
             {
-                List<string> heading, stub;
-                (selection, heading, stub) = _selectionHandler.GetDefaultSelection(builder, out problem);
-                placment = new VariablePlacementType() { Heading = heading, Stub = stub };
-
-                //IsDefaultSelection = true;
+                //TODO: Check if we have a saved query that should serv as default selection
+                variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
             }
             else
             {
@@ -289,46 +286,7 @@ namespace PxWeb.Controllers.Api2
             return Ok();
         }
 
-        private (string, List<string>) TranslateOutputParamters(OutputFormatType? outputFormat, List<OutputFormatParamType>? outputFormatParams, out bool paramError)
-        {
-            paramError = false;
-            string format;
-            List<string> formatParams;
-            try
-            {
-                if (outputFormat is not null)
-                {
-                    format = EnumConverter.ToEnumString(outputFormat.Value);
-                }
-                else
-                {
-                    format = _configOptions.DefaultOutputFormat;
-                }
 
-                if (outputFormatParams is not null)
-                {
-                    formatParams = outputFormatParams.Select(p => EnumConverter.ToEnumString(p)).ToList();
-                }
-                else
-                {
-                    formatParams = new List<string>();
-                }
-
-                if (!format.Equals("CSV", StringComparison.OrdinalIgnoreCase))
-                {
-                    //Check if there is a invalid parameter
-                    paramError = (formatParams.Select(p => p.StartsWith("separator", StringComparison.OrdinalIgnoreCase)).ToList().Count > 0);
-                }
-
-            }
-            catch (ArgumentException)
-            {
-                paramError = true;
-                format = "";
-                formatParams = new List<string>();
-            }
-            return (format, formatParams);
-        }
 
 
         /// <summary>
@@ -370,7 +328,7 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
-            Problem? problem;
+            //Problem? problem;
 
             lang = _languageHelper.HandleLanguage(lang);
 
@@ -384,15 +342,16 @@ namespace PxWeb.Controllers.Api2
 
             //No variable selection is provided, so we will return the default selection
 
-            var (selection, heading, stub) = _selectionHandler.GetDefaultSelection(builder, out problem);
+            var selection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
 
-            if (problem is not null || selection is null)
-            {
-                return BadRequest(problem);
-            }
+            //if (problem is not null || selection is null)
+            //{
+            //    return BadRequest(problem);
+            //}
 
             //Map selection to SelectionResponse
-            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, heading, stub, builder.Model.Meta, id, lang);
+            //TODO: Fix this
+            SelectionResponse selectionResponse = new SelectionResponse(); //= _selectionResponseMapper.Map(selection, heading, stub, builder.Model.Meta, id, lang);
             return Ok(selectionResponse);
         }
 

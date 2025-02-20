@@ -47,29 +47,12 @@ namespace PxWebApi_Mvc.Tests
         }
 
         [TestMethod]
-        public async Task GetMetadataById_tab004()
-        {
-            await using var application = new WebApplicationFactory<Program>();
-            using var client = application.CreateClient();
-
-            var response = await client.GetAsync("/tables/tab004/metadata?lang=en");
-
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
-
-            string rawActual = await response.Content.ReadAsStringAsync();
-            string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab004.json"));
-
-            Util.AssertJson(rawExpected, rawActual, ["updated"]);
-
-        }
-
-        [TestMethod]
         public async Task GetMetadataById_tab004_js2()
         {
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            var response = await client.GetAsync("/tables/tab004/metadata?lang=en&outputFormat=json-stat2");
+            var response = await client.GetAsync("/tables/tab004/metadata?lang=en");
 
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
 
