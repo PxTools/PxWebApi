@@ -18,21 +18,21 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
                 SelectionUtil.AddValues(selection, variableValues);
 
             }
-            else if (expression.StartsWith("*") && expression.EndsWith("*"))
+            else if (expression.StartsWith('*') && expression.EndsWith('*'))
             {
                 // *xyz*
                 var matchExpression = expression.Substring(1, expression.Length - 2);
                 var variableValues = variable.Values.Where(v => v.Code.Contains(matchExpression, StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 SelectionUtil.AddValues(selection, variableValues);
             }
-            else if (expression.StartsWith("*"))
+            else if (expression.StartsWith('*'))
             {
                 // *xyz
                 var matchExpression = expression.Substring(1);
                 var variableValues = variable.Values.Where(v => v.Code.EndsWith(matchExpression, StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 SelectionUtil.AddValues(selection, variableValues);
             }
-            else if (expression.EndsWith("*"))
+            else if (expression.EndsWith('*'))
             {
                 // xyz*
                 var matchExpression = expression.Substring(0, expression.Length - 1);

@@ -22,8 +22,8 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
         }
         public void AddToSelection(Variable variable, VariableSelection selection, string expression)
         {
-            string code1 = "";
-            string code2 = "";
+            string code1;
+            string code2;
 
             if (!GetRangeCodes(expression, out code1, out code2))
             {
