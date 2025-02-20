@@ -2,6 +2,8 @@
 
 using PCAxis.Paxiom;
 
+using PxWeb.Api2.Server.Models;
+
 namespace PxWeb.Helper.Api2
 {
     public class SelectionUtil
@@ -50,6 +52,14 @@ namespace PxWeb.Helper.Api2
             var codes = lstCodes.ToArray();
 
             return codes;
+        }
+
+        public static VariablesSelection CreateEmptyVariablesSelection()
+        {
+            var selections = new VariablesSelection();
+            selections.Selection = new List<VariableSelection>();
+            selections.Placement = new VariablePlacementType() { Heading = new List<string>(), Stub = new List<string>() };
+            return selections;
         }
 
     }

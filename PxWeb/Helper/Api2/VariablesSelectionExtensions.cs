@@ -9,6 +9,7 @@ namespace PxWeb.Helper.Api2
         public static void AddStubVariable(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 1500)
         {
             var selection = new VariableSelection();
+            selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
             selection.CodeList = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
@@ -19,6 +20,7 @@ namespace PxWeb.Helper.Api2
         public static void AddHeadingVariable(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 11)
         {
             var selection = new VariableSelection();
+            selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
             selection.CodeList = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
@@ -29,6 +31,7 @@ namespace PxWeb.Helper.Api2
         public static void AddVariableToHeading(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction)
         {
             var selection = new VariableSelection();
+            selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
             selection.CodeList = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, 1));
@@ -39,6 +42,7 @@ namespace PxWeb.Helper.Api2
         public static void EliminateVariable(this VariablesSelection selections, Variable variable)
         {
             var selection = new VariableSelection();
+            selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
             selection.CodeList = GetCodeList(variable);
             selections.Selection.Add(selection);

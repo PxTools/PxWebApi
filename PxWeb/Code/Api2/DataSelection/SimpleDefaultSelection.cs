@@ -13,8 +13,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             var meta = builder.Model.Meta;
 
-            var selections = new VariablesSelection();
-            selections.Placement = new VariablePlacementType();
+            var selections = SelectionUtil.CreateEmptyVariablesSelection();
 
             //Only one variable put it in the placmentStub
             if (meta.Variables.Count == 1)

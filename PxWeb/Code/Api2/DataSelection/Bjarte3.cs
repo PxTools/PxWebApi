@@ -11,7 +11,6 @@ namespace PxWeb.Code.Api2.DataSelection
     {
         public VariablesSelection GetDefaultSelection(IPXModelBuilder builder)
         {
-            //TODO look for saved query 
             var meta = builder.Model.Meta;
             // Default groupings and value sets are applied in the SQL parser by default
             // Only apply first valueset if no grouping or valueset is applied and multiple valuesets exists
@@ -78,8 +77,9 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns></returns>
         private static VariablesSelection OnlyContentsAndTime(Variable contents, Variable time)
         {
-            var selections = new VariablesSelection();
-            selections.Placement = new VariablePlacementType();
+            var selections = SelectionUtil.CreateEmptyVariablesSelection();
+            selections.Selection = new List<VariableSelection>();
+            selections.Placement = new VariablePlacementType() { Heading = new List<string>(), Stub = new List<string>() };
 
             if (contents.Values.Count < 6)
             {
@@ -105,8 +105,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <exception cref="Exception"></exception>
         private static VariablesSelection WithThreeDimensions(Variable contents, Variable time, Variable variable)
         {
-            var selections = new VariablesSelection();
-            selections.Placement = new VariablePlacementType();
+            var selections = SelectionUtil.CreateEmptyVariablesSelection();
 
             if (contents.Values.Count == 1)
             {
@@ -165,8 +164,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns></returns>
         private static VariablesSelection WithContentsAndTimeAndMoreThenOneMandatoryClassificationVariables(Variable contents, Variable time, List<Variable> mandatoryClassificationVariables, List<Variable> noneMandatoryClassificationVariables)
         {
-            var selections = new VariablesSelection();
-            selections.Placement = new VariablePlacementType();
+            var selections = SelectionUtil.CreateEmptyVariablesSelection();
 
             //First content and lastNoneMandantoryClassificationVariable time period
             selections.AddVariableToHeading(contents, SelectionUtil.GetCodes);
@@ -203,8 +201,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns></returns>
         private static VariablesSelection WithContentsAndTimeAndOneMandatoryClassificationVariables(Variable contents, Variable time, List<Variable> mandatoryClassificationVariables, List<Variable> noneMandatoryClassificationVariables)
         {
-            var selections = new VariablesSelection();
-            selections.Placement = new VariablePlacementType();
+            var selections = SelectionUtil.CreateEmptyVariablesSelection();
 
             //First content and lastNoneMandantoryClassificationVariable time period
             selections.AddVariableToHeading(contents, SelectionUtil.GetCodes);
@@ -237,8 +234,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <returns></returns>
         private static VariablesSelection WithContentsAndTimeAndNoMandatoryClassificationVariables(Variable contents, Variable time, List<Variable> classificationVariables, List<Variable> noneMandatoryClassificationVariables)
         {
-            var selections = new VariablesSelection();
-            selections.Placement = new VariablePlacementType();
+            var selections = SelectionUtil.CreateEmptyVariablesSelection();
 
             //First content and lastNoneMandantoryClassificationVariable time period
             selections.AddVariableToHeading(contents, SelectionUtil.GetCodes);
