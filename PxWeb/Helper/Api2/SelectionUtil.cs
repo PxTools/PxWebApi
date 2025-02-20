@@ -62,6 +62,26 @@ namespace PxWeb.Helper.Api2
             return selections;
         }
 
+        public static void AddValue(VariableSelection selection, string valueCode)
+        {
+            if (!selection.ValueCodes.Contains(valueCode))
+            {
+                selection.ValueCodes.Add(valueCode);
+            }
+
+        }
+
+        public static void AddValues(VariableSelection selection, IEnumerable<string> valueCodes)
+        {
+            foreach (var valueCode in valueCodes)
+            {
+                if (!selection.ValueCodes.Contains(valueCode))
+                {
+                    selection.ValueCodes.Add(valueCode);
+                }
+            }
+        }
+
     }
 
 
