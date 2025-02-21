@@ -6,6 +6,7 @@ using Lucene.Net.Util;
 using PCAxis.Paxiom;
 
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code.Api2.DataSelection.SelectionExpressions;
 using PxWeb.Helper.Api2;
 
 namespace PxWeb.Code.Api2.DataSelection
@@ -13,6 +14,194 @@ namespace PxWeb.Code.Api2.DataSelection
     public class SelectionHandler : ISelectionHandler
     {
         private readonly PxApiConfigurationOptions _configOptions;
+
+
+        public Selection[]? Convert(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
+        {
+
+            //1. -Apply codelists and verify that the variables and values are valid-
+            //2. -Add variables that the user did not post-
+            //3. Resolve selection expressions
+            //4. Convert VariablesSelection to Selection[]
+            //5. Verify that valid selections could be made for mandatory variables and that the number of cells are within the limit
+
+
+            if (!FixVariableRefsAndApplyCodelists(builder, variablesSelection, out problem))
+            {
+                return null;
+            }
+
+            if (!VerifyMandatoryVariables(builder.Model, variablesSelection, out problem))
+            {
+                return null;
+            }
+
+            //Add variables that the user did not post
+            variablesSelection = AddVariables(variablesSelection, builder.Model);
+
+
+            ResolveSelectionExpressions(builder, variablesSelection, out problem);
+
+
+
+
+            Selection[]? selections;
+            //Map VariablesSelection to PCaxis.Paxiom.Selection[]
+            selections = MapCustomizedSelection(builder.Model, variablesSelection).ToArray();
+
+
+
+            //Verify that valid selections could be made for mandatory variables
+            if (!VerifyMadeSelection(builder, selections))
+            {
+                problem = ProblemUtility.IllegalSelection();
+                return null;
+            }
+
+            if (!CheckNumberOfCells(selections))
+            {
+                selections = null;
+                problem = ProblemUtility.TooManyCellsSelected();
+            }
+
+            return selections;
+
+        }
+
+        private static bool VerifyMandatoryVariables(PXModel model, VariablesSelection variablesSelection, out Problem? problem)
+        {
+            problem = null;
+            foreach (var mandatoryVariable in GetAllMandatoryVariables(model))
+            {
+                if (!variablesSelection.Selection.Any(x => x.VariableCode.Equals(mandatoryVariable.Code, System.StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    problem = ProblemUtility.MissingSelection();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool ResolveSelectionExpressions(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
+        {
+            var model = builder.Model;
+            problem = null;
+
+            foreach (var variable in variablesSelection.Selection)
+            {
+                //Verify that variables have at least one value selected for mandatory varibles
+                var mandatory = Mandatory(model, variable);
+                if (variable.ValueCodes.Count() == 0 && mandatory)
+                {
+                    //TODO: Return mantatory value error
+                    problem = ProblemUtility.NonExistentValue();
+                    return false;
+                }
+
+                //Check variable values if they exists in model.Metadata
+                if (variable.ValueCodes.Count() != 0)
+                {
+                    var modelVariable = model.Meta.Variables.GetByCode(variable.VariableCode);
+
+                    for (int i = 0; i < variable.ValueCodes.Count; i++)
+                    {
+                        // Try to get the value using the code specified by the API user
+                        PCAxis.Paxiom.Value? pxValue = pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(variable.ValueCodes[i], System.StringComparison.InvariantCultureIgnoreCase));
+
+                        if (pxValue is null)
+                        {
+                            for (int j = 0; j < ExpressionUtil.SelectionExpressions.Count; j++)
+                            {
+                                if (ExpressionUtil.SelectionExpressions[j].CanHandle(variable.ValueCodes[i]))
+                                {
+                                    if (!ExpressionUtil.SelectionExpressions[j].Verfiy(variable.ValueCodes[i]))
+                                    {
+                                        problem = ProblemUtility.IllegalSelectionExpression();
+                                        return false;
+                                    }
+
+                                    ExpressionUtil.SelectionExpressions[j].AddToSelection(modelVariable, variable, variable.ValueCodes[i]);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            variable.ValueCodes[i] = pxValue.Code;
+                        }
+                    }
+                }
+            }
+
+            return true;
+
+        }
+
+        /// <summary>
+        /// Verify that VariablesSelection object has valid variables and values. Also applies codelists.
+        /// </summary>
+        /// <param name="builder">Paxiom model builder</param>
+        /// <param name="variablesSelection">The VariablesSelection object to verify and apply codelists for</param>
+        /// <param name="problem">Null if everything is ok, otherwise it describes whats wrong</param>
+        /// <returns>True if everything was ok, else false</returns>
+        private static bool FixVariableRefsAndApplyCodelists(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
+        {
+            problem = null;
+
+            //Verify that variable exists
+            foreach (var variable in variablesSelection.Selection)
+            {
+                //Check if time is used as identifier for the time variable in variable selection
+                //If the time variable is named differently in the metadata, change to it
+                ReplaceTimeAlias(builder, variable);
+                // Try to get variable using the code specified by the API user
+                var pxVariable = FindAndCurrectVariableCode(builder, variable);
+
+                if (pxVariable is null)
+                {
+                    problem = ProblemUtility.NonExistentVariable();
+                    return false;
+                }
+
+                if (!ApplyCodelist(builder, pxVariable, variable, out problem))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static Variable? FindAndCurrectVariableCode(IPXModelBuilder builder, VariableSelection variable)
+        {
+            Variable? pxVariable = builder.Model.Meta.Variables.GetByCode(variable.VariableCode);
+
+            if (pxVariable is null)
+            {
+                // Is it a case sensitivity problem?
+                pxVariable = builder.Model.Meta.Variables.FirstOrDefault(x => x.Code.Equals(variable.VariableCode, System.StringComparison.InvariantCultureIgnoreCase));
+
+                if (pxVariable is not null)
+                {
+                    // Use the correct variable code for making the selection
+                    variable.VariableCode = pxVariable.Code;
+                }
+            }
+            return pxVariable;
+        }
+
+        private static void ReplaceTimeAlias(IPXModelBuilder builder, VariableSelection variable)
+        {
+            if (variable.VariableCode.ToLower().Equals("time"))
+            {
+                Variable? pxVariableTime = builder.Model.Meta.Variables.FirstOrDefault(x => x.IsTime);
+
+                if (pxVariableTime is not null && (variable.VariableCode.ToLower() != pxVariableTime.Code.ToLower()))
+                {
+                    variable.VariableCode = pxVariableTime.Code.ToLower();
+                }
+            }
+        }
+
 
         // Regular expressions for selection expression validation
 

@@ -1,9 +1,23 @@
-﻿using PCAxis.Paxiom;
+﻿using J2N.Collections.ObjectModel;
+
+using PCAxis.Paxiom;
 
 namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 {
     public static class ExpressionUtil
     {
+
+        public readonly static ReadOnlyList<ISelectionExpression> SelectionExpressions = new ReadOnlyList<ISelectionExpression>(new List<ISelectionExpression>
+        {
+            new RangeExpression(),
+            new TopExpression(),
+            new BottomExpression(),
+            new FromExpression(),
+            new ToExpression(),
+            new QuestionmarkExpression(),
+            new WildcardExpression()
+        });
+
         /// <summary>
         /// Extracts the count and offset from selection expressions like TOP(count), TOP(count,offset), BOTTOM(count), BOTTOM(count,offset)
         /// </summary>
