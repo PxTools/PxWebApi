@@ -54,6 +54,10 @@ namespace PxWeb.Helper.Api2
             return codes;
         }
 
+        /// <summary>
+        /// Create an empty VariablesSelection
+        /// </summary>
+        /// <returns>An empty variable selection with misc </returns>
         public static VariablesSelection CreateEmptyVariablesSelection()
         {
             var selections = new VariablesSelection();
@@ -62,6 +66,11 @@ namespace PxWeb.Helper.Api2
             return selections;
         }
 
+        /// <summary>
+        /// Adds a value to a variable selection. Only adds the value if it is not already in the selection
+        /// </summary>
+        /// <param name="selection">The selection where to add the value</param>
+        /// <param name="valueCode">Value codes to add</param>
         public static void AddValue(VariableSelection selection, string valueCode)
         {
             if (!selection.ValueCodes.Contains(valueCode))
@@ -71,6 +80,11 @@ namespace PxWeb.Helper.Api2
 
         }
 
+        /// <summary>
+        /// Add values to a variable selection. Only adds values that are not already in the selection
+        /// </summary>
+        /// <param name="selection">The selection where to add the values</param>
+        /// <param name="valueCodes">Value codes to add</param>
         public static void AddValues(VariableSelection selection, IEnumerable<string> valueCodes)
         {
             foreach (var valueCode in valueCodes)
@@ -82,6 +96,23 @@ namespace PxWeb.Helper.Api2
             }
         }
 
+        /// <summary>
+        /// Check if a variable is mandatory
+        /// </summary>
+        /// <param name="model">The model containing the information about variables</param>
+        /// <param name="variable">The variable to check if it is mandatory</param>
+        /// <returns></returns>
+        public static bool IsMandatory(PXModel model, VariableSelection variable)
+        {
+            bool mandatory = false;
+            var mandatoryVariable = model.Meta.Variables.Where(x => x.Code.Equals(variable.VariableCode) && x.Elimination.Equals(false));
+
+            if (mandatoryVariable.Count() != 0)
+            {
+                mandatory = true;
+            }
+            return mandatory;
+        }
     }
 
 
