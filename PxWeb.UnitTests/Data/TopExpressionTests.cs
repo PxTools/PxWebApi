@@ -230,7 +230,7 @@ namespace PxWeb.UnitTests.Data
             selection.ValueCodes.Add("Code_0_clsv_A");
 
             //Act
-            expression.AddToSelection(variable, selection, "bottom(10)", out problem);
+            expression.AddToSelection(variable, selection, "TOP(10)", out problem);
 
             // Assert
             Assert.AreEqual(5, selection.ValueCodes.Count);

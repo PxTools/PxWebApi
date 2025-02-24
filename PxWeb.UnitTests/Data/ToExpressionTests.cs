@@ -3,13 +3,13 @@
 namespace PxWeb.UnitTests.Data
 {
     [TestClass]
-    public class FromExpressionTests
+    public class ToExpressionTests
     {
         [TestMethod]
         public void NotAFromExpression_CanHandle_ReturnFalse()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
 
             // Act
             var canHandle = expression.CanHandle("TOP(10)");
@@ -22,10 +22,10 @@ namespace PxWeb.UnitTests.Data
         public void MixedCase_CanHandle_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
 
             // Act
-            var canHandle = expression.CanHandle("fRom(10)");
+            var canHandle = expression.CanHandle("tO(10)");
 
             // Assert
             Assert.IsTrue(canHandle);
@@ -35,11 +35,11 @@ namespace PxWeb.UnitTests.Data
         public void MixedCases_Verify_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
 
             // Assert
-            Assert.IsTrue(expression.Verfiy("fROm(10)", out problem));
+            Assert.IsTrue(expression.Verfiy("tO(10)", out problem));
             Assert.IsNull(problem);
         }
 
@@ -47,11 +47,11 @@ namespace PxWeb.UnitTests.Data
         public void UpperCases_Verify_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
 
             // Assert
-            Assert.IsTrue(expression.Verfiy("FROM(10)", out problem));
+            Assert.IsTrue(expression.Verfiy("TO(10)", out problem));
             Assert.IsNull(problem);
         }
 
@@ -59,11 +59,11 @@ namespace PxWeb.UnitTests.Data
         public void LowerCases_Verify_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
 
             // Assert
-            Assert.IsTrue(expression.Verfiy("from(10)", out problem));
+            Assert.IsTrue(expression.Verfiy("to(10)", out problem));
             Assert.IsNull(problem);
         }
 
@@ -71,11 +71,11 @@ namespace PxWeb.UnitTests.Data
         public void MissingParameter_Verify_ReturnFalse()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
 
             // Assert
-            Assert.IsFalse(expression.Verfiy("FROM()", out problem));
+            Assert.IsFalse(expression.Verfiy("TO()", out problem));
             Assert.IsNotNull(problem);
         }
 
@@ -84,11 +84,11 @@ namespace PxWeb.UnitTests.Data
         public void SourroundingText_Verify_ReturnFalse()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
 
             // Assert
-            Assert.IsFalse(expression.Verfiy("FROM(2010),a", out problem));
+            Assert.IsFalse(expression.Verfiy("TO(2010),a", out problem));
             Assert.IsNotNull(problem);
         }
 
@@ -97,14 +97,14 @@ namespace PxWeb.UnitTests.Data
         public void AddNonExistingValue_AddToSelection_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
 
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 20, true);
             var selection = new VariableSelection();
 
             //Act
-            expression.AddToSelection(variable, selection, "FROM(THIS-CODE-DOSE-NOT-EXIST)", out problem);
+            expression.AddToSelection(variable, selection, "TO(THIS-CODE-DOSE-NOT-EXIST)", out problem);
 
             // Assert
             Assert.IsNotNull(problem);
@@ -114,16 +114,16 @@ namespace PxWeb.UnitTests.Data
         public void AddFiveValues_AddToSelection_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 10, true);
             var selection = new VariableSelection();
 
             //Act
-            expression.AddToSelection(variable, selection, "FROM(Code_5_clsv_A)", out problem);
+            expression.AddToSelection(variable, selection, "TO(Code_5_clsv_A)", out problem);
 
             // Assert
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.AreEqual(6, selection.ValueCodes.Count);
             Assert.IsNull(problem);
         }
 
@@ -132,19 +132,19 @@ namespace PxWeb.UnitTests.Data
         public void ValueAreReadyInlist_AddToSelection_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 10, true);
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
-            selection.ValueCodes.Add("Code_6_clsv_A");
+            selection.ValueCodes.Add("Code_2_clsv_A");
 
 
             //Act
-            expression.AddToSelection(variable, selection, "FROM(Code_5_clsv_A)", out problem);
+            expression.AddToSelection(variable, selection, "TO(Code_5_clsv_A)", out problem);
 
             // Assert
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.AreEqual(6, selection.ValueCodes.Count);
             Assert.IsNull(problem);
         }
 
@@ -152,17 +152,17 @@ namespace PxWeb.UnitTests.Data
         public void TimeValue_AddToSelection_ReturnTrue()
         {
             // Arrange
-            var expression = new FromExpression();
+            var expression = new ToExpression();
             Problem? problem;
             var variable = ModelStore.CreateTimeVariable("Tid", PlacementType.Stub, 10, 1990);
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
 
             //Act
-            expression.AddToSelection(variable, selection, "FROM(1995)", out problem);
+            expression.AddToSelection(variable, selection, "TO(1995)", out problem);
 
             // Assert
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.AreEqual(6, selection.ValueCodes.Count);
             Assert.IsNull(problem);
         }
     }
