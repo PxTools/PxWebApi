@@ -87,6 +87,11 @@ namespace PxWeb.Helper.Api2
         /// <param name="valueCodes">Value codes to add</param>
         public static void AddValues(VariableSelection selection, IEnumerable<string> valueCodes)
         {
+            if (selection.ValueCodes is null)
+            {
+                selection.ValueCodes = new List<string>();
+            }
+
             foreach (var valueCode in valueCodes)
             {
                 if (!selection.ValueCodes.Contains(valueCode))
