@@ -16,57 +16,67 @@ namespace PxWeb.Code.Api2.DataSelection
         private readonly PxApiConfigurationOptions _configOptions;
 
 
-        public Selection[]? Convert(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
+        public bool ExpandAndVerfiySelections(VariablesSelection variablesSelection, IPXModelBuilder builder, out Problem? problem)
         {
-
-            //1. -Apply codelists and verify that the variables and values are valid-
-            //2. -Add variables that the user did not post-
-            //3. Resolve selection expressions
-            //4. Convert VariablesSelection to Selection[]
-            //5. Verify that valid selections could be made for mandatory variables and that the number of cells are within the limit
-
-
             if (!FixVariableRefsAndApplyCodelists(builder, variablesSelection, out problem))
             {
-                return null;
+                return false;
             }
 
             if (!VerifyMandatoryVariables(builder.Model, variablesSelection, out problem))
             {
-                return null;
+                return false;
             }
 
             //Add variables that the user did not post
             variablesSelection = AddVariables(variablesSelection, builder.Model);
 
 
-            ResolveSelectionExpressions(builder, variablesSelection, out problem);
-
-
-
-
-            Selection[]? selections;
-            //Map VariablesSelection to PCaxis.Paxiom.Selection[]
-            selections = MapCustomizedSelection(builder.Model, variablesSelection).ToArray();
-
-
-
-            //Verify that valid selections could be made for mandatory variables
-            if (!VerifyMadeSelection(builder, selections))
+            if (!ExpandSelectionExpressionsAndVerifyValues(builder, variablesSelection, out problem))
             {
-                problem = ProblemUtility.IllegalSelection();
-                return null;
+                return false;
             }
 
-            if (!CheckNumberOfCells(selections))
+
+            if (!CheckNumberOfCells(variablesSelection, _configOptions.MaxDataCells))
             {
-                selections = null;
                 problem = ProblemUtility.TooManyCellsSelected();
+                return false;
             }
 
-            return selections;
-
+            return true;
         }
+
+        public Selection[] Convert(VariablesSelection variablesSelection)
+        {
+            var selections = new List<Selection>();
+
+            foreach (var varSelection in variablesSelection.Selection)
+            {
+                var selection = new Selection(varSelection.VariableCode);
+                selection.ValueCodes.AddRange(varSelection.ValueCodes.ToArray());
+                selections.Add(selection);
+            }
+
+            return selections.ToArray();
+        }
+
+        private static bool CheckNumberOfCells(VariablesSelection selections, int threshold)
+        {
+            int cells = 1;
+
+            //Calculate number of cells
+            foreach (var s in selections.Selection)
+            {
+                if (s.ValueCodes.Count > 0)
+                {
+                    cells *= s.ValueCodes.Count;
+                }
+            }
+
+            return cells <= threshold;
+        }
+
 
         private static bool VerifyMandatoryVariables(PXModel model, VariablesSelection variablesSelection, out Problem? problem)
         {
@@ -82,58 +92,65 @@ namespace PxWeb.Code.Api2.DataSelection
             return true;
         }
 
-        private bool ResolveSelectionExpressions(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
+        private bool ExpandSelectionExpressionsAndVerifyValues(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
         {
             var model = builder.Model;
             problem = null;
 
             foreach (var variable in variablesSelection.Selection)
             {
-                //Verify that variables have at least one value selected for mandatory varibles
-                var mandatory = Mandatory(model, variable);
-                if (variable.ValueCodes.Count() == 0 && mandatory)
+
+                var modelVariable = model.Meta.Variables.GetByCode(variable.VariableCode);
+
+                for (int i = 0; i < variable.ValueCodes.Count; i++)
                 {
-                    //TODO: Return mantatory value error
-                    problem = ProblemUtility.NonExistentValue();
-                    return false;
+                    var valueCode = variable.ValueCodes[i];
+                    // Try to get the value using the code specified by the API user
+                    PCAxis.Paxiom.Value? pxValue = pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase));
+
+                    if (pxValue is null)
+                    {
+                        return ExpandSelectionExpression(variable, modelVariable, valueCode, out problem);
+                    }
+                    else
+                    {
+                        variable.ValueCodes[i] = pxValue.Code;
+                    }
                 }
 
-                //Check variable values if they exists in model.Metadata
-                if (variable.ValueCodes.Count() != 0)
+                //Verify that variables have at least one value selected for mandatory varibles
+                var mandatory = IsMandatory(model, variable);
+                if (variable.ValueCodes.Count() == 0 && mandatory)
                 {
-                    var modelVariable = model.Meta.Variables.GetByCode(variable.VariableCode);
-
-                    for (int i = 0; i < variable.ValueCodes.Count; i++)
-                    {
-                        // Try to get the value using the code specified by the API user
-                        PCAxis.Paxiom.Value? pxValue = pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(variable.ValueCodes[i], System.StringComparison.InvariantCultureIgnoreCase));
-
-                        if (pxValue is null)
-                        {
-                            for (int j = 0; j < ExpressionUtil.SelectionExpressions.Count; j++)
-                            {
-                                if (ExpressionUtil.SelectionExpressions[j].CanHandle(variable.ValueCodes[i]))
-                                {
-                                    if (!ExpressionUtil.SelectionExpressions[j].Verfiy(variable.ValueCodes[i]))
-                                    {
-                                        problem = ProblemUtility.IllegalSelectionExpression();
-                                        return false;
-                                    }
-
-                                    ExpressionUtil.SelectionExpressions[j].AddToSelection(modelVariable, variable, variable.ValueCodes[i]);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            variable.ValueCodes[i] = pxValue.Code;
-                        }
-                    }
+                    problem = ProblemUtility.NonExistentValue();
+                    return false;
                 }
             }
 
             return true;
+        }
 
+        private static bool ExpandSelectionExpression(VariableSelection variable, Variable modelVariable, string valueCode, out Problem? problem)
+        {
+            for (int j = 0; j < ExpressionUtil.SelectionExpressions.Count; j++)
+            {
+                if (ExpressionUtil.SelectionExpressions[j].CanHandle(valueCode))
+                {
+                    if (!ExpressionUtil.SelectionExpressions[j].Verfiy(valueCode, out problem))
+                    {
+                        problem = ProblemUtility.IllegalSelectionExpression();
+                        return false;
+                    }
+
+                    if (!ExpressionUtil.SelectionExpressions[j].AddToSelection(modelVariable, variable, valueCode, out problem))
+                    {
+                        problem = ProblemUtility.NonExistentValue();
+                        return false;
+                    }
+                }
+            }
+            problem = null;
+            return true;
         }
 
         /// <summary>
@@ -455,7 +472,7 @@ namespace PxWeb.Code.Api2.DataSelection
             foreach (var variable in variablesSelection.Selection)
             {
                 //Verify that variables have at least one value selected for mandatory varibles
-                var mandatory = Mandatory(model, variable);
+                var mandatory = IsMandatory(model, variable);
                 if (variable.ValueCodes.Count().Equals(0) && mandatory)
                 {
                     problem = ProblemUtility.NonExistentValue();
@@ -1178,7 +1195,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return mandatoryVariables;
         }
 
-        private static bool Mandatory(PXModel model, VariableSelection variable)
+        private static bool IsMandatory(PXModel model, VariableSelection variable)
         {
             bool mandatory = false;
             var mandatoryVariable = model.Meta.Variables.Where(x => x.Code.Equals(variable.VariableCode) && x.Elimination.Equals(false));

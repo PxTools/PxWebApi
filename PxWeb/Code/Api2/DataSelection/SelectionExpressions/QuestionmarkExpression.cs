@@ -10,11 +10,13 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 {
     public class QuestionmarkExpression : ISelectionExpression
     {
-        public void AddToSelection(Variable variable, VariableSelection selection, string expression)
+        public bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem)
         {
             string regexPattern = string.Concat("^", Regex.Escape(expression).Replace("\\?", "."), "$");
             var variableValues = variable.Values.Where(v => Regex.IsMatch(v.Code, regexPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100))).Select(v => v.Code);
             SelectionUtil.AddValues(selection, variableValues);
+            problem = null;
+            return true;
         }
 
         public bool CanHandle(string expression)
@@ -22,9 +24,16 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
             return expression.Contains('?');
         }
 
-        public bool Verfiy(string expression)
+        public bool Verfiy(string expression, out Problem? problem)
         {
-            return expression.Contains('?');
+            if (expression.Contains('?'))
+            {
+                problem = null;
+                return true;
+            }
+
+            problem = ProblemUtility.IllegalSelectionExpression();
+            return false;
         }
     }
 }

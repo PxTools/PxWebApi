@@ -9,8 +9,9 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 {
     public class WildcardExpression : ISelectionExpression
     {
-        public void AddToSelection(Variable variable, VariableSelection selection, string expression)
+        public bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem)
         {
+            problem = null;
             if (expression.Equals("*"))
             {
                 // Select all values
@@ -39,6 +40,7 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
                 var variableValues = variable.Values.Where(v => v.Code.StartsWith(matchExpression, StringComparison.InvariantCultureIgnoreCase)).Select(v => v.Code);
                 SelectionUtil.AddValues(selection, variableValues);
             }
+            return true;
         }
 
         public bool CanHandle(string expression)
@@ -51,8 +53,10 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
         /// </summary>
         /// <param name="expression">The expression selection expression to validate</param>
         /// <returns>True if the expression is valid, else false</returns>
-        public bool Verfiy(string expression)
+        public bool Verfiy(string expression, out Problem? problem)
         {
+            problem = null;
+
             if (expression.Equals("*"))
             {
                 return true;
@@ -63,18 +67,21 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
             if (count > 2)
             {
                 // More than 2 * is not allowed
+                problem = ProblemUtility.IllegalSelectionExpression();
                 return false;
             }
 
             if ((count == 1) && !(expression.StartsWith('*') || expression.EndsWith('*')))
             {
                 // * must be in the beginning or end of the value
+                problem = ProblemUtility.IllegalSelectionExpression();
                 return false;
             }
 
             if ((count == 2) && !(expression.StartsWith('*') && expression.EndsWith('*')))
             {
                 // The * must be in the beginning and the end of the value
+                problem = ProblemUtility.IllegalSelectionExpression();
                 return false;
             }
 

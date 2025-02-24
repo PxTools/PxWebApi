@@ -6,6 +6,8 @@ namespace PxWeb.Code.Api2.DataSelection
 {
     public interface ISelectionHandler
     {
-        public Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem);
+        //Selection[]? GetSelection(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem);
+        bool ExpandAndVerfiySelections(VariablesSelection variablesSelection, IPXModelBuilder builder, out Problem? problem);
+        Selection[] Convert(VariablesSelection variablesSelection);
     }
 }

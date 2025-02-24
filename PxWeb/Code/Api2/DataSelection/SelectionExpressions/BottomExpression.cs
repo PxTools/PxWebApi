@@ -13,14 +13,16 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
         // BOTTOM(xxx), BOTTOM(xxx,yyy), bottom(xxx) and bottom(xxx,yyy)
         private static readonly string REGEX_BOTTOM = "^(BOTTOM\\([1-9]\\d*\\)|BOTTOM\\([1-9]\\d*,[0-9]\\d*\\))$";
 
-        public void AddToSelection(Variable variable, VariableSelection selection, string expression)
+        public bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem)
         {
             int count;
             int offset = 0;
+            problem = null;
 
             if (!ExpressionUtil.GetCountAndOffset(expression, out count, out offset))
             {
-                return; // Something went wrong
+                problem = ProblemUtility.IllegalSelectionExpression();
+                return false;
             }
 
             var codes = variable.Values.Select(value => value.Code).ToArray();
@@ -36,6 +38,8 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
                 var variableValues = variable.Values.Select(v => v.Code).Reverse().Skip(offset).Take(count).Reverse();
                 SelectionUtil.AddValues(selection, variableValues);
             }
+
+            return true;
         }
 
         public bool CanHandle(string expression)
@@ -43,9 +47,16 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
             return expression.StartsWith("BOTTOM(", System.StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public bool Verfiy(string expression)
+        public bool Verfiy(string expression, out Problem? problem)
         {
-            return Regex.IsMatch(expression, REGEX_BOTTOM, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
+            if (Regex.IsMatch(expression, REGEX_BOTTOM, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100)))
+            {
+                problem = null;
+                return true;
+            }
+
+            problem = ProblemUtility.IllegalSelectionExpression();
+            return false;
         }
     }
 }

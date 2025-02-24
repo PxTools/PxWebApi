@@ -7,7 +7,7 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
     public interface ISelectionExpression
     {
         bool CanHandle(string expression);
-        bool Verfiy(string expression);
-        void AddToSelection(Variable variable, VariableSelection selection, string expression);
+        bool Verfiy(string expression, out Problem? problem);
+        bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem);
     }
 }

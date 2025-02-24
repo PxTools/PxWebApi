@@ -13,13 +13,14 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
         // TO(xxx) and to(xxx)
         private static readonly string REGEX_TO = "^(TO\\(([^,]+)\\d*\\))$";
 
-        public void AddToSelection(Variable variable, VariableSelection selection, string expression)
+        public bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem)
         {
             string code;
-
+            problem = null;
             if (!ExpressionUtil.GetSingleCode(expression, out code))
             {
-                return; // Something went wrong
+                problem = ProblemUtility.IllegalSelectionExpression();
+                return false;
             }
 
 
@@ -27,11 +28,14 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 
             if (index1 == -1)
             {
-                return; //TODO: Something went wrong no matching value
+                problem = ProblemUtility.IllegalSelectionExpression();
+                return false;
             }
 
             var variableValues = variable.Values.Take(index1 + 1).Select(v => v.Code);
             SelectionUtil.AddValues(selection, variableValues);
+
+            return true;
         }
 
         public bool CanHandle(string expression)
@@ -39,9 +43,15 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
             return expression.StartsWith("TO(", System.StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public bool Verfiy(string expression)
+        public bool Verfiy(string expression, out Problem? problem)
         {
-            return Regex.IsMatch(expression, REGEX_TO, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
+            if (Regex.IsMatch(expression, REGEX_TO, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100)))
+            {
+                problem = null;
+                return true;
+            }
+            problem = ProblemUtility.IllegalSelectionExpression();
+            return false;
         }
     }
 }

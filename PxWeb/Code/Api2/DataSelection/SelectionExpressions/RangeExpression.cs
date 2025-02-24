@@ -16,18 +16,25 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
         {
             return expression.StartsWith("RANGE(", System.StringComparison.InvariantCultureIgnoreCase);
         }
-        public bool Verfiy(string expression)
+        public bool Verfiy(string expression, out Problem? problem)
         {
-            return Regex.IsMatch(expression, REGEX_RANGE, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
+            if (Regex.IsMatch(expression, REGEX_RANGE, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100)))
+            {
+                problem = null;
+                return true;
+            }
+            problem = null;
+            return false;
         }
-        public void AddToSelection(Variable variable, VariableSelection selection, string expression)
+        public bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem)
         {
             string code1;
             string code2;
 
             if (!GetRangeCodes(expression, out code1, out code2))
             {
-                return; //TODO: Something went wrong
+                problem = ProblemUtility.IllegalSelectionExpression();
+                return false;
             }
 
             int index1 = ExpressionUtil.GetCodeIndex(variable, code1);
@@ -36,8 +43,8 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 
             if (index1 == -1 || index2 == -1)
             {
-                //TODO: Something went wrong no matching value
-                return;
+                problem = ProblemUtility.IllegalSelectionExpression();
+                return false;
             }
 
             if (index1 > index2)
@@ -53,7 +60,8 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
             {
                 SelectionUtil.AddValue(selection, variable.Values[i].Code);
             }
-
+            problem = null;
+            return true;
         }
 
         /// <summary>

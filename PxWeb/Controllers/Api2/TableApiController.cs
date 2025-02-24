@@ -233,20 +233,24 @@ namespace PxWeb.Controllers.Api2
                 //TODO: Check if we have a saved query that should serv as default selection
                 variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
             }
-            else
-            {
-                if (variablesSelection is not null)
-                {
-                    selection = _selectionHandler.GetSelection(builder, variablesSelection, out problem);
 
-                    if (problem is null && selection is not null)
-                    {
-                        //Check if we should pivot the table
-                        placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
-                        //GetPlacment(variablesSelection, selection, builder, out problem);
-                    }
+            if (variablesSelection is not null)
+            {
+                if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
+                {
+                    return BadRequest(problem);
+                }
+
+                selection = _selectionHandler.Convert(variablesSelection);
+
+                if (selection is not null)
+                {
+                    //Check if we should pivot the table
+                    placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
+                    //GetPlacment(variablesSelection, selection, builder, out problem);
                 }
             }
+
 
             if (problem is not null)
             {
@@ -343,15 +347,14 @@ namespace PxWeb.Controllers.Api2
             //No variable selection is provided, so we will return the default selection
 
             var selection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+            if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+            {
+                return BadRequest(problem);
+            }
 
-            //if (problem is not null || selection is null)
-            //{
-            //    return BadRequest(problem);
-            //}
 
             //Map selection to SelectionResponse
-            //TODO: Fix this
-            SelectionResponse selectionResponse = new SelectionResponse(); //= _selectionResponseMapper.Map(selection, heading, stub, builder.Model.Meta, id, lang);
+            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, id, lang);
             return Ok(selectionResponse);
         }
 
