@@ -9,7 +9,7 @@ namespace PxWeb.UnitTests.Data
         public void NotABottomExpression_CanHandle_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
 
             // Act
             var canHandle = expression.CanHandle("TOP(10)");
@@ -22,7 +22,7 @@ namespace PxWeb.UnitTests.Data
         public void MixedCase_CanHandle_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
 
             // Act
             var canHandle = expression.CanHandle("boTTom(10)");
@@ -35,8 +35,9 @@ namespace PxWeb.UnitTests.Data
         public void MixedCases_Verify_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsTrue(expression.Verfiy("boTTom(10)", out problem));
             Assert.IsNull(problem);
@@ -46,8 +47,9 @@ namespace PxWeb.UnitTests.Data
         public void UpperCases_Verify_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsTrue(expression.Verfiy("BOTTOM(10)", out problem));
             Assert.IsNull(problem);
@@ -57,8 +59,9 @@ namespace PxWeb.UnitTests.Data
         public void LowerCases_Verify_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsTrue(expression.Verfiy("bottom(10)", out problem));
             Assert.IsNull(problem);
@@ -68,8 +71,9 @@ namespace PxWeb.UnitTests.Data
         public void MissingParameter_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsFalse(expression.Verfiy("bottom()", out problem));
             Assert.IsNotNull(problem);
@@ -79,8 +83,9 @@ namespace PxWeb.UnitTests.Data
         public void ParameterIsNotNumeric_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsFalse(expression.Verfiy("bottom(tio)", out problem));
             Assert.IsNotNull(problem);
@@ -90,8 +95,9 @@ namespace PxWeb.UnitTests.Data
         public void ParameterIsNotNumeric2_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsFalse(expression.Verfiy("bottom(10tio)", out problem));
             Assert.IsNotNull(problem);
@@ -100,8 +106,9 @@ namespace PxWeb.UnitTests.Data
         public void TwoParameter_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsTrue(expression.Verfiy("bottom(10,5)", out problem));
             Assert.IsNull(problem);
@@ -111,8 +118,9 @@ namespace PxWeb.UnitTests.Data
         public void SecondParamterIsNotNumeric_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsFalse(expression.Verfiy("bottom(10,five)", out problem));
             Assert.IsNotNull(problem);
@@ -122,8 +130,9 @@ namespace PxWeb.UnitTests.Data
         public void SourroundingText_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsFalse(expression.Verfiy("bottom(10,five),a", out problem));
             Assert.IsNotNull(problem);
@@ -133,8 +142,9 @@ namespace PxWeb.UnitTests.Data
         public void NegativeParameter_Verify_ReturnFalse()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             // Assert
             Assert.IsFalse(expression.Verfiy("bottom(-10)", out problem));
             Assert.IsNotNull(problem);
@@ -144,8 +154,9 @@ namespace PxWeb.UnitTests.Data
         public void AddNonExistingValues_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
+
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 20, true);
             var selection = new VariableSelection();
 
@@ -161,7 +172,7 @@ namespace PxWeb.UnitTests.Data
         public void OnlyFiveValues_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 5, true);
             var selection = new VariableSelection();
@@ -178,7 +189,7 @@ namespace PxWeb.UnitTests.Data
         public void OnlyFiveValuesWithOfset_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 5, true);
             var selection = new VariableSelection();
@@ -195,7 +206,7 @@ namespace PxWeb.UnitTests.Data
         public void OfsetLagrgerThenValueCount_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 5, true);
             var selection = new VariableSelection();
@@ -213,7 +224,7 @@ namespace PxWeb.UnitTests.Data
         public void ValueAreReadyInlist_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
             var variable = ModelStore.CreateClassificationVariable("A", PlacementType.Stub, 5, true);
             var selection = new VariableSelection();
@@ -233,7 +244,7 @@ namespace PxWeb.UnitTests.Data
         public void TimeValue_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
             var variable = ModelStore.CreateTimeVariable("Tid", PlacementType.Stub, 20, 1990);
             var selection = new VariableSelection();
@@ -252,7 +263,7 @@ namespace PxWeb.UnitTests.Data
         public void TimeValueWithOfset_AddToSelection_ReturnTrue()
         {
             // Arrange
-            BottomExpression expression = new BottomExpression();
+            var expression = new BottomExpression();
             Problem? problem;
             var variable = ModelStore.CreateTimeVariable("Tid", PlacementType.Stub, 20, 1990);
             var selection = new VariableSelection();
