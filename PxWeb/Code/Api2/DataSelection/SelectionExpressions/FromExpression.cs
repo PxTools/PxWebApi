@@ -20,7 +20,7 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 
             if (!ExpressionUtil.GetSingleCode(expression, out code))
             {
-                ProblemUtility.IllegalSelectionExpression();
+                problem = ProblemUtility.IllegalSelectionExpression();
                 return false;
             }
 
@@ -29,7 +29,7 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
 
             if (index1 == -1)
             {
-                ProblemUtility.IllegalSelectionExpression();
+                problem = ProblemUtility.IllegalSelectionExpression();
                 return false;
             }
 
