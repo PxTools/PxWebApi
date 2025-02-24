@@ -36,7 +36,7 @@ namespace PxWeb.Helper.Api2
             selection.CodeList = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, 1));
             selections.Selection.Add(selection);
-            selections.Placement?.Stub.Add(variable.Code);
+            selections.Placement?.Heading.Add(variable.Code);
         }
 
         public static void EliminateVariable(this VariablesSelection selections, Variable variable)
