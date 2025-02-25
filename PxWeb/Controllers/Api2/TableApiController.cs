@@ -228,7 +228,7 @@ namespace PxWeb.Controllers.Api2
             //bool IsDefaultSelection = false;
             VariablePlacementType? placment = null;
 
-            if (ParameterUtil.UseDefaultSelection(variablesSelection))
+            if (SelectionUtil.UseDefaultSelection(variablesSelection))
             {
                 //TODO: Check if we have a saved query that should serv as default selection
                 variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);

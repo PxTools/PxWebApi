@@ -48,21 +48,6 @@ namespace PxWeb.Helper.Api2
             return (format, formatParams);
         }
 
-        public static bool UseDefaultSelection(VariablesSelection? variablesSelection)
-        {
-            return variablesSelection is null || !HasSelection(variablesSelection);
-        }
 
-        private static bool HasSelection(VariablesSelection selection)
-        {
-            if (selection.Selection.Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
     }
 }

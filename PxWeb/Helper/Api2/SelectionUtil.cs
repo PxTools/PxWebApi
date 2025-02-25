@@ -118,7 +118,38 @@ namespace PxWeb.Helper.Api2
             }
             return mandatory;
         }
+
+        /// <summary>
+        /// Check if there is any selection in the VariablesSelection
+        /// </summary>
+        /// <param name="variablesSelection"></param>
+        /// <returns></returns>
+        public static bool UseDefaultSelection(VariablesSelection? variablesSelection)
+        {
+            return variablesSelection is null || !HasSelection(variablesSelection);
+        }
+
+        /// <summary>
+        /// Check if there is any selection in the VariablesSelection
+        /// </summary>
+        /// <param name="selection"></param>
+        /// <returns></returns>
+        private static bool HasSelection(VariablesSelection selection)
+        {
+
+            if (selection.Selection is null)
+            {
+                return false;
+            }
+
+            if (selection.Selection.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
-
-
 }
