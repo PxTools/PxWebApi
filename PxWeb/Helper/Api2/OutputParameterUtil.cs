@@ -32,12 +32,20 @@ namespace PxWeb.Helper.Api2
                     formatParams = new List<string>();
                 }
 
-                if (!format.Equals("CSV", StringComparison.OrdinalIgnoreCase))
+                if ((format.Equals("px", StringComparison.OrdinalIgnoreCase) ||
+                    format.Equals("json-stat2", StringComparison.OrdinalIgnoreCase) ||
+                    format.Equals("px-json", StringComparison.OrdinalIgnoreCase) ||
+                    format.Equals("parquet", StringComparison.OrdinalIgnoreCase)) &&
+                    formatParams.Count > 0)
                 {
-                    //Check if there is a invalid parameter
-                    paramError = (formatParams.Select(p => p.StartsWith("separator", StringComparison.OrdinalIgnoreCase)).ToList().Count > 0);
+                    paramError = true;
                 }
 
+                if (!format.Equals("csv", StringComparison.OrdinalIgnoreCase) && !paramError)
+                {
+                    //Check if there is a invalid parameter
+                    paramError = (formatParams.Where(p => p.StartsWith("separator", StringComparison.OrdinalIgnoreCase)).ToList().Count > 0);
+                }
             }
             catch (ArgumentException)
             {
