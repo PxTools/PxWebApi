@@ -23,7 +23,7 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
                 problem = null;
                 return true;
             }
-            problem = null;
+            problem = ProblemUtility.IllegalSelectionExpression();
             return false;
         }
         public bool AddToSelection(Variable variable, VariableSelection selection, string expression, out Problem? problem)
