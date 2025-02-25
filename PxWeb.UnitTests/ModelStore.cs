@@ -219,7 +219,7 @@
         }
 
 
-        private static PCAxis.Paxiom.Variable CreateClassificationVariable(string suffix, PlacementType placementType, int numberOfValues, bool elimination = true)
+        public static PCAxis.Paxiom.Variable CreateClassificationVariable(string suffix, PlacementType placementType, int numberOfValues, bool elimination = true)
         {
             var name = $"clsv_{suffix}";
             Variable variable = new Variable(name, placementType);
@@ -250,7 +250,7 @@
             return variable;
         }
 
-        private static PCAxis.Paxiom.Variable CreateTimeVariable(string suffix, PlacementType placementType, int numberOfValues, int startYear = 1968)
+        public static PCAxis.Paxiom.Variable CreateTimeVariable(string suffix, PlacementType placementType, int numberOfValues, int startYear = 1968)
         {
             var name = $"time_{suffix}";
             Variable variable = new Variable(name, placementType);
