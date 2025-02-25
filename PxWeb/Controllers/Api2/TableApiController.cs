@@ -94,9 +94,17 @@ namespace PxWeb.Controllers.Api2
                     }
 
 
-                    Dataset ds = _datasetMapper.Map(model, id, lang);
-                    return new ObjectResult(ds);
+                    if (outputFormat != null && outputFormat == MetadataOutputFormatType.JsonStat2Enum)
+                    {
 
+                        Dataset ds = _datasetMapper.Map(model, id, lang);
+                        return new ObjectResult(ds);
+                    }
+                    else
+                    {
+                        TableMetadataResponse tm = _tableMetadataResponseMapper.Map(model, id, lang);
+                        return new ObjectResult(tm);
+                    }
                 }
                 catch (Exception)
                 {

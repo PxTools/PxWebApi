@@ -35,6 +35,7 @@ namespace PxWeb.Mappers
         public SelectionResponse Map(Selection[] selections, List<string> heading, List<string> stub, PXMeta meta, string tableId, string lang)
         {
             var response = new SelectionResponse();
+            response.Language = lang;
             response.Selection = selections.Select(selection => new VariableSelection()
             {
                 VariableCode = selection.VariableCode,
