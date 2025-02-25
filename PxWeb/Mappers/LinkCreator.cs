@@ -22,8 +22,6 @@ namespace PxWeb.Mappers
 
         private readonly string _urlPrefix;
         private readonly string _defaultDataFormat;
-        private readonly List<string> _metaFormats = new List<string> { "json-px", "json-stat2" };
-        //Could not get the strings cleanly from MetadataOutputFormatType. Anybody?
 
         public LinkCreator(IOptions<PxApiConfigurationOptions> configOptions)
         {
@@ -50,21 +48,14 @@ namespace PxWeb.Mappers
             return link;
         }
 
-        public List<Link> GetTableMetadataJsonLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
+        public Link GetTableMetadataJsonLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
         {
-            List<Link> links = new List<Link>();
+            Link link = new Link();
+            link.Rel = relation.ToString();
+            link.Hreflang = language;
+            link.Href = CreateURL($"tables/{id}/metadata", language, showLangParam, null);
 
-            foreach (string outFormat in _metaFormats)
-            {
-                var link = new Link();
-                link.Rel = relation.ToString();
-                link.Hreflang = language;
-
-                link.Href = CreateURL($"tables/{id}/metadata", language, showLangParam, outFormat);
-                links.Add(link);
-            }
-
-            return links;
+            return link;
         }
 
         public Link GetTableDataLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
