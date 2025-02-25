@@ -5,7 +5,7 @@ using PxWeb.Converters;
 
 namespace PxWeb.Helper.Api2
 {
-    public static class ParameterUtil
+    public static class OutputParameterUtil
     {
         public static (string, List<string>) TranslateOutputParamters(OutputFormatType? outputFormat, string defaultOutputFormat, List<OutputFormatParamType>? outputFormatParams, out bool paramError)
         {
