@@ -145,7 +145,7 @@ namespace PxWeb.Mappers
             AddTableNotes(model, dataset);
 
             List<Link> linksOnRoot = new List<Link>();
-            linksOnRoot.AddRange(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.self, id.ToUpper(), language, true));
+            linksOnRoot.Add(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.self, id.ToUpper(), language, true));
             linksOnRoot.Add(_linkCreator.GetTableDataLink(LinkCreator.LinkRelationEnum.data, id.ToUpper(), language, true));
 
             //"type": "application/json"
