@@ -25,12 +25,7 @@
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-px"
-        },
-        {
-          "rel": "metadata",
-          "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-stat2"
+          "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en"
         },
         {
           "rel": "data",
@@ -63,12 +58,7 @@
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB005/metadata?lang=en&outputFormat=json-px"
-        },
-        {
-          "rel": "metadata",
-          "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB005/metadata?lang=en&outputFormat=json-stat2"
+          "href": "https://www.pxapi.com/api/v2/tables/TAB005/metadata?lang=en"
         },
         {
           "rel": "data",
@@ -101,12 +91,7 @@
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en&outputFormat=json-px"
-        },
-        {
-          "rel": "metadata",
-          "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en&outputFormat=json-stat2"
+          "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en"
         },
         {
           "rel": "data",
@@ -140,12 +125,7 @@
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en&outputFormat=json-px"
-        },
-        {
-          "rel": "metadata",
-          "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en&outputFormat=json-stat2"
+          "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en"
         },
         {
           "rel": "data",
@@ -180,12 +160,7 @@
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB002/metadata?lang=en&outputFormat=json-px"
-        },
-        {
-          "rel": "metadata",
-          "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB002/metadata?lang=en&outputFormat=json-stat2"
+          "href": "https://www.pxapi.com/api/v2/tables/TAB002/metadata?lang=en"
         },
         {
           "rel": "data",

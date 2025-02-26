@@ -23,12 +23,7 @@
     {
       "rel": "metadata",
       "hreflang": "en",
-      "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-px"
-    },
-    {
-      "rel": "metadata",
-      "hreflang": "en",
-      "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en&outputFormat=json-stat2"
+      "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en"
     },
     {
       "rel": "data",
