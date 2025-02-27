@@ -265,6 +265,36 @@ namespace PxWeb.Models.Api2
             Extension.Px.Aggregallowed = isAggRegAllowed;
         }
 
+        public void AddUpdateFrequency(string updateFrequency)
+        {
+            if (updateFrequency != null)
+            {
+                Extension ??= new ExtensionRoot();
+                Extension.Px ??= new ExtensionRootPx();
+                Extension.Px.UpdateFrequency = updateFrequency;
+            }
+        }
+
+        public void AddLink(string link)
+        {
+            if (link != null)
+            {
+                Extension ??= new ExtensionRoot();
+                Extension.Px ??= new ExtensionRootPx();
+                Extension.Px.Link = link;
+            }
+        }
+
+        public void AddSurvey(string survey)
+        {
+            if (survey != null)
+            {
+                Extension ??= new ExtensionRoot();
+                Extension.Px ??= new ExtensionRootPx();
+                Extension.Px.Survey = survey;
+            }
+        }
+
         public void AddDescription(string description)
         {
             if (description != null)
@@ -476,11 +506,6 @@ namespace PxWeb.Models.Api2
             }
 
 
-        }
-
-        public void SetUpdatedAsUtcString(DateTime datetime)
-        {
-            Updated = datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
         }
 
         public static void AddMeasuringType(DimensionValue dimensionValue, string valueCode, MeasuringType measuringType)

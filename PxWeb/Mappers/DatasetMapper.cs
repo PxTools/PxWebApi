@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text;
 
 using Microsoft.Extensions.Logging;
@@ -287,7 +288,25 @@ namespace PxWeb.Mappers
                 tempDateTime = model.Meta.CreationDate.PxDateStringToDateTime();
             }
 
-            dataset.SetUpdatedAsUtcString(tempDateTime);
+            dataset.Updated = DateTimeAsUtcString(tempDateTime);
+        }
+
+        public static string DateTimeAsUtcString(DateTime datetime)
+        {
+            return datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        }
+
+        private static void AddNextUpdate(Dataset dataset, string nextUpdate)
+        {
+            if (nextUpdate != null)
+            {
+                DateTime tempDatetime;
+                tempDatetime = nextUpdate.PxDateStringToDateTime();
+
+                dataset.Extension ??= new ExtensionRoot();
+                dataset.Extension.Px ??= new ExtensionRootPx();
+                dataset.Extension.Px.NextUpdate = DateTimeAsUtcString(tempDatetime);
+            }
         }
 
         private static void AddPxToExtension(PXModel model, DatasetSubclass dataset)
@@ -309,6 +328,10 @@ namespace PxWeb.Mappers
             dataset.AddSubjectCode(model.Meta.SubjectCode);
             dataset.AddSubjectArea(model.Meta.SubjectArea);
             dataset.AddAggRegAllowed(model.Meta.AggregAllowed);
+            dataset.AddSurvey(model.Meta.Survey);
+            dataset.AddLink(model.Meta.Link);
+            dataset.AddUpdateFrequency(model.Meta.UpdateFrequency);
+            AddNextUpdate(dataset, model.Meta.NextUpdate);
         }
 
         private static void AddTableNotes(PXModel model, DatasetSubclass dataset)
