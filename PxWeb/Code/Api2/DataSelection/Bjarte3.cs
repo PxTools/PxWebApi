@@ -34,7 +34,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (selections is null)
             {
-                throw new System.Exception("Could not create default selection");
+                throw new NotSupportedException("Could not create default selection");
             }
 
             return selections;
@@ -60,8 +60,8 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 // Case C according to algorithm
                 var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
-                var mandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == false).ToList();
-                var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination == true).ToList();
+                var mandatoryClassificationVariables = classificationVariables.Where(v => !v.Elimination).ToList();
+                var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination).ToList();
                 return WithMoreThenTreeDimensions(contents, time, classificationVariables, mandatoryClassificationVariables, noneMandatoryClassificationVariables);
             }
 
@@ -207,7 +207,7 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.AddVariableToHeading(contents, SelectionUtil.GetCodes);
             selections.AddVariableToHeading(time, SelectionUtil.GetTimeCodes);
 
-            var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables.Last();
+            var lastNoneMandantoryClassificationVariable = noneMandatoryClassificationVariables[noneMandatoryClassificationVariables.Count - 1];
             var (stub, heading) = SelectionUtil.StubOrHeading(mandatoryClassificationVariables[0], lastNoneMandantoryClassificationVariable);
             selections.AddStubVariable(stub, SelectionUtil.GetCodes);
             selections.AddHeadingVariable(heading, SelectionUtil.GetCodes);
@@ -240,8 +240,8 @@ namespace PxWeb.Code.Api2.DataSelection
             selections.AddVariableToHeading(contents, SelectionUtil.GetCodes);
             selections.AddVariableToHeading(time, SelectionUtil.GetTimeCodes);
 
-            var firstNoneMandantoryClassificationVariable = classificationVariables.First();
-            var lastNoneMandantoryClassificationVariable = classificationVariables.Last();
+            var firstNoneMandantoryClassificationVariable = classificationVariables[0];
+            var lastNoneMandantoryClassificationVariable = classificationVariables[classificationVariables.Count - 1];
             var (stub, heading) = SelectionUtil.StubOrHeading(firstNoneMandantoryClassificationVariable, lastNoneMandantoryClassificationVariable);
             selections.AddStubVariable(stub, SelectionUtil.GetCodes);
             selections.AddHeadingVariable(heading, SelectionUtil.GetCodes);
