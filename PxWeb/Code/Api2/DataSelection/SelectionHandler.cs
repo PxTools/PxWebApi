@@ -20,6 +20,12 @@ namespace PxWeb.Code.Api2.DataSelection
 
         public bool ExpandAndVerfiySelections(VariablesSelection variablesSelection, IPXModelBuilder builder, out Problem? problem)
         {
+            if (SelectionUtil.UseDefaultSelection(variablesSelection))
+            {
+                problem = ProblemUtility.MissingSelection();
+                return false;
+            }
+
             if (!FixVariableRefsAndApplyCodelists(builder, variablesSelection, out problem))
             {
                 return false;
@@ -124,7 +130,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var mandatory = SelectionUtil.IsMandatory(model, variable);
                 if (variable.ValueCodes.Count() == 0 && mandatory)
                 {
-                    problem = ProblemUtility.NonExistentValue();
+                    problem = ProblemUtility.MissingSelection();
                     return false;
                 }
             }
@@ -132,6 +138,15 @@ namespace PxWeb.Code.Api2.DataSelection
             return true;
         }
 
+        /// <summary>
+        /// Expand selection expression and add to selection
+        /// This method should only be 
+        /// </summary>
+        /// <param name="variable"></param>
+        /// <param name="modelVariable"></param>
+        /// <param name="valueCode"></param>
+        /// <param name="problem"></param>
+        /// <returns></returns>
         private static bool ExpandSelectionExpression(VariableSelection variable, Variable modelVariable, string valueCode, out Problem? problem)
         {
             for (int j = 0; j < ExpressionUtil.SelectionExpressions.Count; j++)
@@ -149,10 +164,12 @@ namespace PxWeb.Code.Api2.DataSelection
                         problem = ProblemUtility.NonExistentValue();
                         return false;
                     }
+                    problem = null;
+                    return true;
                 }
             }
-            problem = null;
-            return true;
+            problem = ProblemUtility.NonExistentValue();
+            return false;
         }
 
         /// <summary>
