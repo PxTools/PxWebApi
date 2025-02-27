@@ -478,11 +478,52 @@ namespace PxWeb.Models.Api2
 
         }
 
-
-
         public void SetUpdatedAsUtcString(DateTime datetime)
         {
             Updated = datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        }
+
+        public static void AddMeasuringType(DimensionValue dimensionValue, string valueCode, MeasuringType measuringType)
+        {
+            dimensionValue.Extension ??= new ExtensionDimension();
+
+            if (dimensionValue.Extension.MeasuringType == null)
+                dimensionValue.Extension.MeasuringType = new Dictionary<string, MeasuringType>();
+
+            dimensionValue.Extension.MeasuringType.Add(valueCode, measuringType);
+        }
+
+        public static void AddPriceType(DimensionValue dimensionValue, string valueCode, PriceType priceType)
+        {
+            dimensionValue.Extension ??= new ExtensionDimension();
+
+            if (dimensionValue.Extension.PriceType == null)
+                dimensionValue.Extension.PriceType = new Dictionary<string, PriceType>();
+
+            dimensionValue.Extension.PriceType.Add(valueCode, priceType);
+        }
+
+        public static void AddAdjustment(DimensionValue dimensionValue, string valueCode, Adjustment adjustment)
+        {
+            dimensionValue.Extension ??= new ExtensionDimension();
+
+            if (dimensionValue.Extension.Adjustment == null)
+                dimensionValue.Extension.Adjustment = new Dictionary<string, Adjustment>();
+
+            dimensionValue.Extension.Adjustment.Add(valueCode, adjustment);
+        }
+
+        public static void AddBasePeriod(DimensionValue dimensionValue, string valueCode, string basePeriod)
+        {
+            if (!string.IsNullOrEmpty(basePeriod))
+            {
+                dimensionValue.Extension ??= new ExtensionDimension();
+
+                if (dimensionValue.Extension.BasePeriod == null)
+                    dimensionValue.Extension.BasePeriod = new Dictionary<string, string>();
+
+                dimensionValue.Extension.BasePeriod.Add(valueCode, basePeriod);
+            }
         }
     }
 }

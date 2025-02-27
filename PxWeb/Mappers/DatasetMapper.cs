@@ -95,6 +95,18 @@ namespace PxWeb.Mappers
                             //refPeriod extension dimension
                             dataset.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
 
+                            //measuringType extension dimension
+                            DatasetSubclass.AddMeasuringType(dimensionValue, variableValue.Code, GetMeasuringType(variableValue.ContentInfo.StockFa));
+
+                            //priceType extension dimension
+                            DatasetSubclass.AddPriceType(dimensionValue, variableValue.Code, GetPriceType(variableValue.ContentInfo.CFPrices));
+
+                            //adjustment extension dimension
+                            DatasetSubclass.AddAdjustment(dimensionValue, variableValue.Code, GetAdjustment(variableValue.ContentInfo.DayAdj, variableValue.ContentInfo.SeasAdj));
+
+                            //basePeriod extension dimension
+                            DatasetSubclass.AddBasePeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.Baseperiod);
+
                             // Contact
                             AddContact(dataset, variableValue.ContentInfo);
                         }
@@ -157,6 +169,63 @@ namespace PxWeb.Mappers
 
 
             return dataset;
+        }
+
+        private static PriceType GetPriceType(string cfprices)
+        {
+            string cfp = cfprices != null ? cfprices.ToUpper() : "";
+
+            switch (cfp)
+            {
+                case "C":
+                    return PriceType.CurrentEnum;
+                case "F":
+                    return PriceType.FixedEnum;
+                default:
+                    return PriceType.NotApplicableEnum;
+            }
+        }
+
+        private static Adjustment GetAdjustment(string dayAdj, string seasAdj)
+        {
+            string dadj = dayAdj != null ? dayAdj.ToUpper() : "";
+            string sadj = seasAdj != null ? seasAdj.ToUpper() : "";
+
+            if (dadj.Equals("YES") && sadj.Equals("YES"))
+            {
+                return Adjustment.WorkAndSesEnum;
+            }
+            else if (sadj.Equals("YES"))
+            {
+                return Adjustment.SesOnlyEnum;
+            }
+            else if (dadj.Equals("YES"))
+            {
+                return Adjustment.WorkOnlyEnum;
+            }
+            else
+            {
+                return Adjustment.NoneEnum;
+            }
+        }
+
+        private static MeasuringType GetMeasuringType(string stockfa)
+        {
+            if (stockfa == null)
+            {
+                return MeasuringType.OtherEnum;
+            }
+            switch (stockfa.ToUpper())
+            {
+                case "S":
+                    return MeasuringType.StockEnum;
+                case "F":
+                    return MeasuringType.FlowEnum;
+                case "A":
+                    return MeasuringType.AverageEnum;
+                default:
+                    return MeasuringType.OtherEnum;
+            }
         }
 
         private void AddInfoForEliminatedContentVariable(PXModel model, DatasetSubclass dataset)
