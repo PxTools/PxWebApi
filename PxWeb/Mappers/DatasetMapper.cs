@@ -354,16 +354,12 @@ namespace PxWeb.Mappers
                 dataset.Extension.Contact = new List<Api2.Server.Models.Contact>();
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append(contact.Forname);
-            sb.Append(' ');
-            sb.Append(contact.Surname);
-
             Api2.Server.Models.Contact jsonContact = new Api2.Server.Models.Contact
             {
-                Name = sb.ToString(),
+                Name = GetFullName(contact),
                 Mail = contact.Email,
-                Phone = contact.PhoneNo
+                Phone = contact.PhoneNo,
+                Organization = contact.OrganizationName
             };
 
             if (contInfo.Contact != null)
@@ -420,6 +416,26 @@ namespace PxWeb.Mappers
                     }
                 }
             }
+        }
+
+        private static string GetFullName(PCAxis.Paxiom.Contact contact)
+        {
+            if (string.IsNullOrEmpty(contact.Forname) && string.IsNullOrEmpty(contact.Surname))
+            {
+                return string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(contact.Forname))
+            {
+                return contact.Surname;
+            }
+
+            if (string.IsNullOrEmpty(contact.Surname))
+            {
+                return contact.Forname;
+            }
+
+            return $"{contact.Forname} {contact.Surname}";
         }
 
         private void AddRoles(Variable variable, DatasetSubclass dataset)
