@@ -272,7 +272,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddEliminationInfo(DatasetDimensionValue dimensionValue, Variable variable)
+        private void AddEliminationInfo(DimensionValue dimensionValue, Variable variable)
         {
             if (dimensionValue.Extension is null)
             {
@@ -286,7 +286,7 @@ namespace PxWeb.Mappers
             dimensionValue.Extension.EliminationValueCode = variable.EliminationValue.Code;
         }
 
-        private void AddShow(DatasetDimensionValue dimensionValue, Variable variable)
+        private void AddShow(DimensionValue dimensionValue, Variable variable)
         {
             if (Enum.TryParse(variable.PresentationText.ToString(), out PresentationFormType presentationForm))
             {
@@ -298,7 +298,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddValueNotes(Value variableValue, DatasetSubclass dataset, DatasetDimensionValue dimensionValue)
+        private void AddValueNotes(Value variableValue, DatasetSubclass dataset, DimensionValue dimensionValue)
         {
             if (variableValue.Notes == null) return;
 
@@ -315,7 +315,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddVariableNotes(Variable variable, DatasetSubclass dataset, DatasetDimensionValue dimensionValue)
+        private void AddVariableNotes(Variable variable, DatasetSubclass dataset, DimensionValue dimensionValue)
         {
             if (variable.Notes == null) return;
 

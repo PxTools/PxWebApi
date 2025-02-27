@@ -12,7 +12,7 @@ namespace PxWeb.Models.Api2
             Id = new List<string>();
             Size = new List<int>();
             Class = ClassType.DatasetEnum;
-            Role = new DatasetRole();
+            Role = new Role();
             Extension = new ExtensionRoot();
             Extension.Px = new ExtensionRootPx();
         }
@@ -21,7 +21,7 @@ namespace PxWeb.Models.Api2
         {
             if (Role is null)
             {
-                Role = new DatasetRole();
+                Role = new Role();
             }
 
             if (Role.Time == null)
@@ -36,7 +36,7 @@ namespace PxWeb.Models.Api2
         {
             if (Role is null)
             {
-                Role = new DatasetRole();
+                Role = new Role();
             }
             if (Role.Metric == null)
             {
@@ -50,7 +50,7 @@ namespace PxWeb.Models.Api2
         {
             if (Role is null)
             {
-                Role = new DatasetRole();
+                Role = new Role();
             }
             if (Role.Geo == null)
             {
@@ -335,11 +335,11 @@ namespace PxWeb.Models.Api2
             Extension.NoteMandatory.Add(index, true);
         }
 
-        public void AddDimensionValue(string dimensionKey, string label, out DatasetDimensionValue dimensionValue)
+        public void AddDimensionValue(string dimensionKey, string label, out DimensionValue dimensionValue)
         {
-            if (Dimension == null) Dimension = new Dictionary<string, DatasetDimensionValue>();
+            if (Dimension == null) Dimension = new Dictionary<string, DimensionValue>();
 
-            dimensionValue = new DatasetDimensionValue()
+            dimensionValue = new DimensionValue()
             {
                 Label = label,
                 Extension = new ExtensionDimension(),
@@ -352,14 +352,14 @@ namespace PxWeb.Models.Api2
             Dimension.Add(dimensionKey, dimensionValue);
         }
 
-        public void AddNoteToDimension(DatasetDimensionValue dimensionValue, string text)
+        public void AddNoteToDimension(DimensionValue dimensionValue, string text)
         {
             if (dimensionValue.Note == null) dimensionValue.Note = new List<string>();
 
             dimensionValue.Note.Add(text);
         }
 
-        public void AddIsMandatoryForDimensionNote(DatasetDimensionValue dimensionValue, string index)
+        public void AddIsMandatoryForDimensionNote(DimensionValue dimensionValue, string index)
         {
             if (dimensionValue.Extension is null)
             {
@@ -371,7 +371,7 @@ namespace PxWeb.Models.Api2
             dimensionValue.Extension.NoteMandatory.Add(index, true);
         }
 
-        public void AddValueNoteToCategory(DatasetDimensionValue dimensionValue, string valueNoteKey, string text)
+        public void AddValueNoteToCategory(DimensionValue dimensionValue, string valueNoteKey, string text)
         {
             if (dimensionValue.Category is null) { dimensionValue.Category = new JsonstatCategory(); }
             if (dimensionValue.Category.Note == null) dimensionValue.Category.Note = new Dictionary<string, List<string>>();
@@ -388,7 +388,7 @@ namespace PxWeb.Models.Api2
             }
         }
 
-        public void AddIsMandatoryForCategoryNote(DatasetDimensionValue dimensionValue, string valueNoteKey, string index)
+        public void AddIsMandatoryForCategoryNote(DimensionValue dimensionValue, string valueNoteKey, string index)
         {
             if (dimensionValue.Extension is null)
             {
@@ -415,7 +415,7 @@ namespace PxWeb.Models.Api2
             unitValue = new JsonstatCategoryUnitValue();
         }
 
-        public void AddRefPeriod(DatasetDimensionValue dimensionValue, string valueCode, string refPeriod)
+        public void AddRefPeriod(DimensionValue dimensionValue, string valueCode, string refPeriod)
         {
             if (refPeriod == null) return;
 
@@ -430,7 +430,7 @@ namespace PxWeb.Models.Api2
             dimensionValue.Extension.Refperiod.Add(valueCode, refPeriod);
         }
 
-        public void AddDimensionLink(DatasetDimensionValue dimensionValue, Dictionary<string, string> metaIds)
+        public void AddDimensionLink(DimensionValue dimensionValue, Dictionary<string, string> metaIds)
         {
             dimensionValue.Link = new JsonstatExtensionLink
             {
@@ -439,7 +439,7 @@ namespace PxWeb.Models.Api2
 
         }
 
-        public void AddCodelist(DatasetDimensionValue dimensionValue, List<CodeListInformation> codeLists)
+        public void AddCodelist(DimensionValue dimensionValue, List<CodeListInformation> codeLists)
         {
             if (dimensionValue.Extension is null)
             {
