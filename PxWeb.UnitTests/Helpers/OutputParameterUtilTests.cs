@@ -53,6 +53,7 @@ namespace PxWeb.UnitTests.Helpers
             Assert.AreEqual(0, formatParams.Count);
         }
 
+        [TestMethod]
         public void TranslateOutputParamters_WhenCalledWithCsvOutputFormat_ReturnsDefaultOutputFormat()
         {
             // Arrange
