@@ -152,8 +152,6 @@ namespace PxWeb.Mappers
 
             // TODO: Links to documentation
             //if (!string.IsNullOrEmpty(model.Meta.MetaId))
-            //{
-            //}
 
             dataset.AddLinksOnRoot(linksOnRoot);
 
@@ -163,17 +161,18 @@ namespace PxWeb.Mappers
 
         private void AddInfoForEliminatedContentVariable(PXModel model, DatasetSubclass dataset)
         {
+            var eliminatedValue = "EliminatedValue";
             dataset.AddDimensionValue("ContentsCode", "EliminatedContents", out var dimensionValue);
             if (dimensionValue.Category is not null)
             {
-                dimensionValue.Category.Label.Add("EliminatedValue", model.Meta.Contents);
-                dimensionValue.Category.Index.Add("EliminatedValue", 0);
+                dimensionValue.Category.Label.Add(eliminatedValue, model.Meta.Contents);
+                dimensionValue.Category.Index.Add(eliminatedValue, 0);
 
                 dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
                 unitValue.Base = model.Meta.ContentInfo.Units;
                 unitValue.Decimals = model.Meta.Decimals;
 
-                dimensionValue.Category.Unit.Add("EliminatedValue", unitValue);
+                dimensionValue.Category.Unit.Add(eliminatedValue, unitValue);
             }
             if (dimensionValue.Extension is not null)
             {
@@ -181,7 +180,7 @@ namespace PxWeb.Mappers
             }
 
             //refPeriod extension dimension
-            dataset.AddRefPeriod(dimensionValue, "EliminatedValue", model.Meta.ContentInfo.RefPeriod);
+            dataset.AddRefPeriod(dimensionValue, eliminatedValue, model.Meta.ContentInfo.RefPeriod);
 
             // Contact
             AddContact(dataset, model.Meta.ContentInfo);
@@ -191,7 +190,7 @@ namespace PxWeb.Mappers
             dataset.Id.Add("ContentsCode");
         }
 
-        private void AddUpdated(PXModel model, DatasetSubclass dataset)
+        private static void AddUpdated(PXModel model, DatasetSubclass dataset)
         {
             DateTime tempDateTime;
             if (model.Meta.ContentVariable != null && model.Meta.ContentVariable.Values.Count > 0)
@@ -220,20 +219,9 @@ namespace PxWeb.Mappers
             }
 
             dataset.SetUpdatedAsUtcString(tempDateTime);
-
-            /*
-            if (contInfo.LastUpdated.IsPxDate())
-            {
-                DateTime tryDate = contInfo.LastUpdated.PxDateStringToDateTime().ToUniversalTime();
-                if (tm.Updated == null || tryDate > tm.Updated)
-                {
-                    tm.Updated = tryDate;
-                }
-            }
-             */
         }
 
-        private void AddPxToExtension(PXModel model, DatasetSubclass dataset)
+        private static void AddPxToExtension(PXModel model, DatasetSubclass dataset)
         {
             // TODO should we have included both Decimals and ShowDecimals?
             var decimals = model.Meta.ShowDecimals < 0 ? model.Meta.Decimals : model.Meta.ShowDecimals;
@@ -254,7 +242,7 @@ namespace PxWeb.Mappers
             dataset.AddAggRegAllowed(model.Meta.AggregAllowed);
         }
 
-        private void AddTableNotes(PXModel model, DatasetSubclass dataset)
+        private static void AddTableNotes(PXModel model, DatasetSubclass dataset)
         {
             var notes = model.Meta.Notes.Where(note => note.Type == NoteType.Table);
 
@@ -272,7 +260,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddEliminationInfo(DimensionValue dimensionValue, Variable variable)
+        private static void AddEliminationInfo(DimensionValue dimensionValue, Variable variable)
         {
             if (dimensionValue.Extension is null)
             {
@@ -286,7 +274,7 @@ namespace PxWeb.Mappers
             dimensionValue.Extension.EliminationValueCode = variable.EliminationValue.Code;
         }
 
-        private void AddShow(DimensionValue dimensionValue, Variable variable)
+        private static void AddShow(DimensionValue dimensionValue, Variable variable)
         {
             if (Enum.TryParse(variable.PresentationText.ToString(), out PresentationFormType presentationForm))
             {
@@ -298,14 +286,13 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddValueNotes(Value variableValue, DatasetSubclass dataset, DimensionValue dimensionValue)
+        private static void AddValueNotes(Value variableValue, DatasetSubclass dataset, DimensionValue dimensionValue)
         {
             if (variableValue.Notes == null) return;
 
             var index = 0;
             foreach (var note in variableValue.Notes)
             {
-                //dataset.AddValueNoteToDimension(dimensionValue, variableValue.Code, note.Mandantory, note.Text);
                 dataset.AddValueNoteToCategory(dimensionValue, variableValue.Code, note.Text);
 
                 if (note.Mandantory)
@@ -315,7 +302,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddVariableNotes(Variable variable, DatasetSubclass dataset, DimensionValue dimensionValue)
+        private static void AddVariableNotes(Variable variable, DatasetSubclass dataset, DimensionValue dimensionValue)
         {
             if (variable.Notes == null) return;
 
@@ -365,7 +352,7 @@ namespace PxWeb.Mappers
             if (contInfo.Contact != null)
             {
                 var contacts = contInfo.Contact.Split(new[] { "##" }, StringSplitOptions.RemoveEmptyEntries);
-                var res = contacts.Where(x => x.Contains(contact.Forname) && x.Contains(contact.Surname) && x.Contains(contact.Email) && x.Contains(contact.PhoneNo)).FirstOrDefault();
+                var res = contacts.FirstOrDefault(x => x.Contains(contact.Forname) && x.Contains(contact.Surname) && x.Contains(contact.Email) && x.Contains(contact.PhoneNo));
 
                 if (res != null)
                 {
@@ -438,7 +425,7 @@ namespace PxWeb.Mappers
             return $"{contact.Forname} {contact.Surname}";
         }
 
-        private void AddRoles(Variable variable, DatasetSubclass dataset)
+        private static void AddRoles(Variable variable, DatasetSubclass dataset)
         {
             if (variable.IsTime)
             {
