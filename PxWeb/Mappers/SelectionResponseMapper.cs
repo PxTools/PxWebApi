@@ -16,6 +16,22 @@ namespace PxWeb.Mappers
             _linkCreator = linkCreator;
         }
 
+        public SelectionResponse Map(VariablesSelection selections, string tableId, string lang)
+        {
+            var response = new SelectionResponse();
+            response.Selection = selections.Selection;
+
+            response.Placement = selections.Placement;
+
+            response.Links = new List<Link>();
+
+            response.Links.Add(_linkCreator.GetDefaultSelectionLink(LinkCreator.LinkRelationEnum.self, tableId, lang, true));
+
+            return response;
+        }
+
+
+
         public SelectionResponse Map(Selection[] selections, List<string> heading, List<string> stub, PXMeta meta, string tableId, string lang)
         {
             var response = new SelectionResponse();
