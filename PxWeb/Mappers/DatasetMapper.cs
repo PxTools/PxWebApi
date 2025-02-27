@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text;
 
 using Microsoft.Extensions.Logging;
@@ -95,6 +96,18 @@ namespace PxWeb.Mappers
                             //refPeriod extension dimension
                             dataset.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
 
+                            //measuringType extension dimension
+                            DatasetSubclass.AddMeasuringType(dimensionValue, variableValue.Code, GetMeasuringType(variableValue.ContentInfo.StockFa));
+
+                            //priceType extension dimension
+                            DatasetSubclass.AddPriceType(dimensionValue, variableValue.Code, GetPriceType(variableValue.ContentInfo.CFPrices));
+
+                            //adjustment extension dimension
+                            DatasetSubclass.AddAdjustment(dimensionValue, variableValue.Code, GetAdjustment(variableValue.ContentInfo.DayAdj, variableValue.ContentInfo.SeasAdj));
+
+                            //basePeriod extension dimension
+                            DatasetSubclass.AddBasePeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.Baseperiod);
+
                             // Contact
                             AddContact(dataset, variableValue.ContentInfo);
                         }
@@ -152,8 +165,6 @@ namespace PxWeb.Mappers
 
             // TODO: Links to documentation
             //if (!string.IsNullOrEmpty(model.Meta.MetaId))
-            //{
-            //}
 
             dataset.AddLinksOnRoot(linksOnRoot);
 
@@ -161,19 +172,77 @@ namespace PxWeb.Mappers
             return dataset;
         }
 
+        private static PriceType GetPriceType(string cfprices)
+        {
+            string cfp = cfprices != null ? cfprices.ToUpper() : "";
+
+            switch (cfp)
+            {
+                case "C":
+                    return PriceType.CurrentEnum;
+                case "F":
+                    return PriceType.FixedEnum;
+                default:
+                    return PriceType.NotApplicableEnum;
+            }
+        }
+
+        private static Adjustment GetAdjustment(string dayAdj, string seasAdj)
+        {
+            string dadj = dayAdj != null ? dayAdj.ToUpper() : "";
+            string sadj = seasAdj != null ? seasAdj.ToUpper() : "";
+
+            if (dadj.Equals("YES") && sadj.Equals("YES"))
+            {
+                return Adjustment.WorkAndSesEnum;
+            }
+            else if (sadj.Equals("YES"))
+            {
+                return Adjustment.SesOnlyEnum;
+            }
+            else if (dadj.Equals("YES"))
+            {
+                return Adjustment.WorkOnlyEnum;
+            }
+            else
+            {
+                return Adjustment.NoneEnum;
+            }
+        }
+
+        private static MeasuringType GetMeasuringType(string stockfa)
+        {
+            if (stockfa == null)
+            {
+                return MeasuringType.OtherEnum;
+            }
+            switch (stockfa.ToUpper())
+            {
+                case "S":
+                    return MeasuringType.StockEnum;
+                case "F":
+                    return MeasuringType.FlowEnum;
+                case "A":
+                    return MeasuringType.AverageEnum;
+                default:
+                    return MeasuringType.OtherEnum;
+            }
+        }
+
         private void AddInfoForEliminatedContentVariable(PXModel model, DatasetSubclass dataset)
         {
+            var eliminatedValue = "EliminatedValue";
             dataset.AddDimensionValue("ContentsCode", "EliminatedContents", out var dimensionValue);
             if (dimensionValue.Category is not null)
             {
-                dimensionValue.Category.Label.Add("EliminatedValue", model.Meta.Contents);
-                dimensionValue.Category.Index.Add("EliminatedValue", 0);
+                dimensionValue.Category.Label.Add(eliminatedValue, model.Meta.Contents);
+                dimensionValue.Category.Index.Add(eliminatedValue, 0);
 
                 dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
                 unitValue.Base = model.Meta.ContentInfo.Units;
                 unitValue.Decimals = model.Meta.Decimals;
 
-                dimensionValue.Category.Unit.Add("EliminatedValue", unitValue);
+                dimensionValue.Category.Unit.Add(eliminatedValue, unitValue);
             }
             if (dimensionValue.Extension is not null)
             {
@@ -181,7 +250,7 @@ namespace PxWeb.Mappers
             }
 
             //refPeriod extension dimension
-            dataset.AddRefPeriod(dimensionValue, "EliminatedValue", model.Meta.ContentInfo.RefPeriod);
+            dataset.AddRefPeriod(dimensionValue, eliminatedValue, model.Meta.ContentInfo.RefPeriod);
 
             // Contact
             AddContact(dataset, model.Meta.ContentInfo);
@@ -191,7 +260,7 @@ namespace PxWeb.Mappers
             dataset.Id.Add("ContentsCode");
         }
 
-        private void AddUpdated(PXModel model, DatasetSubclass dataset)
+        private static void AddUpdated(PXModel model, DatasetSubclass dataset)
         {
             DateTime tempDateTime;
             if (model.Meta.ContentVariable != null && model.Meta.ContentVariable.Values.Count > 0)
@@ -219,21 +288,28 @@ namespace PxWeb.Mappers
                 tempDateTime = model.Meta.CreationDate.PxDateStringToDateTime();
             }
 
-            dataset.SetUpdatedAsUtcString(tempDateTime);
-
-            /*
-            if (contInfo.LastUpdated.IsPxDate())
-            {
-                DateTime tryDate = contInfo.LastUpdated.PxDateStringToDateTime().ToUniversalTime();
-                if (tm.Updated == null || tryDate > tm.Updated)
-                {
-                    tm.Updated = tryDate;
-                }
-            }
-             */
+            dataset.Updated = DateTimeAsUtcString(tempDateTime);
         }
 
-        private void AddPxToExtension(PXModel model, DatasetSubclass dataset)
+        public static string DateTimeAsUtcString(DateTime datetime)
+        {
+            return datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        }
+
+        private static void AddNextUpdate(Dataset dataset, string nextUpdate)
+        {
+            if (nextUpdate != null)
+            {
+                DateTime tempDatetime;
+                tempDatetime = nextUpdate.PxDateStringToDateTime();
+
+                dataset.Extension ??= new ExtensionRoot();
+                dataset.Extension.Px ??= new ExtensionRootPx();
+                dataset.Extension.Px.NextUpdate = DateTimeAsUtcString(tempDatetime);
+            }
+        }
+
+        private static void AddPxToExtension(PXModel model, DatasetSubclass dataset)
         {
             // TODO should we have included both Decimals and ShowDecimals?
             var decimals = model.Meta.ShowDecimals < 0 ? model.Meta.Decimals : model.Meta.ShowDecimals;
@@ -252,9 +328,13 @@ namespace PxWeb.Mappers
             dataset.AddSubjectCode(model.Meta.SubjectCode);
             dataset.AddSubjectArea(model.Meta.SubjectArea);
             dataset.AddAggRegAllowed(model.Meta.AggregAllowed);
+            dataset.AddSurvey(model.Meta.Survey);
+            dataset.AddLink(model.Meta.Link);
+            dataset.AddUpdateFrequency(model.Meta.UpdateFrequency);
+            AddNextUpdate(dataset, model.Meta.NextUpdate);
         }
 
-        private void AddTableNotes(PXModel model, DatasetSubclass dataset)
+        private static void AddTableNotes(PXModel model, DatasetSubclass dataset)
         {
             var notes = model.Meta.Notes.Where(note => note.Type == NoteType.Table);
 
@@ -272,7 +352,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddEliminationInfo(DatasetDimensionValue dimensionValue, Variable variable)
+        private static void AddEliminationInfo(DimensionValue dimensionValue, Variable variable)
         {
             if (dimensionValue.Extension is null)
             {
@@ -286,7 +366,7 @@ namespace PxWeb.Mappers
             dimensionValue.Extension.EliminationValueCode = variable.EliminationValue.Code;
         }
 
-        private void AddShow(DatasetDimensionValue dimensionValue, Variable variable)
+        private static void AddShow(DimensionValue dimensionValue, Variable variable)
         {
             if (Enum.TryParse(variable.PresentationText.ToString(), out PresentationFormType presentationForm))
             {
@@ -298,14 +378,13 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddValueNotes(Value variableValue, DatasetSubclass dataset, DatasetDimensionValue dimensionValue)
+        private static void AddValueNotes(Value variableValue, DatasetSubclass dataset, DimensionValue dimensionValue)
         {
             if (variableValue.Notes == null) return;
 
             var index = 0;
             foreach (var note in variableValue.Notes)
             {
-                //dataset.AddValueNoteToDimension(dimensionValue, variableValue.Code, note.Mandantory, note.Text);
                 dataset.AddValueNoteToCategory(dimensionValue, variableValue.Code, note.Text);
 
                 if (note.Mandantory)
@@ -315,7 +394,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddVariableNotes(Variable variable, DatasetSubclass dataset, DatasetDimensionValue dimensionValue)
+        private static void AddVariableNotes(Variable variable, DatasetSubclass dataset, DimensionValue dimensionValue)
         {
             if (variable.Notes == null) return;
 
@@ -354,22 +433,18 @@ namespace PxWeb.Mappers
                 dataset.Extension.Contact = new List<Api2.Server.Models.Contact>();
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.Append(contact.Forname);
-            sb.Append(' ');
-            sb.Append(contact.Surname);
-
             Api2.Server.Models.Contact jsonContact = new Api2.Server.Models.Contact
             {
-                Name = sb.ToString(),
+                Name = GetFullName(contact),
                 Mail = contact.Email,
-                Phone = contact.PhoneNo
+                Phone = contact.PhoneNo,
+                Organization = contact.OrganizationName
             };
 
             if (contInfo.Contact != null)
             {
                 var contacts = contInfo.Contact.Split(new[] { "##" }, StringSplitOptions.RemoveEmptyEntries);
-                var res = contacts.Where(x => x.Contains(contact.Forname) && x.Contains(contact.Surname) && x.Contains(contact.Email) && x.Contains(contact.PhoneNo)).FirstOrDefault();
+                var res = contacts.FirstOrDefault(x => x.Contains(contact.Forname) && x.Contains(contact.Surname) && x.Contains(contact.Email) && x.Contains(contact.PhoneNo));
 
                 if (res != null)
                 {
@@ -422,7 +497,27 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddRoles(Variable variable, DatasetSubclass dataset)
+        private static string GetFullName(PCAxis.Paxiom.Contact contact)
+        {
+            if (string.IsNullOrEmpty(contact.Forname) && string.IsNullOrEmpty(contact.Surname))
+            {
+                return string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(contact.Forname))
+            {
+                return contact.Surname;
+            }
+
+            if (string.IsNullOrEmpty(contact.Surname))
+            {
+                return contact.Forname;
+            }
+
+            return $"{contact.Forname} {contact.Surname}";
+        }
+
+        private static void AddRoles(Variable variable, DatasetSubclass dataset)
         {
             if (variable.IsTime)
             {

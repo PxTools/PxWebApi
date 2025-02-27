@@ -142,7 +142,16 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codeLists": [],
+        "measuringType": {
+          "Emission": "Stock"
+        },
+        "priceType": {
+          "Emission": "NotApplicable"
+        },
+        "adjustment": {
+          "Emission": "None"
+        }
       }
     },
     "TIME": {
