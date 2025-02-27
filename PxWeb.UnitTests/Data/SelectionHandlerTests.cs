@@ -162,7 +162,7 @@ namespace PxWeb.UnitTests.Data
             return selection;
         }
 
-        private Mock<IPxApiConfigurationService> GetConfigMock()
+        private static Mock<IPxApiConfigurationService> GetConfigMock()
         {
             var configMock = new Mock<IPxApiConfigurationService>();
             var testFactory = new TestFactory();
