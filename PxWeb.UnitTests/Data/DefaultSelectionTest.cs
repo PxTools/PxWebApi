@@ -47,7 +47,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(2, selection.Selection.Count);
         }
 
@@ -62,8 +61,8 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
-            Assert.AreEqual(selection.Selection.Count, 4);
+
+            Assert.AreEqual(4, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
             var m1 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
