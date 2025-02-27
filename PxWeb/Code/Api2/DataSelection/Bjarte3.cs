@@ -56,17 +56,11 @@ namespace PxWeb.Code.Api2.DataSelection
                     return WithThreeDimensions(contents, time, variable);
                 }
             }
-            else
-            {
-                // Case C according to algorithm
-                var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
-                var mandatoryClassificationVariables = classificationVariables.Where(v => !v.Elimination).ToList();
-                var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination).ToList();
-                return WithMoreThenTreeDimensions(contents, time, classificationVariables, mandatoryClassificationVariables, noneMandatoryClassificationVariables);
-            }
-
-            //TODO : Should not happen, throw exception?
-            return new VariablesSelection();
+            // Case C according to algorithm
+            var classificationVariables = meta.Variables.Where(v => v.Code != contents.Code && v.Code != time.Code).ToList();
+            var mandatoryClassificationVariables = classificationVariables.Where(v => !v.Elimination).ToList();
+            var noneMandatoryClassificationVariables = classificationVariables.Where(v => v.Elimination).ToList();
+            return WithMoreThenTreeDimensions(contents, time, classificationVariables, mandatoryClassificationVariables, noneMandatoryClassificationVariables);
         }
 
         /// <summary>
