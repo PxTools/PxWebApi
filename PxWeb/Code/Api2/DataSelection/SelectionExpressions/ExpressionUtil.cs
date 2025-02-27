@@ -47,12 +47,9 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
                     return false; // Something went wrong
                 }
 
-                if (numbers.Length == 2)
+                if (numbers.Length == 2 && !int.TryParse(numbers[1], out offset))
                 {
-                    if (!int.TryParse(numbers[1], out offset))
-                    {
-                        return false; // Something went wrong
-                    }
+                    return false; // Something went wrong
                 }
 
                 return true;

@@ -91,8 +91,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
-            Assert.AreEqual(selection.Selection.Count, 4);
+            Assert.AreEqual(4, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
             var m1 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -121,7 +120,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(4, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -151,7 +149,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(2, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -176,7 +173,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(2, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -201,7 +197,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(3, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -229,7 +224,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(3, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -257,7 +251,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(5, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -291,7 +284,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(5, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -325,7 +317,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(5, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -359,7 +350,6 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.IsNotNull(selection.Selection);
             Assert.AreEqual(6, selection.Selection.Count);
 
             var meta = builderMock.Object.Model.Meta;
@@ -386,7 +376,7 @@
         }
 
 
-        private Mock<IPXModelBuilder> GetPxModelBuilderMock(PXModel model)
+        private static Mock<IPXModelBuilder> GetPxModelBuilderMock(PXModel model)
         {
             var builderMock = new Mock<IPXModelBuilder>();
             builderMock.Setup(x => x.Model).Returns(model);

@@ -25,8 +25,6 @@ namespace PxWeb.Code.Api2.DataSelection.SelectionExpressions
                 return false;
             }
 
-            var codes = variable.Values.Select(value => value.Code).ToArray();
-
             if (variable.IsTime)
             {
                 //Time should alway be sorted in ascending order

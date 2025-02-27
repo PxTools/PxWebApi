@@ -22,14 +22,14 @@ namespace PxWeb.Code.Api2.DataSelection
                 return selections;
             }
 
-            var mandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == false).ToList();
-            var noneMandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination == true).ToList();
+            var mandatoryClassificationVariables = meta.Variables.Where(v => !v.Elimination).ToList();
+            var noneMandatoryClassificationVariables = meta.Variables.Where(v => v.Elimination).ToList();
 
             if (mandatoryClassificationVariables.Count == 1) //Only one mandantory classification variable
             {
                 //Take the mandantory and the last none mandantory classification variable
                 // place the one with most values in the placmentStub
-                var (stub, heading) = SelectionUtil.StubOrHeading(mandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+                var (stub, heading) = SelectionUtil.StubOrHeading(mandatoryClassificationVariables[0], noneMandatoryClassificationVariables[noneMandatoryClassificationVariables.Count - 1]);
                 selections.AddStubVariable(stub, SelectionUtil.GetCodes);
                 selections.AddHeadingVariable(heading, SelectionUtil.GetCodes);
 
@@ -43,7 +43,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 //Take the first and last mandantory classification variable
                 //and place the one with most values in the placmentStub
-                var (stub, heading) = SelectionUtil.StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables.Last());
+                var (stub, heading) = SelectionUtil.StubOrHeading(mandatoryClassificationVariables[0], mandatoryClassificationVariables[mandatoryClassificationVariables.Count - 1]);
 
                 //select firt value for all remaining mandatory classification variables
                 for (int i = 1; i < mandatoryClassificationVariables.Count - 1; i++)
@@ -65,7 +65,7 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 //Take the first and last none mandantory classification variable
                 //and place the one with most values in the placmentStub
-                var (stub, heading) = SelectionUtil.StubOrHeading(noneMandatoryClassificationVariables[0], noneMandatoryClassificationVariables.Last());
+                var (stub, heading) = SelectionUtil.StubOrHeading(noneMandatoryClassificationVariables[0], noneMandatoryClassificationVariables[noneMandatoryClassificationVariables.Count - 1];
                 selections.AddStubVariable(stub, SelectionUtil.GetCodes);
                 selections.AddHeadingVariable(heading, SelectionUtil.GetCodes);
 

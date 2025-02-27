@@ -74,12 +74,9 @@ namespace PxWeb.Code.Api2.DataSelection
             int cells = 1;
 
             //Calculate number of cells
-            foreach (var s in selections.Selection)
+            foreach (var s in selections.Selection.Where(s => s.ValueCodes.Count > 0).Select(s => s.ValueCodes.Count))
             {
-                if (s.ValueCodes.Count > 0)
-                {
-                    cells *= s.ValueCodes.Count;
-                }
+                cells *= s;
             }
 
             return cells <= threshold;
@@ -114,7 +111,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     var valueCode = variable.ValueCodes[i];
                     // Try to get the value using the code specified by the API user
-                    PCAxis.Paxiom.Value? pxValue = pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase));
+                    Value? pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase));
 
                     if (pxValue is null)
                     {
@@ -128,7 +125,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
                 //Verify that variables have at least one value selected for mandatory varibles
                 var mandatory = SelectionUtil.IsMandatory(model, variable);
-                if (variable.ValueCodes.Count() == 0 && mandatory)
+                if (variable.ValueCodes.Count == 0 && mandatory)
                 {
                     problem = ProblemUtility.MissingSelection();
                     return false;

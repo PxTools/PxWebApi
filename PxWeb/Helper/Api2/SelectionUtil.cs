@@ -6,7 +6,7 @@ using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Helper.Api2
 {
-    public class SelectionUtil
+    public static class SelectionUtil
     {
         /// <summary>
         /// Helper function that determis which variable should to the Stub or Heading
@@ -112,7 +112,7 @@ namespace PxWeb.Helper.Api2
             bool mandatory = false;
             var mandatoryVariable = model.Meta.Variables.Where(x => x.Code.Equals(variable.VariableCode) && x.Elimination.Equals(false));
 
-            if (mandatoryVariable.Count() != 0)
+            if (mandatoryVariable.Any())
             {
                 mandatory = true;
             }
