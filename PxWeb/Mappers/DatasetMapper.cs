@@ -457,9 +457,9 @@ namespace PxWeb.Mappers
             {
                 var contacts = contInfo.Contact.Split(new[] { "##" }, StringSplitOptions.RemoveEmptyEntries);
                 var res = contacts.FirstOrDefault(x => x.Contains(contact.Forname) &&
-                                                       x.Contains(contact.Surname) && 
-                                                       x.Contains(contact.Email) && 
-                                                       x.Contains(contact.PhoneNo) && 
+                                                       x.Contains(contact.Surname) &&
+                                                       x.Contains(contact.Email) &&
+                                                       x.Contains(contact.PhoneNo) &&
                                                        x.Contains(contact.OrganizationName));
 
                 if (res != null)
