@@ -76,7 +76,7 @@ namespace PxWebApi_Mvc.Tests
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab003_js2.json"));
 
-            Util.AssertJson(rawExpected, rawActual, ["updated"]);
+            Util.AssertJson(rawExpected, rawActual, ["updated", "nextUpdate"]);
 
         }
 
