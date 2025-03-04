@@ -1,8 +1,4 @@
-﻿using System.Linq;
-
-using PCAxis.Paxiom;
-
-using PxWeb.Api2.Server.Models;
+﻿using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Mappers
 {
@@ -16,22 +12,12 @@ namespace PxWeb.Mappers
             _linkCreator = linkCreator;
         }
 
-        public SelectionResponse Map(Selection[] selections, List<string> heading, List<string> stub, PXMeta meta, string tableId, string lang)
+        public SelectionResponse Map(VariablesSelection selections, string tableId, string lang)
         {
             var response = new SelectionResponse();
-            response.Language = lang;
-            response.Selection = selections.Select(selection => new VariableSelection()
-            {
-                VariableCode = selection.VariableCode,
-                CodeList = GetCodeList(meta.Variables.FirstOrDefault(v => string.Compare(v.Code, selection.VariableCode, true) == 0)),
-                ValueCodes = selection.ValueCodes.Cast<string>().ToList(),
-            }).ToList();
+            response.Selection = selections.Selection;
 
-            response.Placement = new VariablePlacementType()
-            {
-                Heading = heading,
-                Stub = stub
-            };
+            response.Placement = selections.Placement;
 
             response.Links = new List<Link>();
 
@@ -40,26 +26,6 @@ namespace PxWeb.Mappers
             return response;
         }
 
-        private static string? GetCodeList(Variable? variable)
-        {
-            if (variable == null)
-            {
-                return null;
-            }
-
-            if (variable.CurrentGrouping != null)
-            {
-                return "agg_" + variable.CurrentGrouping.ID;
-            }
-
-            if (variable.CurrentValueSet != null)
-            {
-                return "vs_" + variable.CurrentValueSet.ID;
-            }
-
-            return null;
-
-        }
     }
 
 
