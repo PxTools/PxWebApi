@@ -198,7 +198,12 @@ namespace PxWeb
                 });
 
             // Configure the HTTP request pipeline.
-            // app.UseHttpsRedirection();
+            var httpsRedirectionConfig = builder.Configuration.GetSection("HttpsRedirection");
+            bool httpsRedirectionEnabled = httpsRedirectionConfig.GetValue<bool>("Enabled");
+            if (httpsRedirectionEnabled)
+            {
+                app.UseHttpsRedirection();
+            }
 
             if (corsEnbled)
             {
