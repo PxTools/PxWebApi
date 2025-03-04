@@ -12,7 +12,7 @@ namespace PxWeb.Models.Api2
             Id = new List<string>();
             Size = new List<int>();
             Class = ClassType.DatasetEnum;
-            Role = new DatasetRole();
+            Role = new Role();
             Extension = new ExtensionRoot();
             Extension.Px = new ExtensionRootPx();
         }
@@ -21,7 +21,7 @@ namespace PxWeb.Models.Api2
         {
             if (Role is null)
             {
-                Role = new DatasetRole();
+                Role = new Role();
             }
 
             if (Role.Time == null)
@@ -36,7 +36,7 @@ namespace PxWeb.Models.Api2
         {
             if (Role is null)
             {
-                Role = new DatasetRole();
+                Role = new Role();
             }
             if (Role.Metric == null)
             {
@@ -50,7 +50,7 @@ namespace PxWeb.Models.Api2
         {
             if (Role is null)
             {
-                Role = new DatasetRole();
+                Role = new Role();
             }
             if (Role.Geo == null)
             {
@@ -265,6 +265,36 @@ namespace PxWeb.Models.Api2
             Extension.Px.Aggregallowed = isAggRegAllowed;
         }
 
+        public void AddUpdateFrequency(string updateFrequency)
+        {
+            if (updateFrequency != null)
+            {
+                Extension ??= new ExtensionRoot();
+                Extension.Px ??= new ExtensionRootPx();
+                Extension.Px.UpdateFrequency = updateFrequency;
+            }
+        }
+
+        public void AddLink(string link)
+        {
+            if (link != null)
+            {
+                Extension ??= new ExtensionRoot();
+                Extension.Px ??= new ExtensionRootPx();
+                Extension.Px.Link = link;
+            }
+        }
+
+        public void AddSurvey(string survey)
+        {
+            if (survey != null)
+            {
+                Extension ??= new ExtensionRoot();
+                Extension.Px ??= new ExtensionRootPx();
+                Extension.Px.Survey = survey;
+            }
+        }
+
         public void AddDescription(string description)
         {
             if (description != null)
@@ -335,11 +365,11 @@ namespace PxWeb.Models.Api2
             Extension.NoteMandatory.Add(index, true);
         }
 
-        public void AddDimensionValue(string dimensionKey, string label, out DatasetDimensionValue dimensionValue)
+        public void AddDimensionValue(string dimensionKey, string label, out DimensionValue dimensionValue)
         {
-            if (Dimension == null) Dimension = new Dictionary<string, DatasetDimensionValue>();
+            if (Dimension == null) Dimension = new Dictionary<string, DimensionValue>();
 
-            dimensionValue = new DatasetDimensionValue()
+            dimensionValue = new DimensionValue()
             {
                 Label = label,
                 Extension = new ExtensionDimension(),
@@ -352,14 +382,14 @@ namespace PxWeb.Models.Api2
             Dimension.Add(dimensionKey, dimensionValue);
         }
 
-        public void AddNoteToDimension(DatasetDimensionValue dimensionValue, string text)
+        public static void AddNoteToDimension(DimensionValue dimensionValue, string text)
         {
             if (dimensionValue.Note == null) dimensionValue.Note = new List<string>();
 
             dimensionValue.Note.Add(text);
         }
 
-        public void AddIsMandatoryForDimensionNote(DatasetDimensionValue dimensionValue, string index)
+        public static void AddIsMandatoryForDimensionNote(DimensionValue dimensionValue, string index)
         {
             if (dimensionValue.Extension is null)
             {
@@ -371,7 +401,7 @@ namespace PxWeb.Models.Api2
             dimensionValue.Extension.NoteMandatory.Add(index, true);
         }
 
-        public void AddValueNoteToCategory(DatasetDimensionValue dimensionValue, string valueNoteKey, string text)
+        public static void AddValueNoteToCategory(DimensionValue dimensionValue, string valueNoteKey, string text)
         {
             if (dimensionValue.Category is null) { dimensionValue.Category = new JsonstatCategory(); }
             if (dimensionValue.Category.Note == null) dimensionValue.Category.Note = new Dictionary<string, List<string>>();
@@ -388,7 +418,7 @@ namespace PxWeb.Models.Api2
             }
         }
 
-        public void AddIsMandatoryForCategoryNote(DatasetDimensionValue dimensionValue, string valueNoteKey, string index)
+        public static void AddIsMandatoryForCategoryNote(DimensionValue dimensionValue, string valueNoteKey, string index)
         {
             if (dimensionValue.Extension is null)
             {
@@ -408,14 +438,14 @@ namespace PxWeb.Models.Api2
             }
         }
 
-        public void AddUnitValue(JsonstatCategory category, out JsonstatCategoryUnitValue unitValue)
+        public static void AddUnitValue(JsonstatCategory category, out JsonstatCategoryUnitValue unitValue)
         {
             if (category.Unit == null) category.Unit = new Dictionary<string, JsonstatCategoryUnitValue>();
 
             unitValue = new JsonstatCategoryUnitValue();
         }
 
-        public void AddRefPeriod(DatasetDimensionValue dimensionValue, string valueCode, string refPeriod)
+        public static void AddRefPeriod(DimensionValue dimensionValue, string valueCode, string refPeriod)
         {
             if (refPeriod == null) return;
 
@@ -430,7 +460,7 @@ namespace PxWeb.Models.Api2
             dimensionValue.Extension.Refperiod.Add(valueCode, refPeriod);
         }
 
-        public void AddDimensionLink(DatasetDimensionValue dimensionValue, Dictionary<string, string> metaIds)
+        public void AddDimensionLink(DimensionValue dimensionValue, Dictionary<string, string> metaIds)
         {
             dimensionValue.Link = new JsonstatExtensionLink
             {
@@ -439,7 +469,7 @@ namespace PxWeb.Models.Api2
 
         }
 
-        public void AddCodelist(DatasetDimensionValue dimensionValue, List<CodeListInformation> codeLists)
+        public static void AddCodelist(DimensionValue dimensionValue, List<CodeListInformation> codeLists)
         {
             if (dimensionValue.Extension is null)
             {
@@ -478,11 +508,47 @@ namespace PxWeb.Models.Api2
 
         }
 
-
-
-        public void SetUpdatedAsUtcString(DateTime datetime)
+        public static void AddMeasuringType(DimensionValue dimensionValue, string valueCode, MeasuringType measuringType)
         {
-            Updated = datetime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+            dimensionValue.Extension ??= new ExtensionDimension();
+
+            if (dimensionValue.Extension.MeasuringType == null)
+                dimensionValue.Extension.MeasuringType = new Dictionary<string, MeasuringType>();
+
+            dimensionValue.Extension.MeasuringType.Add(valueCode, measuringType);
+        }
+
+        public static void AddPriceType(DimensionValue dimensionValue, string valueCode, PriceType priceType)
+        {
+            dimensionValue.Extension ??= new ExtensionDimension();
+
+            if (dimensionValue.Extension.PriceType == null)
+                dimensionValue.Extension.PriceType = new Dictionary<string, PriceType>();
+
+            dimensionValue.Extension.PriceType.Add(valueCode, priceType);
+        }
+
+        public static void AddAdjustment(DimensionValue dimensionValue, string valueCode, Adjustment adjustment)
+        {
+            dimensionValue.Extension ??= new ExtensionDimension();
+
+            if (dimensionValue.Extension.Adjustment == null)
+                dimensionValue.Extension.Adjustment = new Dictionary<string, Adjustment>();
+
+            dimensionValue.Extension.Adjustment.Add(valueCode, adjustment);
+        }
+
+        public static void AddBasePeriod(DimensionValue dimensionValue, string valueCode, string basePeriod)
+        {
+            if (!string.IsNullOrEmpty(basePeriod))
+            {
+                dimensionValue.Extension ??= new ExtensionDimension();
+
+                if (dimensionValue.Extension.BasePeriod == null)
+                    dimensionValue.Extension.BasePeriod = new Dictionary<string, string>();
+
+                dimensionValue.Extension.BasePeriod.Add(valueCode, basePeriod);
+            }
         }
     }
 }

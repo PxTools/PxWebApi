@@ -18,7 +18,7 @@ namespace PxWebApi_Mvc.Tests
 
             var response = await client.GetAsync("/tables?lang=en");
 
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "ListAllTables.json"));
@@ -37,7 +37,7 @@ namespace PxWebApi_Mvc.Tests
 
             var response = await client.GetAsync("/tables/tab004?lang=en");
 
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "TableById_tab004.json"));
@@ -54,12 +54,29 @@ namespace PxWebApi_Mvc.Tests
 
             var response = await client.GetAsync("/tables/tab004/metadata?lang=en");
 
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab004_js2.json"));
 
             Util.AssertJson(rawExpected, rawActual, ["updated"]);
+
+        }
+
+        [TestMethod]
+        public async Task GetMetadataById_tab003_js2()
+        {
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            var response = await client.GetAsync("/tables/tab003/metadata?lang=en");
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            string rawActual = await response.Content.ReadAsStringAsync();
+            string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab003_js2.json"));
+
+            Util.AssertJson(rawExpected, rawActual, ["updated", "nextUpdate"]);
 
         }
 
