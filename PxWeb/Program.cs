@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -50,6 +52,34 @@ namespace PxWeb
 
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
+
+            // Add initial support for OIDC
+            var authConfig = builder.Configuration.GetSection("Authentication");
+            bool useOIDC = authConfig.GetValue<bool>("UseOIDC");
+
+            Console.WriteLine($"OIDC Enabled: {useOIDC}");
+
+            if (useOIDC)
+            {
+                builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+
+                        options.Authority = authConfig["Authority"];
+                        options.Audience = authConfig["Audience"];
+                        options.RequireHttpsMetadata = authConfig.GetValue<bool>("RequireHttpsMetadata");
+
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = authConfig.GetValue<bool>("TokenValidation:ValidateIssuer"),
+                            ValidateAudience = authConfig.GetValue<bool>("TokenValidation:ValidateAudience"),
+                            ValidateLifetime = authConfig.GetValue<bool>("TokenValidation:ValidateLifetime"),
+                            ValidateIssuerSigningKey = authConfig.GetValue<bool>("TokenValidation:ValidateIssuerSigningKey")
+                        };
+                    });
+
+                builder.Services.AddAuthorization();
+            }
 
             // needed to store rate limit counters and ip rules
             builder.Services.AddMemoryCache();
@@ -147,8 +177,6 @@ namespace PxWeb
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(pxApiConfiguration.RoutePrefix);
             app.UsePathBase(new PathString(pxApiConfiguration.RoutePrefix));
 
-
-
             app.UseSwagger(options =>
             {
                 options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
@@ -170,7 +198,7 @@ namespace PxWeb
                 });
 
             // Configure the HTTP request pipeline.
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             if (corsEnbled)
             {
@@ -200,6 +228,25 @@ namespace PxWeb
                 appBuilder.UseCacheMiddleware();
             });
 
+            if (useOIDC)
+            {
+                app.UseAuthentication();
+                app.UseAuthorization();
+
+                app.Use(async (context, next) =>
+                {
+                    if (context.User.Identity == null || !context.User.Identity.IsAuthenticated)
+                    {
+                        context.Response.StatusCode = 401;
+                        await context.Response.CompleteAsync();
+                        return;
+                    }
+
+                    await next();
+                });
+
+                app.MapControllers();
+            }
             app.Run();
         }
 
