@@ -86,7 +86,7 @@ namespace PxWeb.Mappers
                     var unitDecimals = (variableValue.HasPrecision()) ? variableValue.Precision : model.Meta.ShowDecimals;
                     if (dimensionValue.Category is not null)
                     {
-                        dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
+                        DatasetSubclass.AddUnitValue(dimensionValue.Category, out var unitValue);
 
                         if (variableValue.ContentInfo != null)
                         {
@@ -94,7 +94,7 @@ namespace PxWeb.Mappers
                             unitValue.Decimals = unitDecimals;
 
                             //refPeriod extension dimension
-                            dataset.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
+                            DatasetSubclass.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
 
                             //measuringType extension dimension
                             DatasetSubclass.AddMeasuringType(dimensionValue, variableValue.Code, GetMeasuringType(variableValue.ContentInfo.StockFa));
@@ -238,7 +238,7 @@ namespace PxWeb.Mappers
                 dimensionValue.Category.Label.Add(eliminatedValue, model.Meta.Contents);
                 dimensionValue.Category.Index.Add(eliminatedValue, 0);
 
-                dataset.AddUnitValue(dimensionValue.Category, out var unitValue);
+                DatasetSubclass.AddUnitValue(dimensionValue.Category, out var unitValue);
                 unitValue.Base = model.Meta.ContentInfo.Units;
                 unitValue.Decimals = model.Meta.Decimals;
 
@@ -250,7 +250,19 @@ namespace PxWeb.Mappers
             }
 
             //refPeriod extension dimension
-            dataset.AddRefPeriod(dimensionValue, eliminatedValue, model.Meta.ContentInfo.RefPeriod);
+            DatasetSubclass.AddRefPeriod(dimensionValue, eliminatedValue, model.Meta.ContentInfo.RefPeriod);
+
+            //measuringType extension dimension
+            DatasetSubclass.AddMeasuringType(dimensionValue, eliminatedValue, GetMeasuringType(model.Meta.ContentInfo.StockFa));
+
+            //priceType extension dimension
+            DatasetSubclass.AddPriceType(dimensionValue, eliminatedValue, GetPriceType(model.Meta.ContentInfo.CFPrices));
+
+            //adjustment extension dimension
+            DatasetSubclass.AddAdjustment(dimensionValue, eliminatedValue, GetAdjustment(model.Meta.ContentInfo.DayAdj, model.Meta.ContentInfo.SeasAdj));
+
+            //basePeriod extension dimension
+            DatasetSubclass.AddBasePeriod(dimensionValue, eliminatedValue, model.Meta.ContentInfo.Baseperiod);
 
             // Contact
             AddContact(dataset, model.Meta.ContentInfo);
@@ -444,7 +456,11 @@ namespace PxWeb.Mappers
             if (contInfo.Contact != null)
             {
                 var contacts = contInfo.Contact.Split(new[] { "##" }, StringSplitOptions.RemoveEmptyEntries);
-                var res = contacts.FirstOrDefault(x => x.Contains(contact.Forname) && x.Contains(contact.Surname) && x.Contains(contact.Email) && x.Contains(contact.PhoneNo));
+                var res = contacts.FirstOrDefault(x => x.Contains(contact.Forname) &&
+                                                       x.Contains(contact.Surname) && 
+                                                       x.Contains(contact.Email) && 
+                                                       x.Contains(contact.PhoneNo) && 
+                                                       x.Contains(contact.OrganizationName));
 
                 if (res != null)
                 {
@@ -460,9 +476,11 @@ namespace PxWeb.Mappers
             if (!dataset.Extension.Contact.Exists(x => x.Mail is not null &&
                                                        x.Name is not null &&
                                                        x.Phone is not null &&
+                                                       x.Organization is not null &&
                                                        x.Mail.Equals(jsonContact.Mail) &&
                                                        x.Name.Equals(jsonContact.Name) &&
-                                                       x.Phone.Equals(jsonContact.Phone)))
+                                                       x.Phone.Equals(jsonContact.Phone) &&
+                                                       x.Organization.Equals(jsonContact.Organization)))
             {
                 dataset.Extension.Contact.Add(jsonContact);
             }

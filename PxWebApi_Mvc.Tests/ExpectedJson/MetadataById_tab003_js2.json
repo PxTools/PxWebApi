@@ -1,0 +1,258 @@
+{
+  "version": "2.0",
+  "class": "dataset",
+  "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en",
+  "label": "Disposal facilities by treatment category, waste category, contents and year",
+  "source": "Statistics Sweden",
+  "updated": "2023-05-25T14:13:00Z",
+  "link": {
+    "data": [
+      {
+        "href": "https://www.pxapi.com/api/v2/tables/TAB003/data?lang=en&outputFormat=px"
+      }
+    ]
+  },
+  "note": [
+    ".. = Data not available"
+  ],
+  "role": {
+    "time": [
+      "TIME"
+    ],
+    "metric": [
+      "ContentsCode"
+    ]
+  },
+  "id": [
+    "TREATMENT_CAT",
+    "WASTE_CAT",
+    "ContentsCode",
+    "TIME"
+  ],
+  "size": [
+    9,
+    34,
+    2,
+    4
+  ],
+  "dimension": {
+    "TREATMENT_CAT": {
+      "label": "treatment category",
+      "category": {
+        "index": {
+          "05": 0,
+          "10": 1,
+          "20": 2,
+          "30": 3,
+          "40": 4,
+          "50": 5,
+          "60": 6,
+          "70": 7,
+          "90": 8
+        },
+        "label": {
+          "05": "RECYCLING",
+          "10": "COMPOSTING AND ANAEROBIC DIGESTION",
+          "20": "BACKFILLING",
+          "30": "OTHER RECOVERY INCL. RECULTIVATION OF LANDFILLS AND CONSTRUCTION",
+          "40": "INCINERATION WITH ENERGY RECOVERY",
+          "50": "INCINERATION WITHOUT ENERGY RECOVERY",
+          "60": "LANDFILLING",
+          "70": "LAND TREATMENT OR RELEASE INTO WATER BODIES",
+          "90": "PRE-TREATMENT AND SORTING"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codeLists": []
+      }
+    },
+    "WASTE_CAT": {
+      "label": "waste category",
+      "category": {
+        "index": {
+          "01.1": 0,
+          "01.2": 1,
+          "01.3": 2,
+          "01.4,02,03.1": 3,
+          "03.2": 4,
+          "03.3": 5,
+          "05": 6,
+          "06.1": 7,
+          "06.2": 8,
+          "06.3": 9,
+          "07.1": 10,
+          "07.2": 11,
+          "07.3": 12,
+          "07.4": 13,
+          "07.5": 14,
+          "07.6": 15,
+          "07.7": 16,
+          "08 ex 08.1,41": 17,
+          "08.1": 18,
+          "08.41": 19,
+          "09.1": 20,
+          "09.2": 21,
+          "09.3": 22,
+          "10.1": 23,
+          "10.2": 24,
+          "10.3": 25,
+          "11": 26,
+          "12.1": 27,
+          "12.2,3,5": 28,
+          "12.4": 29,
+          "12.6": 30,
+          "12.7": 31,
+          "12.8,13": 32,
+          "TOT": 33
+        },
+        "label": {
+          "01.1": "spent solvents",
+          "01.2": "acid, alkaline or saline wastes",
+          "01.3": "used oils",
+          "01.4,02,03.1": "chemical wastes",
+          "03.2": "industrial effluent sludges",
+          "03.3": "sludges and liquid wastes from w. treatm.",
+          "05": "health care and biological wastes",
+          "06.1": "metallic wastes, ferrous",
+          "06.2": "metallic wastes, non-ferrous",
+          "06.3": "metallic wastes, mixed",
+          "07.1": "glass wastes",
+          "07.2": "paper and cardboard wastes",
+          "07.3": "rubber wastes",
+          "07.4": "plastic wastes",
+          "07.5": "wood wastes",
+          "07.6": "textile wastes",
+          "07.7": "waste containing PCB",
+          "08 ex 08.1,41": "discarded equipment",
+          "08.1": "discarded vehicles",
+          "08.41": "batteries and accumulators wastes",
+          "09.1": "animal and mixed waste",
+          "09.2": "vegetal wastes",
+          "09.3": "animal faeces, urine and manure",
+          "10.1": "household and similar wastes",
+          "10.2": "mixed and undifferentiated materials",
+          "10.3": "sorting residues",
+          "11": "common sludges",
+          "12.1": "mineral waste from constr. and demol.",
+          "12.2,3,5": "other mineral wastes",
+          "12.4": "combustion wastes",
+          "12.6": "soils",
+          "12.7": "dredging spoils (dry weight)",
+          "12.8,13": "min. waste from w. treatm. and stabilised w.",
+          "TOT": "Total"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codeLists": []
+      }
+    },
+    "ContentsCode": {
+      "label": "contents",
+      "category": {
+        "index": {
+          "WasteHazard": 0,
+          "WasteNonHazard": 1
+        },
+        "label": {
+          "WasteHazard": "Treated waste, hazardous (tonnes)",
+          "WasteNonHazard": "Treated waste, non hazardous (tonnes)"
+        },
+        "unit": {
+          "WasteHazard": {
+            "base": "tonnes",
+            "decimals": 0
+          },
+          "WasteNonHazard": {
+            "base": "tonnes",
+            "decimals": 0
+          }
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codeLists": [],
+        "measuringType": {
+          "WasteHazard": "Flow",
+          "WasteNonHazard": "Average"
+        },
+        "priceType": {
+          "WasteHazard": "Current",
+          "WasteNonHazard": "Fixed"
+        },
+        "adjustment": {
+          "WasteHazard": "SesOnly",
+          "WasteNonHazard": "WorkOnly"
+        },
+        "basePeriod": {
+          "WasteHazard": "Dummy baseperiod for waste sm",
+          "WasteNonHazard": "Dummy baseperiod for NON haz"
+        }
+      }
+    },
+    "TIME": {
+      "label": "year",
+      "category": {
+        "index": {
+          "2010": 0,
+          "2012": 1,
+          "2014": 2,
+          "2016": 3
+        },
+        "label": {
+          "2010": "2010",
+          "2012": "2012",
+          "2014": "2014",
+          "2016": "2016"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "code",
+        "codeLists": []
+      }
+    }
+  },
+  "extension": {
+    "px": {
+      "infofile": "ENVIRONMENT",
+      "tableid": "TAB003",
+      "decimals": 0,
+      "official-statistics": false,
+      "aggregallowed": false,
+      "language": "en",
+      "contents": "Disposal facilities",
+      "descriptiondefault": false,
+      "heading": [
+        "ContentsCode",
+        "TIME"
+      ],
+      "stub": [
+        "TREATMENT_CAT",
+        "WASTE_CAT"
+      ],
+      "matrix": "TAB003",
+      "subject-code": "EN",
+      "subject-area": "Environment",
+      "nextUpdate": "2024-05-25T14:13:00Z",
+      "survey": "This is a survey",
+      "link": "This is a link",
+      "updateFrequency": "This is a frequency"
+    },
+    "contact": [
+      {
+        "raw": "Test Testsson, SCB#Tel: 08-111 222 33#Fax: 08-222 333 44#E-mail: test.testsson@scb.se"
+      },
+      {
+        "raw": "Test2 Testsson2, SCB#Tel: 08-333 444 55#Fax: 08-444 555 66#E-mail: test2.testsson2@scb.se"
+      },
+      {
+        "raw": "Test3 Testsson3, SCB#Tel: 08-111 222 33#Fax: 08-222 333 44#E-mail: test3.testsson3@scb.se"
+      }
+    ]
+  }
+}

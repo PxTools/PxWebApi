@@ -438,14 +438,14 @@ namespace PxWeb.Models.Api2
             }
         }
 
-        public void AddUnitValue(JsonstatCategory category, out JsonstatCategoryUnitValue unitValue)
+        public static void AddUnitValue(JsonstatCategory category, out JsonstatCategoryUnitValue unitValue)
         {
             if (category.Unit == null) category.Unit = new Dictionary<string, JsonstatCategoryUnitValue>();
 
             unitValue = new JsonstatCategoryUnitValue();
         }
 
-        public void AddRefPeriod(DimensionValue dimensionValue, string valueCode, string refPeriod)
+        public static void AddRefPeriod(DimensionValue dimensionValue, string valueCode, string refPeriod)
         {
             if (refPeriod == null) return;
 

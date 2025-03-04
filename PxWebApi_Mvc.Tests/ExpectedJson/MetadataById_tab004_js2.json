@@ -249,10 +249,25 @@
     },
     "contact": [
       {
-        "raw": "Test Testsson, SCB#Tel: 08-111 222 33#Fax: 08-222 333 44#E-mail: test.testsson@scb.se"
+        "name": "Test Testsson",
+        "organization": "SCB",
+        "phone": "08-111 222 33",
+        "mail": "test.testsson@scb",
+        "raw": "Test Testsson, SCB# 08-111 222 33#test.testsson@scb"
       },
       {
-        "raw": "Test2 Testsson2, SCB#Tel: 08-333 444 55#Fax: 08-444 555 66#E-mail: test2.testsson2@scb.se"
+        "name": "Test2 Testsson2",
+        "organization": "SCB",
+        "phone": "08-111 222 32",
+        "mail": "test.testsson2@scb",
+        "raw": "Test2 Testsson2, SCB# 08-111 222 32#test.testsson2@scb"
+      },
+      {
+        "name": "",
+        "organization": "just organization",
+        "phone": "",
+        "mail": "",
+        "raw": " , just organization# "
       }
     ]
   }
