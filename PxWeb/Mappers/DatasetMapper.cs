@@ -79,7 +79,7 @@ namespace PxWeb.Mappers
                     CollectMetaIdsForValue(variableValue, ref metaIdsHelper);
 
                     // ValueNote
-                    AddValueNotes(variableValue, dataset, dimensionValue);
+                    AddValueNotes(variableValue, dimensionValue);
 
                     if (!variable.IsContentVariable) continue;
 
@@ -128,7 +128,7 @@ namespace PxWeb.Mappers
                 AddShow(dimensionValue, variable);
 
                 //Variable notes
-                AddVariableNotes(variable, dataset, dimensionValue);
+                AddVariableNotes(variable, dimensionValue);
 
                 //MetaID
                 CollectMetaIdsForVariable(variable, ref metaIdsHelper);
@@ -144,7 +144,7 @@ namespace PxWeb.Mappers
                 MapCodelists(codeLists, variable);
                 if (codeLists != null)
                 {
-                    dataset.AddCodelist(dimensionValue, codeLists);
+                    DatasetSubclass.AddCodelist(dimensionValue, codeLists);
                 }
 
 
@@ -390,33 +390,33 @@ namespace PxWeb.Mappers
             }
         }
 
-        private static void AddValueNotes(Value variableValue, DatasetSubclass dataset, DimensionValue dimensionValue)
+        private static void AddValueNotes(Value variableValue, DimensionValue dimensionValue)
         {
             if (variableValue.Notes == null) return;
 
             var index = 0;
             foreach (var note in variableValue.Notes)
             {
-                dataset.AddValueNoteToCategory(dimensionValue, variableValue.Code, note.Text);
+                DatasetSubclass.AddValueNoteToCategory(dimensionValue, variableValue.Code, note.Text);
 
                 if (note.Mandantory)
-                    dataset.AddIsMandatoryForCategoryNote(dimensionValue, variableValue.Code, index.ToString());
+                    DatasetSubclass.AddIsMandatoryForCategoryNote(dimensionValue, variableValue.Code, index.ToString());
 
                 index++;
             }
         }
 
-        private static void AddVariableNotes(Variable variable, DatasetSubclass dataset, DimensionValue dimensionValue)
+        private static void AddVariableNotes(Variable variable, DimensionValue dimensionValue)
         {
             if (variable.Notes == null) return;
 
             var noteIndex = 0;
             foreach (var note in variable.Notes)
             {
-                dataset.AddNoteToDimension(dimensionValue, note.Text);
+                DatasetSubclass.AddNoteToDimension(dimensionValue, note.Text);
 
                 if (note.Mandantory)
-                    dataset.AddIsMandatoryForDimensionNote(dimensionValue, noteIndex.ToString());
+                    DatasetSubclass.AddIsMandatoryForDimensionNote(dimensionValue, noteIndex.ToString());
 
                 noteIndex++;
             }
