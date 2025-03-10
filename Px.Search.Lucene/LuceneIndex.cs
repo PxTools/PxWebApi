@@ -1,8 +1,6 @@
 ﻿namespace Px.Search.Lucene
 {
 
-    //TODO look at https://github.com/statisticssweden/Px.Search.Lucene/blob/main/Px.Search.Lucene/LuceneIndexer.cs for inspiration
-
     public class LuceneIndex : IIndex
     {
         private readonly string _indexDirectoryBase = "";
