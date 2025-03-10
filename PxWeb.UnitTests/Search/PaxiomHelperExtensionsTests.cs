@@ -19,17 +19,16 @@
         [TestMethod]
         public void GetTimeUnit_TimeSacleNotSet_ReturnsX()
         {
+
+            // Arrange
             var variable = ModelStore.CreateTimeVariable("", PlacementType.Stub, 10);
             PXMeta meta = new PXMeta();
             meta.Variables.Add(variable);
             var model = new PXModel();
             model.Meta = meta;
 
-            // Arrange
-            var pxModel = ModelStore.GetModelWithOnlyOneVariable(1);
-
             // Act
-            var timeUnit = pxModel.Meta.GetTimeUnit();
+            var timeUnit = model.Meta.GetTimeUnit();
 
             // Assert
             Assert.AreEqual("X", timeUnit);
