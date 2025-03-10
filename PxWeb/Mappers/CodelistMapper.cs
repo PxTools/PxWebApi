@@ -10,6 +10,7 @@ namespace PxWeb.Mappers
         {
             Codelist codelist = new Codelist(grouping.ID, grouping.Name);
             codelist.CodelistType = Codelist.CodelistTypeEnum.Aggregation;
+            
 
             foreach (Group group in grouping.Groups)
             {
