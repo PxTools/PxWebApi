@@ -119,7 +119,7 @@ namespace Px.Search.Tests
             indexer.IndexDatabase(new List<string> { "en" });
 
             // Assert
-            // No exception should be thrown
+            index.Verify(b => b.AddEntry(It.IsAny<TableInformation>(), It.IsAny<PXMeta>()), Times.Exactly(1));
         }
     }
 }
