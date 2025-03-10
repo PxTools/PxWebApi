@@ -90,32 +90,40 @@
             {
                 foreach (var subitem in ((PxMenuItem)item).SubItems)
                 {
+                    if (subitem is null)
+                    {
+                        continue;
+                    }
                     if (subitem is PxMenuItem)
                     {
                         TraverseDatabase(subitem.ID.Selection, language, index);
                     }
                     else if (subitem is TableLink)
                     {
-                        string tableId = ((TableLink)subitem).TableId;
-                        if (!_indexedTables.Contains(tableId))
-                        {
-                            IndexTable(tableId, (TableLink)subitem, language, index);
-
-                            _indexedTables.Add(tableId);
-                            if (_indexedTables.Count % 100 == 0)
-                            {
-                                _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
-                            }
-                        }
-                        else
-                        {
-                            _logger.LogDebug("Table {TableId} is already indexed.", tableId);
-                        }
-
+                        AddTableToIndex(language, index, (TableLink)subitem);
                     }
                 }
             }
 
+        }
+
+        private void AddTableToIndex(string language, IIndex index, TableLink subitem)
+        {
+            string tableId = subitem.TableId;
+            if (!_indexedTables.Contains(tableId))
+            {
+                IndexTable(tableId, subitem, language, index);
+
+                _indexedTables.Add(tableId);
+                if (_indexedTables.Count % 100 == 0)
+                {
+                    _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
+                }
+            }
+            else
+            {
+                _logger.LogDebug("Table {TableId} is already indexed.", tableId);
+            }
         }
 
 

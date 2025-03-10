@@ -24,5 +24,7 @@
         public const string SEARCH_FIELD_VALUESETS = "valuesets";
         public const string SEARCH_FIELD_VALUESETCODES = "valuesetcodes";
         public const string SEARCH_FIELD_SYNONYMS = "synonyms";
+        public const string SEARCH_FIELD_SOURCE = "source";
+        public const string SEARCH_FIELD_TIME_UNIT = "timeunit";
     }
 }

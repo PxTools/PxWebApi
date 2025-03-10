@@ -1,8 +1,6 @@
 ﻿namespace Px.Search.Lucene
 {
 
-    //TODO look at https://github.com/statisticssweden/Px.Search.Lucene/blob/main/Px.Search.Lucene/LuceneIndexer.cs for inspiration
-
     public class LuceneIndex : IIndex
     {
         private readonly string _indexDirectoryBase = "";
@@ -172,6 +170,8 @@
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUESETCODES, meta.GetAllValuesetCodes(), Field.Store.NO));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DISCONTINUED, tbl.Discontinued == null ? "Unknown" : tbl.Discontinued.ToString(), Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TAGS, GetAllTags(tbl.Tags), Field.Store.YES));
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SOURCE, meta.Source, Field.Store.YES));
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, meta.GetTimeUnit(), Field.Store.YES));
                 if (!string.IsNullOrEmpty(meta.Synonyms))
                 {
                     doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SYNONYMS, meta.Synonyms, Field.Store.NO));
