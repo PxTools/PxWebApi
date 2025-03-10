@@ -81,6 +81,41 @@ namespace Px.Search.Tests
             // Assert
             // No exception should be thrown
 
+
+
+        }
+
+        [TestMethod]
+        public void IndexDatabase_WithMenu_ShouldTraverseTheDatabase()
+        {
+            // Arrange
+            var backend = new Mock<ISearchBackend>();
+            var index = new Mock<IIndex>();
+            var dataSource = new Mock<IDataSource>();
+            var logger = new Mock<ILogger>();
+            var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
+            var rootItem = new PxMenuItem(null, "", "", "A", "", "root", "");
+            rootItem.SubItems.Add(tableLink);
+            backend.Setup(b => b.GetIndex()).Returns(index.Object);
+            dataSource.Setup(d => d.CreateMenu("", It.IsAny<string>(), out It.Ref<bool>.IsAny))
+                .Returns((string id, string language, out bool selectionExists) =>
+                {
+                    selectionExists = true;
+                    return (Item)rootItem;
+                });
+            dataSource.Setup(d => d.CreateMenu("root", It.IsAny<string>(), out It.Ref<bool>.IsAny))
+                .Returns((string id, string language, out bool selectionExists) =>
+                {
+                    selectionExists = true;
+                    return (Item)rootItem;
+                });
+
+            var indexer = new Indexer(dataSource.Object, backend.Object, logger.Object);
+            // Act
+            indexer.IndexDatabase(new List<string> { "en" });
+
+            // Assert
+            // No exception should be thrown
         }
     }
 }

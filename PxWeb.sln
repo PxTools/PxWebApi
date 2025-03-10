@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWebApi.BigTests", "PxWebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PxWebApi_Mvc.Tests", "PxWebApi_Mvc.Tests\PxWebApi_Mvc.Tests.csproj", "{DE680238-98E9-4FCE-9D55-9B849F893238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Px.Search.Tests", "Px.Search.Tests\Px.Search.Tests.csproj", "{4EC75DDE-F0ED-45BB-9825-404E77E5F422}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{DE680238-98E9-4FCE-9D55-9B849F893238}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE680238-98E9-4FCE-9D55-9B849F893238}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE680238-98E9-4FCE-9D55-9B849F893238}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4EC75DDE-F0ED-45BB-9825-404E77E5F422}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4EC75DDE-F0ED-45BB-9825-404E77E5F422}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4EC75DDE-F0ED-45BB-9825-404E77E5F422}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4EC75DDE-F0ED-45BB-9825-404E77E5F422}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
