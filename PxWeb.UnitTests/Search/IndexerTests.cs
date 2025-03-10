@@ -1,4 +1,8 @@
-﻿namespace Px.Search.Tests
+﻿using System;
+
+using PxWeb.UnitTests;
+
+namespace Px.Search.Tests
 {
     [TestClass]
     public sealed class IndexerTests
@@ -86,8 +90,12 @@
             var logger = new Mock<ILogger>();
             var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
             var rootItem = new PxMenuItem(null, "", "", "A", "", "root", "");
+            var builder = new Mock<IPXModelBuilder>();
+            var model = ModelStore.CreateModelA();
             rootItem.SubItems.Add(tableLink);
             backend.Setup(b => b.GetIndex()).Returns(index.Object);
+            builder.Setup(b => b.Model).Returns(model);
+
             dataSource.Setup(d => d.CreateMenu("", It.IsAny<string>(), out It.Ref<bool>.IsAny))
                 .Returns((string id, string language, out bool selectionExists) =>
                 {
@@ -99,6 +107,11 @@
                 {
                     selectionExists = true;
                     return (Item)rootItem;
+                });
+            dataSource.Setup(d => d.CreateBuilder(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string id, string language) =>
+                {
+                    return builder.Object;
                 });
 
             var indexer = new Indexer(dataSource.Object, backend.Object, logger.Object);
