@@ -1,8 +1,6 @@
 ﻿using System;
 
-using PxWeb.UnitTests;
-
-namespace Px.Search.Tests
+namespace PxWeb.UnitTests.Search
 {
     [TestClass]
     public sealed class IndexerTests
