@@ -1,13 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-using Moq;
-
-using PCAxis.Menu;
-
-using Px.Abstractions.Interfaces;
-
-
-namespace Px.Search.Tests
+﻿namespace Px.Search.Tests
 {
     [TestClass]
     public sealed class IndexerTests
@@ -71,7 +62,7 @@ namespace Px.Search.Tests
                 .Returns((string id, string language, out bool selectionExists) =>
                 {
                     selectionExists = false;
-                    return (Item)null;
+                    return null as Item;
                 });
 
             var indexer = new Indexer(dataSource.Object, backend.Object, logger.Object);
