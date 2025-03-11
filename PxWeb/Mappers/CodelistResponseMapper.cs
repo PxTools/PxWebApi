@@ -59,7 +59,7 @@ namespace PxWeb.Mappers
 
             codeListResponse.Elimination = codelist.Elimination;
             codeListResponse.EliminationValueCode = codelist.EliminationValue;
-            
+
             return codeListResponse;
         }
 

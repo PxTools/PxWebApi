@@ -133,7 +133,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 // Remove leading "agg_" from id
                 id = id.Substring(4);
             }
-            
+
             Grouping grouping = PCAxis.Paxiom.GroupRegistry.GetRegistry().GetGrouping(id);
 
             if (grouping != null)
@@ -141,7 +141,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 codelist = _codelistMapper.Map(grouping);
                 codelist.AvailableLanguages.Add(language);
             }
-            
+
             return codelist;
         }
 
