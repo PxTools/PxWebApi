@@ -10,7 +10,8 @@ namespace PxWeb.Mappers
         {
             Codelist codelist = new Codelist(grouping.ID, grouping.Name);
             codelist.CodelistType = Codelist.CodelistTypeEnum.Aggregation;
-            
+            codelist.Elimination = false;
+            codelist.EliminationValue = null;
 
             foreach (Group group in grouping.Groups)
             {
@@ -24,6 +25,9 @@ namespace PxWeb.Mappers
         {
             Codelist codelist = new Codelist(grouping.Id, grouping.Label);
             codelist.CodelistType = Codelist.CodelistTypeEnum.Aggregation;
+            codelist.Elimination = false;
+            codelist.EliminationValue = null;
+            codelist.AvailableLanguages = grouping.AvailableLanguages;
 
             foreach (PCAxis.Sql.Models.GroupedValue group in grouping.Values)
             {
@@ -37,14 +41,15 @@ namespace PxWeb.Mappers
         {
             Codelist codelist = new Codelist(valueset.Id, valueset.Label);
             codelist.CodelistType = Codelist.CodelistTypeEnum.ValueSet;
+            codelist.Elimination = valueset.Elimination;
+            codelist.EliminationValue = valueset.EliminationValueCode;
+            codelist.AvailableLanguages = valueset.AvailableLanguages;
 
             foreach (var value in valueset.Values)
             {
                 codelist.Values.Add(MapValuesetValue(value));
             }
-
-            codelist.AvailableLanguages = valueset.AvailableLanguages;
-
+            
             return codelist;
         }
 

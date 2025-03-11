@@ -219,7 +219,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 // Remove leading "agg_" from id
                 id = id.Substring(4);
             }
-
+            
             PCAxis.Sql.Models.Grouping grouping = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetGrouping(id, language);
 
             if (grouping != null)

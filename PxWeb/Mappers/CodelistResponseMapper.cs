@@ -57,11 +57,8 @@ namespace PxWeb.Mappers
                 }
             }
 
-            codeListResponse.Elimination = codelist.Elemenation;
-            if (codelist.Elemenation != null && codelist.Elemenation == true && codelist.EliminationValue != null)
-            {
-                codeListResponse.EliminationValueCode = codelist.EliminationValue.Code;
-            }
+            codeListResponse.Elimination = codelist.Elimination;
+            codeListResponse.EliminationValueCode = codelist.EliminationValue;
             
             return codeListResponse;
         }
