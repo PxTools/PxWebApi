@@ -48,7 +48,9 @@
 
                         if (item is PxMenuItem)
                         {
-                            TraverseDatabase(item.ID.Selection, language, index);
+                            var path = new List<Level>();
+                            path.Add(new Level(item.ID.Selection, item.Text));
+                            TraverseDatabase(item.ID.Selection, language, index, path);
                         }
                     }
                     _logger.LogInformation("Done for {Language}. Indexed total of {Count} tables.", language, _indexedTables.Count);
@@ -64,7 +66,7 @@
         /// <param name="id">current node id</param>
         /// <param name="language">current processing language</param>
         /// <param name="index">the index to use</param>
-        private void TraverseDatabase(string id, string language, IIndex index)
+        private void TraverseDatabase(string id, string language, IIndex index, List<Level> path)
         {
             bool exists;
             Item? item;
@@ -96,23 +98,24 @@
                     }
                     if (subitem is PxMenuItem)
                     {
-                        TraverseDatabase(subitem.ID.Selection, language, index);
+                        path.Add(new Level(subitem.ID.Selection, subitem.Text));
+                        TraverseDatabase(subitem.ID.Selection, language, index, path);
                     }
                     else if (subitem is TableLink)
                     {
-                        AddTableToIndex(language, index, (TableLink)subitem);
+                        AddTableToIndex(language, index, (TableLink)subitem, path);
                     }
                 }
             }
 
         }
 
-        private void AddTableToIndex(string language, IIndex index, TableLink subitem)
+        private void AddTableToIndex(string language, IIndex index, TableLink tableLink, List<Level> path)
         {
-            string tableId = subitem.TableId;
+            string tableId = tableLink.TableId;
             if (!_indexedTables.Contains(tableId))
             {
-                IndexTable(tableId, subitem, language, index);
+                IndexTable(tableId, tableLink, language, index, path);
 
                 _indexedTables.Add(tableId);
                 if (_indexedTables.Count % 100 == 0)
@@ -159,7 +162,7 @@
             }
         }
 
-        private void IndexTable(string id, TableLink tblLink, string language, IIndex index)
+        private void IndexTable(string id, TableLink tblLink, string language, IIndex index, List<Level> path)
         {
             IPXModelBuilder? builder = _source.CreateBuilder(id, language);
 
@@ -170,6 +173,7 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
+                    tbl.Paths.Add(path.ToArray());
 
                     index.AddEntry(tbl, model.Meta);
                 }

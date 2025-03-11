@@ -1,4 +1,6 @@
-﻿namespace Px.Search.Lucene
+﻿using System.Text.Json;
+
+namespace Px.Search.Lucene
 {
 
     public class LuceneIndex : IIndex
@@ -172,6 +174,7 @@
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TAGS, GetAllTags(tbl.Tags), Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SOURCE, meta.Source, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, meta.GetTimeUnit(), Field.Store.YES));
+                doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
                 if (!string.IsNullOrEmpty(meta.Synonyms))
                 {
                     doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SYNONYMS, meta.Synonyms, Field.Store.NO));
@@ -199,6 +202,12 @@
                 builder.Append(' ');
             }
             return builder.ToString();
+        }
+
+        private static byte[] GetBytes(List<Level[]> paths)
+        {
+            string jsonString = JsonSerializer.Serialize(paths);
+            return Encoding.UTF8.GetBytes(jsonString);
         }
     }
 }

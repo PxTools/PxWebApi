@@ -11,6 +11,7 @@
             LastPeriod = lastPeriod;
             VariableNames = variableNames;
             Tags = new string[] { }; // TODO: Implement later
+            Paths = new List<Level[]>(); // TODO: Implement later
         }
 
         public string Id { get; set; }
@@ -24,5 +25,6 @@
         public string LastPeriod { get; set; }
         public string[] VariableNames { get; set; }
         public string[] Tags { get; set; }
+        public List<Level[]> Paths { get; set; }
     }
 }
