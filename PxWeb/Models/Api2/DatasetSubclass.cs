@@ -200,15 +200,9 @@ namespace PxWeb.Models.Api2
 
         public void AddCopyright(bool isCopyrighted)
         {
-            if (Extension is null)
-            {
-                Extension = new ExtensionRoot();
-            }
+            Extension ??= new ExtensionRoot();
 
-            if (Extension.Px is null)
-            {
-                Extension.Px = new ExtensionRootPx();
-            }
+            Extension.Px ??= new ExtensionRootPx();
 
             Extension.Px.Copyright = isCopyrighted;
         }
