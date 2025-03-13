@@ -198,6 +198,21 @@ namespace PxWeb.Models.Api2
             Extension.Px.OfficialStatistics = isOfficialStatistics;
         }
 
+        public void AddCopyright(bool isCopyrighted)
+        {
+            if (Extension is null)
+            {
+                Extension = new ExtensionRoot();
+            }
+
+            if (Extension.Px is null)
+            {
+                Extension.Px = new ExtensionRootPx();
+            }
+
+            Extension.Px.Copyright = isCopyrighted;
+        }
+
         public void AddMatrix(string matrix)
         {
             if (matrix != null)
