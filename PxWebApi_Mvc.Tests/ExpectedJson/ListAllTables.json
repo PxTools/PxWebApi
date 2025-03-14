@@ -10,11 +10,20 @@
       "firstPeriod": "1990",
       "lastPeriod": "2017",
       "category": "public",
-      "variableNames": [
-        "sector",
-        "greenhouse gas",
-        "contents",
-        "year"
+      "variableNames": [ "sector", "greenhouse gas", "contents", "year" ],
+      "source": "Statistics Sweden",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "EN",
+            "label": "Environment"
+          },
+          {
+            "id": "EN02",
+            "label": "Miscellaneous"
+          }
+        ]
       ],
       "links": [
         {
@@ -43,11 +52,20 @@
       "firstPeriod": "2010",
       "lastPeriod": "2015",
       "category": "public",
-      "variableNames": [
-        "region",
-        "land use",
-        "contents",
-        "year"
+      "variableNames": [ "region", "land use", "contents", "year" ],
+      "source": "Statistics Sweden",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "EN",
+            "label": "Environment"
+          },
+          {
+            "id": "EN02",
+            "label": "Miscellaneous"
+          }
+        ]
       ],
       "links": [
         {
@@ -76,11 +94,24 @@
       "firstPeriod": "2010",
       "lastPeriod": "2016",
       "category": "public",
-      "variableNames": [
-        "treatment category",
-        "waste category",
-        "contents",
-        "year"
+      "variableNames": [ "treatment category", "waste category", "contents", "year" ],
+      "source": "Statistics Sweden",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "EN",
+            "label": "Environment"
+          },
+          {
+            "id": "EN02",
+            "label": "Miscellaneous"
+          },
+          {
+            "id": "EN01",
+            "label": "Waste"
+          }
+        ]
       ],
       "links": [
         {
@@ -109,12 +140,32 @@
       "firstPeriod": "1981",
       "lastPeriod": "2001",
       "category": "public",
-      "variableNames": [
-        "region",
-        "sex",
-        "age",
-        "contents",
-        "year"
+      "variableNames": [ "region", "sex", "age", "contents", "year" ],
+      "source": "Eurostat",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "EN",
+            "label": "Environment"
+          },
+          {
+            "id": "EN02",
+            "label": "Miscellaneous"
+          },
+          {
+            "id": "EN01",
+            "label": "Waste"
+          },
+          {
+            "id": "PO",
+            "label": "Population"
+          },
+          {
+            "id": "PO01",
+            "label": "Population census"
+          }
+        ]
       ],
       "links": [
         {
@@ -143,13 +194,32 @@
       "firstPeriod": "1991",
       "lastPeriod": "2001",
       "category": "public",
-      "variableNames": [
-        "region",
-        "sex",
-        "age",
-        "citizenship",
-        "contents",
-        "year"
+      "variableNames": [ "region", "sex", "age", "citizenship", "contents", "year" ],
+      "source": "Eurostat",
+      "timeUnit": "Annual",
+      "paths": [
+        [
+          {
+            "id": "EN",
+            "label": "Environment"
+          },
+          {
+            "id": "EN02",
+            "label": "Miscellaneous"
+          },
+          {
+            "id": "EN01",
+            "label": "Waste"
+          },
+          {
+            "id": "PO",
+            "label": "Population"
+          },
+          {
+            "id": "PO01",
+            "label": "Population census"
+          }
+        ]
       ],
       "links": [
         {

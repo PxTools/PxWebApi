@@ -8,11 +8,20 @@
   "firstPeriod": "1990",
   "lastPeriod": "2017",
   "category": "public",
-  "variableNames": [
-    "sector",
-    "greenhouse gas",
-    "contents",
-    "year"
+  "variableNames": [ "sector", "greenhouse gas", "contents", "year" ],
+  "source": "Statistics Sweden",
+  "timeUnit": "Annual",
+  "paths": [
+    [
+      {
+        "id": "EN",
+        "label": "Environment"
+      },
+      {
+        "id": "EN02",
+        "label": "Miscellaneous"
+      }
+    ]
   ],
   "links": [
     {
