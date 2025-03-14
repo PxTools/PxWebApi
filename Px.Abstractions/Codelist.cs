@@ -4,7 +4,8 @@
     {
         public string Id { get; set; }
         public string Label { get; set; }
-
+        public bool Elimination { get; set; }
+        public string? EliminationValue { get; set; }
         public CodelistTypeEnum CodelistType { get; set; }
 
         public enum CodelistTypeEnum
