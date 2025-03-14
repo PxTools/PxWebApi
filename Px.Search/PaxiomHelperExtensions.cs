@@ -186,6 +186,33 @@
             }
             return builder.ToString();
         }
+
+        public static string GetTimeUnit(this PXMeta meta)
+        {
+            var timeVariable = meta.Variables.FirstOrDefault(v => v.IsTime);
+
+            if (timeVariable is null)
+            {
+                return "X";
+            }
+
+            switch (timeVariable.TimeScale)
+            {
+                case TimeScaleType.Annual:
+                    return "A";
+                case TimeScaleType.Monthly:
+                    return "M";
+                case TimeScaleType.Quartely:
+                    return "Q";
+                case TimeScaleType.Weekly:
+                    return "W";
+                default:
+                    break;
+            }
+
+            return "X";
+
+        }
     }
 }
 

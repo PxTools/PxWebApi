@@ -1,7 +1,7 @@
-﻿namespace Px.Search.Lucene
-{
+﻿using System.Text.Json;
 
-    //TODO look at https://github.com/statisticssweden/Px.Search.Lucene/blob/main/Px.Search.Lucene/LuceneIndexer.cs for inspiration
+namespace Px.Search.Lucene
+{
 
     public class LuceneIndex : IIndex
     {
@@ -172,6 +172,9 @@
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUESETCODES, meta.GetAllValuesetCodes(), Field.Store.NO));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DISCONTINUED, tbl.Discontinued == null ? "Unknown" : tbl.Discontinued.ToString(), Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TAGS, GetAllTags(tbl.Tags), Field.Store.YES));
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SOURCE, tbl.Source, Field.Store.YES));
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, tbl.TimeUnit, Field.Store.YES));
+                doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
                 if (!string.IsNullOrEmpty(meta.Synonyms))
                 {
                     doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SYNONYMS, meta.Synonyms, Field.Store.NO));
@@ -199,6 +202,12 @@
                 builder.Append(' ');
             }
             return builder.ToString();
+        }
+
+        private static byte[] GetBytes(List<Level[]> paths)
+        {
+            string jsonString = JsonSerializer.Serialize(paths);
+            return Encoding.UTF8.GetBytes(jsonString);
         }
     }
 }

@@ -78,6 +78,9 @@ namespace PxWeb.Mappers
                     Type = FolderContentItemTypeEnum.TableEnum,
                     Id = item.Id,
                     Label = item.Label,
+                    Source = item.Source,
+                    TimeUnit = TableResponseMapper.Convert(item.TimeUnit),
+                    Paths = TableResponseMapper.Convert(item.Paths),
                     Description = item.Description,
                     //Tags = item.Tags.ToList(), // TODO: Implement later
                     Updated = item.Updated,

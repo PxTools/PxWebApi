@@ -48,7 +48,8 @@
 
                         if (item is PxMenuItem)
                         {
-                            TraverseDatabase(item.ID.Selection, language, index);
+                            var path = new List<Level>();
+                            TraverseDatabase(item.ID.Selection, language, index, path);
                         }
                     }
                     _logger.LogInformation("Done for {Language}. Indexed total of {Count} tables.", language, _indexedTables.Count);
@@ -64,7 +65,7 @@
         /// <param name="id">current node id</param>
         /// <param name="language">current processing language</param>
         /// <param name="index">the index to use</param>
-        private void TraverseDatabase(string id, string language, IIndex index)
+        private void TraverseDatabase(string id, string language, IIndex index, List<Level> path)
         {
             bool exists;
             Item? item;
@@ -90,32 +91,41 @@
             {
                 foreach (var subitem in ((PxMenuItem)item).SubItems)
                 {
+                    if (subitem is null)
+                    {
+                        continue;
+                    }
                     if (subitem is PxMenuItem)
                     {
-                        TraverseDatabase(subitem.ID.Selection, language, index);
+                        path.Add(new Level(subitem.ID.Selection, subitem.Text));
+                        TraverseDatabase(subitem.ID.Selection, language, index, path);
                     }
                     else if (subitem is TableLink)
                     {
-                        string tableId = ((TableLink)subitem).TableId;
-                        if (!_indexedTables.Contains(tableId))
-                        {
-                            IndexTable(tableId, (TableLink)subitem, language, index);
-
-                            _indexedTables.Add(tableId);
-                            if (_indexedTables.Count % 100 == 0)
-                            {
-                                _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
-                            }
-                        }
-                        else
-                        {
-                            _logger.LogDebug("Table {TableId} is already indexed.", tableId);
-                        }
-
+                        AddTableToIndex(language, index, (TableLink)subitem, path);
                     }
                 }
             }
 
+        }
+
+        private void AddTableToIndex(string language, IIndex index, TableLink tableLink, List<Level> path)
+        {
+            string tableId = tableLink.TableId;
+            if (!_indexedTables.Contains(tableId))
+            {
+                IndexTable(tableId, tableLink, language, index, path);
+
+                _indexedTables.Add(tableId);
+                if (_indexedTables.Count % 100 == 0)
+                {
+                    _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
+                }
+            }
+            else
+            {
+                _logger.LogDebug("Table {TableId} is already indexed.", tableId);
+            }
         }
 
 
@@ -151,7 +161,7 @@
             }
         }
 
-        private void IndexTable(string id, TableLink tblLink, string language, IIndex index)
+        private void IndexTable(string id, TableLink tblLink, string language, IIndex index, List<Level> path)
         {
             IPXModelBuilder? builder = _source.CreateBuilder(id, language);
 
@@ -162,6 +172,7 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
+                    tbl.Paths.Add(path.ToArray());
 
                     index.AddEntry(tbl, model.Meta);
                 }
@@ -203,7 +214,7 @@
 
         private TableInformation GetTableInformation(string id, TableLink tblLink, PXMeta meta)
         {
-            TableInformation tbl = new TableInformation(id, tblLink.Text, GetCategory(tblLink), meta.GetFirstTimeValue(), meta.GetLastTimeValue(), (from v in meta.Variables select v.Name).ToArray());
+            TableInformation tbl = new TableInformation(id, tblLink.Text, GetCategory(tblLink), meta.GetFirstTimeValue(), meta.GetLastTimeValue(), (from v in meta.Variables select v.Name).ToArray(), meta.Source, meta.GetTimeUnit());
             tbl.Description = tblLink.Description;
             tbl.SortCode = tblLink.SortCode;
             tbl.Updated = tblLink.LastUpdated;

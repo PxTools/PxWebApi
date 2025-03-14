@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-using PxWeb.Api2.Server.Models;
+﻿using PxWeb.Api2.Server.Models;
 
 namespace PxWeb.Models.Api2
 {
