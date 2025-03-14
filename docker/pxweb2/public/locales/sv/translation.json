@@ -4,7 +4,7 @@
     "shorthand": "sv"
   },
   "common": {
-    "title": "Välkommen till PxWeb 2.0",
+    "title": "PxWeb 2.0",
     "header": {
       "title": "PxWeb 2.0 [Main]",
       "logo": "PxWeb 2.0"
@@ -33,7 +33,7 @@
       "cancel": "Avbryt",
       "save": "Spara",
       "search": "Sök",
-      "close": "Stänga"
+      "close": "Stäng"
     },
     "generic_tags": {
       "mandatory": "Obligatorisk"
@@ -50,6 +50,7 @@
       "statistics": "Statistikdatabasen"
     },
     "sidemenu": {
+      "arialabeltoolsidemenu": "Verktygsmeny för tabell",
       "hide": "Dölj",
       "selection": {
         "title": "Filtrera",
@@ -63,7 +64,8 @@
           "header": {
             "tag_selected": "{{selected}} av {{total}} valda",
             "tag_mandatory": "Obligatorisk",
-            "alert_no_mandatory_values": "Du måste välja något i listan för att tabellen ska visas"
+            "alert_no_mandatory_values": "Du måste välja något i listan för att tabellen ska visas",
+            "show_more": "Visa mer"
           },
           "content": {
             "select": {
@@ -147,6 +149,7 @@
       }
     },
     "main_content": {
+      "arialabelbreadcrumb": "Brödsmulor",
       "last_updated": "Senast uppdaterad",
       "show_details": "Visa detaljer",
       "table": {
@@ -158,22 +161,24 @@
         }
       },
       "about_table": {
-        "title": "Om tabellen",
+        "title": "Information",
         "footnotes": {
-          "title": "Fotnoter",
+          "title": "Noter",
           "show_all_footnotes": "Visa alla fotnoter för tabellen"
         },
-        "information": {
-          "title": "Information",
+        "definitions": {
+          "title": "Definitioner",
           "description": "Tabellen är en del av statistiken {{statistics}}"
         },
-        "definition": {
-          "title": "Definitioner",
+        "details": {
+          "title": "Detaljer",
           "description": "Beskrivande text..."
         },
-        "metadata": {
-          "title": "Metadata",
-          "description": "Beskrivande text..."
+        "contact": {
+          "title": "Kontakt",
+          "description": "Beskrivande text...",
+          "missing_heading": "Ingen kontaktinformation",
+          "missing_text": "Tabellen har ingen kontaktinformation."
         }
       },
       "related": {
