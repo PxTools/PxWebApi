@@ -232,6 +232,7 @@
       "decimals": 0,
       "official-statistics": false,
       "aggregallowed": false,
+      "copyright": true,
       "language": "en",
       "contents": "Total air emissions",
       "descriptiondefault": false,
