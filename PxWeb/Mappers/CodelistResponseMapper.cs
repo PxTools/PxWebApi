@@ -57,6 +57,9 @@ namespace PxWeb.Mappers
                 }
             }
 
+            codeListResponse.Languages = codelist.AvailableLanguages;
+            codeListResponse.Elimination = codelist.Elimination;
+            codeListResponse.EliminationValueCode = codelist.EliminationValue;
 
             return codeListResponse;
         }

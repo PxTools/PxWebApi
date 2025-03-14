@@ -139,6 +139,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             if (grouping != null)
             {
                 codelist = _codelistMapper.Map(grouping);
+                codelist.AvailableLanguages.Add(language);
             }
 
             return codelist;
