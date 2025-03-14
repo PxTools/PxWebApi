@@ -4,7 +4,7 @@
     "shorthand": "no"
   },
   "common": {
-    "title": "Velkommen til PxWeb 2.0",
+    "title": "PxWeb 2.0",
     "header": {
       "title": "PxWeb 2.0 [Main]",
       "logo": "PxWeb 2.0"
@@ -50,6 +50,7 @@
       "statistics": "Statistikkbanken"
     },
     "sidemenu": {
+      "arialabeltoolsidemenu": "Verktøymeny for tabell",
       "hide": "Skjul",
       "selection": {
         "title": "Filtrer",
@@ -63,7 +64,8 @@
           "header": {
             "tag_selected": "{{selected}} av {{total}} valgt",
             "tag_mandatory": "Må velges",
-            "alert_no_mandatory_values": "Du må velge noe i listen for at tabellen skal kunne vises"
+            "alert_no_mandatory_values": "Du må velge noe i listen for at tabellen skal kunne vises",
+            "show_more": "Vis mer"
           },
           "content": {
             "select": {
@@ -81,7 +83,7 @@
             "values_list": {
               "aria_label": "Liste av {{total}} verdier.",
               "aria_description": "Variabelens liste over {{total}} totale verdier. For å gå inn i listen, trykk på pil ned-tasten. Tab-tasten går ut av listen.",
-              "no_results_heading": "Ingen treff på <<{{search}}>>",
+              "no_results_heading": "Ingen treff på «{{search}}»",
               "no_results_bodyshort": "Prøv med et annet søkeord eller en annen stavemåte."
             }
           }
@@ -147,6 +149,7 @@
       }
     },
     "main_content": {
+      "arialabelbreadcrumb": "Brødsmulesti",
       "last_updated": "Sist oppdatert",
       "show_details": "Vis detaljer",
       "table": {
@@ -158,22 +161,24 @@
         }
       },
       "about_table": {
-        "title": "Om tabellen",
+        "title": "Informasjon",
         "footnotes": {
-          "title": "Noter",
+          "title": "Merknader",
           "show_all_footnotes": "Vis alle noter for tabellen"
         },
-        "information": {
-          "title": "Informasjon",
+        "definitions": {
+          "title": "Definisjoner",
           "description": "Tabellen er en del av statistikken {{statistics}}"
         },
-        "definition": {
-          "title": "Definisjoner",
+        "details": {
+          "title": "Detaljer",
           "description": "Beskrivelsestekst..."
         },
-        "metadata": {
-          "title": "Metadata",
-          "description": "Beskrivelsestekst..."
+        "contact": {
+          "title": "Kontakt",
+          "description": "Beskrivelsestekst...",
+          "missing_heading": "Ingen kontaktinformasjon",
+          "missing_text": "Tabellen har ikke kontaktinformasjon."
         }
       },
       "related": {

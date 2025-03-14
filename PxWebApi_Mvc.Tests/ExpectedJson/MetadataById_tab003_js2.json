@@ -224,6 +224,7 @@
       "decimals": 0,
       "official-statistics": false,
       "aggregallowed": false,
+      "copyright": false,
       "language": "en",
       "contents": "Disposal facilities",
       "descriptiondefault": false,

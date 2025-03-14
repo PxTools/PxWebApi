@@ -50,6 +50,7 @@
       "statistics": "بنك الإحصائيات"
     },
     "sidemenu": {
+      "arialabeltoolsidemenu": "قائمة الأدوات للجدول",
       "hide": "يخفي",
       "selection": {
         "title": "فلتر",
@@ -63,7 +64,8 @@
           "header": {
             "tag_selected": "{{selected}} ل {{total}} مختارة",
             "tag_mandatory": "إلزامي",
-            "alert_no_mandatory_values": "يجب عليك تحديد شيء ما في القائمة حتى يتم عرض الجدول"
+            "alert_no_mandatory_values": "يجب عليك تحديد شيء ما في القائمة حتى يتم عرض الجدول",
+            "show_more": "اظهر المزيد"
           },
           "content": {
             "select": {
@@ -147,6 +149,7 @@
       }
     },
     "main_content": {
+      "arialabelbreadcrumb": "مسار التنقل",
       "last_updated": "آخر تحديث",
       "show_details": "إظهار التفاصيل",
       "table": {
@@ -158,22 +161,24 @@
         }
       },
       "about_table": {
-        "title": "حول الطاولة",
+        "title": "معلومة",
         "footnotes": {
           "title": "ملحوظات",
           "show_all_footnotes": "إظهار كافة الملاحظات للجدول"
         },
-        "information": {
-          "title": "معلومة",
+        "definitions": {
+          "title": "التعاريف",
           "description": "الجدول جزء من الإحصائيات {{statistics}}"
         },
-        "definition": {
-          "title": "التعاريف",
+        "details": {
+          "title": "تفاصيل",
           "description": "نص الوصف..."
         },
-        "metadata": {
-          "title": "البيانات الوصفية",
-          "description": "نص الوصف..."
+        "contact": {
+          "title": "اتصال",
+          "description": "نص الوصف...",
+          "missing_heading": "لا يوجد معلومات الاتصال",
+          "missing_text": "الجدول ليس لديه معلومات الاتصال."
         }
       },
       "related": {
