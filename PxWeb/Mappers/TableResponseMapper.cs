@@ -40,6 +40,9 @@ namespace PxWeb.Mappers
                 Id = searchResult.Id,
                 Label = searchResult.Label,
                 Description = searchResult.Description,
+                Source = searchResult.Source,
+                TimeUnit = Convert(searchResult.TimeUnit),
+                Paths = Convert(searchResult.Paths),
                 //Tags = item.Tags.ToList(), // TODO: Implement later
                 Updated = searchResult.Updated,
                 FirstPeriod = searchResult.FirstPeriod,
@@ -54,6 +57,34 @@ namespace PxWeb.Mappers
             };
             return tableResponse;
 
+        }
+
+        public static TimeUnit Convert(string timeUnit)
+        {
+            return timeUnit switch
+            {
+                "A" => TimeUnit.AnnualEnum,
+                "Q" => TimeUnit.QuarterlyEnum,
+                "M" => TimeUnit.MonthlyEnum,
+                "W" => TimeUnit.WeeklyEnum,
+                _ => TimeUnit.OtherEnum
+            };
+        }
+
+        public static List<List<PathElement>> Convert(List<Level[]> paths)
+        {
+            var list = new List<List<PathElement>>();
+            foreach (var path in paths)
+            {
+                var p = new List<PathElement>();
+                foreach (var level in path)
+                {
+                    p.Add(new PathElement() { Id = level.Code, Label = level.Text });
+                }
+                list.Add(p);
+            }
+
+            return list;
         }
 
     }
