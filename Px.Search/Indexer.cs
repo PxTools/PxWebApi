@@ -49,7 +49,6 @@
                         if (item is PxMenuItem)
                         {
                             var path = new List<Level>();
-                            path.Add(new Level(item.ID.Selection, item.Text));
                             TraverseDatabase(item.ID.Selection, language, index, path);
                         }
                     }
