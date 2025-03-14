@@ -214,7 +214,7 @@
 
         private TableInformation GetTableInformation(string id, TableLink tblLink, PXMeta meta)
         {
-            TableInformation tbl = new TableInformation(id, tblLink.Text, GetCategory(tblLink), meta.GetFirstTimeValue(), meta.GetLastTimeValue(), (from v in meta.Variables select v.Name).ToArray());
+            TableInformation tbl = new TableInformation(id, tblLink.Text, GetCategory(tblLink), meta.GetFirstTimeValue(), meta.GetLastTimeValue(), (from v in meta.Variables select v.Name).ToArray(), meta.Source, meta.GetTimeUnit());
             tbl.Description = tblLink.Description;
             tbl.SortCode = tblLink.SortCode;
             tbl.Updated = tblLink.LastUpdated;
