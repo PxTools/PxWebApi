@@ -40,7 +40,7 @@
 
             // Arrange
             var variable = new TVariable();
-            variable.SetTimeScale("tlist(A1)");
+            variable.SetTimeScaleX("tlist(A1)");
 
             PXMeta meta = new PXMeta();
             meta.Variables.Add(variable);
@@ -61,7 +61,7 @@
 
             // Arrange
             var variable = new TVariable();
-            variable.SetTimeScale("tlist(Q1)");
+            variable.SetTimeScaleX("tlist(Q1)");
 
             PXMeta meta = new PXMeta();
             meta.Variables.Add(variable);
@@ -81,7 +81,7 @@
 
             // Arrange
             var variable = new TVariable();
-            variable.SetTimeScale("tlist(W1)");
+            variable.SetTimeScaleX("tlist(W1)");
 
             PXMeta meta = new PXMeta();
             meta.Variables.Add(variable);
@@ -101,7 +101,7 @@
 
             // Arrange
             var variable = new TVariable();
-            variable.SetTimeScale("tlist(H1)");
+            variable.SetTimeScaleX("tlist(H1)");
 
             PXMeta meta = new PXMeta();
             meta.Variables.Add(variable);
@@ -123,13 +123,10 @@
             base.IsTime = true;
             base.SetTimeScale("A");
         }
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-        public void SetTimeScale(string timeScale)
+        public void SetTimeScaleX(string timeScale)
         {
             base.SetTimeScale(timeScale);
         }
-        public bool IsTime { get { return true; } }
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 
 
     }

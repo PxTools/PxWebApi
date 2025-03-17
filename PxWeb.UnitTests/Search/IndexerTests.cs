@@ -72,9 +72,7 @@ namespace PxWeb.UnitTests.Search
             indexer.IndexDatabase(new List<string> { "en" });
 
             // Assert
-            // No exception should be thrown
-
-
+            index.Verify(b => b.BeginWrite(It.IsAny<string>()), Times.Exactly(1));
 
         }
 
