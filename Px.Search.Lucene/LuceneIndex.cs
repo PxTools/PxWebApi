@@ -8,6 +8,9 @@ namespace Px.Search.Lucene
         private readonly string _indexDirectoryBase = "";
         private string _indexDirectoryCurrent = "";
         private IndexWriter? _writer;
+        private IndexReader? _reader;
+        private IndexSearcher? _indexSearcher;
+        private Analyzer? _analyzer;
 
         /// <summary>
         /// Constructor
@@ -52,6 +55,15 @@ namespace Px.Search.Lucene
             return writer;
         }
 
+        private void CreateIndexReader(string language)
+        {
+            FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
+            IndexReader reader = DirectoryReader.Open(fsDir);
+            _indexSearcher = new IndexSearcher(reader);
+            _analyzer = LuceneAnalyzer.GetAnalyzer(language);
+            _reader = reader;
+        }
+
         public void BeginUpdate(string language)
         {
             if (string.IsNullOrWhiteSpace(language))
@@ -61,6 +73,7 @@ namespace Px.Search.Lucene
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
             _writer = CreateIndexWriter(false, language);
+            CreateIndexReader(language);
 
             if (_writer == null)
             {
@@ -86,6 +99,11 @@ namespace Px.Search.Lucene
 
         public void EndUpdate(string language)
         {
+            if (_reader is not null)
+            {
+                _reader.Dispose();
+                _indexSearcher = null;
+            }
             EndWrite(language);
         }
 
@@ -109,7 +127,18 @@ namespace Px.Search.Lucene
 
         public void UpdateEntry(TableInformation tbl, PXMeta meta)
         {
+            var oldDoc = FindDocument(tbl.Id);
             Document doc = GetDocument(tbl, meta);
+
+            if (oldDoc is not null)
+            {
+                var paths = oldDoc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS);
+                if (paths is not null)
+                {
+                    doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, paths));
+                }
+                return;
+            }
             if (_writer != null)
             {
                 _writer.UpdateDocument(new Term(SearchConstants.SEARCH_FIELD_DOCID, doc.Get(SearchConstants.SEARCH_FIELD_DOCID)), doc);
@@ -182,6 +211,30 @@ namespace Px.Search.Lucene
             }
 
             return doc;
+        }
+
+        public Document? FindDocument(string tableId)
+        {
+            if (_indexSearcher is null)
+            {
+                return null;
+            }
+
+            string[] field = new[] { SearchConstants.SEARCH_FIELD_SEARCHID };
+            LuceneVersion luceneVersion = LuceneAnalyzer.luceneVersion;
+            Query luceneQuery;
+            QueryParser queryParser = new MultiFieldQueryParser(luceneVersion,
+                                                       field,
+                                                       new StandardAnalyzer(luceneVersion));
+            luceneQuery = queryParser.Parse(tableId);
+
+            TopDocs topDocs = _indexSearcher.Search(luceneQuery, 1);
+            if (topDocs.TotalHits == 0)
+            {
+                return null;
+            }
+
+            return _indexSearcher.Doc(topDocs.ScoreDocs[0].Doc);
         }
 
         public void Dispose()
