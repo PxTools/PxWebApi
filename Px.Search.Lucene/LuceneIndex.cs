@@ -57,11 +57,19 @@ namespace Px.Search.Lucene
 
         private void CreateIndexReader(string language)
         {
-            FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
-            IndexReader reader = DirectoryReader.Open(fsDir);
-            _indexSearcher = new IndexSearcher(reader);
-            _analyzer = LuceneAnalyzer.GetAnalyzer(language);
-            _reader = reader;
+            try
+            {
+                FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
+                IndexReader reader = DirectoryReader.Open(fsDir);
+                _indexSearcher = new IndexSearcher(reader);
+                _analyzer = LuceneAnalyzer.GetAnalyzer(language);
+                _reader = reader;
+            }
+            catch (Exception e)
+            {
+                _reader = null;
+                Console.WriteLine(e.ToString());
+            }
         }
 
         public void BeginUpdate(string language)
