@@ -18,11 +18,10 @@
         {
             // Arrange
             var language = "en";
-            //_mockFSDirectory.Setup(d => d.Open(It.IsAny<string>())).Returns(_mockFSDirectory.Object);
-            //_mockAnalyzer.Setup(a => a.GetAnalyzer(language)).Returns(_mockAnalyzer.Object);
 
             // Act
             _luceneIndex.BeginWrite(language);
+            _luceneIndex.EndWrite(language);
 
             // Assert
             Assert.IsNotNull(_luceneIndex);
@@ -36,7 +35,7 @@
 
             // Act
             _luceneIndex.BeginUpdate(language);
-
+            _luceneIndex.EndUpdate(language);
             // Assert
             Assert.IsNotNull(_luceneIndex);
         }
