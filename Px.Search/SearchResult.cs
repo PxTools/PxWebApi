@@ -6,7 +6,7 @@
     public class SearchResult : TableInformation
     {
         public SearchResult(string id, string label, string category, string firstPeriod, string lastPeriod, string[] variableNames, string source, string timeUnit)
-            : base(id, label, category, firstPeriod, lastPeriod, variableNames, source, timeUnit)
+            : base(id, label, category, firstPeriod, lastPeriod, variableNames)
         {
         }
 

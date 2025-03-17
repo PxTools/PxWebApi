@@ -2,7 +2,7 @@
 {
     public class TableInformation
     {
-        public TableInformation(string id, string label, string category, string firstPeriod, string lastPeriod, string[] variableNames, string source, string timeUnit)
+        public TableInformation(string id, string label, string category, string firstPeriod, string lastPeriod, string[] variableNames)
         {
             Id = id;
             Label = label;
@@ -12,8 +12,8 @@
             VariableNames = variableNames;
             Tags = new string[] { }; // TODO: Implement later
             Paths = new List<Level[]>();
-            Source = source;
-            TimeUnit = timeUnit;
+            Source = "";
+            TimeUnit = "X";
         }
 
         public string Id { get; set; }
