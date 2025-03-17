@@ -76,6 +76,26 @@
         }
 
         [TestMethod]
+        public void GetTimeUnit_TimeScaleMonthly_ReturnsM()
+        {
+
+            // Arrange
+            var variable = new TVariable();
+            variable.SetTimeScaleX("tlist(M1)");
+
+            PXMeta meta = new PXMeta();
+            meta.Variables.Add(variable);
+            var model = new PXModel();
+            model.Meta = meta;
+
+            // Act
+            var timeUnit = model.Meta.GetTimeUnit();
+
+            // Assert
+            Assert.AreEqual("M", timeUnit);
+        }
+
+        [TestMethod]
         public void GetTimeUnit_TimeScaleWeekly_ReturnsW()
         {
 
