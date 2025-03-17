@@ -135,6 +135,7 @@ namespace PxWeb
                 );
             });
 
+            builder.Services.AddSwaggerGenNewtonsoftSupport();
 
             // Handle CORS configuration from appsettings.json
             bool corsEnbled = builder.Services.ConfigurePxCORS(builder);
