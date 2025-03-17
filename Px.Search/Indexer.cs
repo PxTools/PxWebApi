@@ -9,6 +9,7 @@
         private readonly ISearchBackend _backend;
         private readonly ILogger _logger;
         private List<string> _indexedTables;
+        private readonly Dictionary<string, List<Level[]>> _breadcrumbs;
 
         public Indexer(IDataSource dataSource, ISearchBackend backend, ILogger logger)
         {
@@ -16,6 +17,7 @@
             _backend = backend;
             _logger = logger;
             _indexedTables = new List<string>();
+            _breadcrumbs = new Dictionary<string, List<Level[]>>();
         }
 
         /// <summary>
@@ -49,13 +51,64 @@
                         if (item is PxMenuItem)
                         {
                             var path = new List<Level>();
-                            TraverseDatabase(item.ID.Selection, language, index, path);
+                            _breadcrumbs.Clear();
+                            GenerateBreadcrumbs(item.ID.Selection, language, index, path);
+                            TraverseDatabase(item.ID.Selection, language, index);
                         }
                     }
                     _logger.LogInformation("Done for {Language}. Indexed total of {Count} tables.", language, _indexedTables.Count);
                     index.EndWrite(language);
                 }
             }
+        }
+
+        private void GenerateBreadcrumbs(string id, string language, IIndex index, List<Level> path)
+        {
+            bool exists;
+            Item? item;
+
+            try
+            {
+                item = _source.CreateMenu(id, language, out exists);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GenerateBreadcrumbs : Could not CreateMenu for id {Id} for language {Language}", id, language);
+
+                return;
+            }
+
+            if (item == null || !exists)
+            {
+                _logger.LogError("GenerateBreadcrumbs : Could not get database level with id {Id} for language {Language}", id, language);
+                return;
+            }
+
+            if (item is PxMenuItem)
+            {
+                foreach (var subitem in ((PxMenuItem)item).SubItems)
+                {
+                    if (subitem is null)
+                    {
+                        continue;
+                    }
+                    if (subitem is PxMenuItem)
+                    {
+                        path.Add(new Level(subitem.ID.Selection, subitem.Text));
+                        GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
+                    }
+                    else if (subitem is TableLink)
+                    {
+                        var tblLink = (TableLink)subitem;
+                        if (!_breadcrumbs.ContainsKey(tblLink.TableId))
+                        {
+                            _breadcrumbs.Add(tblLink.TableId, new List<Level[]>());
+                        }
+                        _breadcrumbs[tblLink.TableId].Add(path.ToArray());
+                    }
+                }
+            }
+
         }
 
 
@@ -65,7 +118,7 @@
         /// <param name="id">current node id</param>
         /// <param name="language">current processing language</param>
         /// <param name="index">the index to use</param>
-        private void TraverseDatabase(string id, string language, IIndex index, List<Level> path)
+        private void TraverseDatabase(string id, string language, IIndex index)
         {
             bool exists;
             Item? item;
@@ -97,24 +150,23 @@
                     }
                     if (subitem is PxMenuItem)
                     {
-                        path.Add(new Level(subitem.ID.Selection, subitem.Text));
-                        TraverseDatabase(subitem.ID.Selection, language, index, path);
+                        TraverseDatabase(subitem.ID.Selection, language, index);
                     }
                     else if (subitem is TableLink)
                     {
-                        AddTableToIndex(language, index, (TableLink)subitem, path);
+                        AddTableToIndex(language, index, (TableLink)subitem);
                     }
                 }
             }
 
         }
 
-        private void AddTableToIndex(string language, IIndex index, TableLink tableLink, List<Level> path)
+        private void AddTableToIndex(string language, IIndex index, TableLink tableLink)
         {
             string tableId = tableLink.TableId;
             if (!_indexedTables.Contains(tableId))
             {
-                IndexTable(tableId, tableLink, language, index, path);
+                IndexTable(tableId, tableLink, language, index);
 
                 _indexedTables.Add(tableId);
                 if (_indexedTables.Count % 100 == 0)
@@ -161,7 +213,7 @@
             }
         }
 
-        private void IndexTable(string id, TableLink tblLink, string language, IIndex index, List<Level> path)
+        private void IndexTable(string id, TableLink tblLink, string language, IIndex index)
         {
             IPXModelBuilder? builder = _source.CreateBuilder(id, language);
 
@@ -172,7 +224,7 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
-                    tbl.Paths.Add(path.ToArray());
+                    tbl.Paths = _breadcrumbs[id];
 
                     index.AddEntry(tbl, model.Meta);
                 }
