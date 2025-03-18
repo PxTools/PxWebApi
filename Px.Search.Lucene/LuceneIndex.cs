@@ -10,7 +10,6 @@ namespace Px.Search.Lucene
         private IndexWriter? _writer;
         private IndexReader? _reader;
         private IndexSearcher? _indexSearcher;
-        private Analyzer? _analyzer;
 
         /// <summary>
         /// Constructor
@@ -62,7 +61,6 @@ namespace Px.Search.Lucene
                 FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
                 IndexReader reader = DirectoryReader.Open(fsDir);
                 _indexSearcher = new IndexSearcher(reader);
-                _analyzer = LuceneAnalyzer.GetAnalyzer(language);
                 _reader = reader;
             }
             catch (Exception e)

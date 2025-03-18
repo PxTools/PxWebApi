@@ -26,7 +26,6 @@ namespace PxWeb.UnitTests.Search
             _luceneIndex.EndWrite(language);
 
             // Assert
-            Assert.IsNotNull(_luceneIndex);
         }
 
         [TestMethod]
@@ -39,7 +38,7 @@ namespace PxWeb.UnitTests.Search
             _luceneIndex.BeginUpdate(language);
             _luceneIndex.EndUpdate(language);
             // Assert
-            Assert.IsNotNull(_luceneIndex);
+
         }
 
         [TestMethod]
@@ -67,7 +66,7 @@ namespace PxWeb.UnitTests.Search
             _luceneIndex.UpdateEntry(tableInformation, meta);
             _luceneIndex.EndUpdate(language);
             // Assert
-            Assert.IsNotNull(_luceneIndex);
+
         }
 
 

@@ -71,14 +71,14 @@
             {
                 item = _source.CreateMenu(id, language, out exists);
 
-                if (item == null || !exists)
+                if (item is null || !exists)
                 {
                     return;
                 }
 
-                if (item is PxMenuItem)
+                if (item is PxMenuItem menuItem)
                 {
-                    foreach (var subitem in ((PxMenuItem)item).SubItems)
+                    foreach (var subitem in menuItem.SubItems)
                     {
                         if (subitem is null)
                         {
@@ -92,11 +92,7 @@
                         else if (subitem is TableLink)
                         {
                             var tblLink = (TableLink)subitem;
-                            if (!_breadcrumbs.ContainsKey(tblLink.TableId))
-                            {
-                                _breadcrumbs.Add(tblLink.TableId, new List<Level[]>());
-                            }
-                            _breadcrumbs[tblLink.TableId].Add(path.ToArray());
+                            AddBreadcrumbPath(path, tblLink);
                         }
                     }
                 }
@@ -104,10 +100,17 @@
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GenerateBreadcrumbs : Could not CreateMenu for id {Id} for language {Language}", id, language);
-
-                return;
             }
 
+        }
+
+        private void AddBreadcrumbPath(List<Level> path, TableLink tblLink)
+        {
+            if (!_breadcrumbs.ContainsKey(tblLink.TableId))
+            {
+                _breadcrumbs.Add(tblLink.TableId, new List<Level[]>());
+            }
+            _breadcrumbs[tblLink.TableId].Add(path.ToArray());
         }
 
 
