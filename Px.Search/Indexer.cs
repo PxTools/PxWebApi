@@ -70,43 +70,42 @@
             try
             {
                 item = _source.CreateMenu(id, language, out exists);
+
+                if (item == null || !exists)
+                {
+                    return;
+                }
+
+                if (item is PxMenuItem)
+                {
+                    foreach (var subitem in ((PxMenuItem)item).SubItems)
+                    {
+                        if (subitem is null)
+                        {
+                            continue;
+                        }
+                        if (subitem is PxMenuItem)
+                        {
+                            path.Add(new Level(subitem.ID.Selection, subitem.Text));
+                            GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
+                        }
+                        else if (subitem is TableLink)
+                        {
+                            var tblLink = (TableLink)subitem;
+                            if (!_breadcrumbs.ContainsKey(tblLink.TableId))
+                            {
+                                _breadcrumbs.Add(tblLink.TableId, new List<Level[]>());
+                            }
+                            _breadcrumbs[tblLink.TableId].Add(path.ToArray());
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GenerateBreadcrumbs : Could not CreateMenu for id {Id} for language {Language}", id, language);
 
                 return;
-            }
-
-            if (item == null || !exists)
-            {
-                _logger.LogError("GenerateBreadcrumbs : Could not get database level with id {Id} for language {Language}", id, language);
-                return;
-            }
-
-            if (item is PxMenuItem)
-            {
-                foreach (var subitem in ((PxMenuItem)item).SubItems)
-                {
-                    if (subitem is null)
-                    {
-                        continue;
-                    }
-                    if (subitem is PxMenuItem)
-                    {
-                        path.Add(new Level(subitem.ID.Selection, subitem.Text));
-                        GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
-                    }
-                    else if (subitem is TableLink)
-                    {
-                        var tblLink = (TableLink)subitem;
-                        if (!_breadcrumbs.ContainsKey(tblLink.TableId))
-                        {
-                            _breadcrumbs.Add(tblLink.TableId, new List<Level[]>());
-                        }
-                        _breadcrumbs[tblLink.TableId].Add(path.ToArray());
-                    }
-                }
             }
 
         }
