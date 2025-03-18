@@ -21,11 +21,19 @@ namespace PxWeb.UnitTests.Search
             // Arrange
             var language = "en";
 
-            // Act
-            _luceneIndex.BeginWrite(language);
-            _luceneIndex.EndWrite(language);
+            try
+            {
+                // Act
+                _luceneIndex.BeginWrite(language);
+                _luceneIndex.EndWrite(language);
+            }
+            catch (Exception e)
+            {
+                // Assert
+                Assert.Fail(e.Message);
+            }
 
-            // Assert
+
         }
 
         [TestMethod]
@@ -34,11 +42,17 @@ namespace PxWeb.UnitTests.Search
             // Arrange
             var language = "en";
 
-            // Act
-            _luceneIndex.BeginUpdate(language);
-            _luceneIndex.EndUpdate(language);
-            // Assert
-
+            try
+            {
+                // Act
+                _luceneIndex.BeginUpdate(language);
+                _luceneIndex.EndUpdate(language);
+            }
+            catch (Exception e)
+            {
+                // Assert
+                Assert.Fail(e.Message);
+            }
         }
 
         [TestMethod]
@@ -61,23 +75,18 @@ namespace PxWeb.UnitTests.Search
             meta.Matrix = "TAB001";
             meta.Variables.Add(ModelStore.CreateTimeVariable("", PlacementType.Stub, 2000, 2005));
 
-            // Act
             try
             {
+                // Act
                 _luceneIndex.BeginUpdate(language);
                 _luceneIndex.UpdateEntry(tableInformation, meta);
                 _luceneIndex.EndUpdate(language);
             }
             catch (Exception e)
             {
+                // Assert
                 Assert.Fail(e.Message);
             }
-            //_luceneIndex.BeginUpdate(language);
-            //_luceneIndex.UpdateEntry(tableInformation, meta);
-            //_luceneIndex.EndUpdate(language);
-            // Assert
-
-
         }
 
 
