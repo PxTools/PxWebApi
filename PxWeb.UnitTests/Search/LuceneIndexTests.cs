@@ -62,10 +62,21 @@ namespace PxWeb.UnitTests.Search
             meta.Variables.Add(ModelStore.CreateTimeVariable("", PlacementType.Stub, 2000, 2005));
 
             // Act
-            _luceneIndex.BeginUpdate(language);
-            _luceneIndex.UpdateEntry(tableInformation, meta);
-            _luceneIndex.EndUpdate(language);
+            try
+            {
+                _luceneIndex.BeginUpdate(language);
+                _luceneIndex.UpdateEntry(tableInformation, meta);
+                _luceneIndex.EndUpdate(language);
+            }
+            catch (Exception e)
+            {
+                Assert.Fail(e.Message);
+            }
+            //_luceneIndex.BeginUpdate(language);
+            //_luceneIndex.UpdateEntry(tableInformation, meta);
+            //_luceneIndex.EndUpdate(language);
             // Assert
+
 
         }
 
@@ -74,7 +85,7 @@ namespace PxWeb.UnitTests.Search
         public void NewLucenIndex_NoPath_ShouldThrowExcpetion()
         {
             // Assert
-            Assert.ThrowsExactly<ArgumentNullException>(() => new LuceneIndex(""));
+            Assert.ThrowsExactly<ArgumentNullException>(() => { var index = new LuceneIndex(""); });
         }
 
     }

@@ -105,7 +105,6 @@
 
         private void AddBreadcrumbPath(List<Level> path, TableLink tblLink)
         {
-            ;
             if (!_breadcrumbs.TryGetValue(tblLink.TableId, out var paths))
             {
                 paths = new List<Level[]>();
