@@ -40,6 +40,34 @@
             Assert.IsNotNull(_luceneIndex);
         }
 
+        [TestMethod]
+        public void UpdatedEntry_ShouldCreateIndexWriterAndReader()
+        {
+            // Arrange
+            var language = "en";
+            var tableInformation = new TableInformation(
+                    "TAB001",
+                    "Population in the world",
+                    "Population",
+                    "2000",
+                    "2005",
+                    new string[] { "TIME" });
+            tableInformation.Description = "Test";
+            tableInformation.SortCode = "001";
+            tableInformation.Paths.Add(new Level[] { new Level("A", "Test") });
+
+            var meta = new PXMeta();
+            meta.Matrix = "TAB001";
+            meta.Variables.Add(ModelStore.CreateTimeVariable("", PlacementType.Stub, 2000, 2005));
+
+            // Act
+            _luceneIndex.BeginUpdate(language);
+            _luceneIndex.UpdateEntry(tableInformation, meta);
+            _luceneIndex.EndUpdate(language);
+            // Assert
+            Assert.IsNotNull(_luceneIndex);
+        }
+
     }
 
 }
