@@ -74,7 +74,7 @@ namespace PxWeb.UnitTests.Search
         public void NewLucenIndex_NoPath_ShouldThrowExcpetion()
         {
             // Assert
-            Assert.ThrowsException<ArgumentNullException>(() => new LuceneIndex(""));
+            Assert.ThrowsExactly<ArgumentNullException>(() => new LuceneIndex(""));
         }
 
     }

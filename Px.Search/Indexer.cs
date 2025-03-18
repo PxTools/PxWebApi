@@ -89,9 +89,8 @@
                             path.Add(new Level(subitem.ID.Selection, subitem.Text));
                             GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
                         }
-                        else if (subitem is TableLink)
+                        else if (subitem is TableLink tblLink)
                         {
-                            var tblLink = (TableLink)subitem;
                             AddBreadcrumbPath(path, tblLink);
                         }
                     }
@@ -106,11 +105,13 @@
 
         private void AddBreadcrumbPath(List<Level> path, TableLink tblLink)
         {
-            if (!_breadcrumbs.ContainsKey(tblLink.TableId))
+            ;
+            if (!_breadcrumbs.TryGetValue(tblLink.TableId, out var paths))
             {
-                _breadcrumbs.Add(tblLink.TableId, new List<Level[]>());
+                paths = new List<Level[]>();
+                _breadcrumbs.Add(tblLink.TableId, paths);
             }
-            _breadcrumbs[tblLink.TableId].Add(path.ToArray());
+            paths.Add(path.ToArray());
         }
 
 

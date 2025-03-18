@@ -54,7 +54,7 @@ namespace Px.Search.Lucene
             return writer;
         }
 
-        private void CreateIndexReader(string language)
+        private void CreateIndexReader()
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Px.Search.Lucene
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
             _writer = CreateIndexWriter(false, language);
-            CreateIndexReader(language);
+            CreateIndexReader();
 
             if (_writer == null)
             {
