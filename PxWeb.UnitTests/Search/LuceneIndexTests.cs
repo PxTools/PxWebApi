@@ -1,4 +1,6 @@
-﻿namespace PxWeb.UnitTests.Search
+﻿using System;
+
+namespace PxWeb.UnitTests.Search
 {
     [TestClass]
     public class LuceneIndexTests
@@ -66,6 +68,14 @@
             _luceneIndex.EndUpdate(language);
             // Assert
             Assert.IsNotNull(_luceneIndex);
+        }
+
+
+        [TestMethod]
+        public void NewLucenIndex_NoPath_ShouldThrowExcpetion()
+        {
+            // Assert
+            Assert.ThrowsException<ArgumentNullException>(() => new LuceneIndex(""));
         }
 
     }
