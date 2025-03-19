@@ -283,7 +283,7 @@ namespace PxWeb.Controllers.Api2
             var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
 
             Response.ContentType = serializationInfo.ContentType;
-            Response.Headers.Append("Content-Disposition", $"attachment; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
+            Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
             serializationInfo.Serializer.Serialize(model, Response.Body);
 
             return Ok();
