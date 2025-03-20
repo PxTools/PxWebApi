@@ -88,6 +88,7 @@
                         {
                             path.Add(new Level(subitem.ID.Selection, subitem.Text));
                             GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
+                            path.RemoveAt(path.Count - 1);
                         }
                         else if (subitem is TableLink tblLink)
                         {
