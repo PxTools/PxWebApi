@@ -261,6 +261,9 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             foreach (var variable in meta.Variables)
             {
+                var variableNotes = variable.Notes;
+                var valueNotes = GetNotes(variable);
+
                 if (variable.HasValuesets() && variable.CurrentGrouping is null && variable.CurrentValueSet is null)
                 {
                     builder.ApplyValueSet(variable.Code, variable.ValueSets[0]);
@@ -272,6 +275,49 @@ namespace PxWeb.Code.Api2.DataSelection
                 else if (variable.CurrentValueSet != null)
                 {
                     builder.ApplyValueSet(variable.Code, variable.CurrentValueSet);
+                }
+                var newVariable = builder.Model.Meta.Variables.FirstOrDefault(v => v.Code == variable.Code);
+                if (newVariable is not null)
+                {
+                    ReapplyNotes(newVariable, valueNotes, variableNotes);
+                }
+            }
+        }
+
+        // GetNotes(variable)
+        private static Dictionary<string, Notes> GetNotes(Variable variable)
+        {
+            var valueNotes = new Dictionary<string, Notes>();
+            foreach (var value in variable.Values)
+            {
+                if (value.HasNotes())
+                {
+                    valueNotes.Add(value.Code, value.Notes);
+                }
+            }
+            return valueNotes;
+        }
+
+        // ReapplyNotes(variable, notes)
+        private static void ReapplyNotes(Variable variable, Dictionary<string, Notes> valueNotes, Notes variableNotes)
+        {
+            //if (variableNotes is not null)
+            //{
+            //    foreach (var note in variableNotes)
+            //    {
+            //        variable.Notes.Add(note);
+            //    }
+            //}
+
+            foreach (var valueCode in valueNotes.Keys)
+            {
+                var value = variable.Values.FirstOrDefault(v => v.Code == valueCode);
+                if (value is not null)
+                {
+                    foreach (var note in valueNotes[valueCode])
+                    {
+                        value.AddNote(note);
+                    }
                 }
             }
         }
