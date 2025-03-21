@@ -1,5 +1,7 @@
 ﻿
 
+using System.Text.Json;
+
 namespace Px.Search.Lucene
 {
     public class LuceneSearcher : ISearcher
@@ -141,7 +143,10 @@ namespace Px.Search.Lucene
                     doc.Get(SearchConstants.SEARCH_FIELD_CATEGORY),
                     doc.Get(SearchConstants.SEARCH_FIELD_FIRSTPERIOD),
                     doc.Get(SearchConstants.SEARCH_FIELD_LASTPERIOD),
-                    doc.Get(SearchConstants.SEARCH_FIELD_VARIABLES).Split("|")
+                    doc.Get(SearchConstants.SEARCH_FIELD_VARIABLES).Split("|"),
+                    doc.Get(SearchConstants.SEARCH_FIELD_SOURCE),
+                    doc.Get(SearchConstants.SEARCH_FIELD_TIME_UNIT)
+
                 );
             searchResult.Description = doc.Get(SearchConstants.SEARCH_FIELD_DESCRIPTION);
             searchResult.SortCode = doc.Get(SearchConstants.SEARCH_FIELD_SORTCODE);
@@ -159,6 +164,8 @@ namespace Px.Search.Lucene
             searchResult.Tags = doc.Get(SearchConstants.SEARCH_FIELD_TAGS).Split(" ");
             searchResult.Updated = String.IsNullOrEmpty(doc.Get(SearchConstants.SEARCH_FIELD_UPDATED)) ? null : DateTools.StringToDate(doc.Get(SearchConstants.SEARCH_FIELD_UPDATED));
             searchResult.Label = doc.Get(SearchConstants.SEARCH_FIELD_TITLE);
+
+            searchResult.Paths = JsonSerializer.Deserialize<List<Level[]>>(doc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS).Bytes) ?? new List<Level[]>();
 
             return searchResult;
         }

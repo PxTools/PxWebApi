@@ -22,4 +22,11 @@
     <ProjectReference Include="..\Px.Abstractions\Px.Abstractions.csproj" />
   </ItemGroup>
 
+<ItemGroup>
+  <!-- Include must be the fully qualified .NET type name of the Attribute to create. -->
+  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+    <_Parameter1>Px.Search.Tests</_Parameter1>
+  </AssemblyAttribute>
+</ItemGroup>
+
 </Project>

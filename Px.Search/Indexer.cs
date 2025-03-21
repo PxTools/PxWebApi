@@ -9,6 +9,7 @@
         private readonly ISearchBackend _backend;
         private readonly ILogger _logger;
         private List<string> _indexedTables;
+        private readonly Dictionary<string, List<Level[]>> _breadcrumbs;
 
         public Indexer(IDataSource dataSource, ISearchBackend backend, ILogger logger)
         {
@@ -16,6 +17,7 @@
             _backend = backend;
             _logger = logger;
             _indexedTables = new List<string>();
+            _breadcrumbs = new Dictionary<string, List<Level[]>>();
         }
 
         /// <summary>
@@ -48,6 +50,9 @@
 
                         if (item is PxMenuItem)
                         {
+                            var path = new List<Level>();
+                            _breadcrumbs.Clear();
+                            GenerateBreadcrumbs(item.ID.Selection, language, index, path);
                             TraverseDatabase(item.ID.Selection, language, index);
                         }
                     }
@@ -55,6 +60,58 @@
                     index.EndWrite(language);
                 }
             }
+        }
+
+        private void GenerateBreadcrumbs(string id, string language, IIndex index, List<Level> path)
+        {
+            bool exists;
+            Item? item;
+
+            try
+            {
+                item = _source.CreateMenu(id, language, out exists);
+
+                if (item is null || !exists)
+                {
+                    return;
+                }
+
+                if (item is PxMenuItem menuItem)
+                {
+                    foreach (var subitem in menuItem.SubItems)
+                    {
+                        if (subitem is null)
+                        {
+                            continue;
+                        }
+                        if (subitem is PxMenuItem)
+                        {
+                            path.Add(new Level(subitem.ID.Selection, subitem.Text));
+                            GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
+                            path.RemoveAt(path.Count - 1);
+                        }
+                        else if (subitem is TableLink tblLink)
+                        {
+                            AddBreadcrumbPath(path, tblLink);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GenerateBreadcrumbs : Could not CreateMenu for id {Id} for language {Language}", id, language);
+            }
+
+        }
+
+        private void AddBreadcrumbPath(List<Level> path, TableLink tblLink)
+        {
+            if (!_breadcrumbs.TryGetValue(tblLink.TableId, out var paths))
+            {
+                paths = new List<Level[]>();
+                _breadcrumbs.Add(tblLink.TableId, paths);
+            }
+            paths.Add(path.ToArray());
         }
 
 
@@ -90,32 +147,40 @@
             {
                 foreach (var subitem in ((PxMenuItem)item).SubItems)
                 {
+                    if (subitem is null)
+                    {
+                        continue;
+                    }
                     if (subitem is PxMenuItem)
                     {
                         TraverseDatabase(subitem.ID.Selection, language, index);
                     }
                     else if (subitem is TableLink)
                     {
-                        string tableId = ((TableLink)subitem).TableId;
-                        if (!_indexedTables.Contains(tableId))
-                        {
-                            IndexTable(tableId, (TableLink)subitem, language, index);
-
-                            _indexedTables.Add(tableId);
-                            if (_indexedTables.Count % 100 == 0)
-                            {
-                                _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
-                            }
-                        }
-                        else
-                        {
-                            _logger.LogDebug("Table {TableId} is already indexed.", tableId);
-                        }
-
+                        AddTableToIndex(language, index, (TableLink)subitem);
                     }
                 }
             }
 
+        }
+
+        private void AddTableToIndex(string language, IIndex index, TableLink tableLink)
+        {
+            string tableId = tableLink.TableId;
+            if (!_indexedTables.Contains(tableId))
+            {
+                IndexTable(tableId, tableLink, language, index);
+
+                _indexedTables.Add(tableId);
+                if (_indexedTables.Count % 100 == 0)
+                {
+                    _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
+                }
+            }
+            else
+            {
+                _logger.LogDebug("Table {TableId} is already indexed.", tableId);
+            }
         }
 
 
@@ -162,6 +227,7 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
+                    tbl.Paths = _breadcrumbs[id];
 
                     index.AddEntry(tbl, model.Meta);
                 }
@@ -204,6 +270,8 @@
         private TableInformation GetTableInformation(string id, TableLink tblLink, PXMeta meta)
         {
             TableInformation tbl = new TableInformation(id, tblLink.Text, GetCategory(tblLink), meta.GetFirstTimeValue(), meta.GetLastTimeValue(), (from v in meta.Variables select v.Name).ToArray());
+            tbl.Source = meta.Source;
+            tbl.TimeUnit = meta.GetTimeUnit();
             tbl.Description = tblLink.Description;
             tbl.SortCode = tblLink.SortCode;
             tbl.Updated = tblLink.LastUpdated;
