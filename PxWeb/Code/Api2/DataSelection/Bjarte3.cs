@@ -261,7 +261,7 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             foreach (var variable in meta.Variables)
             {
-                var variableNotes = variable.Notes;
+
                 var valueNotes = GetNotes(variable);
 
                 if (variable.HasValuesets() && variable.CurrentGrouping is null && variable.CurrentValueSet is null)
@@ -279,7 +279,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 var newVariable = builder.Model.Meta.Variables.FirstOrDefault(v => v.Code == variable.Code);
                 if (newVariable is not null)
                 {
-                    ReapplyNotes(newVariable, valueNotes, variableNotes);
+                    ReapplyNotes(newVariable, valueNotes);
                 }
             }
         }
@@ -303,7 +303,7 @@ namespace PxWeb.Code.Api2.DataSelection
             return valueNotes;
         }
 
-        private static void ReapplyNotes(Variable variable, Dictionary<string, Notes> valueNotes, Notes variableNotes)
+        private static void ReapplyNotes(Variable variable, Dictionary<string, Notes> valueNotes)
         {
 
             foreach (var valueCode in valueNotes.Keys)
