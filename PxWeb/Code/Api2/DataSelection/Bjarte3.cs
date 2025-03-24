@@ -261,6 +261,9 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             foreach (var variable in meta.Variables)
             {
+
+                var valueNotes = GetNotes(variable);
+
                 if (variable.HasValuesets() && variable.CurrentGrouping is null && variable.CurrentValueSet is null)
                 {
                     builder.ApplyValueSet(variable.Code, variable.ValueSets[0]);
@@ -272,6 +275,43 @@ namespace PxWeb.Code.Api2.DataSelection
                 else if (variable.CurrentValueSet != null)
                 {
                     builder.ApplyValueSet(variable.Code, variable.CurrentValueSet);
+                }
+                var newVariable = builder.Model.Meta.Variables.FirstOrDefault(v => v.Code == variable.Code);
+                if (newVariable is not null)
+                {
+                    ReapplyNotes(newVariable, valueNotes);
+                }
+            }
+        }
+
+        private static Dictionary<string, Notes> GetNotes(Variable variable)
+        {
+            var valueNotes = new Dictionary<string, Notes>();
+            //Skip Content variables since they have not other valueset or grouping
+            if (variable.IsContentVariable)
+            {
+                return valueNotes;
+            }
+
+            foreach (var value in variable.Values.Where(v => v.HasNotes()))
+            {
+                valueNotes.Add(value.Code, value.Notes);
+            }
+            return valueNotes;
+        }
+
+        private static void ReapplyNotes(Variable variable, Dictionary<string, Notes> valueNotes)
+        {
+
+            foreach (var valueCode in valueNotes.Keys)
+            {
+                var value = variable.Values.FirstOrDefault(v => v.Code == valueCode);
+                if (value is not null && !value.HasNotes())
+                {
+                    foreach (var note in valueNotes[valueCode])
+                    {
+                        value.AddNote(note);
+                    }
                 }
             }
         }
