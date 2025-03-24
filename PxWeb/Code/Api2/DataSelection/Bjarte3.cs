@@ -284,10 +284,15 @@ namespace PxWeb.Code.Api2.DataSelection
             }
         }
 
-        // GetNotes(variable)
         private static Dictionary<string, Notes> GetNotes(Variable variable)
         {
             var valueNotes = new Dictionary<string, Notes>();
+            //Skip Content variables since they have not other valueset or grouping
+            if (variable.IsContentVariable)
+            {
+                return valueNotes;
+            }
+
             foreach (var value in variable.Values)
             {
                 if (value.HasNotes())
@@ -298,21 +303,13 @@ namespace PxWeb.Code.Api2.DataSelection
             return valueNotes;
         }
 
-        // ReapplyNotes(variable, notes)
         private static void ReapplyNotes(Variable variable, Dictionary<string, Notes> valueNotes, Notes variableNotes)
         {
-            //if (variableNotes is not null)
-            //{
-            //    foreach (var note in variableNotes)
-            //    {
-            //        variable.Notes.Add(note);
-            //    }
-            //}
 
             foreach (var valueCode in valueNotes.Keys)
             {
                 var value = variable.Values.FirstOrDefault(v => v.Code == valueCode);
-                if (value is not null)
+                if (value is not null && !value.HasNotes())
                 {
                     foreach (var note in valueNotes[valueCode])
                     {
