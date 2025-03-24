@@ -293,12 +293,9 @@ namespace PxWeb.Code.Api2.DataSelection
                 return valueNotes;
             }
 
-            foreach (var value in variable.Values)
+            foreach (var value in variable.Values.Where(v => v.HasNotes()))
             {
-                if (value.HasNotes())
-                {
-                    valueNotes.Add(value.Code, value.Notes);
-                }
+                valueNotes.Add(value.Code, value.Notes);
             }
             return valueNotes;
         }
