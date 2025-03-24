@@ -234,7 +234,7 @@
             return variable;
         }
 
-        private static PCAxis.Paxiom.Variable CreateContentVariable(string suffix, PlacementType placementType, int numberOfValues)
+        public static PCAxis.Paxiom.Variable CreateContentVariable(string suffix, PlacementType placementType, int numberOfValues)
         {
             var name = $"cont_{suffix}";
             Variable variable = new Variable(name, placementType);
