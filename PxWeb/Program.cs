@@ -197,7 +197,7 @@ namespace PxWeb
                 app.UseIpRateLimiting();
             }
 
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
+            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin")), appBuilder =>
             {
                 appBuilder.UseCacheMiddleware();
             });
