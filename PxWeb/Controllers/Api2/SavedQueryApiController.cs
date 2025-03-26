@@ -1,8 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 using Microsoft.AspNetCore.Mvc;
 
+using PCAxis.Paxiom;
+using PCAxis.Paxiom.Operations;
+
+using Px.Abstractions.Interfaces;
+
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code.Api2.DataSelection;
+using PxWeb.Helper.Api2;
 
 namespace PxWeb.Controllers.Api2
 {
@@ -10,15 +18,76 @@ namespace PxWeb.Controllers.Api2
     public class SavedQueryApiController : PxWeb.Api2.Server.Controllers.SavedQueriesApiController
     {
 
-        public SavedQueryApiController()
-        {
+        private readonly ISelectionHandler _selectionHandler;
+        private readonly IDataSource _dataSource;
 
+        public SavedQueryApiController(IDataSource dataSource, ISelectionHandler selectionHandler)
+        {
+            _dataSource = dataSource;
+            _selectionHandler = selectionHandler;
         }
 
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
         {
             //TOOD: Implement
+            Problem? problem;
+
+            if (savedQuery is null)
+            {
+                //TODO Fix error message
+                return BadRequest("The request body is empty.");
+            }
+            var variablesSelection = savedQuery.Selection;
+
             // 1. Make sure that the SavedQuery is ok and that it results in a valid output.
+            var builder = _dataSource.CreateBuilder(savedQuery.TableId, savedQuery.Language);
+            if (builder == null)
+            {
+                return NotFound(ProblemUtility.NonExistentTable());
+            }
+
+            Selection[]? selection = null;
+            VariablePlacementType? placment = null;
+
+            if (variablesSelection is not null)
+            {
+                if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
+                {
+                    return BadRequest(problem);
+                }
+
+                selection = _selectionHandler.Convert(variablesSelection);
+
+                if (problem is not null)
+                {
+                    return BadRequest(problem);
+                }
+
+                builder.BuildForPresentation(selection);
+
+                var model = builder.Model;
+
+                if (placment is not null)
+                {
+                    var descriptions = new List<PivotDescription>();
+
+                    descriptions.AddRange(placment.Heading.Select(h => new PivotDescription()
+                    {
+                        VariableName = model.Meta.Variables.First(v => v.Code.Equals(h, StringComparison.OrdinalIgnoreCase)).Name,
+                        VariablePlacement = PlacementType.Heading
+                    }));
+
+                    descriptions.AddRange(placment.Stub.Select(h => new PivotDescription()
+                    {
+                        VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
+                        VariablePlacement = PlacementType.Stub
+                    }));
+
+                    var pivot = new PCAxis.Paxiom.Operations.Pivot();
+                    model = pivot.Execute(model, descriptions.ToArray());
+                }
+            }
+
             // 2. Save the SavedQuery to the database/file.
             // 3. Return the SavedQuery with the id set.
             // If error return 400 Bad Request
