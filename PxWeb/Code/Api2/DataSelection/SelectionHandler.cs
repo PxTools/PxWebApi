@@ -113,7 +113,10 @@ namespace PxWeb.Code.Api2.DataSelection
                     // Try to get the value using the code specified by the API user
                     Value? pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase));
 
-                    return ExpandValue(ref problem, variable, modelVariable, valueCode, pxValue);
+                    if (!ExpandValue(ref problem, variable, modelVariable, valueCode, pxValue))
+                    {
+                        return false;
+                    }
                 }
 
                 //Verify that variables have at least one value selected for mandatory varibles
