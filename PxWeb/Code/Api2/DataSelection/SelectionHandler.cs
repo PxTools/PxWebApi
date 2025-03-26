@@ -106,20 +106,30 @@ namespace PxWeb.Code.Api2.DataSelection
             {
 
                 var modelVariable = model.Meta.Variables.GetByCode(variable.VariableCode);
+                var valueCodes = variable.ValueCodes.ToList();
 
-                for (int i = 0; i < variable.ValueCodes.Count; i++)
+                foreach (var valueCode in valueCodes)
                 {
-                    var valueCode = variable.ValueCodes[i];
                     // Try to get the value using the code specified by the API user
                     Value? pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase));
 
                     if (pxValue is null)
                     {
-                        return ExpandSelectionExpression(variable, modelVariable, valueCode, out problem);
+                        if (ExpandSelectionExpression(variable, modelVariable, valueCode, out problem))
+                        {
+                            variable.ValueCodes.Remove(valueCode);
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     else
                     {
-                        variable.ValueCodes[i] = pxValue.Code;
+                        if (valueCode != pxValue.Code)
+                        {
+                            variable.ValueCodes[variable.ValueCodes.IndexOf(valueCode)] = pxValue.Code;
+                        }
                     }
                 }
 
