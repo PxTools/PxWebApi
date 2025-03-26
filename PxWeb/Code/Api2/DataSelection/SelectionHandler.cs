@@ -113,24 +113,7 @@ namespace PxWeb.Code.Api2.DataSelection
                     // Try to get the value using the code specified by the API user
                     Value? pxValue = modelVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase));
 
-                    if (pxValue is null)
-                    {
-                        if (ExpandSelectionExpression(variable, modelVariable, valueCode, out problem))
-                        {
-                            variable.ValueCodes.Remove(valueCode);
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (valueCode != pxValue.Code)
-                        {
-                            variable.ValueCodes[variable.ValueCodes.IndexOf(valueCode)] = pxValue.Code;
-                        }
-                    }
+                    return ExpandValue(ref problem, variable, modelVariable, valueCode, pxValue);
                 }
 
                 //Verify that variables have at least one value selected for mandatory varibles
@@ -142,6 +125,29 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
             }
 
+            return true;
+        }
+
+        private static bool ExpandValue(ref Problem? problem, VariableSelection variable, Variable modelVariable, string valueCode, Value? pxValue)
+        {
+            if (pxValue is null)
+            {
+                if (ExpandSelectionExpression(variable, modelVariable, valueCode, out problem))
+                {
+                    variable.ValueCodes.Remove(valueCode);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (valueCode != pxValue.Code)
+                {
+                    variable.ValueCodes[variable.ValueCodes.IndexOf(valueCode)] = pxValue.Code;
+                }
+            }
             return true;
         }
 
