@@ -41,10 +41,12 @@ namespace PxWeb.Controllers.Api2
 
             // 1. Make sure that the SavedQuery is ok and that it results in a valid output.
             var builder = _dataSource.CreateBuilder(savedQuery.TableId, savedQuery.Language);
+
             if (builder == null)
             {
                 return NotFound(ProblemUtility.NonExistentTable());
             }
+            builder.BuildForSelection();
 
             Selection[]? selection = null;
             VariablePlacementType? placment = null;
