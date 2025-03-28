@@ -16,7 +16,8 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
 
         public SavedQuery? Load(string id)
         {
-            var savedQueryString = _backend.Load(id);
+            var cleanId = SanitizeName(id);
+            var savedQueryString = _backend.Load(cleanId);
             if (string.IsNullOrEmpty(savedQueryString))
             {
                 return null;
@@ -32,7 +33,13 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
 
         public void UpdateRunStatistics(string id)
         {
-            _backend.UpdateRunStatistics(id);
+            var cleanId = SanitizeName(id);
+            _backend.UpdateRunStatistics(cleanId);
+        }
+
+        private static string SanitizeName(string id)
+        {
+            return id.Replace("/", "_").Replace("\\", "_").Replace(".", "_");
         }
     }
 }
