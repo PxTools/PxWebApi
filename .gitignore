@@ -491,3 +491,4 @@ docker/pxwebapi/database/*
 !docker/pxwebapi/database/tinydatabase.zip
 SqlDb.config
 *.sqa
+*.sqs

@@ -40,7 +40,9 @@ namespace PxWeb.Controllers.Api2
                 //TODO Fix error message
                 return BadRequest("The request body is empty.");
             }
-            var variablesSelection = savedQuery.Selection;
+
+            // Create a copy of the selection to be able to expand it
+            var variablesSelection = SelectionUtil.Copy(savedQuery.Selection);
 
             // 1. Make sure that the SavedQuery is ok and that it results in a valid output.
             var builder = _dataSource.CreateBuilder(savedQuery.TableId, savedQuery.Language);
