@@ -10,6 +10,7 @@ using Px.Abstractions.Interfaces;
 
 using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2.DataSelection;
+using PxWeb.Code.Api2.SavedQueryBackend;
 using PxWeb.Helper.Api2;
 
 namespace PxWeb.Controllers.Api2
@@ -20,11 +21,13 @@ namespace PxWeb.Controllers.Api2
 
         private readonly ISelectionHandler _selectionHandler;
         private readonly IDataSource _dataSource;
+        private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
 
-        public SavedQueryApiController(IDataSource dataSource, ISelectionHandler selectionHandler)
+        public SavedQueryApiController(IDataSource dataSource, ISelectionHandler selectionHandler, ISavedQueryBackendProxy savedQueryStorageBackend)
         {
             _dataSource = dataSource;
             _selectionHandler = selectionHandler;
+            _savedQueryBackendProxy = savedQueryStorageBackend;
         }
 
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
@@ -69,6 +72,8 @@ namespace PxWeb.Controllers.Api2
 
                 var model = builder.Model;
 
+                placment = savedQuery.Selection.Placement;
+
                 if (placment is not null)
                 {
                     var descriptions = new List<PivotDescription>();
@@ -89,22 +94,34 @@ namespace PxWeb.Controllers.Api2
                     model = pivot.Execute(model, descriptions.ToArray());
                 }
             }
+            string id;
+            try
+            {
+                // 2. Save the SavedQuery to the database/file.
+                id = _savedQueryBackendProxy.Save(savedQuery);
+            }
+            catch (Exception e)
+            {
+                // If error return 400 Bad Request
+                //TODO: Fix error response 
+                return BadRequest(e.Message);
+            }
 
-            // 2. Save the SavedQuery to the database/file.
             // 3. Return the SavedQuery with the id set.
-            // If error return 400 Bad Request
+            savedQuery.Id = id;
+            return Created(savedQuery.Id, savedQuery);
 
-            throw new NotImplementedException();
         }
 
         public override IActionResult GetSaveQuery([FromRoute(Name = "id"), Required] string id)
         {
-            //TODO: Implement
-            // 1. Get the SavedQuery from the database/file.
-            // 2. If the SavedQuery is not found return 404 Not Found
-            // 3. Return the SavedQuery
-
-            throw new NotImplementedException();
+            var savedQuery = _savedQueryBackendProxy.Load(id);
+            if (savedQuery is null)
+            {
+                //TODO: Fix error message
+                return NotFound();
+            }
+            return Ok(savedQuery);
         }
 
         public override IActionResult RunSaveQuery([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat, [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams)
