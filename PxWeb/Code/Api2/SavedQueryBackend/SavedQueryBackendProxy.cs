@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.RegularExpressions;
 
 using Px.Abstractions.Interfaces;
 
@@ -37,9 +38,9 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
             _backend.UpdateRunStatistics(cleanId);
         }
 
-        private static string SanitizeName(string id)
+        public static string SanitizeName(string id)
         {
-            return id.Replace("/", "_").Replace("\\", "_").Replace(".", "_");
+            return Regex.Replace(id, @"[^a-zA-Z0-9-]", "", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
     }
 }
