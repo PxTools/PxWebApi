@@ -5,13 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-using PCAxis.Paxiom;
-using PCAxis.Paxiom.Operations;
-
-using Px.Abstractions.Interfaces;
-
 using PxWeb.Api2.Server.Models;
-using PxWeb.Code.Api2.DataSelection;
+using PxWeb.Code.Api2;
 using PxWeb.Code.Api2.SavedQueryBackend;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Helper.Api2;
@@ -22,15 +17,13 @@ namespace PxWeb.Controllers.Api2
     public class SavedQueryApiController : PxWeb.Api2.Server.Controllers.SavedQueriesApiController
     {
         private readonly PxApiConfigurationOptions _configOptions;
-        private readonly ISelectionHandler _selectionHandler;
-        private readonly IDataSource _dataSource;
         private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
         private readonly ISerializeManager _serializeManager;
+        private readonly IDataWorkflow _dataWorkflow;
 
-        public SavedQueryApiController(IDataSource dataSource, ISelectionHandler selectionHandler, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions)
+        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions)
         {
-            _dataSource = dataSource;
-            _selectionHandler = selectionHandler;
+            _dataWorkflow = dataWorkflow;
             _savedQueryBackendProxy = savedQueryStorageBackend;
             _serializeManager = serializeManager;
             _configOptions = configOptions.Value;
@@ -50,58 +43,8 @@ namespace PxWeb.Controllers.Api2
             // Create a copy of the selection to be able to expand it
             var variablesSelection = SelectionUtil.Copy(savedQuery.Selection);
 
-            // 1. Make sure that the SavedQuery is ok and that it results in a valid output.
-            var builder = _dataSource.CreateBuilder(savedQuery.TableId, savedQuery.Language);
+            _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem);
 
-            if (builder == null)
-            {
-                return NotFound(ProblemUtility.NonExistentTable());
-            }
-            builder.BuildForSelection();
-
-            Selection[]? selection = null;
-            VariablePlacementType? placment = null;
-
-            if (variablesSelection is not null)
-            {
-                if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
-                {
-                    return BadRequest(problem);
-                }
-
-                selection = _selectionHandler.Convert(variablesSelection);
-
-                if (problem is not null)
-                {
-                    return BadRequest(problem);
-                }
-
-                builder.BuildForPresentation(selection);
-
-                var model = builder.Model;
-
-                placment = savedQuery.Selection.Placement;
-
-                if (placment is not null)
-                {
-                    var descriptions = new List<PivotDescription>();
-
-                    descriptions.AddRange(placment.Heading.Select(h => new PivotDescription()
-                    {
-                        VariableName = model.Meta.Variables.First(v => v.Code.Equals(h, StringComparison.OrdinalIgnoreCase)).Name,
-                        VariablePlacement = PlacementType.Heading
-                    }));
-
-                    descriptions.AddRange(placment.Stub.Select(h => new PivotDescription()
-                    {
-                        VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
-                        VariablePlacement = PlacementType.Stub
-                    }));
-
-                    var pivot = new PCAxis.Paxiom.Operations.Pivot();
-                    model = pivot.Execute(model, descriptions.ToArray());
-                }
-            }
             string id;
             try
             {
@@ -168,60 +111,14 @@ namespace PxWeb.Controllers.Api2
             }
 
             // 4. Run the SavedQuery
-            var builder = _dataSource.CreateBuilder(savedQuery.TableId, savedQuery.Language);
+            var model = _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, savedQuery.Selection, out problem);
 
-            if (builder == null)
-            {
-                return NotFound(ProblemUtility.NonExistentTable());
-            }
-            builder.BuildForSelection();
-
-            Selection[]? selection = null;
-            VariablePlacementType? placment = null;
-
-            var variablesSelection = savedQuery.Selection;
-
-
-            if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
+            if (model is null)
             {
                 return BadRequest(problem);
-            }
-
-            selection = _selectionHandler.Convert(variablesSelection);
-
-            if (problem is not null)
-            {
-                return BadRequest(problem);
-            }
-
-            builder.BuildForPresentation(selection);
-
-            var model = builder.Model;
-
-            placment = savedQuery.Selection.Placement;
-
-            if (placment is not null)
-            {
-                var descriptions = new List<PivotDescription>();
-
-                descriptions.AddRange(placment.Heading.Select(h => new PivotDescription()
-                {
-                    VariableName = model.Meta.Variables.First(v => v.Code.Equals(h, StringComparison.OrdinalIgnoreCase)).Name,
-                    VariablePlacement = PlacementType.Heading
-                }));
-
-                descriptions.AddRange(placment.Stub.Select(h => new PivotDescription()
-                {
-                    VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
-                    VariablePlacement = PlacementType.Stub
-                }));
-
-                var pivot = new PCAxis.Paxiom.Operations.Pivot();
-                model = pivot.Execute(model, descriptions.ToArray());
             }
 
             // 5. Return the result
-
             bool paramError;
             string outputFormatStr;
             List<string> outputFormatParamsStr;

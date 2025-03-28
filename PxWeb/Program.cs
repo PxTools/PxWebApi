@@ -81,6 +81,7 @@ namespace PxWeb
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
             builder.Services.Configure<SavedQueryFileStorageOptions>(builder.Configuration.GetSection(SavedQueryFileStorageOptions.SectionName));
 
+            builder.Services.AddTransient<IDataWorkflow, DataWorkflow>();
             builder.Services.AddTransient<ISavedQueryStorageBackend, SaveQueryFileStorgeBackend>();
             builder.Services.AddTransient<ISavedQueryBackendProxy, SavedQueryBackendProxy>();
             builder.Services.AddTransient<IPxApiConfigurationService, PxApiConfigurationService>();
