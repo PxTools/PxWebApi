@@ -15,13 +15,17 @@ namespace PxWeb.Code.Api2
     {
         private readonly IDataSource _dataSource;
         private readonly ISelectionHandler _selectionHandler;
+        private readonly IDefaultSelectionAlgorithm _defaultSelectionAlgorithm;
+        private readonly IPlacementHandler _placementHandler;
 
-        public DataWorkflow(IDataSource datasource, ISelectionHandler selectionHandler)
+        public DataWorkflow(IDataSource datasource, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IPlacementHandler placementHandler)
         {
             _dataSource = datasource;
             _selectionHandler = selectionHandler;
+            _defaultSelectionAlgorithm = defaultSelectionAlgorithm;
+            _placementHandler = placementHandler;
         }
-        public PXModel? Run(string tableId, string language, VariablesSelection variablesSelection, out Problem? problem)
+        public PXModel? Run(string tableId, string language, VariablesSelection? variablesSelection, out Problem? problem)
         {
             //If no selection is made, return a problem and exit early
             if (variablesSelection is null)
@@ -33,6 +37,40 @@ namespace PxWeb.Code.Api2
 
             // Create a builder for the table and read in the table metadata
             var builder = _dataSource.CreateBuilder(tableId, language);
+            return Run(variablesSelection, builder, out problem);
+        }
+
+        public PXModel? Run(string tableId, string language, out Problem? problem)
+        {
+            var builder = _dataSource.CreateBuilder(tableId, language);
+            if (builder == null)
+            {
+                problem = ProblemUtility.NonExistentTable();
+                return null;
+            }
+
+            var variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+            //If no selection is made, return a problem and exit early
+            if (variablesSelection is null)
+            {
+                problem = ProblemUtility.MissingSelection();
+                return null;
+
+            }
+
+            // Create a builder for the table and read in the table metadata
+            return Run(variablesSelection, builder, out problem);
+        }
+
+        private PXModel? Run(VariablesSelection variablesSelection, IPXModelBuilder? builder, out Problem? problem)
+        {
+            //If no selection is made, return a problem and exit early
+            if (variablesSelection is null)
+            {
+                problem = ProblemUtility.MissingSelection();
+                return null;
+
+            }
 
             if (builder == null)
             {
@@ -63,7 +101,7 @@ namespace PxWeb.Code.Api2
             var model = builder.Model;
 
             // TODO: Fix this
-            //placment = savedQuery.Selection.Placement;
+            placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
 
             if (placment is not null)
             {

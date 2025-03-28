@@ -17,13 +17,13 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 using PCAxis.Paxiom;
-using PCAxis.Paxiom.Operations;
 
 using Px.Abstractions;
 using Px.Abstractions.Interfaces;
 using Px.Search;
 
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code.Api2;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
 using PxWeb.Code.Api2.Serialization;
@@ -48,11 +48,11 @@ namespace PxWeb.Controllers.Api2
         private readonly ISerializeManager _serializeManager;
         private readonly PxApiConfigurationOptions _configOptions;
         private readonly ISelectionHandler _selectionHandler;
-        private readonly IPlacementHandler _placementHandler;
         private readonly ISelectionResponseMapper _selectionResponseMapper;
         private readonly IDefaultSelectionAlgorithm _defaultSelectionAlgorithm;
+        private readonly IDataWorkflow _dataWorkflow;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IPlacementHandler placementHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm)
+        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow)
         {
             _dataSource = dataSource;
             _languageHelper = languageHelper;
@@ -65,8 +65,8 @@ namespace PxWeb.Controllers.Api2
             _serializeManager = serializeManager;
             _selectionHandler = selectionHandler;
             _selectionResponseMapper = selectionResponseMapper;
-            _placementHandler = placementHandler;
             _defaultSelectionAlgorithm = defaultSelectionAlgorithm;
+            _dataWorkflow = dataWorkflow;
         }
 
         public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
@@ -86,8 +86,6 @@ namespace PxWeb.Controllers.Api2
                     if (defaultSelection is not null && defaultSelection == true)
                     {
                         //apply the default selection
-                        //Problem? problem;
-                        //var selectionx = _selectionHandler.GetDefaultSelection(builder, out problem);
 
                         //TODO: Check if we have a saved query that should serv as default selection
                         _defaultSelectionAlgorithm.GetDefaultSelection(builder);
@@ -192,13 +190,6 @@ namespace PxWeb.Controllers.Api2
 
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, OutputFormatType? outputFormat, List<OutputFormatParamType> outputFormatParams)
         {
-            //1. GetQuery()
-            //2. GetSelectionFromQuery()
-            //3. GetModelFromSelection()
-            //4. ApplyOperations()
-            //5. PivotModel()
-            //6. SerializeModel()
-
 
             Problem? problem = null;
 
@@ -215,69 +206,21 @@ namespace PxWeb.Controllers.Api2
                 return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
-            var builder = _dataSource.CreateBuilder(id, lang);
-            if (builder == null)
-            {
-                return NotFound(ProblemUtility.NonExistentTable());
-            }
-
-            builder.BuildForSelection();
-
-            Selection[]? selection = null;
-            //bool IsDefaultSelection = false;
-            VariablePlacementType? placment = null;
+            PXModel? model;
 
             if (SelectionUtil.UseDefaultSelection(variablesSelection))
             {
                 //TODO: Check if we have a saved query that should serv as default selection
-                variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                model = _dataWorkflow.Run(id, lang, out problem);
             }
-
-            if (variablesSelection is not null)
+            else
             {
-                if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
-                {
-                    return BadRequest(problem);
-                }
-
-                selection = _selectionHandler.Convert(variablesSelection);
-
-                if (selection is not null)
-                {
-                    //Check if we should pivot the table
-                    placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
-                    //GetPlacment(variablesSelection, selection, builder, out problem);
-                }
+                model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
             }
 
-
-            if (problem is not null)
+            if (model is null)
             {
                 return BadRequest(problem);
-            }
-
-            builder.BuildForPresentation(selection);
-
-            var model = builder.Model;
-
-            if (placment is not null)
-            {
-                var descriptions = new List<PivotDescription>();
-
-                descriptions.AddRange(placment.Heading.Select(h => new PivotDescription()
-                {
-                    VariableName = model.Meta.Variables.First(v => v.Code.Equals(h, StringComparison.OrdinalIgnoreCase)).Name,
-                    VariablePlacement = PlacementType.Heading
-                }));
-
-                descriptions.AddRange(placment.Stub.Select(h => new PivotDescription()
-                {
-                    VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
-                    VariablePlacement = PlacementType.Stub
-                }));
-
-                var pivot = new PCAxis.Paxiom.Operations.Pivot();
-                model = pivot.Execute(model, descriptions.ToArray());
             }
 
             var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);

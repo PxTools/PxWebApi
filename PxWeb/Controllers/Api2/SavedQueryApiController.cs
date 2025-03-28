@@ -100,14 +100,16 @@ namespace PxWeb.Controllers.Api2
                 return NotFound();
             }
 
-            // 3. Apply parameters to the SavedQuery
-            if (outputFormat is not null)
+            // 3. Override parameters to the SavedQuery
+            bool paramError;
+            string outputFormatStr;
+            List<string> outputFormatParamsStr;
+
+            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat ?? savedQuery.OutputFormat, _configOptions.DefaultOutputFormat, outputFormatParams ?? savedQuery.OutputFormatParams, out paramError);
+
+            if (paramError)
             {
-                savedQuery.OutputFormat = outputFormat.Value;
-            }
-            if (outputFormatParams is not null)
-            {
-                savedQuery.OutputFormatParams = outputFormatParams;
+                return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
             // 4. Run the SavedQuery
@@ -119,14 +121,7 @@ namespace PxWeb.Controllers.Api2
             }
 
             // 5. Return the result
-            bool paramError;
-            string outputFormatStr;
-            List<string> outputFormatParamsStr;
-
-            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions.DefaultOutputFormat, outputFormatParams, out paramError);
-
             var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
-
             Response.ContentType = serializationInfo.ContentType;
             Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
             serializationInfo.Serializer.Serialize(model, Response.Body);
