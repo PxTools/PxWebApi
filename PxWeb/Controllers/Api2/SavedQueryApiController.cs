@@ -115,6 +115,11 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetSaveQuery([FromRoute(Name = "id"), Required] string id)
         {
+            if (id.Contains("..") || id.Contains("/") || id.Contains("\\"))
+            {
+                // TODO: Fix error message
+                return BadRequest("");
+            }
             var savedQuery = _savedQueryBackendProxy.Load(id);
             if (savedQuery is null)
             {
