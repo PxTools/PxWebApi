@@ -25,6 +25,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
 
         public string Load(string id)
         {
+            id = SavedQueryBackendProxy.SanitizeName(id);
             var statisticsFilePath = Path.Combine(_path, id.Substring(0, _subDirectoryLength), id + ".sqa");
 
             if (File.Exists(statisticsFilePath))
@@ -59,6 +60,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
 
         public void UpdateRunStatistics(string id)
         {
+            id = SavedQueryBackendProxy.SanitizeName(id);
             // Load the statistics file
             var statisticsFilePath = Path.Combine(_path, id.Substring(0, _subDirectoryLength), id + ".sqs");
             SavedQueryStats? statistics;
