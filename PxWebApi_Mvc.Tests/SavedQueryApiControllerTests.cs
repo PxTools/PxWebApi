@@ -156,5 +156,33 @@ namespace PxWebApi_Mvc.Tests
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
+
+        [TestMethod]
+        public async Task GetSavedQueryData_WhenIdWithDots_ShoudlReturnBadRequest()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync($"/savedqueries/..test/data");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task GetSavedQueryData_WhenBadId_ShoudlReturnNotFound()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync($"/savedqueries/no-id/data");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
     }
 }
