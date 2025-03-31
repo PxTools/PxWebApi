@@ -18,7 +18,9 @@ namespace PxWebApi_Mvc.Tests
                             ""tableId"": ""TAB001"",
                             ""outputFormat"": ""px"",
                             ""outputFormatParams"": [],
-                            ""selection"": {""selection"": [
+                            ""selection"": {
+                                ""placement"": { ""heading"": [""ContentsCode""], ""stub"":[]},
+                                ""selection"": [
                                 {
                                     ""variableCode"": ""ContentsCode"",
                                     ""valueCodes"": [
