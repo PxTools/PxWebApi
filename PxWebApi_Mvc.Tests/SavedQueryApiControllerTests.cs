@@ -155,7 +155,6 @@ namespace PxWebApi_Mvc.Tests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
         }
     }
 }

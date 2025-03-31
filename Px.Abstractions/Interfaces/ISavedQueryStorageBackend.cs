@@ -4,6 +4,6 @@
     {
         string Save(string savedQuery);
         string Load(string id);
-        void UpdateRunStatistics(string id);
+        bool UpdateRunStatistics(string id);
     }
 }

@@ -6,6 +6,6 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
     {
         string Save(SavedQuery savedQuery);
         SavedQuery? Load(string id);
-        void UpdateRunStatistics(string id);
+        bool UpdateRunStatistics(string id);
     }
 }

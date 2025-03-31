@@ -40,10 +40,10 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
             return _backend.Save(savedQueryString);
         }
 
-        public void UpdateRunStatistics(string id)
+        public bool UpdateRunStatistics(string id)
         {
             var cleanId = SanitizeName(id);
-            _backend.UpdateRunStatistics(cleanId);
+            return _backend.UpdateRunStatistics(cleanId);
         }
 
         public static string SanitizeName(string id)

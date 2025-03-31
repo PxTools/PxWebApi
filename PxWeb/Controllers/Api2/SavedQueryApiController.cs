@@ -100,6 +100,8 @@ namespace PxWeb.Controllers.Api2
                 return NotFound();
             }
 
+            _savedQueryBackendProxy.UpdateRunStatistics(id);
+
             // 3. Override parameters to the SavedQuery
             bool paramError;
             string outputFormatStr;

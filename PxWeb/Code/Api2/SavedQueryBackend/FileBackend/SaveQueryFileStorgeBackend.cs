@@ -58,7 +58,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
             return name;
         }
 
-        public void UpdateRunStatistics(string id)
+        public bool UpdateRunStatistics(string id)
         {
             id = SavedQueryBackendProxy.SanitizeName(id);
             // Load the statistics file
@@ -67,6 +67,11 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
             if (File.Exists(statisticsFilePath))
             {
                 statistics = JsonSerializer.Deserialize<SavedQueryStats>(File.ReadAllText(statisticsFilePath));
+            }
+            else if (!File.Exists(Path.Combine(_path, id.Substring(0, _subDirectoryLength), id + ".sqa")))
+            {
+                // No saved query file exists, so we can't update the statistics
+                return false;
             }
             else
             {
@@ -80,6 +85,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
             }
 
             File.WriteAllText(statisticsFilePath, JsonSerializer.Serialize(statistics));
+            return true;
         }
     }
 }
