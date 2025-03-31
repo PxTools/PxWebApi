@@ -66,7 +66,7 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetSaveQuery([FromRoute(Name = "id"), Required] string id)
         {
-            if (id.Contains("..") || id.Contains("/") || id.Contains("\\"))
+            if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
                 // TODO: Fix error message
                 return BadRequest("");
@@ -85,7 +85,7 @@ namespace PxWeb.Controllers.Api2
             Problem? problem;
 
             // 0. Validate the input
-            if (id.Contains("..") || id.Contains("/") || id.Contains("\\"))
+            if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
                 // TODO: Fix error message
                 return BadRequest("");
