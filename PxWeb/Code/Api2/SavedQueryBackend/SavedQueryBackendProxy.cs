@@ -23,7 +23,15 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
             {
                 return null;
             }
-            return JsonSerializer.Deserialize<SavedQuery>(savedQueryString);
+
+            var savedQuery = JsonSerializer.Deserialize<SavedQuery>(savedQueryString);
+
+            if (savedQuery is not null)
+            {
+                savedQuery.Id = cleanId;
+            }
+
+            return savedQuery;
         }
 
         public string Save(SavedQuery savedQuery)
