@@ -97,6 +97,17 @@ namespace PxWebApi_Mvc.Tests
         }
 
         [TestMethod]
+        public async Task GetSavedQuery_WhenHavingDots_ShoudlReturnFileNotFound()
+        {
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            var response = await client.GetAsync(@"/savedqueries/..\tab002");
+
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [TestMethod]
         public async Task GetSavedQuery_WhenOK_ShoudlReturnSameQuery()
         {
             // Arrange
@@ -123,6 +134,27 @@ namespace PxWebApi_Mvc.Tests
 
             Assert.AreEqual("en", actualQuery.Language);
             Assert.AreEqual("*", actualQuery.Selection.Selection.FirstOrDefault(v => v.VariableCode == "REGION")?.ValueCodes[0]);
+
+        }
+
+        [TestMethod]
+        public async Task GetSavedQueryData_WhenOK_ShoudlReturnOK()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            var content = new StringContent(SavedQuery, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/savedqueries", content);
+
+            var rawQuery = await response.Content.ReadAsStringAsync();
+            var query = JsonConvert.DeserializeObject<SavedQuery>(rawQuery);
+
+            // Act
+            response = await client.GetAsync($"/savedqueries/{query?.Id}/data");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
         }
     }
