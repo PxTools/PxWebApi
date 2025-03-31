@@ -37,6 +37,12 @@ namespace PxWeb.Code.Api2
 
             // Create a builder for the table and read in the table metadata
             var builder = _dataSource.CreateBuilder(tableId, language);
+            if (builder == null)
+            {
+                problem = ProblemUtility.NonExistentTable();
+                return null;
+            }
+            builder.BuildForSelection();
             return Run(variablesSelection, builder, out problem);
         }
 
@@ -48,6 +54,8 @@ namespace PxWeb.Code.Api2
                 problem = ProblemUtility.NonExistentTable();
                 return null;
             }
+
+            builder.BuildForSelection();
 
             var variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
             //If no selection is made, return a problem and exit early
@@ -77,7 +85,7 @@ namespace PxWeb.Code.Api2
                 problem = ProblemUtility.NonExistentTable();
                 return null;
             }
-            builder.BuildForSelection();
+
 
             // Expand and verify the selections
             if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
