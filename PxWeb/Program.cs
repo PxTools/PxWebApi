@@ -23,7 +23,6 @@ using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.DataSource;
 using PxWeb.Code.Api2.NewtonsoftConfiguration;
 using PxWeb.Code.Api2.SavedQueryBackend;
-using PxWeb.Code.Api2.SavedQueryBackend.FileBackend;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Code.BackgroundWorker;
 using PxWeb.Filters.Api2;
@@ -79,10 +78,10 @@ namespace PxWeb
             builder.Services.Configure<AdminProtectionConfigurationOptions>(builder.Configuration.GetSection("AdminProtection"));
             builder.Services.Configure<CacheMiddlewareConfigurationOptions>(builder.Configuration.GetSection("CacheMiddleware"));
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
-            builder.Services.Configure<SavedQueryFileStorageOptions>(builder.Configuration.GetSection(SavedQueryFileStorageOptions.SectionName));
+
+            builder.Services.AddSavedQuery(builder);
 
             builder.Services.AddTransient<IDataWorkflow, DataWorkflow>();
-            builder.Services.AddTransient<ISavedQueryStorageBackend, SaveQueryFileStorgeBackend>();
             builder.Services.AddTransient<ISavedQueryBackendProxy, SavedQueryBackendProxy>();
             builder.Services.AddTransient<IPxApiConfigurationService, PxApiConfigurationService>();
             builder.Services.AddTransient<IAdminProtectionConfigurationService, AdminProtectionConfigurationService>();
