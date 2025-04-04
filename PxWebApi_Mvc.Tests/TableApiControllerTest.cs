@@ -80,5 +80,21 @@ namespace PxWebApi_Mvc.Tests
 
         }
 
+        [TestMethod]
+        public async Task GetTableData_WhenDefault_ShoudlReturnOK()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/tables/tab003/data?lang=en");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+
+        }
+
     }
 }

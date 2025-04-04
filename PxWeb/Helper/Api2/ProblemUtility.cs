@@ -105,5 +105,35 @@ namespace PxWeb.Helper.Api2
             p.Title = "Unsupported output format";
             return p;
         }
+
+        public static Problem NonExistentSavedQuery()
+        {
+            Problem p = new Problem();
+            p.Type = "Parameter error";
+            p.Detail = "Saved query not found";
+            p.Status = 404;
+            p.Title = "Saved query not found";
+            return p;
+        }
+
+        public static Problem InternalErrorCreateSavedQuery()
+        {
+            Problem p = new Problem();
+            p.Type = "Create saved query";
+            p.Detail = "Internal error! Could not create saved query";
+            p.Status = 400;
+            p.Title = "Internal error! Could not create saved query";
+            return p;
+        }
+
+        public static Problem NoQuerySpecified()
+        {
+            Problem p = new Problem();
+            p.Type = "Create saved query";
+            p.Detail = "No query specified";
+            p.Status = 400;
+            p.Title = "No query specified";
+            return p;
+        }
     }
 }

@@ -129,6 +129,28 @@ namespace PxWeb.Helper.Api2
             return variablesSelection is null || !HasSelection(variablesSelection);
         }
 
+        public static VariablesSelection Copy(VariablesSelection selection)
+        {
+            var copy = new VariablesSelection();
+            copy.Placement = new VariablePlacementType();
+            if (selection.Placement is not null)
+            {
+                copy.Placement.Heading = new List<string>(selection.Placement.Heading);
+                copy.Placement.Stub = new List<string>(selection.Placement.Stub);
+            }
+            copy.Selection = new List<VariableSelection>();
+            foreach (var variableSelection in selection.Selection)
+            {
+                var newVariableSelection = new VariableSelection();
+                newVariableSelection.CodeList = variableSelection.CodeList;
+                newVariableSelection.VariableCode = variableSelection.VariableCode;
+                newVariableSelection.ValueCodes = new List<string>(variableSelection.ValueCodes);
+                copy.Selection.Add(newVariableSelection);
+            }
+            return copy;
+        }
+
+
         /// <summary>
         /// Check if there is any selection in the VariablesSelection
         /// </summary>
