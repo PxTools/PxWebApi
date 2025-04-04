@@ -21,9 +21,9 @@ namespace PxWeb.Controllers.Api2
         private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
         private readonly ISerializeManager _serializeManager;
         private readonly IDataWorkflow _dataWorkflow;
-        private readonly ILogger _logger;
+        private readonly ILogger<SavedQueryApiController> _logger;
 
-        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger logger)
+        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger<SavedQueryApiController> logger)
         {
             _dataWorkflow = dataWorkflow;
             _savedQueryBackendProxy = savedQueryStorageBackend;
