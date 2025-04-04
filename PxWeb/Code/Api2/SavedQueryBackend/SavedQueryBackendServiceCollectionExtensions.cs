@@ -11,9 +11,9 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
     {
         public static void AddSavedQuery(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            var backend = builder.Configuration.GetSection("SavedQuery:Backend");
+            var backend = builder.Configuration.GetSection("SavedQuery:Backend").Value ?? "File";
 
-            if (backend.Value != null && backend.Value.ToUpper() == "DATABASE")
+            if (backend.Equals("Database", StringComparison.OrdinalIgnoreCase))
             {
                 // Configure database backend
             }
@@ -22,7 +22,6 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
                 // File storage backend is also the fallback
                 builder.Services.Configure<SavedQueryFileStorageOptions>(builder.Configuration.GetSection("SavedQuery:" + SavedQueryFileStorageOptions.SectionName));
                 builder.Services.AddTransient<ISavedQueryStorageBackend, SaveQueryFileStorgeBackend>();
-
             }
 
         }
