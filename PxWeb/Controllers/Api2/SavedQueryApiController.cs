@@ -3,6 +3,7 @@ using System.Linq;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using PxWeb.Api2.Server.Models;
@@ -20,24 +21,24 @@ namespace PxWeb.Controllers.Api2
         private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
         private readonly ISerializeManager _serializeManager;
         private readonly IDataWorkflow _dataWorkflow;
+        private readonly ILogger _logger;
 
-        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions)
+        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger logger)
         {
             _dataWorkflow = dataWorkflow;
             _savedQueryBackendProxy = savedQueryStorageBackend;
             _serializeManager = serializeManager;
             _configOptions = configOptions.Value;
+            _logger = logger;
         }
 
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
         {
-            //TOOD: Implement
             Problem? problem;
 
             if (savedQuery is null)
             {
-                //TODO Fix error message
-                return BadRequest("The request body is empty.");
+                return BadRequest(ProblemUtility.NoQuerySpecified());
             }
 
             // Create a copy of the selection to be able to expand it
@@ -54,8 +55,8 @@ namespace PxWeb.Controllers.Api2
             catch (Exception e)
             {
                 // If error return 400 Bad Request
-                //TODO: Fix error response 
-                return BadRequest(e.Message);
+                _logger.LogWarning(e, "Error saving the SavedQuery");
+                return BadRequest(ProblemUtility.InternalErrorCreateSavedQuery());
             }
 
             // 3. Return the SavedQuery with the id set.
@@ -68,14 +69,12 @@ namespace PxWeb.Controllers.Api2
         {
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
-                // TODO: Fix error message
-                return BadRequest("");
+                return BadRequest(ProblemUtility.NonExistentSavedQuery());
             }
             var savedQuery = _savedQueryBackendProxy.Load(id);
             if (savedQuery is null)
             {
-                //TODO: Fix error message
-                return NotFound();
+                return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
             return Ok(savedQuery);
         }
@@ -87,8 +86,7 @@ namespace PxWeb.Controllers.Api2
             // 0. Validate the input
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
-                // TODO: Fix error message
-                return BadRequest("");
+                return BadRequest(ProblemUtility.NonExistentSavedQuery());
             }
 
             // 1. Get the SavedQuery from the database/file.
@@ -96,8 +94,7 @@ namespace PxWeb.Controllers.Api2
             if (savedQuery is null)
             {
                 // 2. If the SavedQuery is not found return 404 Not Found
-                //TODO: Fix error message
-                return NotFound();
+                return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
 
             _savedQueryBackendProxy.UpdateRunStatistics(id);
