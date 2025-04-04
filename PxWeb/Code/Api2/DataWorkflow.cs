@@ -108,7 +108,6 @@ namespace PxWeb.Code.Api2
 
             var model = builder.Model;
 
-            // TODO: Fix this
             placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
 
             if (placment is not null)
