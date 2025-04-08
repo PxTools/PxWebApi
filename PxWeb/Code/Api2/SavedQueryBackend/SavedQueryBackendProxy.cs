@@ -37,7 +37,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
         public string Save(SavedQuery savedQuery)
         {
             var savedQueryString = JsonSerializer.Serialize(savedQuery);
-            return _backend.Save(savedQueryString);
+            return _backend.Save(savedQueryString, savedQuery.TableId, savedQuery.Language);
         }
 
         public bool UpdateRunStatistics(string id)
