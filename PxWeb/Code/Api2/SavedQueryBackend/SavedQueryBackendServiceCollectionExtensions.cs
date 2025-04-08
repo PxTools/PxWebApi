@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Px.Abstractions.Interfaces;
 
+using PxWeb.Code.Api2.SavedQueryBackend.DatabaseBackend;
 using PxWeb.Code.Api2.SavedQueryBackend.FileBackend;
 
 namespace PxWeb.Code.Api2.SavedQueryBackend
@@ -15,7 +16,8 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
 
             if (backend.Equals("Database", StringComparison.OrdinalIgnoreCase))
             {
-                // Configure database backend
+                builder.Services.Configure<SavedQueryFileStorageOptions>(builder.Configuration.GetSection("SavedQuery:" + SavedQueryDatabaseStorageOptions.SectionName));
+                builder.Services.AddTransient<ISavedQueryStorageBackend, SavedQueryDatabaseStorageBackend>();
             }
             else
             {

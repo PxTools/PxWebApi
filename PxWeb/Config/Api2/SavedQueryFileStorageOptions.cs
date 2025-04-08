@@ -2,7 +2,7 @@
 {
     public class SavedQueryFileStorageOptions
     {
-        public const string SectionName = "SavedQueryFileStorage";
+        public const string SectionName = "FileStorage";
         public SavedQueryFileStorageOptions()
         {
             Path = "saved-queries";
