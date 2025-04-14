@@ -37,7 +37,7 @@ namespace PxWeb.UnitTests.SavedQuery
 
 
             // Act & Assert
-            Assert.ThrowsExactly<ArgumentException>(() => new SavedQueryDatabaseStorageBackend(mockDataSourceOptions.Object, mockStorageOptions.Object, resolver.Object));
+            Assert.ThrowsExactly<ArgumentException>(() => _ = new SavedQueryDatabaseStorageBackend(mockDataSourceOptions.Object, mockStorageOptions.Object, resolver.Object));
         }
 
 
