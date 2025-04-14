@@ -12,6 +12,8 @@ namespace PxWeb.Code.Api2.DataSource
     {
         public static void AddPxDataSource(this IServiceCollection services, WebApplicationBuilder builder)
         {
+            builder.Services.Configure<DataSourceOptions>(builder.Configuration.GetSection("DataSource"));
+
             var dataSource = builder.Configuration.GetSection("DataSource:DataSourceType");
 
             if (dataSource.Value != null && dataSource.Value.ToUpper() == "PX")
