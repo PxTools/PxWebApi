@@ -83,8 +83,6 @@ namespace PxWeb.Controllers.Api2
         {
             Problem? problem;
 
-            //TODO: Validate lang and outputFormat paramters
-
             // 0. Validate the input
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
@@ -98,8 +96,6 @@ namespace PxWeb.Controllers.Api2
                 // 2. If the SavedQuery is not found return 404 Not Found
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
-
-            //TODO: Replace lang and outputFormat in saved query if specified as pramaters
 
             _savedQueryBackendProxy.UpdateRunStatistics(id);
 
