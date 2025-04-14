@@ -36,6 +36,11 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
             return string.Empty;
         }
 
+        public string LoadDefaultSelection(string tableId)
+        {
+            return Load(tableId);
+        }
+
         public string Save(string savedQuery, string tableId, string language)
         {
             var name = Guid.NewGuid().ToString();

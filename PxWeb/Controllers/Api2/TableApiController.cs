@@ -26,6 +26,7 @@ using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
+using PxWeb.Code.Api2.SavedQueryBackend;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
@@ -51,8 +52,9 @@ namespace PxWeb.Controllers.Api2
         private readonly ISelectionResponseMapper _selectionResponseMapper;
         private readonly IDefaultSelectionAlgorithm _defaultSelectionAlgorithm;
         private readonly IDataWorkflow _dataWorkflow;
+        private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow)
+        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryBackendProxy)
         {
             _dataSource = dataSource;
             _languageHelper = languageHelper;
@@ -67,6 +69,7 @@ namespace PxWeb.Controllers.Api2
             _selectionResponseMapper = selectionResponseMapper;
             _defaultSelectionAlgorithm = defaultSelectionAlgorithm;
             _dataWorkflow = dataWorkflow;
+            _savedQueryBackendProxy = savedQueryBackendProxy;
         }
 
         public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
@@ -211,7 +214,16 @@ namespace PxWeb.Controllers.Api2
             if (SelectionUtil.UseDefaultSelection(variablesSelection))
             {
                 //TODO: Check if we have a saved query that should serv as default selection
-                model = _dataWorkflow.Run(id, lang, out problem);
+                var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+                if (savedQuery is not null)
+                {
+                    variablesSelection = savedQuery.Selection;
+                    model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                }
+                else
+                {
+                    model = _dataWorkflow.Run(id, lang, out problem);
+                }
             }
             else
             {
