@@ -274,7 +274,7 @@ namespace PxWeb.Code.Api2.DataSelection
 
                     if (grouping is null)
                     {
-                        throw new Exception($"Could not find grouping {variable.CurrentGrouping.ID} for variable {variable.Code}");
+                        throw new ArgumentException($"Could not find grouping {variable.CurrentGrouping.ID} for variable {variable.Code}");
                     }
 
                     builder.ApplyGrouping(variable.Code, variable.GetGroupingInfoById(variable.CurrentGrouping.ID), grouping.GroupPres);
