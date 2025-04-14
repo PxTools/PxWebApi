@@ -23,9 +23,18 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
             _path = path;
         }
 
+        private bool ContainsInvalidPathChars(string path)
+        {
+            return path.Contains("..") || path.Contains("/") || path.Contains("\\");
+        }
+
         public string Load(string id)
         {
             id = SavedQueryBackendProxy.SanitizeName(id);
+            if (ContainsInvalidPathChars(id))
+            {
+                throw new ArgumentException("Invalid path");
+            }
             var statisticsFilePath = Path.Combine(_path, id.Substring(0, _subDirectoryLength), id + ".sqa");
 
             if (File.Exists(statisticsFilePath))
@@ -38,6 +47,10 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
 
         public string LoadDefaultSelection(string tableId)
         {
+            if (ContainsInvalidPathChars(tableId))
+            {
+                throw new ArgumentException("Invalid path");
+            }
             return Load(tableId);
         }
 
@@ -66,6 +79,10 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
         public bool UpdateRunStatistics(string id)
         {
             id = SavedQueryBackendProxy.SanitizeName(id);
+            if (ContainsInvalidPathChars(id))
+            {
+                throw new ArgumentException("Invalid path");
+            }
             // Load the statistics file
             var statisticsFilePath = Path.Combine(_path, id.Substring(0, _subDirectoryLength), id + ".sqs");
             SavedQueryStats? statistics;
