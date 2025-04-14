@@ -16,7 +16,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
 
             if (backend.Equals("Database", StringComparison.OrdinalIgnoreCase))
             {
-                builder.Services.Configure<SavedQueryFileStorageOptions>(builder.Configuration.GetSection("SavedQuery:" + SavedQueryDatabaseStorageOptions.SectionName));
+                builder.Services.Configure<SavedQueryDatabaseStorageOptions>(builder.Configuration.GetSection("SavedQuery:" + SavedQueryDatabaseStorageOptions.SectionName));
                 builder.Services.AddTransient<ISavedQueryStorageBackend, SavedQueryDatabaseStorageBackend>();
             }
             else

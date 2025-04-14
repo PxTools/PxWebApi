@@ -9,12 +9,12 @@
             ConnectionString = string.Empty;
             TargetDatabase = "default";
             TableOwner = "dbo";
+            DatabaseVendor = "Microsoft";
         }
 
         public string ConnectionString { get; set; }
         public string TargetDatabase { get; set; }
         public string TableOwner { get; set; }
-
         public string DatabaseVendor { get; set; }
 
     }
