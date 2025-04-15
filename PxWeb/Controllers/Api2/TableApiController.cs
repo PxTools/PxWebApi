@@ -84,16 +84,22 @@ namespace PxWeb.Controllers.Api2
                 try
                 {
                     builder.BuildForSelection();
-                    var model = builder.Model;
 
                     if (defaultSelection is not null && defaultSelection == true)
                     {
                         //apply the default selection
-
-                        //TODO: Check if we have a saved query that should serv as default selection
-                        _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                        var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+                        if (savedQuery is not null)
+                        {
+                            _selectionHandler.ExpandAndVerfiySelections(savedQuery.Selection, builder, out Problem? problem);
+                        }
+                        else
+                        {
+                            _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                        }
                     }
 
+                    var model = builder.Model;
                     Dataset ds = _datasetMapper.Map(model, id, lang);
                     return new ObjectResult(ds);
 
