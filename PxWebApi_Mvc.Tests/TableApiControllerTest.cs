@@ -96,5 +96,21 @@ namespace PxWebApi_Mvc.Tests
 
         }
 
+        [TestMethod]
+        public async Task GetTableData_ShoudlReturnBadRequest_WhenTableIdDoesNotExist()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/tables/tabXYZ/data?lang=en");
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+
+
+        }
+
     }
 }
