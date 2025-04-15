@@ -23,9 +23,9 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.FileBackend
             _path = path;
         }
 
-        private bool ContainsInvalidPathChars(string path)
+        public static bool ContainsInvalidPathChars(string path)
         {
-            return path.Contains("..") || path.Contains("/") || path.Contains("\\");
+            return path.Contains("..") || path.Contains('/') || path.Contains('\\');
         }
 
         public string Load(string id)
