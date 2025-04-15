@@ -213,7 +213,6 @@ namespace PxWeb.Controllers.Api2
 
             if (SelectionUtil.UseDefaultSelection(variablesSelection))
             {
-                //TODO: Check if we have a saved query that should serv as default selection
                 var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
                 if (savedQuery is not null)
                 {
@@ -286,26 +285,34 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
-            //Problem? problem;
-
             lang = _languageHelper.HandleLanguage(lang);
 
-            var builder = _dataSource.CreateBuilder(id, lang);
-            if (builder == null)
+            VariablesSelection selection;
+
+            //Check if we have a saved query that should serv as default selection
+            var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+            if (savedQuery is not null)
             {
-                return NotFound(ProblemUtility.NonExistentTable());
+                selection = savedQuery.Selection;
             }
-
-            builder.BuildForSelection();
-
-            //No variable selection is provided, so we will return the default selection
-
-            var selection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
-            if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+            else //Fallback to the default selection algorithm
             {
-                return BadRequest(problem);
-            }
+                var builder = _dataSource.CreateBuilder(id, lang);
+                if (builder == null)
+                {
+                    return NotFound(ProblemUtility.NonExistentTable());
+                }
 
+                builder.BuildForSelection();
+
+                //No variable selection is provided, so we will return the default selection
+                selection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+                {
+                    return BadRequest(problem);
+                }
+
+            }
 
             //Map selection to SelectionResponse
             SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, id, lang);
