@@ -150,6 +150,20 @@ namespace PxWeb.Helper.Api2
             return copy;
         }
 
+        public static Selection[] Copy(Selection[] selection)
+        {
+            var copy = new Selection[selection.Length];
+            for (int i = 0; i < selection.Length; i++)
+            {
+                copy[i] = new Selection(selection[i].VariableCode);
+                for (int j = 0; j < selection[i].ValueCodes.Count; j++)
+                {
+                    copy[i].ValueCodes.Add(selection[i].ValueCodes[j]);
+                }
+            }
+            return copy;
+        }
+
 
         /// <summary>
         /// Check if there is any selection in the VariablesSelection

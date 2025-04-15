@@ -104,7 +104,12 @@ namespace PxWeb.Code.Api2
                 return null;
             }
 
+            //Fix selection loses all values after BuildForPresentation
+            var selectionCopy = SelectionUtil.Copy(selection);
+
             builder.BuildForPresentation(selection);
+
+            selection = selectionCopy;
 
             var model = builder.Model;
 
