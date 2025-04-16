@@ -115,11 +115,6 @@ namespace PxWeb.Code.Api2
 
             placment = _placementHandler.GetPlacment(variablesSelection, selection, builder.Model.Meta, out problem);
 
-            if (problem is not null)
-            {
-                return null;
-            }
-
             if (placment is not null)
             {
                 var descriptions = new List<PivotDescription>();
