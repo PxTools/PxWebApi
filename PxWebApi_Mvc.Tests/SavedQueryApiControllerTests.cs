@@ -19,7 +19,7 @@ namespace PxWebApi_Mvc.Tests
                             ""outputFormat"": ""px"",
                             ""outputFormatParams"": [],
                             ""selection"": {
-                                ""placement"": { ""heading"": [""ContentsCode""], ""stub"":[]},
+                                ""placement"": { ""heading"": [], ""stub"":[""ContentsCode""]},
                                 ""selection"": [
                                 {
                                     ""variableCode"": ""ContentsCode"",

@@ -304,7 +304,7 @@ namespace PxWeb.Code.Api2.DataSelection
                 return false;
             }
 
-            GroupingIncludesType include = GroupingIncludesType.AggregatedValues; // Always build for aggregated values
+            GroupingIncludesType include = grpInfo.GroupPres;
 
 
             try

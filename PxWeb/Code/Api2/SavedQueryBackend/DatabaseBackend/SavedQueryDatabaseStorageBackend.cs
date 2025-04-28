@@ -42,6 +42,11 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.DatabaseBackend
             return string.Empty;
         }
 
+        public string LoadDefaultSelection(string tableId)
+        {
+            return _savedQueryDatabaseAccessor.LoadDefaultSelection(tableId);
+        }
+
         public string Save(string savedQuery, string tableId, string language)
         {
             bool exists;

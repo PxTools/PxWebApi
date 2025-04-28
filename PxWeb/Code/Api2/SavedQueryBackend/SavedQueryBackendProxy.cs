@@ -50,5 +50,24 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
         {
             return Regex.Replace(id, @"[^a-zA-Z0-9-]", "", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(100));
         }
+
+        public SavedQuery? LoadDefaultSelection(string tableId)
+        {
+            var cleanId = SanitizeName(tableId);
+            var savedQueryString = _backend.LoadDefaultSelection(cleanId);
+            if (string.IsNullOrEmpty(savedQueryString))
+            {
+                return null;
+            }
+
+            var savedQuery = JsonSerializer.Deserialize<SavedQuery>(savedQueryString);
+
+            if (savedQuery is not null)
+            {
+                savedQuery.Id = cleanId;
+            }
+
+            return savedQuery;
+        }
     }
 }

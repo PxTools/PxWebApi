@@ -26,6 +26,7 @@ using PxWeb.Api2.Server.Models;
 using PxWeb.Code.Api2;
 using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.ModelBinder;
+using PxWeb.Code.Api2.SavedQueryBackend;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
@@ -51,8 +52,9 @@ namespace PxWeb.Controllers.Api2
         private readonly ISelectionResponseMapper _selectionResponseMapper;
         private readonly IDefaultSelectionAlgorithm _defaultSelectionAlgorithm;
         private readonly IDataWorkflow _dataWorkflow;
+        private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow)
+        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryBackendProxy)
         {
             _dataSource = dataSource;
             _languageHelper = languageHelper;
@@ -67,6 +69,7 @@ namespace PxWeb.Controllers.Api2
             _selectionResponseMapper = selectionResponseMapper;
             _defaultSelectionAlgorithm = defaultSelectionAlgorithm;
             _dataWorkflow = dataWorkflow;
+            _savedQueryBackendProxy = savedQueryBackendProxy;
         }
 
         public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
@@ -81,16 +84,22 @@ namespace PxWeb.Controllers.Api2
                 try
                 {
                     builder.BuildForSelection();
-                    var model = builder.Model;
 
                     if (defaultSelection is not null && defaultSelection == true)
                     {
                         //apply the default selection
-
-                        //TODO: Check if we have a saved query that should serv as default selection
-                        _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                        var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+                        if (savedQuery is not null)
+                        {
+                            _selectionHandler.ExpandAndVerfiySelections(savedQuery.Selection, builder, out Problem? problem);
+                        }
+                        else
+                        {
+                            _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                        }
                     }
 
+                    var model = builder.Model;
                     Dataset ds = _datasetMapper.Map(model, id, lang);
                     return new ObjectResult(ds);
 
@@ -210,8 +219,16 @@ namespace PxWeb.Controllers.Api2
 
             if (SelectionUtil.UseDefaultSelection(variablesSelection))
             {
-                //TODO: Check if we have a saved query that should serv as default selection
-                model = _dataWorkflow.Run(id, lang, out problem);
+                var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+                if (savedQuery is not null)
+                {
+                    variablesSelection = savedQuery.Selection;
+                    model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                }
+                else
+                {
+                    model = _dataWorkflow.Run(id, lang, out problem);
+                }
             }
             else
             {
@@ -274,26 +291,34 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetDefaultSelection([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
-            //Problem? problem;
-
             lang = _languageHelper.HandleLanguage(lang);
 
-            var builder = _dataSource.CreateBuilder(id, lang);
-            if (builder == null)
+            VariablesSelection selection;
+
+            //Check if we have a saved query that should serv as default selection
+            var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+            if (savedQuery is not null)
             {
-                return NotFound(ProblemUtility.NonExistentTable());
+                selection = savedQuery.Selection;
             }
-
-            builder.BuildForSelection();
-
-            //No variable selection is provided, so we will return the default selection
-
-            var selection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
-            if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+            else //Fallback to the default selection algorithm
             {
-                return BadRequest(problem);
-            }
+                var builder = _dataSource.CreateBuilder(id, lang);
+                if (builder == null)
+                {
+                    return NotFound(ProblemUtility.NonExistentTable());
+                }
 
+                builder.BuildForSelection();
+
+                //No variable selection is provided, so we will return the default selection
+                selection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+                {
+                    return BadRequest(problem);
+                }
+
+            }
 
             //Map selection to SelectionResponse
             SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, id, lang);
