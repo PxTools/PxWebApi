@@ -270,7 +270,14 @@ namespace PxWeb.Code.Api2.DataSelection
                 }
                 else if (variable.CurrentGrouping != null)
                 {
-                    builder.ApplyGrouping(variable.Code, variable.GetGroupingInfoById(variable.CurrentGrouping.ID), GroupingIncludesType.AggregatedValues);
+                    var grouping = variable.GetGroupingInfoById(variable.CurrentGrouping.ID);
+
+                    if (grouping is null)
+                    {
+                        throw new ArgumentException($"Could not find grouping {variable.CurrentGrouping.ID} for variable {variable.Code}");
+                    }
+
+                    builder.ApplyGrouping(variable.Code, variable.GetGroupingInfoById(variable.CurrentGrouping.ID), grouping.GroupPres);
                 }
                 else if (variable.CurrentValueSet != null)
                 {
