@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     strategy:
@@ -55,4 +58,3 @@ jobs:
           context: .
           load: true
           tags: pxwebapi:${{ github.sha }}
-
