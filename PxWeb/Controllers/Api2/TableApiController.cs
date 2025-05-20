@@ -72,7 +72,7 @@ namespace PxWeb.Controllers.Api2
             _savedQueryBackendProxy = savedQueryBackendProxy;
         }
 
-        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection)
+        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist)
         {
             lang = _languageHelper.HandleLanguage(lang);
             IPXModelBuilder? builder = _dataSource.CreateBuilder(id, lang);
@@ -96,6 +96,14 @@ namespace PxWeb.Controllers.Api2
                         else
                         {
                             _defaultSelectionAlgorithm.GetDefaultSelection(builder);
+                        }
+                    }
+                    else if (codelist is not null && codelist.Keys.Count > 0) //Check that we have codelist specified
+                    {
+                        var selections = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
+                        if (!_selectionHandler.FixVariableRefsAndApplyCodelists(builder, selections, out Problem? problem))
+                        {
+                            return BadRequest(problem);
                         }
                     }
 

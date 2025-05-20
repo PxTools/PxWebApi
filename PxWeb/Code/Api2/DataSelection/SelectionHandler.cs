@@ -195,7 +195,7 @@ namespace PxWeb.Code.Api2.DataSelection
         /// <param name="variablesSelection">The VariablesSelection object to verify and apply codelists for</param>
         /// <param name="problem">Null if everything is ok, otherwise it describes whats wrong</param>
         /// <returns>True if everything was ok, else false</returns>
-        private static bool FixVariableRefsAndApplyCodelists(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
+        public bool FixVariableRefsAndApplyCodelists(IPXModelBuilder builder, VariablesSelection variablesSelection, out Problem? problem)
         {
             problem = null;
 

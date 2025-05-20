@@ -66,6 +66,21 @@ namespace PxWeb.Helper.Api2
             return selections;
         }
 
+        public static VariablesSelection CreateVariablesSelectionFromCodelists(Dictionary<string, string> codelist)
+        {
+            var selections = CreateEmptyVariablesSelection();
+
+            foreach (var key in codelist.Keys)
+            {
+                var selection = new VariableSelection();
+                selection.VariableCode = key;
+                selection.CodeList = codelist[key];
+                selections.Selection.Add(selection);
+            }
+
+            return selections;
+        }
+
         /// <summary>
         /// Adds a value to a variable selection. Only adds the value if it is not already in the selection
         /// </summary>
