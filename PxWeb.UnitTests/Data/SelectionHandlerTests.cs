@@ -132,6 +132,47 @@ namespace PxWeb.UnitTests.Data
             Assert.AreEqual(3, result.Length);
         }
 
+        [TestMethod]
+        public void FixVariableRefsAndApplyCodelists_WhenNoExistingVaiableSpecified_ReturnFalseAndProblem()
+        {
+            // Arrange
+            var codelist = new Dictionary<string, string>();
+            codelist.Add("THIS_IS_A_INVALID_CODE", "m1");
+            var variablesSelection = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
+            var configMock = GetConfigMock();
+            var handler = new SelectionHandler(configMock.Object);
+            var model = ModelStore.CreateModelA();
+            var builderMock = new Mock<IPXModelBuilder>();
+            builderMock.Setup(x => x.Model).Returns(model);
+            handler.ExpandAndVerfiySelections(variablesSelection, builderMock.Object, out var problem);
+            // Act
+            var result = handler.FixVariableRefsAndApplyCodelists(builderMock.Object, variablesSelection, out problem);
+            // Assert
+            Assert.IsFalse(result);
+            Assert.IsNotNull(problem);
+        }
+
+        [TestMethod]
+        public void FixVariableRefsAndApplyCodelists_WhenNoExistingCodeListSpecified_ReturnFalseAndProblem()
+        {
+            // Arrange
+            var codelist = new Dictionary<string, string>();
+            codelist.Add("measure", "THIS_VALUE_DOES_NOT_EXIST");
+            var variablesSelection = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
+            var configMock = GetConfigMock();
+            var handler = new SelectionHandler(configMock.Object);
+            var model = ModelStore.CreateModelA();
+            var builderMock = new Mock<IPXModelBuilder>();
+            builderMock.Setup(x => x.Model).Returns(model);
+            handler.ExpandAndVerfiySelections(variablesSelection, builderMock.Object, out var problem);
+            // Act
+            var result = handler.FixVariableRefsAndApplyCodelists(builderMock.Object, variablesSelection, out problem);
+            // Assert
+            Assert.IsFalse(result);
+            Assert.IsNotNull(problem);
+        }
+
+
         private static VariablesSelection CreateValidSelection()
         {
             var selection = new VariablesSelection();

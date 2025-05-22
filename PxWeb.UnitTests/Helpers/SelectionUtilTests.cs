@@ -102,5 +102,38 @@ namespace PxWeb.UnitTests.Helpers
             Assert.IsFalse(useDefaultSelection);
 
         }
+
+        [TestMethod]
+        public void CreateVariablesSelectionFromCodelists_WhenNoCodelist_ReturnsEmptySelection()
+        {
+            // Arrange
+            var codelist = new Dictionary<string, string>();
+            // Act
+            var result = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(0, result.Selection.Count);
+            Assert.IsNotNull(result.Placement);
+            Assert.AreEqual(0, result.Placement.Heading.Count);
+            Assert.AreEqual(0, result.Placement.Stub.Count);
+        }
+
+        [TestMethod]
+        public void VariablesSelectionFromCodelists_WhenOneCodelist_ReturnsSelectionWithOneValue()
+        {
+            // Arrange
+            var codelist = new Dictionary<string, string>
+            {
+                { "A", "B" }
+            };
+            // Act
+            var result = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Selection.Count);
+            Assert.AreEqual("A", result.Selection[0].VariableCode);
+            Assert.AreEqual("B", result.Selection[0].CodeList);
+
+        }
     }
 }
