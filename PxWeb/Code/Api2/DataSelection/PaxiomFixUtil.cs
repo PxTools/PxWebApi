@@ -13,13 +13,11 @@ namespace PxWeb.Code.Api2.DataSelection
             {
                 var cellNote = meta.CellNotes[i];
                 // Check if there is a condition for the variable with a value that is no longer in the list of values
-                foreach (var condition in cellNote.Conditions.Where(c => string.Equals(c.VariableCode, pxVariable.Code, StringComparison.OrdinalIgnoreCase)))
+                foreach (var condition in cellNote.Conditions.Where(c => string.Equals(c.VariableCode, pxVariable.Code, StringComparison.OrdinalIgnoreCase) &&
+                                                                    pxVariable.Values.FirstOrDefault(x => x.Code.Equals(c.ValueCode, StringComparison.InvariantCultureIgnoreCase)) is null))
                 {
-                    if (pxVariable.Values.FirstOrDefault(x => x.Code.Equals(condition.ValueCode, StringComparison.InvariantCultureIgnoreCase)) is null)
-                    {
-                        meta.CellNotes.RemoveAt(i);
-                        removed++;
-                    }
+                    meta.CellNotes.RemoveAt(i);
+                    removed++;
                 }
             }
             return removed;
@@ -44,12 +42,9 @@ namespace PxWeb.Code.Api2.DataSelection
 
             // Extract notes
             var notes = new Dictionary<string, Notes>();
-            foreach (var value in variable.Values)
+            foreach (var value in variable.Values.Where(v => v.HasNotes()))
             {
-                if (value.HasNotes())
-                {
-                    notes.Add(value.Code, value.Notes);
-                }
+                notes.Add(value.Code, value.Notes);
             }
 
             return notes;
