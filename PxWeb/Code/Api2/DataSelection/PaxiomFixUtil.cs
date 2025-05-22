@@ -12,16 +12,13 @@ namespace PxWeb.Code.Api2.DataSelection
             for (int i = meta.CellNotes.Count - 1; i >= 0; i--)
             {
                 var cellNote = meta.CellNotes[i];
-                foreach (var condition in cellNote.Conditions)
+                // Check if there is a condition for the variable with a value that is no longer in the list of values
+                foreach (var condition in cellNote.Conditions.Where(c => string.Equals(c.VariableCode, pxVariable.Code, StringComparison.OrdinalIgnoreCase)))
                 {
-                    // Check if there is a condition for the variable with a value that is no longer in the list of values
-                    if (string.Equals(condition.VariableCode, pxVariable.Code, StringComparison.OrdinalIgnoreCase))
+                    if (pxVariable.Values.FirstOrDefault(x => x.Code.Equals(condition.ValueCode, StringComparison.InvariantCultureIgnoreCase)) is null)
                     {
-                        if (pxVariable.Values.FirstOrDefault(x => x.Code.Equals(condition.ValueCode, StringComparison.InvariantCultureIgnoreCase)) is null)
-                        {
-                            meta.CellNotes.RemoveAt(i);
-                            removed++;
-                        }
+                        meta.CellNotes.RemoveAt(i);
+                        removed++;
                     }
                 }
             }

@@ -112,7 +112,6 @@ namespace PxWeb.UnitTests.Helpers
             var result = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Selection);
             Assert.AreEqual(0, result.Selection.Count);
             Assert.IsNotNull(result.Placement);
             Assert.AreEqual(0, result.Placement.Heading.Count);
@@ -131,7 +130,6 @@ namespace PxWeb.UnitTests.Helpers
             var result = SelectionUtil.CreateVariablesSelectionFromCodelists(codelist);
             // Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Selection);
             Assert.AreEqual(1, result.Selection.Count);
             Assert.AreEqual("A", result.Selection[0].VariableCode);
             Assert.AreEqual("B", result.Selection[0].CodeList);
