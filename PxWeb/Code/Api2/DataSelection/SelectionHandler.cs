@@ -262,6 +262,17 @@ namespace PxWeb.Code.Api2.DataSelection
 
             if (!string.IsNullOrWhiteSpace(variable.CodeList))
             {
+
+                // Extract notes
+                var notes = new Dictionary<string, Notes>();
+                foreach (var value in pxVariable.Values)
+                {
+                    if (value.HasNotes())
+                    {
+                        notes.Add(value.Code, value.Notes);
+                    }
+                }
+
                 if (variable.CodeList.StartsWith("agg_"))
                 {
                     if (!ApplyGrouping(builder, pxVariable, variable, out problem))
@@ -281,7 +292,36 @@ namespace PxWeb.Code.Api2.DataSelection
                     problem = ProblemUtility.NonExistentCodelist();
                     return false;
                 }
+
+                // Restore notes
+                foreach (var valueCode in notes.Keys)
+                {
+                    if (pxVariable.Values.FirstOrDefault(x => x.Code.Equals(valueCode, System.StringComparison.InvariantCultureIgnoreCase)) is Value value)
+                    {
+                        foreach (var note in notes[valueCode])
+                        {
+                            value.AddNote(note);
+                        }
+                    }
+                }
+                // Remove cellnotes
+                for (int i = builder.Model.Meta.CellNotes.Count - 1; i >= 0; i--)
+                {
+                    var cellNote = builder.Model.Meta.CellNotes[i];
+                    foreach (var condition in cellNote.Conditions)
+                    {
+                        // Check if there is a condition for the variable with a value that is no longer in the list of values
+                        if (string.Equals(condition.VariableCode, pxVariable.Code, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (pxVariable.Values.FirstOrDefault(x => x.Code.Equals(condition.ValueCode, StringComparison.InvariantCultureIgnoreCase)) is null)
+                            {
+                                builder.Model.Meta.CellNotes.RemoveAt(i);
+                            }
+                        }
+                    }
+                }
             }
+
 
             return true;
         }
