@@ -38,7 +38,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         /// <returns>Builder object, null if builder could not be created</returns>
         public IPXModelBuilder? CreateBuilder(string id, string language)
         {
-            var builder = new PCAxis.Paxiom.PXFileBuilder();
+            var builder = new PxFileBuilder2();
 
             var path = _tablePathResolver.Resolve(language, id, out bool selectionExists);
 
