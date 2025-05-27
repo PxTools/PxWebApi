@@ -1,4 +1,6 @@
-﻿using PCAxis.Paxiom;
+﻿using System.Globalization;
+
+using PCAxis.Paxiom;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
@@ -10,10 +12,12 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             var retVAlue = base.BuildForSelection();
             if (meta.ContentVariable is null)
             {
-                // TODO: If there is no content variable add one
                 Console.WriteLine("No content variable found in the model. This should be handled properly.");
 
-                var contentVariable = new Variable("Metrics", "CONTENTS", PlacementType.Stub, meta.NumberOfLanguages);
+                var name = PCAxis.Paxiom.Localization.PxResourceManager.GetResourceManager()
+                    .GetString("ApiContentsVariableName", new CultureInfo(meta.Language));
+
+                var contentVariable = new Variable(name, "CONTENTS", PlacementType.Stub, meta.NumberOfLanguages);
                 contentVariable.IsContentVariable = true;
                 var value = new Value(meta.Contents, meta.NumberOfLanguages);
                 PaxiomUtil.SetCode(value, "content");
