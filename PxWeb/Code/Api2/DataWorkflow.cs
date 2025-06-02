@@ -125,9 +125,10 @@ namespace PxWeb.Code.Api2
                     VariablePlacement = PlacementType.Heading
                 }));
 
+
                 descriptions.AddRange(placment.Stub.Select(h => new PivotDescription()
                 {
-                    VariableName = model.Meta.Variables.First(v => v.Code == h).Name,
+                    VariableName = model.Meta.Variables.First(v => v.Code.Equals(h, StringComparison.OrdinalIgnoreCase)).Name,
                     VariablePlacement = PlacementType.Stub
                 }));
 
