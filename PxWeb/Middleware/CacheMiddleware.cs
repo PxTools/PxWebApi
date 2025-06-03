@@ -37,7 +37,9 @@ namespace PxWeb.Middleware
 
                 string? contentType = httpContext.Response.ContentType;
                 int responseCode = httpContext.Response.StatusCode;
-                string contentDisposition = httpContext.Response.Headers["Content-Disposition"].ToString();
+
+
+                string contentDisposition = httpContext.Response.Headers.ContentDisposition.ToString();
                 CachedResponse response = new CachedResponse(body, contentType, responseCode, contentDisposition);
                 return response;
             }
