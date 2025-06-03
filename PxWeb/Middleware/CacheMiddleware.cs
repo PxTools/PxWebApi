@@ -37,7 +37,8 @@ namespace PxWeb.Middleware
 
                 string? contentType = httpContext.Response.ContentType;
                 int responseCode = httpContext.Response.StatusCode;
-                CachedResponse response = new CachedResponse(body, contentType, responseCode);
+                string contentDisposition = httpContext.Response.Headers["Content-Disposition"].ToString();
+                CachedResponse response = new CachedResponse(body, contentType, responseCode, contentDisposition);
                 return response;
             }
         }
@@ -90,10 +91,14 @@ namespace PxWeb.Middleware
                 response = cached;
             }
 
-            httpContext.Response.ContentType = response.contentType;
-            httpContext.Response.StatusCode = response.responseCode;
+            httpContext.Response.ContentType = response.ContentType;
+            httpContext.Response.StatusCode = response.ResponseCode;
+            if (!string.IsNullOrEmpty(response.ContentDisposition))
+            {
+                httpContext.Response.Headers.Append("Content-Disposition", response.ContentDisposition);
+            }
 
-            await httpContext.Response.Body.WriteAsync(response.content);
+            await httpContext.Response.Body.WriteAsync(response.Content);
         }
     }
 

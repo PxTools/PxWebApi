@@ -2,14 +2,17 @@
 {
     public class CachedResponse
     {
-        public byte[] content { get; set; }
-        public string? contentType { get; set; }
-        public int responseCode { get; set; }
-        public CachedResponse(byte[] content, string? responseType, int responseCode)
+        public byte[] Content { get; set; }
+        public string? ContentType { get; set; }
+        public int ResponseCode { get; set; }
+        public string ContentDisposition { get; set; }
+
+        public CachedResponse(byte[] content, string? responseType, int responseCode, string contentDisposition)
         {
-            this.content = content;
-            contentType = responseType;
-            this.responseCode = responseCode;
+            this.Content = content;
+            ContentType = responseType;
+            this.ResponseCode = responseCode;
+            ContentDisposition = contentDisposition;
         }
     }
 }
