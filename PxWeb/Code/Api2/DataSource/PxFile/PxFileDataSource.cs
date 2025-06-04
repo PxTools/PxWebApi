@@ -166,5 +166,9 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             }
         }
 
+        public List<string> GetTablesPublishedBetween(DateTime from, DateTime to)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
