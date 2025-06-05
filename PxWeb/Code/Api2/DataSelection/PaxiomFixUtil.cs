@@ -31,9 +31,25 @@ namespace PxWeb.Code.Api2.DataSelection
                 {
                     foreach (var note in notes[valueCode])
                     {
-                        value.AddNote(note);
+                        RetoreNote(value, note);
                     }
                 }
+            }
+        }
+
+        private static void RetoreNote(Value value, Note note)
+        {
+            if (value.Notes is null)
+            {
+                value.AddNote(note);
+            }
+            else
+            {
+                if (value.Notes.Any(n => n.Text == note.Text && n.Type == note.Type && n.Mandantory == note.Mandantory))
+                {
+                    return; // Note already exists
+                }
+                value.AddNote(note);
             }
         }
 
