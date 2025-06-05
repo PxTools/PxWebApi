@@ -43,5 +43,16 @@
         /// <param name="language">codelist with texts for a specific language</param>
         /// <returns></returns>
         Codelist? GetCodelist(string id, string language);
+
+        /// <summary> Intended for the (Lucene) indexing.
+        /// Returns a list of tableid (url-type not datasource-type) for tables where published is in the intervall [from,to]
+        /// For cnmm the tableid is the maintable.tableid column and time of publication is the content.published column.
+        /// Does not restrict the output-list to things like PresCategory = public or table "is running", since
+        /// we want to run it with internal DBs.
+        /// </summary>
+        /// <param name="from">Earliest. MinDate. Inclusive</param>
+        /// <param name="to">Lastest. MaxDate. Inclusive</param>
+        /// <returns>A list of (url-type) tableids (cnmm:maintable.tableid) which may be empty</returns>
+        List<string> GetTablesPublishedBetween(DateTime from, DateTime to);
     }
 }

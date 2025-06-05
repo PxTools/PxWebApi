@@ -249,5 +249,10 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
             return codelist;
         }
+
+        public List<string> GetTablesPublishedBetween(DateTime from, DateTime to)
+        {
+            return PCAxis.Sql.ApiUtils.ApiUtilStatic.GetTablesPublishedBetween(from, to);
+        }
     }
 }
