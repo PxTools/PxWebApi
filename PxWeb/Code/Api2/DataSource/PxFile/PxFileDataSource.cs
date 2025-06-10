@@ -166,5 +166,40 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             }
         }
 
+        public List<string> GetTablesPublishedBetween(DateTime from, DateTime to)
+        {
+            MenuXmlFile menuXmlFile = new MenuXmlFile(_hostingEnvironment);
+            var doc = menuXmlFile.GetAsXmlDocument();
+
+            var tableIds = new List<string>();
+            var nodes = doc.SelectNodes("//Link[LastUpdated]");
+
+            if (nodes is null)
+            {
+                return tableIds;
+            }
+
+            foreach (XmlNode link in nodes)
+            {
+                var lastUpdatedNode = link.SelectSingleNode("LastUpdated");
+                if (lastUpdatedNode != null)
+                {
+                    if (DateTime.TryParse(lastUpdatedNode.InnerText, out DateTime lastUpdated))
+                    {
+                        if (lastUpdated >= from && lastUpdated <= to)
+                        {
+                            string? tableId = link.Attributes?["tableId"]?.Value;
+
+                            if (tableId is not null && !tableIds.Contains(tableId))
+                            {
+                                tableIds.Add(tableId);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return tableIds;
+        }
     }
 }
