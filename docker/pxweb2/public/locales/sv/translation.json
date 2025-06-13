@@ -9,6 +9,16 @@
       "title": "PxWeb 2.0 [Main]",
       "logo": "PxWeb 2.0"
     },
+    "not_found": {
+      "page_not_found": {
+        "title": "Sidan hittades inte",
+        "description": "Sidan du letar efter finns inte. Kontrollera URL:en eller återgå till startsidan."
+      },
+      "unsupported_language": {
+        "title": "Ogiltigt språk",
+        "description": "Det valda språket stöds inte."
+      }
+    },
     "skip_to_main": "Gå direkt till huvudinnehållet",
     "footer": {
       "contact": {
@@ -40,8 +50,38 @@
     }
   },
   "start_page": {
-    "header": "Välkommen till appen!",
-    "welcome_trans_test": "Välkommen till <1>appen</1> för PxWeb 2.0!"
+    "header": "Välkommen till PxWeb 2.0",
+    "ingress": "Letar du efter den perfekta tabellen? Använd sökfältet och filtren för att hitta de data du behöver. Oavsett om du letar efter trender, fakta eller bara något intressant samband, så har PxWeb 2.0 det du behöver.",
+    "more_about_label": "Mer om Statistikdatabasen",
+    "more_about_text": "more about text SV",
+    "search_placeholder": "Sök i Statistikdatabasen",
+    "filter": {
+      "button": "Filter",
+      "back": "Tilbaka",
+      "show_results": "Visa {{value}} träffar",
+      "close": "Lukk filter",
+      "header": "Filter",
+      "remove_all_filter": "Ta bort alla filter",
+      "remove_filter_aria": "Slett {{value}}",
+      "subject": "Ämnesområde",
+      "timeUnit": "Tidsperiod",
+      "year": "År",
+      "variabel": "Variabel",
+      "frequency": {
+        "annual": "År",
+        "monthly": "Månad",
+        "quarterly": "Kvartal",
+        "term": "Termin",
+        "weekly": "Vecka",
+        "other": "Annan"
+      }
+    },
+    "table": {
+      "number_of_tables": "<strong>{{count}}</strong> tabeller",
+      "number_of_tables_found": "Träff på <strong>{{count}}</strong> tabeller",
+      "updated_label": "Senast uppdaterad",
+      "show_more": "Visa flere"
+    }
   },
   "presentation_page": {
     "header": {
@@ -64,8 +104,7 @@
           "header": {
             "tag_selected": "{{selected}} av {{total}} valda",
             "tag_mandatory": "Obligatorisk",
-            "alert_no_mandatory_values": "Du måste välja något i listan för att tabellen ska visas",
-            "show_more": "Visa mer"
+            "alert_no_mandatory_values": "Du måste välja något i listan för att tabellen ska visas"
           },
           "content": {
             "select": {
@@ -157,6 +196,14 @@
           "missing_mandatory": {
             "title": "Tabellen kan inte visas",
             "description": "Du måste välja något i listan för att tabellen ska visas"
+          },
+          "to_many_values_selected": {
+            "title": "Tabellen är för stor och kan inte uppdateras",
+            "description1": "Dina val i filtren motsvarar ",
+            "description2": " celler men tabellen kan bara visa ",
+            "description3": " celler. Minska antalet val i filtren och när det här meddelandet försvinner kommer tabellen att uppdateras som vanligt.",
+            "selectedCells": "{{selectedCells}}",
+            "maxCells": "{{maxCells}}"
           }
         }
       },
@@ -164,6 +211,13 @@
         "title": "Information",
         "footnotes": {
           "title": "Noter",
+          "missing_heading": "Inga noter",
+          "missing_text_table": "Tabellen har inga noter.",
+          "missing_text_selection": "Det finns ingen not för vald filtrering.",
+          "symbol_explanation_heading": "Teckenförklaring",
+          "mandatory_heading": "Viktigt om tabellen",
+          "mandatory_variable_heading": "Viktigt om",
+          "non_mandatory_heading": "Gäller hela tabellen",
           "show_all_footnotes": "Visa alla fotnoter för tabellen"
         },
         "definitions": {
@@ -172,13 +226,31 @@
         },
         "details": {
           "title": "Detaljer",
-          "description": "Beskrivande text..."
+          "description": "Beskrivande text...",
+          "boolean_true": "Ja",
+          "boolean_false": "Nej",
+          "base_time": "Bastid",
+          "update_frequency": "Uppdateringsfrekvens",
+          "survey": "Undersökning",
+          "link": "Länk",
+          "copyright": "Upphovsrättsskyddat",
+          "matrix": "Matris",
+          "last_updated": "Senast uppdaterad",
+          "next_update": "Nästa uppdatering",
+          "source": "Statistikansvarig myndighet (SAM)",
+          "official_statistics": "Officiell statistik",
+          "unit": "Enhet",
+          "reference_time": "Referenstid"
         },
         "contact": {
           "title": "Kontakt",
           "description": "Beskrivande text...",
           "missing_heading": "Ingen kontaktinformation",
           "missing_text": "Tabellen har ingen kontaktinformation."
+        },
+        "notes": {
+          "important_about_table": "Viktigt om tabellen",
+          "important_about_variable": "Viktigt om "
         }
       },
       "related": {
@@ -194,5 +266,19 @@
       "scrumMaster": "Scrummaster",
       "copyright": "Upphovsrätt © 2024 Statistiska centralbyrån och Statistisk sentralbyrå"
     }
+  },
+  "date": {
+    "simple_date": "{{value, datetime}}",
+    "simple_date_with_time": "{{value, datetime(year: 'numeric'; month: 'numeric'; day: 'numeric'; hour: 'numeric'; minute: 'numeric')}}"
+  },
+  "number": {
+    "simple_number": "{{value, pxNumber}}",
+    "simple_number_with_zero_decimal": "{{value, pxNumber(minimumFractionDigits: 0; maximumFractionDigits: 0;)}}",
+    "simple_number_with_one_decimal": "{{value, pxNumber(minimumFractionDigits: 1; maximumFractionDigits: 1;)}}",
+    "simple_number_with_two_decimals": "{{value, pxNumber(minimumFractionDigits: 2; maximumFractionDigits: 2;)}}",
+    "simple_number_with_three_decimals": "{{value, pxNumber(minimumFractionDigits: 3; maximumFractionDigits: 3;)}}",
+    "simple_number_with_four_decimals": "{{value, pxNumber(minimumFractionDigits: 4; maximumFractionDigits: 4;)}}",
+    "simple_number_with_five_decimals": "{{value, pxNumber(minimumFractionDigits: 5; maximumFractionDigits: 5;)}}",
+    "simple_number_with_default_formatter": "{{value, number(minimumFractionDigits: 5; maximumFractionDigits: 5; roundingMode: 'halfExpand')}}"
   }
 }
