@@ -145,7 +145,8 @@ namespace Px.Search.Lucene
                     doc.Get(SearchConstants.SEARCH_FIELD_LASTPERIOD),
                     doc.Get(SearchConstants.SEARCH_FIELD_VARIABLES).Split("|"),
                     doc.Get(SearchConstants.SEARCH_FIELD_SOURCE),
-                    doc.Get(SearchConstants.SEARCH_FIELD_TIME_UNIT)
+                    doc.Get(SearchConstants.SEARCH_FIELD_TIME_UNIT),
+                    doc.Get(SearchConstants.SEARCH_SUBJECT_CODE)
 
                 );
             searchResult.Description = doc.Get(SearchConstants.SEARCH_FIELD_DESCRIPTION);
