@@ -9,6 +9,16 @@
       "title": "PxWeb 2.0 [Main]",
       "logo": "بيكس ويب 2.0"
     },
+    "not_found": {
+      "page_not_found": {
+        "title": "لم يتم العثور على الصفحة",
+        "description": "الصفحة التي تبحث عنها غير موجودة. يرجى التحقق من عنوان URL أو العودة إلى الصفحة الرئيسية."
+      },
+      "unsupported_language": {
+        "title": "لغة غير مدعومة",
+        "description": "اللغة المحددة غير مدعومة."
+      }
+    },
     "skip_to_main": "انتقل إلى المحتوى الرئيسي",
     "footer": {
       "contact": {
@@ -64,8 +74,7 @@
           "header": {
             "tag_selected": "{{selected}} ل {{total}} مختارة",
             "tag_mandatory": "إلزامي",
-            "alert_no_mandatory_values": "يجب عليك تحديد شيء ما في القائمة حتى يتم عرض الجدول",
-            "show_more": "اظهر المزيد"
+            "alert_no_mandatory_values": "يجب عليك تحديد شيء ما في القائمة حتى يتم عرض الجدول"
           },
           "content": {
             "select": {
@@ -164,6 +173,13 @@
         "title": "معلومة",
         "footnotes": {
           "title": "ملحوظات",
+          "missing_heading": "لا توجد ملاحظات",
+          "missing_text_table": "الجدول لا يحتوي على ملاحظات.",
+          "missing_text_selection": "لا توجد ملاحظات للتصفية المحددة.",
+          "symbol_explanation_heading": "شرح الرمز",
+          "mandatory_heading": "مهم بخصوص الطاولة",
+          "mandatory_variable_heading": "مهم حول",
+          "non_mandatory_heading": "للجدول بأكمله",
           "show_all_footnotes": "إظهار كافة الملاحظات للجدول"
         },
         "definitions": {
@@ -172,7 +188,21 @@
         },
         "details": {
           "title": "تفاصيل",
-          "description": "نص الوصف..."
+          "description": "نص الوصف...",
+          "boolean_true": "نعم",
+          "boolean_false": "لا",
+          "base_time": "الوقت الأساسي",
+          "update_frequency": "تردد التحديث",
+          "survey": "استطلاع",
+          "link": "وصلة",
+          "copyright": "حقوق الطبع والنشر",
+          "matrix": "مصفوفة",
+          "last_updated": "آخر تحديث",
+          "next_update": "التحديث القادم",
+          "source": "مصدر",
+          "official_statistics": "الإحصاءات الرسمية",
+          "unit": "وحدة",
+          "reference_time": "وقت المرجع"
         },
         "contact": {
           "title": "اتصال",
@@ -194,5 +224,19 @@
       "scrumMaster": "سيد سكروم",
       "copyright": "حقوق الطبع والنشر © 2024 هيئة إحصاءات السويد وهيئة إحصاءات النرويج"
     }
+  },
+  "date": {
+    "simple_date": "{{value, datetime}}",
+    "simple_date_with_time": "{{value, datetime(year: 'numeric'; month: 'numeric'; day: 'numeric'; hour: 'numeric'; minute: 'numeric')}}"
+  },
+  "number": {
+    "simple_number": "{{value, pxNumber}}",
+    "simple_number_with_zero_decimal": "{{value, pxNumber(minimumFractionDigits: 0; maximumFractionDigits: 0;)}}",
+    "simple_number_with_one_decimal": "{{value, pxNumber(minimumFractionDigits: 1; maximumFractionDigits: 1;)}}",
+    "simple_number_with_two_decimals": "{{value, pxNumber(minimumFractionDigits: 2; maximumFractionDigits: 2;)}}",
+    "simple_number_with_three_decimals": "{{value, pxNumber(minimumFractionDigits: 3; maximumFractionDigits: 3;)}}",
+    "simple_number_with_four_decimals": "{{value, pxNumber(minimumFractionDigits: 4; maximumFractionDigits: 4;)}}",
+    "simple_number_with_five_decimals": "{{value, pxNumber(minimumFractionDigits: 5; maximumFractionDigits: 5;)}}",
+    "simple_number_with_default_formatter": "{{value, number(minimumFractionDigits: 5; maximumFractionDigits: 5; roundingMode: 'halfExpand')}}"
   }
 }
