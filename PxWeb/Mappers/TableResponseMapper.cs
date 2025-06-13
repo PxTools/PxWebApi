@@ -52,7 +52,8 @@ namespace PxWeb.Mappers
                 VariableNames = searchResult.VariableNames.ToList(),
                 Links = linkList,
                 Language = lang,
-                SortCode = searchResult.SortCode ?? string.Empty
+                SortCode = searchResult.SortCode ?? string.Empty,
+                SubjectCode = searchResult.SubjectCode ?? string.Empty
 
             };
             return tableResponse;

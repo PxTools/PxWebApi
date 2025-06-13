@@ -209,6 +209,7 @@ namespace Px.Search.Lucene
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TAGS, GetAllTags(tbl.Tags), Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SOURCE, tbl.Source, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, tbl.TimeUnit, Field.Store.YES));
+                doc.Add(new TextField(SearchConstants.SEARCH_SUBJECT_CODE, tbl.SubjectCode, Field.Store.YES));
                 doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
                 if (!string.IsNullOrEmpty(meta.Synonyms))
                 {

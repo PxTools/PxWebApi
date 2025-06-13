@@ -27,5 +27,6 @@
         public const string SEARCH_FIELD_SOURCE = "source";
         public const string SEARCH_FIELD_TIME_UNIT = "timeunit";
         public const string SEARCH_FIELD_PATHS = "paths";
+        public const string SEARCH_SUBJECT_CODE = "subjectcode";
     }
 }
