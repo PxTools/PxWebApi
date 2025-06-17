@@ -19,12 +19,12 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.17" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.9.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.9.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.9.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.9.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
