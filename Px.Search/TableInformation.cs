@@ -30,5 +30,6 @@
         public List<Level[]> Paths { get; set; }
         public string Source { get; set; }
         public string TimeUnit { get; set; }
+        public string SubjectCode { get; set; } = string.Empty;
     }
 }

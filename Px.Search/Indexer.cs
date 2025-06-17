@@ -276,6 +276,7 @@
             tbl.SortCode = tblLink.SortCode;
             tbl.Updated = tblLink.LastUpdated;
             tbl.Discontinued = null; // TODO: Implement later
+            tbl.SubjectCode = meta.SubjectCode ?? string.Empty;
 
             return tbl;
         }

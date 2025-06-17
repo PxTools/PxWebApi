@@ -89,7 +89,8 @@ namespace PxWeb.Mappers
                     Category = EnumConverter.ToCategoryEnum(item.Category),
                     Discontinued = item.Discontinued,
                     VariableNames = item.VariableNames.ToList(),
-                    Links = linkList
+                    Links = linkList,
+                    SubjectCode = item.SubjectCode ?? string.Empty,
                 };
                 tableList.Add(tb);
             }

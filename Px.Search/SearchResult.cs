@@ -5,11 +5,12 @@
     /// </summary>
     public class SearchResult : TableInformation
     {
-        public SearchResult(string id, string label, string category, string firstPeriod, string lastPeriod, string[] variableNames, string source, string timeUnit)
+        public SearchResult(string id, string label, string category, string firstPeriod, string lastPeriod, string[] variableNames, string source, string timeUnit, string subjectCode)
             : base(id, label, category, firstPeriod, lastPeriod, variableNames)
         {
             Source = source;
             TimeUnit = timeUnit;
+            SubjectCode = subjectCode;
         }
 
         public float Score { get; set; }

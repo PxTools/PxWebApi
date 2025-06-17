@@ -68,6 +68,33 @@ namespace PxWeb.UnitTests.Data
         }
 
         [TestMethod]
+        public void RestoreNotes_WhenSameNoteExist_DoesNotAddNote()
+        {
+            // Arrange
+            var variable = new Variable("VAR1", "VAR1", PlacementType.Heading, 1);
+            var value = new Value("v1");
+            value.AddNote(new Note("My note", NoteType.Value, true));
+            PaxiomUtil.SetCode(value, "v1");
+            variable.Values.Add(value);
+            value = new Value("v2");
+            PaxiomUtil.SetCode(value, "v2");
+            variable.Values.Add(value);
+            value = new Value("v3");
+            PaxiomUtil.SetCode(value, "v3");
+            variable.Values.Add(value);
+            var notes = new Dictionary<string, Notes>();
+            var list = new Notes();
+            list.Add(new Note("My note", NoteType.Value, true));
+            notes.Add("v1", list);
+
+            // Act
+            PaxiomFixUtil.RestoreNotes(variable, notes);
+
+            // Assert
+            Assert.AreEqual(1, variable.Values[0].Notes.Count);
+        }
+
+        [TestMethod]
         public void RestoreNotes_WhenNotesNotApplicable_ReturnsNotes()
         {
             // Arrange

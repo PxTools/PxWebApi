@@ -9,6 +9,16 @@
       "title": "PxWeb 2.0 [Main]",
       "logo": "PxWeb 2.0"
     },
+    "not_found": {
+      "page_not_found": {
+        "title": "Page not found",
+        "description": "The page you are looking for does not exist. Please check the URL or return to the homepage."
+      },
+      "unsupported_language": {
+        "title": "Unsupported language",
+        "description": "The selected language is not supported."
+      }
+    },
     "skip_to_main": "Skip to main content",
     "footer": {
       "contact": {
@@ -40,8 +50,38 @@
     }
   },
   "start_page": {
-    "header": "Welcome to the app!",
-    "welcome_trans_test": "Welcome to the <1>app</1> for PxWeb 2.0!"
+    "header": "Welcome to PxWeb 2.0",
+    "ingress": "Looking for the perfect table? Use the search field and filters to dig into the numbers you need. Whether you're hunting for trends, facts, or just an oddly satisfying dataset, PxWeb 2.0 has your back.",
+    "more_about_label": "More about PxWeb 2.0",
+    "more_about_text": "More about Text EN",
+    "search_placeholder": "Search in PxWeb 2.0",
+    "filter": {
+      "button": "Filter",
+      "back": "Back",
+      "show_results": "Show {{value}} results",
+      "close": "Close filter",
+      "header": "Filter",
+      "remove_all_filter": "Remove all filters",
+      "remove_filter_aria": "Delete {{value}}",
+      "subject": "Topic",
+      "timeUnit": "Time period",
+      "year": "Year",
+      "variabel": "Variable",
+      "frequency": {
+        "annual": "Year",
+        "monthly": "Month",
+        "quarterly": "Quarter",
+        "term": "Term",
+        "weekly": "Week",
+        "other": "Other"
+      }
+    },
+    "table": {
+      "number_of_tables": "<strong>{{count}}</strong> tables",
+      "number_of_tables_found": "<strong>{{count}}</strong> tables found",
+      "updated_label": "Updated",
+      "show_more": "Show more"
+    }
   },
   "presentation_page": {
     "header": {
@@ -64,8 +104,7 @@
           "header": {
             "tag_selected": "{{selected}} of {{total}} selected",
             "tag_mandatory": "Mandatory",
-            "alert_no_mandatory_values": "You must select something in the list for the table to be displayed",
-            "show_more": "Show more"
+            "alert_no_mandatory_values": "You must select something in the list for the table to be displayed"
           },
           "content": {
             "select": {
@@ -157,6 +196,14 @@
           "missing_mandatory": {
             "title": "The table cannot be displayed",
             "description": "You must select something in the filter"
+          },
+          "to_many_values_selected": {
+            "title": "The table is too large and cannot be updated",
+            "description1": "Your current selection makes ",
+            "description2": " cells, while the table can display a maximum of ",
+            "description3": " cells. Reduce the number of selections in the filter, and once this message disappears, the table will update as usual.",
+            "selectedCells": "{{selectedCells}}",
+            "maxCells": "{{maxCells}}"
           }
         }
       },
@@ -164,6 +211,13 @@
         "title": "Information",
         "footnotes": {
           "title": "Notes",
+          "missing_heading": "No notes",
+          "missing_text_table": "The table has no notes.",
+          "missing_text_selection": "There are no notes for the selected filtering.",
+          "symbol_explanation_heading": "Symbol explanation",
+          "mandatory_heading": "Important about the table",
+          "mandatory_variable_heading": "Important about",
+          "non_mandatory_heading": "For the entire table",
           "show_all_footnotes": "Show all notes for table"
         },
         "definitions": {
@@ -172,13 +226,31 @@
         },
         "details": {
           "title": "Details",
-          "description": "Description text..."
+          "description": "Description text...",
+          "boolean_true": "Yes",
+          "boolean_false": "No",
+          "base_time": "Base time",
+          "update_frequency": "Update frequency",
+          "survey": "Survey",
+          "link": "Link",
+          "copyright": "Copyright",
+          "matrix": "Matrix",
+          "last_updated": "Last updated",
+          "next_update": "Next update",
+          "source": "Source",
+          "official_statistics": "Official statistics",
+          "unit": "Unit",
+          "reference_time": "Reference time"
         },
         "contact": {
           "title": "Contact",
           "description": "Description text...",
           "missing_heading": "No contact information",
           "missing_text": "The table has no contact information."
+        },
+        "notes": {
+          "important_about_table": "Important about the table",
+          "important_about_variable": "Important about "
         }
       },
       "related": {
