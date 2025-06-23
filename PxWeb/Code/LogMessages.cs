@@ -70,6 +70,74 @@ namespace PxWeb.Code
             this ILogger logger,
             string outputFormat);
 
+        [LoggerMessage(
+            Message = "Fetching default selection by using saved query with id {savedQueryId}.",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogDataExctractionBySavedQuery(
+            this ILogger logger,
+            string savedQueryId);
+
+        [LoggerMessage(
+            Message = "Fetching default selection by using configured algorithm.",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogDataExctractionByAlgorithm(
+            this ILogger logger);
+
+        [LoggerMessage(
+            Message = "Fetching using selection.",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogDataExctractionBySelection(
+            this ILogger logger);
+
+        [LoggerMessage(
+            Message = "One or more parameters given by the user where incorrect. Results in bad request.",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogParameterError(
+            this ILogger logger);
+
+        [LoggerMessage(
+            Message = "No table with id {tableId} was found.",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogNoTableWithGivenId(
+            this ILogger logger,
+            string tableId);
+
+        [LoggerMessage(
+            Message = "No table with id {tableId} was found in the search index.",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogNoTableWithGivenIdInSearchIndex(
+            this ILogger logger,
+            string tableId);
+
+        [LoggerMessage(
+            Message = "No codelist with id {codelistId} was found.",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogNoCodelistWithGivenId(
+            this ILogger logger,
+            string codelistId);
+
+        [LoggerMessage(
+            Message = "Page selection is out of range. Page number {pageNumber}, page size {pageSize}",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogPageOutOfRange(
+            this ILogger logger,
+            int pageNumber,
+            int pageSize);
+
+        [LoggerMessage(
+            Message = "Could not run workflow sucessfully",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogCouldNotRunWorkflowSucessfully(
+            this ILogger logger);
     }
 
     internal static partial class LogMessages
