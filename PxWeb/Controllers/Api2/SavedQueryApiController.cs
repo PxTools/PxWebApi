@@ -72,7 +72,7 @@ namespace PxWeb.Controllers.Api2
         {
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
-                _logger.LogInjectionInParmater("id", id);
+                _logger.LogInjectionInParmater("id");
                 return BadRequest(ProblemUtility.NonExistentSavedQuery());
             }
 
@@ -92,7 +92,7 @@ namespace PxWeb.Controllers.Api2
             // 0. Validate the input
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
-                _logger.LogInjectionInParmater("id", id);
+                _logger.LogInjectionInParmater("id");
                 return BadRequest(ProblemUtility.NonExistentSavedQuery());
             }
 

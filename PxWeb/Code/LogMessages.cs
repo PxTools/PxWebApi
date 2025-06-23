@@ -38,13 +38,12 @@ namespace PxWeb.Code
             string queryId);
 
         [LoggerMessage(
-            Message = "Possible injection attack on parmater {parameter} with value {value}",
+            Message = "Possible injection attack on parmater {parameter}",
             Level = LogLevel.Warning,
             SkipEnabledCheck = true)]
         internal static partial void LogInjectionInParmater(
             this ILogger logger,
-            string parameter,
-            string value);
+            string parameter);
 
         [LoggerMessage(
             Message = "Saved query with id {queryId} can not be found.",
