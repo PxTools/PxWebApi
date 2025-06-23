@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
+using PxWeb.Code;
 using PxWeb.Code.Api2.Cache;
 
 namespace PxWeb.Middleware
@@ -14,10 +16,12 @@ namespace PxWeb.Middleware
         private readonly object _cacheLock = new();
         readonly CacheMiddlewareConfigurationOptions _configuration;
         private readonly TimeSpan _cacheTime;
+        private readonly ILogger<CacheMiddleware> _logger;
 
-        public CacheMiddleware(RequestDelegate next, ICacheMiddlewareConfigurationService cacheMiddlewareConfigurationService)
+        public CacheMiddleware(RequestDelegate next, ICacheMiddlewareConfigurationService cacheMiddlewareConfigurationService, ILogger<CacheMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
             _configuration = cacheMiddlewareConfigurationService.GetConfiguration();
             _cacheTime = TimeSpan.FromSeconds(_configuration.CacheTime);
         }
@@ -73,6 +77,8 @@ namespace PxWeb.Middleware
             CachedResponse? cached = cache.Get<CachedResponse>(key);
             if (cached is null)
             {
+                _logger.LogCacheMiss(key);
+
                 response = readResponse(httpContext).Result;
 
                 lock (_cacheLock)

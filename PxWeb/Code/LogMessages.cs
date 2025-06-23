@@ -138,6 +138,15 @@ namespace PxWeb.Code
             SkipEnabledCheck = false)]
         internal static partial void LogCouldNotRunWorkflowSucessfully(
             this ILogger logger);
+
+
+        [LoggerMessage(
+            Message = "Cache miss for key {key}",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogCacheMiss(
+            this ILogger logger,
+            string key);
     }
 
     internal static partial class LogMessages
