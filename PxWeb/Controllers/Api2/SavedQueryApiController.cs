@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code;
 using PxWeb.Code.Api2;
 using PxWeb.Code.Api2.SavedQueryBackend;
 using PxWeb.Code.Api2.Serialization;
@@ -38,6 +39,7 @@ namespace PxWeb.Controllers.Api2
 
             if (savedQuery is null)
             {
+                _logger.LogNoSavedQuerySpecified();
                 return BadRequest(ProblemUtility.NoQuerySpecified());
             }
 
@@ -51,11 +53,12 @@ namespace PxWeb.Controllers.Api2
             {
                 // 2. Save the SavedQuery to the database/file.
                 id = _savedQueryBackendProxy.Save(savedQuery);
+                _logger.LogSavedQueryCreated(id);
             }
             catch (Exception e)
             {
                 // If error return 400 Bad Request
-                _logger.LogWarning(e, "Error saving the SavedQuery");
+                _logger.LogInternalErrorWhenProcessingRequest("CreateSaveQuery", e);
                 return BadRequest(ProblemUtility.InternalErrorCreateSavedQuery());
             }
 
@@ -69,11 +72,14 @@ namespace PxWeb.Controllers.Api2
         {
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
+                _logger.LogInjectionInParmater("id", id);
                 return BadRequest(ProblemUtility.NonExistentSavedQuery());
             }
+
             var savedQuery = _savedQueryBackendProxy.Load(id);
             if (savedQuery is null)
             {
+                _logger.LogNoSavedQueryWithGivenId(id);
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
             return Ok(savedQuery);
@@ -86,6 +92,7 @@ namespace PxWeb.Controllers.Api2
             // 0. Validate the input
             if (id.Contains("..") || id.Contains('/') || id.Contains('\\'))
             {
+                _logger.LogInjectionInParmater("id", id);
                 return BadRequest(ProblemUtility.NonExistentSavedQuery());
             }
 
@@ -94,6 +101,7 @@ namespace PxWeb.Controllers.Api2
             if (savedQuery is null)
             {
                 // 2. If the SavedQuery is not found return 404 Not Found
+                _logger.LogNoSavedQueryWithGivenId(id);
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
 
@@ -108,6 +116,7 @@ namespace PxWeb.Controllers.Api2
 
             if (paramError)
             {
+                _logger.LogUnsupportedOutputFormat(outputFormatStr);
                 return BadRequest(ProblemUtility.UnsupportedOutputFormat());
             }
 
@@ -116,6 +125,7 @@ namespace PxWeb.Controllers.Api2
 
             if (model is null)
             {
+                _logger.LogFaultySavedQuery(savedQuery.Id ?? "Unknown");
                 return BadRequest(problem);
             }
 
