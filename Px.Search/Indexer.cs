@@ -52,8 +52,12 @@
                         {
                             var path = new List<Level>();
                             _breadcrumbs.Clear();
+                            _logger.LogDebug("Starting GenerateBreadcrumbs");
                             GenerateBreadcrumbs(item.ID.Selection, language, index, path);
+                            _logger.LogDebug("End GenerateBreadcrumbs");
+                            _logger.LogDebug("Starting TraverseDatabase");
                             TraverseDatabase(item.ID.Selection, language, index);
+                            _logger.LogDebug("End TraverseDatabase");
                         }
                     }
                     _logger.LogInformation("Done for {Language}. Indexed total of {Count} tables.", language, _indexedTables.Count);
