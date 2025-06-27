@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Px.Abstractions.Interfaces;
 using Px.Search;
 
+using PxWeb.Code;
 using PxWeb.Code.BackgroundWorker;
 
 using Swashbuckle.AspNetCore.Annotations;
@@ -63,7 +64,7 @@ namespace PxWeb.Controllers.Api2.Admin
                         string message = $"Looked for tables published between {from:yyyy-MM-dd HH:mm:ss} and {to:yyyy-MM-dd HH:mm:ss}. Found {tableList.Count()}";
 
                         _responseState.AddEvent(new Event("Information", message));
-                        _logger.LogDebug(message);
+                        _logger.LogUpdatedTableBetween(from, to, tableList.Count);
                         if (tableList.Count > 0)
                         {
 
@@ -73,14 +74,13 @@ namespace PxWeb.Controllers.Api2.Admin
                     catch (System.Exception ex)
                     {
                         _responseState.AddEvent(new Event("Error", ex.Message));
-                        _logger.LogError(ex, "Error when building search index");
+                        _logger.LogFaildToIndexDatabase(ex);
                     }
                 }
                 else
                 {
                     try
                     {
-                        //TODO: this factoring adds _responseState.AddEvent(new Event("Error", message));   Good thing, likp?
                         List<string> languages = GetLangaugesFromConfig();
                         if (languages.Count == 0)
                         {
@@ -93,7 +93,7 @@ namespace PxWeb.Controllers.Api2.Admin
                     catch (System.Exception ex)
                     {
                         _responseState.AddEvent(new Event("Error", ex.Message));
-                        _logger.LogError(ex, "Error when building search index");
+                        _logger.LogFaildToIndexDatabase(ex);
                     }
                 }
             });
@@ -125,7 +125,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 catch (System.Exception ex)
                 {
                     _responseState.AddEvent(new Event("Error", ex.Message));
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogFaildToIndexDatabase(ex);
                 }
 
 
@@ -138,8 +138,8 @@ namespace PxWeb.Controllers.Api2.Admin
             if (tableList.Count == 0)
             {
                 string message = "Incoming list with table id's to be updated is empty. Index will not be updated.";
-                _logger.LogError(message);
-                _responseState.AddEvent(new Event("Error", message));
+                _responseState.AddEvent(new Event("Information", message));
+                _logger.LogNoTablesIndexWillNotUpdate();
                 return;
             }
 
@@ -170,9 +170,9 @@ namespace PxWeb.Controllers.Api2.Admin
 
             if (config.Languages.Count == 0)
             {
-                string message = "No languages configured for PxApi. Index will not be updated.";
-                _logger.LogError(message);
+                string message = "No languages configured. Index will not be updated.";
                 _responseState.AddEvent(new Event("Error", message));
+                _logger.LogNoLanguageIndexWillNotUpdate();
                 return languages;
             }
 

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 
 using Px.Abstractions.Interfaces;
 
+using PxWeb.Code;
 using PxWeb.Code.Api2.DataSource.PxFile;
 using PxWeb.Code.BackgroundWorker;
 
@@ -100,11 +101,12 @@ namespace PxWeb.Controllers.Api2.Admin
 
                 spider.Builders.Add(new MenuBuilder(_configOptions, _logger, _hostingEnvironment, langs.ToArray(), GetLangDependent(langDependent)) { SortOrder = GetSortOrder(sorting) });
                 await Task.Run(() => spider.Search(databasePath), token);
+                _logger.LogDatabaseGenerated();
             }
             catch (System.Exception ex)
             {
                 _responseState.AddEvent(new Event("Error", ex.Message));
-                _logger.LogError(ex.Message);
+                _logger.LogFaildToGenerateDatabase(ex);
             }
         }
 

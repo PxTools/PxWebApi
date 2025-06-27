@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code;
 
 using Language = PxWeb.Api2.Server.Models.Language;
 
@@ -30,11 +31,6 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetApiConfiguration()
         {
-            ////TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            //// return StatusCode(200, default(Folder));
-
-            ////TODO: Uncomment the next line to return response 429 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            //// return StatusCode(429, default(Problem));
             try
             {
                 int timeWindow = DefaultTimeWindow;
@@ -43,7 +39,7 @@ namespace PxWeb.Controllers.Api2
 
                 try
                 {
-                    //Set the values for time window and max calls per time window if they exist in appsetting
+                    // Set the values for time window and max calls per time window if they exist in appsetting
                     if (_rateLimitOptions.GeneralRules != null)
                     {
                         var generalRules = _rateLimitOptions.GeneralRules.Where(x => x.Endpoint == "*").First();
@@ -60,8 +56,9 @@ namespace PxWeb.Controllers.Api2
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Something bad in config of rateLimiting.");
-                    //Use default values for timewindow and maxCalls if an exeption occurs
+                    _logger.LogInvalidRateLimitingConfiguration(ex);
+
+                    // Use default values for timewindow and maxCalls if an exeption occurs
                     timeWindow = DefaultTimeWindow;
                     maxCallsPerTimeWindow = DefaultMaxCallsPerTimeWindow;
                 }
@@ -107,9 +104,9 @@ namespace PxWeb.Controllers.Api2
 
                 return new ObjectResult(configResponse);
             }
-            catch (NullReferenceException ex)
+            catch (Exception ex)
             {
-                _logger.LogError(ex, "GetConfiguration caused an exception");
+                _logger.LogInternalErrorWhenProcessingRequest("GetApiConfiguration", ex);
             }
             return StatusCode(500, new Problem() { Status = 500, Title = "Something went wrong fetching the API configuration", Type = "https://TODO/ConfigError", });
         }
