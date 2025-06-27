@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace PxWeb.UnitTests.DataSource
 {
     [TestClass]
@@ -224,6 +226,37 @@ namespace PxWeb.UnitTests.DataSource
             Assert.IsFalse(selectionExists);
         }
 
+        [TestMethod]
+        public void GetTablesPublishedBetween_WhenCalled_ReturnNonNull()
+        {
+            string pathRunning = Directory.GetCurrentDirectory();
+            int index = pathRunning.IndexOf("PxWeb.UnitTests");
+
+            if (index == -1)
+            {
+                throw new System.Exception("Hmm, Directory.GetCurrentDirectory() does not contain string:PxWeb.UnitTests , so unable to find wwwroot path.");
+            }
+            string repoRoot = pathRunning.Substring(0, index);
+            string wwwPath = Path.Combine(repoRoot, "PxWeb", "wwwroot");
+
+            var hostingEnvironmentMock = new Mock<IPxHost>();
+            hostingEnvironmentMock
+                .Setup(m => m.RootPath)
+                .Returns(wwwPath);
+
+            var dataSource = new PxFileDataSource(
+                new Mock<IPxFileConfigurationService>().Object,
+                new Mock<IItemSelectionResolver>().Object,
+                new Mock<ITablePathResolver>().Object,
+                hostingEnvironmentMock.Object,
+                new Mock<ICodelistMapper>().Object);
+
+            var updataedTables = dataSource.GetTablesPublishedBetween(new DateTime(2023, 8, 1), new DateTime(2023, 9, 1));
+
+            Assert.IsNotNull(updataedTables);
+
+        }
+
         private TablePathResolverPxFile GetTablePathResolver()
         {
             var testFactory = new TestFactory();
@@ -260,5 +293,7 @@ namespace PxWeb.UnitTests.DataSource
 
             return resolver;
         }
+
+
     }
 }
