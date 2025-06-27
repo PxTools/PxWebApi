@@ -79,7 +79,7 @@ namespace PxWeb.Controllers.Api2
             var savedQuery = _savedQueryBackendProxy.Load(id);
             if (savedQuery is null)
             {
-                _logger.LogNoSavedQueryWithGivenId(id);
+                _logger.LogNoSavedQueryWithGivenId();
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
             return Ok(savedQuery);
@@ -101,7 +101,7 @@ namespace PxWeb.Controllers.Api2
             if (savedQuery is null)
             {
                 // 2. If the SavedQuery is not found return 404 Not Found
-                _logger.LogNoSavedQueryWithGivenId(id);
+                _logger.LogNoSavedQueryWithGivenId();
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
 

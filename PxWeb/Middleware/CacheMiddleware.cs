@@ -77,7 +77,7 @@ namespace PxWeb.Middleware
             CachedResponse? cached = cache.Get<CachedResponse>(key);
             if (cached is null)
             {
-                _logger.LogCacheMiss(key);
+                _logger.LogCacheMiss();
 
                 response = readResponse(httpContext).Result;
 

@@ -46,12 +46,11 @@ namespace PxWeb.Code
             string parameter);
 
         [LoggerMessage(
-            Message = "Saved query with id {queryId} can not be found.",
+            Message = "Saved query with given id can not be found.",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
         internal static partial void LogNoSavedQueryWithGivenId(
-            this ILogger logger,
-            string queryId);
+            this ILogger logger);
 
         [LoggerMessage(
             Message = "Saved query with id {queryId} did not ran sucessfully.",
@@ -99,28 +98,25 @@ namespace PxWeb.Code
             this ILogger logger);
 
         [LoggerMessage(
-            Message = "No table with id {tableId} was found.",
+            Message = "No table with given id was found.",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
         internal static partial void LogNoTableWithGivenId(
-            this ILogger logger,
-            string tableId);
+            this ILogger logger);
 
         [LoggerMessage(
-            Message = "No table with id {tableId} was found in the search index.",
+            Message = "No table with given id was found in the search index.",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
         internal static partial void LogNoTableWithGivenIdInSearchIndex(
-            this ILogger logger,
-            string tableId);
+            this ILogger logger);
 
         [LoggerMessage(
-            Message = "No codelist with id {codelistId} was found.",
+            Message = "No codelist with given id  was found.",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
         internal static partial void LogNoCodelistWithGivenId(
-            this ILogger logger,
-            string codelistId);
+            this ILogger logger);
 
         [LoggerMessage(
             Message = "Page selection is out of range. Page number {pageNumber}, page size {pageSize}",
@@ -140,12 +136,11 @@ namespace PxWeb.Code
 
 
         [LoggerMessage(
-            Message = "Cache miss for key {key}",
+            Message = "Cache miss",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
         internal static partial void LogCacheMiss(
-            this ILogger logger,
-            string key);
+            this ILogger logger);
     }
 
     internal static partial class LogMessages

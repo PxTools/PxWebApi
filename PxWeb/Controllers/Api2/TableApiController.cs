@@ -121,7 +121,7 @@ namespace PxWeb.Controllers.Api2
             }
             else
             {
-                _logger.LogNoTableWithGivenId(id);
+                _logger.LogNoTableWithGivenId();
                 return NotFound(ProblemUtility.NonExistentTable());
             }
         }
@@ -133,14 +133,14 @@ namespace PxWeb.Controllers.Api2
 
             if (!_dataSource.TableExists(id, lang))
             {
-                _logger.LogNoTableWithGivenId(id);
+                _logger.LogNoTableWithGivenId();
                 return NotFound(ProblemUtility.NonExistentTable());
             }
 
             SearchResult? searchResult = searcher.FindTable(id, lang);
             if (searchResult == null)
             {
-                _logger.LogNoTableWithGivenIdInSearchIndex(id);
+                _logger.LogNoTableWithGivenIdInSearchIndex();
                 return NotFound(ProblemUtility.NonExistentTable());
             }
 
@@ -160,7 +160,7 @@ namespace PxWeb.Controllers.Api2
             }
             else
             {
-                _logger.LogNoCodelistWithGivenId(id);
+                _logger.LogNoCodelistWithGivenId();
                 return NotFound(ProblemUtility.NonExistentCodelist());
             }
         }
@@ -330,7 +330,7 @@ namespace PxWeb.Controllers.Api2
                 var builder = _dataSource.CreateBuilder(id, lang);
                 if (builder == null)
                 {
-                    _logger.LogNoTableWithGivenId(id);
+                    _logger.LogNoTableWithGivenId();
                     return NotFound(ProblemUtility.NonExistentTable());
                 }
 
