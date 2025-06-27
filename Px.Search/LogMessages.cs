@@ -60,7 +60,7 @@
 
         [LoggerMessage(
             Message = "Have currently index {count} number of tables.",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogProgression(
             this ILogger logger,
