@@ -31,7 +31,7 @@ namespace PxWeb.Code
 
         [LoggerMessage(
             Message = "Saved query created with id {queryId}.",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogSavedQueryCreated(
             this ILogger logger,
@@ -62,7 +62,7 @@ namespace PxWeb.Code
 
         [LoggerMessage(
             Message = "Output format {outputFormat} our one of its parameter is not supported.",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogUnsupportedOutputFormat(
             this ILogger logger,
@@ -92,7 +92,7 @@ namespace PxWeb.Code
 
         [LoggerMessage(
             Message = "One or more parameters given by the user where incorrect. Results in bad request.",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogParameterError(
             this ILogger logger);
@@ -120,7 +120,7 @@ namespace PxWeb.Code
 
         [LoggerMessage(
             Message = "Page selection is out of range. Page number {pageNumber}, page size {pageSize}",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogPageOutOfRange(
             this ILogger logger,
@@ -145,8 +145,8 @@ namespace PxWeb.Code
 
 
         [LoggerMessage(
-            Message = "Unauthurized call from Ip {ip}",
-            Level = LogLevel.Debug,
+            Message = "Unauthorized call from Ip {ip}",
+            Level = LogLevel.Warning,
             SkipEnabledCheck = false)]
         internal static partial void LogUnuthorizedCallFromIp(
             this ILogger logger,
