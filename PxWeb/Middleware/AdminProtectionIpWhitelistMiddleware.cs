@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+
+using PxWeb.Code;
 
 namespace PxWeb.Middleware
 {
@@ -13,10 +16,12 @@ namespace PxWeb.Middleware
         private readonly RequestDelegate _next;
         private readonly AdminProtectionConfigurationOptions _adminProtectionConfigurationOptions;
         private readonly HashSet<string> _ipWhitelist = new HashSet<string>();
+        private readonly ILogger<AdminProtectionIpWhitelistMiddleware> _logger;
 
 
-        public AdminProtectionIpWhitelistMiddleware(RequestDelegate next, IAdminProtectionConfigurationService adminProtectionConfigurationService)
+        public AdminProtectionIpWhitelistMiddleware(RequestDelegate next, IAdminProtectionConfigurationService adminProtectionConfigurationService, ILogger<AdminProtectionIpWhitelistMiddleware> logger)
         {
+            _logger = logger;
             _next = next;
             _adminProtectionConfigurationOptions = adminProtectionConfigurationService.GetConfiguration();
             List<string> ipWhitelist = _adminProtectionConfigurationOptions.IpWhitelist;
@@ -46,9 +51,9 @@ namespace PxWeb.Middleware
 
             if (!match)
             {
+                _logger.LogUnuthorizedCallFromIp(ip.ToString());
 
                 httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                Console.Write($"Unauthorized access from IP: {ip}");
                 return;
             }
             await _next(httpContext);

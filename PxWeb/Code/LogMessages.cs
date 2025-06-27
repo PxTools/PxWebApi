@@ -141,6 +141,16 @@ namespace PxWeb.Code
             SkipEnabledCheck = false)]
         internal static partial void LogCacheMiss(
             this ILogger logger);
+
+
+
+        [LoggerMessage(
+            Message = "Unauthurized call from Ip {ip}",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogUnuthorizedCallFromIp(
+            this ILogger logger,
+            string ip);
     }
 
     internal static partial class LogMessages
