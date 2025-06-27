@@ -137,7 +137,7 @@ namespace PxWeb.Code
 
         [LoggerMessage(
             Message = "Cache miss",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogCacheMiss(
             this ILogger logger);
