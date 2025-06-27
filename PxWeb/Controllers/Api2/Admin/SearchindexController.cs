@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Px.Abstractions.Interfaces;
 using Px.Search;
 
+using PxWeb.Code;
 using PxWeb.Code.BackgroundWorker;
 
 using Swashbuckle.AspNetCore.Annotations;
@@ -72,7 +73,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 }
                 catch (System.Exception ex)
                 {
-                    _logger.LogError(ex, "Error when building search index");
+                    _logger.LogFaildToIndexDatabase(ex);
                 }
             });
             return new AcceptedResult();
@@ -128,7 +129,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 catch (System.Exception ex)
                 {
                     _responseState.AddEvent(new Event("Error", ex.Message));
-                    _logger.LogError(ex.Message);
+                    _logger.LogFaildToIndexDatabase(ex);
                 }
             });
             return new AcceptedResult();

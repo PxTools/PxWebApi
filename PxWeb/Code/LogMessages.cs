@@ -151,6 +151,38 @@ namespace PxWeb.Code
         internal static partial void LogUnuthorizedCallFromIp(
             this ILogger logger,
             string ip);
+
+        [LoggerMessage(
+            Message = "Cached cleared",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogCacheCleared(
+            this ILogger logger);
+
+
+        [LoggerMessage(
+            Message = "Menu.xml file created",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogDatabaseGenerated(
+            this ILogger logger);
+
+        [LoggerMessage(
+            Message = "Failed to generate Menu.xml file",
+            Level = LogLevel.Warning,
+            SkipEnabledCheck = false)]
+        internal static partial void LogFaildToGenerateDatabase(
+            this ILogger logger,
+            Exception ex);
+
+
+        [LoggerMessage(
+            Message = "Failed to generate serach index for database",
+            Level = LogLevel.Warning,
+            SkipEnabledCheck = false)]
+        internal static partial void LogFaildToIndexDatabase(
+            this ILogger logger,
+            Exception ex);
     }
 
     internal static partial class LogMessages
