@@ -183,6 +183,30 @@ namespace PxWeb.Code
         internal static partial void LogFaildToIndexDatabase(
             this ILogger logger,
             Exception ex);
+
+        [LoggerMessage(
+            Message = "Looked for tables published between {from} and {to}. Found {count} number of tables.",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogUpdatedTableBetween(
+            this ILogger logger,
+            DateTime from,
+            DateTime to,
+            int count);
+
+        [LoggerMessage(
+            Message = "The list of tables to updated was empty, will not try to update index",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogNoTablesIndexWillNotUpdate(
+           this ILogger logger);
+
+        [LoggerMessage(
+            Message = "No languages configured. Index will not be updated.",
+            Level = LogLevel.Warning,
+            SkipEnabledCheck = false)]
+        internal static partial void LogNoLanguageIndexWillNotUpdate(
+           this ILogger logger);
     }
 
     internal static partial class LogMessages
