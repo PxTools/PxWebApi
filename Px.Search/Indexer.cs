@@ -35,7 +35,7 @@
 
                     index.BeginWrite(language);
                     _indexedTables = new List<string>();
-                    _logger.LogInformation("Indexing starting for {Language}.", language);
+                    _logger.LogIndexingStarted(language);
 
                     //Get the root item from the database
                     var item = _source.CreateMenu("", language, out selectionExisits);
@@ -44,7 +44,7 @@
 
                         if (item == null)
                         {
-                            _logger.LogError("IndexDatabase : Could not get root level for database");
+                            _logger.LogNoRootLevel();
                             return;
                         }
 
@@ -56,7 +56,7 @@
                             TraverseDatabase(item.ID.Selection, language, index);
                         }
                     }
-                    _logger.LogInformation("Done for {Language}. Indexed total of {Count} tables.", language, _indexedTables.Count);
+                    _logger.LogIndexingEnded(language, _indexedTables.Count);
                     index.EndWrite(language);
                 }
             }
@@ -99,7 +99,7 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GenerateBreadcrumbs : Could not CreateMenu for id {Id} for language {Language}", id, language);
+                _logger.LogCouldNotCreateBreadcrumb(id, language, ex);
             }
 
         }
@@ -132,14 +132,14 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "TraverseDatabase : Could not CreateMenu for id {Id} for language {Language}", id, language);
+                _logger.LogCouldNotCreateMenu(id, language, ex);
 
                 return;
             }
 
             if (item == null || !exists)
             {
-                _logger.LogError("TraverseDatabase : Could not get database level with id {Id} for language {Language}", id, language);
+                _logger.LogLevelIsNull(id, language);
                 return;
             }
 
@@ -174,12 +174,12 @@
                 _indexedTables.Add(tableId);
                 if (_indexedTables.Count % 100 == 0)
                 {
-                    _logger.LogInformation("Indexed {Count} tables ...", _indexedTables.Count);
+                    _logger.LogProgression(_indexedTables.Count);
                 }
             }
             else
             {
-                _logger.LogDebug("Table {TableId} is already indexed.", tableId);
+                _logger.LogTableAlreadyIndex(tableId);
             }
         }
 
@@ -233,12 +233,12 @@
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "IndexTable : Could not build table with id {Id} for language {Language}", id, language);
+                    _logger.LogCouldNotBuildTable(id, language, ex);
                 }
             }
             else
             {
-                _logger.LogError("IndexTable : Could not build table with id {Id} for language {Language}", id, language);
+                _logger.LogCouldNotCreateBuilder(id, language);
             }
 
         }
@@ -258,12 +258,12 @@
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "UpdateTable : Could not build table with id {Id} for language {Language}", id, language);
+                    _logger.LogCouldNotBuildTable(id, language, ex);
                 }
             }
             else
             {
-                _logger.LogError("UpdateTable : Could not build table with id {Id} for language {Language}", id, language);
+                _logger.LogCouldNotCreateBuilder(id, language);
             }
         }
 
