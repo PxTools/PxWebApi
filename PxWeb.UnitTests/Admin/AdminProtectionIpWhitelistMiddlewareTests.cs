@@ -24,7 +24,10 @@ namespace PxWeb.UnitTests.Admin
                 IpWhitelist = new List<string> { "172.17.0.9/16" }
             });
 
-            AdminProtectionIpWhitelistMiddleware middleware = new AdminProtectionIpWhitelistMiddleware(nextMock.Object, adminProtectionConfigurationServiceMock.Object);
+            Mock<ILogger<AdminProtectionIpWhitelistMiddleware>> loggerMock = new Mock<ILogger<AdminProtectionIpWhitelistMiddleware>>();
+
+
+            AdminProtectionIpWhitelistMiddleware middleware = new AdminProtectionIpWhitelistMiddleware(nextMock.Object, adminProtectionConfigurationServiceMock.Object, loggerMock.Object);
 
             _httpContextMock.Setup(c => c.Connection.RemoteIpAddress).Returns(IPAddress.Parse("192.168.0.1"));
             var responseMock = new Mock<HttpResponse>();
@@ -52,7 +55,10 @@ namespace PxWeb.UnitTests.Admin
                 IpWhitelist = new List<string> { "192.168.0.1" }
             });
 
-            AdminProtectionIpWhitelistMiddleware middleware = new AdminProtectionIpWhitelistMiddleware(nextMock.Object, adminProtectionConfigurationServiceMock.Object);
+
+            Mock<ILogger<AdminProtectionIpWhitelistMiddleware>> loggerMock = new Mock<ILogger<AdminProtectionIpWhitelistMiddleware>>();
+
+            AdminProtectionIpWhitelistMiddleware middleware = new AdminProtectionIpWhitelistMiddleware(nextMock.Object, adminProtectionConfigurationServiceMock.Object, loggerMock.Object);
 
             _httpContextMock.Setup(c => c.Connection.RemoteIpAddress).Returns(IPAddress.Parse("192.168.0.1"));
             var responseMock = new Mock<HttpResponse>();
