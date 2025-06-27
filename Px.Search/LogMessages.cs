@@ -69,7 +69,7 @@
 
         [LoggerMessage(
             Message = "Table {tableId} is have aready been index.",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogTableAlreadyIndex(
             this ILogger logger,
