@@ -135,7 +135,8 @@ namespace PxWeb.Controllers.Api2.Admin
 
         private async Task UpdateFromTableList(List<string> tableList, CancellationToken token)
         {
-            if (tableList.Count == 0)
+
+            if (tableList.Count == 0 || (tableList.Count == 1 && string.IsNullOrEmpty(tableList[0])))
             {
                 string message = "Incoming list with table id's to be updated is empty. Index will not be updated.";
                 _responseState.AddEvent(new Event("Information", message));

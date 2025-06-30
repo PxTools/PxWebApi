@@ -53,7 +53,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
         public ItemSelection ResolveTable(string language, string selection, out bool selectionExists)
         {
-            selectionExists = true;
+            selectionExists = false;
             ItemSelection itemSelection = new ItemSelection();
 
             string lookupTableName = "LookUpTableCache_Table_" + language;
@@ -71,12 +71,10 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                     var itmSel = lookupTable[selection.ToUpper()];
                     itemSelection.Menu = itmSel.Menu;
                     itemSelection.Selection = itmSel.Selection;
-                }
-                else
-                {
-                    selectionExists = false;
+                    selectionExists = true;
                 }
             }
+
             return itemSelection;
         }
     }
