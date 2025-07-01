@@ -64,15 +64,12 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 _pxCache.Set(lookupTableName, lookupTable);
             }
 
-            if (!string.IsNullOrEmpty(selection))
+            if (!string.IsNullOrEmpty(selection) && lookupTable.ContainsKey(selection.ToUpper()))
             {
-                if (lookupTable.ContainsKey(selection.ToUpper()))
-                {
-                    var itmSel = lookupTable[selection.ToUpper()];
-                    itemSelection.Menu = itmSel.Menu;
-                    itemSelection.Selection = itmSel.Selection;
-                    selectionExists = true;
-                }
+                var itmSel = lookupTable[selection.ToUpper()];
+                itemSelection.Menu = itmSel.Menu;
+                itemSelection.Selection = itmSel.Selection;
+                selectionExists = true;
             }
 
             return itemSelection;
