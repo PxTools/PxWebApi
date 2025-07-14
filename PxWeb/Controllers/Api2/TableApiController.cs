@@ -109,6 +109,14 @@ namespace PxWeb.Controllers.Api2
                     }
 
                     var model = builder.Model;
+
+                    Searcher searcher = new Searcher(_dataSource, _backend);
+                    SearchResult? searchResult = searcher.FindTable(id, lang);
+                    if (searchResult != null)
+                    {
+                        model.Meta.Title = searchResult.Label;
+                    }
+
                     Dataset ds = _datasetMapper.Map(model, id, lang);
                     return new ObjectResult(ds);
 
