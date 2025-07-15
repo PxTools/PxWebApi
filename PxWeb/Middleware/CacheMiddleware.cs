@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.IO.Hashing;
+using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
@@ -51,14 +53,25 @@ namespace PxWeb.Middleware
 
         private string generateKey(HttpRequest request, string body)
         {
-            // Get url
-            string url = $"{request.Method}:{request.Scheme}://{request.Host.Value}{request.Path}{request.QueryString}";
-            string key = $"{url}";
+            var hasher = new XxHash128();
+            hasher.Append(Encoding.UTF8.GetBytes(request.Method));
+            hasher.Append(Encoding.UTF8.GetBytes(request.Path));
+            hasher.Append(Encoding.UTF8.GetBytes(request.QueryString.Value ?? ""));
+
             if (request.Method == "POST" && body != "")
             {
-                key += $":{body}";
+                hasher.Append(Encoding.UTF8.GetBytes(body));
             }
+
+
+            Span<byte> hashBytes = stackalloc byte[16]; // 128 bitar = 16 byte
+            hasher.GetCurrentHash(hashBytes);
+
+            // Konvertera till hex-sträng
+            string key = Convert.ToHexString(hashBytes);
+
             return key;
+
         }
 
         public async Task Invoke(HttpContext httpContext, IPxCache cache)
