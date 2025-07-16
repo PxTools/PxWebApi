@@ -13,7 +13,7 @@
             NextClearTime = nextClearTime;
         }
 
-        public bool CacheIsCoherent()
+        public static bool CacheIsCoherent()
         {
             if (DateTime.Now >= NextClearTime)
             {
