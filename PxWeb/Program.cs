@@ -76,8 +76,8 @@ namespace PxWeb
 
                 if (clearTime != null && DateTime.TryParse(clearTime, out DateTime time))
                 {
-                    var clearer = new DefaultCacheClearer(time);
-                    instance.SetCoherenceChecker(clearer.CacheIsCoherent);
+                    DefaultCacheClearer.SetNextClearTime(time);
+                    instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
                 }
 
                 return instance;

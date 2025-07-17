@@ -4,7 +4,7 @@
     {
         public static DateTime NextClearTime { get; set; } = DateTime.Now;
 
-        public DefaultCacheClearer(DateTime nextClearTime)
+        public static void SetNextClearTime(DateTime nextClearTime)
         {
             if (nextClearTime < DateTime.Now)
             {
@@ -17,7 +17,7 @@
         {
             if (DateTime.Now >= NextClearTime)
             {
-                NextClearTime = DateTime.Now.AddDays(1);
+                NextClearTime = NextClearTime.AddDays(1);
                 return false;
             }
             return true;
