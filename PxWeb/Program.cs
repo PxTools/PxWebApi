@@ -66,7 +66,23 @@ namespace PxWeb
 
             // configuration (resolvers, counter key builders)
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-            builder.Services.AddSingleton<IPxCache, PxCache>();
+            builder.Services.AddSingleton<IPxCache>(provider =>
+            {
+                var logger = provider.GetRequiredService<ILogger<PxCache>>();
+                var instance = new PxCache(logger);
+
+                // Gör något med instansen innan den returneras
+                var clearTime = builder.Configuration.GetSection("PxApiConfiguration:CacheClearTime").Value;
+
+                if (clearTime != null && DateTime.TryParse(clearTime, out DateTime time))
+                {
+                    DefaultCacheClearer.SetNextClearTime(time);
+                    instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
+                }
+
+                return instance;
+            });
+
             builder.Services.AddSingleton<ILinkCreator, LinkCreator>();
             builder.Services.AddSingleton<ISelectionHandler, SelectionHandler>();
             builder.Services.AddSingleton<IPlacementHandler, PlacementHandler>();
