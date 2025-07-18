@@ -185,7 +185,7 @@ namespace PxWeb.Controllers.Api2
                 return NotFound(ProblemUtility.OutOfRange());
             }
 
-            return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query));
+            return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query, pastDays));
 
         }
 
