@@ -28,12 +28,12 @@ namespace PxWeb.Mappers
             _urlPrefix = configOptions.Value.BaseURL + configOptions.Value.RoutePrefix;
             _defaultDataFormat = configOptions.Value.DefaultOutputFormat;
         }
-        public Link GetTablesLink(LinkRelationEnum relation, string language, string? query, int pagesize, int pageNumber, bool showLangParam = true)
+        public Link GetTablesLink(LinkRelationEnum relation, string language, string? query, int? pastDays, int pagesize, int pageNumber, bool showLangParam = true)
         {
             var link = new Link();
             link.Rel = relation.ToString();
             link.Hreflang = language;
-            link.Href = CreatePageURL($"tables/", language, showLangParam, query, pagesize, pageNumber);
+            link.Href = CreatePageURL($"tables/", language, showLangParam, query, pastDays, pagesize, pageNumber);
 
             return link;
         }
@@ -127,7 +127,7 @@ namespace PxWeb.Mappers
 
             return sb.ToString();
         }
-        private string CreatePageURL(string endpointUrl, string language, bool showLangParam, string? query, int pagesize, int pageNumber)
+        private string CreatePageURL(string endpointUrl, string language, bool showLangParam, string? query, int? pastDays, int pagesize, int pageNumber)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -161,6 +161,11 @@ namespace PxWeb.Mappers
             }
 
             sb.Append("&pageNumber=" + pageNumber);
+
+            if (pastDays is not null)
+            {
+                sb.Append("&pastDays=" + pastDays.Value);
+            }
 
             return sb.ToString();
         }
