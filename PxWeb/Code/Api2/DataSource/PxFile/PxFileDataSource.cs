@@ -201,5 +201,10 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
             return tableIds;
         }
+
+        public Item? LoadDatabaseStructure(string language)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

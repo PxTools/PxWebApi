@@ -26,8 +26,6 @@
         /// <param name="languages">list of languages codes that the search index will be able to be searched for</param>
         public void IndexDatabase(List<string> languages)
         {
-            bool selectionExisits;
-
             using (var index = _backend.GetIndex())
             {
                 foreach (var language in languages)
@@ -38,40 +36,35 @@
                     _logger.LogIndexingStarted(language);
 
                     //Get the root item from the database
-                    var item = _source.CreateMenu("", language, out selectionExisits);
-                    if (selectionExisits)
+                    var item = _source.LoadDatabaseStructure(language);
+
+
+                    if (item == null)
                     {
-
-                        if (item == null)
-                        {
-                            _logger.LogNoRootLevel();
-                            return;
-                        }
-
-                        if (item is PxMenuItem)
-                        {
-                            var path = new List<Level>();
-                            _breadcrumbs.Clear();
-                            GenerateBreadcrumbs(item.ID.Selection, language, index, path);
-                            TraverseDatabase(item.ID.Selection, language, index);
-                        }
+                        _logger.LogNoRootLevel();
+                        return;
                     }
+
+                    if (item is PxMenuItem)
+                    {
+                        var path = new List<Level>();
+                        _breadcrumbs.Clear();
+                        GenerateBreadcrumbs(item, language, index, path);
+                        TraverseDatabase(item, language, index);
+                    }
+
                     _logger.LogIndexingEnded(language, _indexedTables.Count);
                     index.EndWrite(language);
                 }
             }
         }
 
-        private void GenerateBreadcrumbs(string id, string language, IIndex index, List<Level> path)
+        private void GenerateBreadcrumbs(Item? item, string language, IIndex index, List<Level> path)
         {
-            bool exists;
-            Item? item;
 
             try
             {
-                item = _source.CreateMenu(id, language, out exists);
-
-                if (item is null || !exists)
+                if (item is null)
                 {
                     return;
                 }
@@ -87,7 +80,7 @@
                         if (subitem is PxMenuItem)
                         {
                             path.Add(new Level(subitem.ID.Selection, subitem.Text));
-                            GenerateBreadcrumbs(subitem.ID.Selection, language, index, path);
+                            GenerateBreadcrumbs(subitem, language, index, path);
                             path.RemoveAt(path.Count - 1);
                         }
                         else if (subitem is TableLink tblLink)
@@ -99,7 +92,8 @@
             }
             catch (Exception ex)
             {
-                _logger.LogCouldNotCreateBreadcrumb(id, language, ex);
+                //TODO: Handle this better
+                _logger.LogCouldNotCreateBreadcrumb("TODO", language, ex);
             }
 
         }
@@ -121,25 +115,15 @@
         /// <param name="id">current node id</param>
         /// <param name="language">current processing language</param>
         /// <param name="index">the index to use</param>
-        private void TraverseDatabase(string id, string language, IIndex index)
+        private void TraverseDatabase(Item? item, string language, IIndex index)
         {
-            bool exists;
-            Item? item;
 
-            try
-            {
-                item = _source.CreateMenu(id, language, out exists);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCouldNotCreateMenu(id, language, ex);
 
-                return;
-            }
 
-            if (item == null || !exists)
+            if (item == null)
             {
-                _logger.LogLevelIsNull(id, language);
+                // TODO: Handle this better
+                //_logger.LogLevelIsNull(id, language);
                 return;
             }
 
@@ -153,7 +137,7 @@
                     }
                     if (subitem is PxMenuItem)
                     {
-                        TraverseDatabase(subitem.ID.Selection, language, index);
+                        TraverseDatabase(subitem, language, index);
                     }
                     else if (subitem is TableLink)
                     {

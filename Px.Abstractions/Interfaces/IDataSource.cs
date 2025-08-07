@@ -11,6 +11,8 @@
         /// <returns></returns>
         Item? CreateMenu(string id, string language, out bool selectionExists);
 
+        Item? LoadDatabaseStructure(string language);
+
 
         /// <summary>
         /// Gets a TableLink from the Menu. (This is only usen when Updating the search Index) 
