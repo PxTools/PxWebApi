@@ -26,16 +26,12 @@ namespace PxWeb.Middleware
             {
                 if (context.Items.TryGetValue("PX_TableId", out var tableId) &&
                     context.Items.TryGetValue("PX_Format", out var format) &&
-                    context.Items.TryGetValue("PX_Matrix_Size", out var size))
+                    context.Items.TryGetValue("PX_Matrix_Size", out var size) &&
+                    tableId is not null &&
+                    format is not null &&
+                    size is not null)
                 {
-                    if (tableId is not null &&
-                        format is not null &&
-                        size is not null)
-                    {
-                        _logger.LogUsage((string)tableId, (string)format, (int)size);
-                    }
-
-
+                    _logger.LogUsage((string)tableId, (string)format, (int)size);
                 }
             }
         }
