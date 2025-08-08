@@ -22,20 +22,19 @@ namespace PxWeb.Middleware
         public async Task Invoke(HttpContext context, IPxCache cache)
         {
             await _next(context);
-            if (context.Response.StatusCode == 200)
+            if (context.Response.StatusCode == 200 &&
+                context.Items.TryGetValue("PX_TableId", out var tableId) &&
+                context.Items.TryGetValue("PX_Format", out var format) &&
+                context.Items.TryGetValue("PX_Matrix_Size", out var size) &&
+                tableId is not null &&
+                format is not null &&
+                size is not null)
             {
-                if (context.Items.TryGetValue("PX_TableId", out var tableId) &&
-                    context.Items.TryGetValue("PX_Format", out var format) &&
-                    context.Items.TryGetValue("PX_Matrix_Size", out var size) &&
-                    tableId is not null &&
-                    format is not null &&
-                    size is not null)
-                {
-                    _logger.LogUsage((string)tableId, (string)format, (int)size);
-                }
+                _logger.LogUsage((string)tableId, (string)format, (int)size);
             }
         }
     }
+
 
     public static class UseUsageLogMiddlewareExtensions
     {
