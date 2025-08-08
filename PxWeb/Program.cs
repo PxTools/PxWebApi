@@ -220,6 +220,7 @@ namespace PxWeb
 
             app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin")), appBuilder =>
             {
+                appBuilder.UseUsageLogMiddleware();
                 appBuilder.UseCacheMiddleware();
             });
 
