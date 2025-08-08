@@ -119,11 +119,9 @@ namespace PxWeb.Middleware
                 response = cached;
             }
 
-            if (response.TableId is not null && _logger.IsEnabled(LogLevel.Debug))
+            if (response.TableId is not null)
             {
-                httpContext.Items["PX_TableId"] = response.TableId;
-                httpContext.Items["PX_Format"] = response.Format;
-                httpContext.Items["PX_Matrix_Size"] = response.MatrixSize;
+                httpContext.AddLoggingContext(response.TableId, response.Format, response.MatrixSize);
             }
 
             httpContext.Response.ContentType = response.ContentType;

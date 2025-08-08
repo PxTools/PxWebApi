@@ -32,7 +32,7 @@ namespace PxWeb.Middleware
                         format is not null &&
                         size is not null)
                     {
-                        _logger.LogIndexingStarted((string)tableId, (string)format, (int)size);
+                        _logger.LogUsage((string)tableId, (string)format, (int)size);
                     }
 
 
@@ -55,7 +55,7 @@ namespace PxWeb.Middleware
             Message = "Fetch data for tableId={tableId}, format={format}, size={size}",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
-        internal static partial void LogIndexingStarted(
+        internal static partial void LogUsage(
             this ILogger logger,
             string tableId,
             string format,
