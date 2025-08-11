@@ -117,6 +117,13 @@ namespace PxWeb.Controllers.Api2
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
 
+            // Override the language if specified
+            var language = _languageHelper.HandleLanguage(lang);
+            if (!string.Equals(savedQuery.Language, language, StringComparison.OrdinalIgnoreCase))
+            {
+                savedQuery.Language = language;
+            }
+
             _savedQueryBackendProxy.UpdateRunStatistics(id);
 
             // 3. Override parameters to the SavedQuery
