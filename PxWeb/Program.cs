@@ -42,6 +42,18 @@ namespace PxWeb
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // Paxiom settings
+            var omit = builder.Configuration.GetSection("PxApiConfiguration:OmitContentsInTitle");
+            if (omit != null && bool.TryParse(omit.Value, out bool omitContentsInTitle))
+            {
+                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = omitContentsInTitle;
+            }
+            else
+            {
+                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = true; // Default value
+            }
+
+
             // Only use Log4Net provider
             builder.Logging.ClearProviders();
             builder.Logging.AddLog4Net();
