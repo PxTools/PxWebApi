@@ -35,6 +35,7 @@ namespace PxWeb.Config.Api2
         public List<string> OutputFormats { get; set; } = new List<string>();
         public string DefaultOutputFormat { get; set; } = String.Empty;
         public bool EnableAllEndpointsSwaggerUI { get; set; } = false;
+        public bool OmitContentsInTitle { get; set; } = true;
 
     }
 }
