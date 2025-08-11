@@ -289,6 +289,8 @@ namespace PxWeb.Controllers.Api2
             Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
             serializationInfo.Serializer.Serialize(model, Response.Body);
 
+            HttpContext.AddLoggingContext(id, outputFormatStr, model.Data.MatrixSize);
+
             return Ok();
         }
 

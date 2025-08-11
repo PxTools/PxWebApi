@@ -47,6 +47,23 @@ namespace PxWeb.Middleware
 
                 string contentDisposition = httpContext.Response.Headers.ContentDisposition.ToString();
                 CachedResponse response = new CachedResponse(body, contentType, responseCode, contentDisposition);
+
+                if (httpContext.Items.TryGetValue("PX_TableId", out var tableId))
+                {
+                    response.TableId = tableId as string;
+                }
+
+                if (httpContext.Items.TryGetValue("PX_Format", out var format))
+                {
+                    response.Format = format as string;
+                }
+
+                if (httpContext.Items.TryGetValue("PX_Matrix_Size", out var matrixSize))
+                {
+                    response.MatrixSize = matrixSize as int?;
+                }
+
+
                 return response;
             }
         }
@@ -113,6 +130,11 @@ namespace PxWeb.Middleware
             else
             {
                 response = cached;
+            }
+
+            if (response.TableId is not null)
+            {
+                httpContext.AddLoggingContext(response.TableId, response.Format, response.MatrixSize);
             }
 
             httpContext.Response.ContentType = response.ContentType;
