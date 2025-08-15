@@ -92,8 +92,7 @@
             }
             catch (Exception ex)
             {
-                //TODO: Handle this better
-                _logger.LogCouldNotCreateBreadcrumb("TODO", language, ex);
+                _logger.LogCouldNotCreateBreadcrumb(language, ex);
             }
 
         }
@@ -118,12 +117,8 @@
         private void TraverseDatabase(Item? item, string language, IIndex index)
         {
 
-
-
             if (item == null)
             {
-                // TODO: Handle this better
-                //_logger.LogLevelIsNull(id, language);
                 return;
             }
 
