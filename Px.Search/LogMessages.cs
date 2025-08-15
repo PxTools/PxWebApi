@@ -27,12 +27,11 @@
             this ILogger logger);
 
         [LoggerMessage(
-            Message = "Could not create breadcrumb for table {tableId} and language {language}",
+            Message = "Could not create breadcrumb for language {language}",
             Level = LogLevel.Warning,
             SkipEnabledCheck = false)]
         internal static partial void LogCouldNotCreateBreadcrumb(
             this ILogger logger,
-            string tableId,
             string language,
             Exception ex);
 

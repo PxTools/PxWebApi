@@ -14,7 +14,10 @@ namespace PxWeb.UnitTests.Search
             var dataSource = new Mock<IDataSource>();
             var logger = new Mock<ILogger>();
             //var meta = new Mock<PXMeta>();
-            //var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
+            var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
+
+            dataSource.Setup(d => d.LoadDatabaseStructure(It.IsAny<string>())).Returns(tableLink);
+
 
             backend.Setup(b => b.GetIndex()).Returns(index.Object);
 
@@ -37,7 +40,9 @@ namespace PxWeb.UnitTests.Search
             var dataSource = new Mock<IDataSource>();
             var logger = new Mock<ILogger>();
             //var meta = new Mock<PXMeta>();
-            //var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
+            var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
+
+            dataSource.Setup(d => d.LoadDatabaseStructure(It.IsAny<string>())).Returns(tableLink);
 
             backend.Setup(b => b.GetIndex()).Returns(index.Object);
 
@@ -91,6 +96,8 @@ namespace PxWeb.UnitTests.Search
             rootItem.SubItems.Add(tableLink);
             backend.Setup(b => b.GetIndex()).Returns(index.Object);
             builder.Setup(b => b.Model).Returns(model);
+
+            dataSource.Setup(d => d.LoadDatabaseStructure(It.IsAny<string>())).Returns(rootItem);
 
             dataSource.Setup(d => d.CreateMenu("", It.IsAny<string>(), out It.Ref<bool>.IsAny))
                 .Returns((string id, string language, out bool selectionExists) =>

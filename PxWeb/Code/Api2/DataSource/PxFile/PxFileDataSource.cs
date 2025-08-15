@@ -15,7 +15,6 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 {
     public class PxFileDataSource : IDataSource
     {
-        private readonly IPxFileConfigurationService _pxFileConfigurationService;
         private readonly IItemSelectionResolver _itemSelectionResolver;
         private readonly ITablePathResolver _tablePathResolver;
         private readonly IPxHost _hostingEnvironment;
@@ -23,7 +22,6 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public PxFileDataSource(IPxFileConfigurationService pxFileConfigurationService, IItemSelectionResolver itemSelectionResolver, ITablePathResolver tablePathResolver, IPxHost hostingEnvironment, ICodelistMapper codelistMapper)
         {
-            _pxFileConfigurationService = pxFileConfigurationService;
             _itemSelectionResolver = itemSelectionResolver;
             _tablePathResolver = tablePathResolver;
             _hostingEnvironment = hostingEnvironment;
@@ -200,6 +198,13 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             }
 
             return tableIds;
+        }
+
+        public Item? LoadDatabaseStructure(string language)
+        {
+            var filePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+            var menu = new XmlMenu(filePath, language);
+            return menu.CurrentItem;
         }
     }
 }

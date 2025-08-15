@@ -71,7 +71,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
         }
 
-        private Item? CreateMenu(string language, ItemSelection itmSel)
+        private Item? CreateMenu(string language, ItemSelection itmSel, int numberOfLevels = 1)
         {
             var cnmmOptions = _cnmmConfigurationService.GetConfiguration();
 
@@ -83,6 +83,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                     PCAxis.Sql.DbConfig.SqlDbConfigsStatic.DataBases[cnmmOptions.DatabaseID],
                     m =>
                     {
+                        m.NumberOfLevels = numberOfLevels;
                         m.RootSelection = itmSel;
                         m.AlterItemBeforeStorage = item =>
                         {
@@ -253,6 +254,19 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         public List<string> GetTablesPublishedBetween(DateTime from, DateTime to)
         {
             return PCAxis.Sql.ApiUtils.ApiUtilStatic.GetTablesPublishedBetween(from, to);
+        }
+
+        public Item? LoadDatabaseStructure(string language)
+        {
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, "", out var selectionExists);
+            if (!selectionExists)
+            {
+                return null;
+            }
+
+            Item? outItem = CreateMenu(language, itmSel, 10);
+
+            return outItem;
         }
     }
 }
