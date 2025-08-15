@@ -18,7 +18,7 @@ namespace PxWebApi_Mvc.Tests
 
             var response = await client.GetAsync("/tables?lang=en");
 
-            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Accepted, response.StatusCode);
 
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "ListAllTables.json"));
