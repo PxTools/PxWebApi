@@ -143,7 +143,6 @@ namespace Px.Search.Lucene
                 {
                     doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, paths));
                 }
-                return;
             }
             if (_writer != null)
             {
