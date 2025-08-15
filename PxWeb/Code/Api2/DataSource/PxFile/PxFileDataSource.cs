@@ -204,7 +204,9 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public Item? LoadDatabaseStructure(string language)
         {
-            throw new NotImplementedException();
+            var filePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+            var menu = new XmlMenu(filePath, language);
+            return menu.CurrentItem;
         }
     }
 }
