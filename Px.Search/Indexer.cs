@@ -122,9 +122,9 @@
                 return;
             }
 
-            if (item is PxMenuItem)
+            if (item is PxMenuItem menuItem)
             {
-                foreach (var subitem in ((PxMenuItem)item).SubItems)
+                foreach (var subitem in menuItem.SubItems)
                 {
                     if (subitem is null)
                     {
@@ -134,9 +134,9 @@
                     {
                         TraverseDatabase(subitem, language, index);
                     }
-                    else if (subitem is TableLink)
+                    else if (subitem is TableLink tableLink)
                     {
-                        AddTableToIndex(language, index, (TableLink)subitem);
+                        AddTableToIndex(language, index, tableLink);
                     }
                 }
             }
@@ -260,7 +260,7 @@
             return tbl;
         }
 
-        private string GetCategory(TableLink tblLink)
+        private static string GetCategory(TableLink tblLink)
         {
             switch (tblLink.Category)
             {
