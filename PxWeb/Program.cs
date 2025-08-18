@@ -53,10 +53,19 @@ namespace PxWeb
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
 
-            builder.Services.AddHealthChecks()
-                .AddCheck<MaintenanceHealthCheck>(
-                "Maintenance",
-                tags: new[] { "ready" });
+            var hBuilder = builder.Services.AddHealthChecks()
+                            .AddCheck<MaintenanceHealthCheck>(
+                            "Maintenance",
+                            tags: new[] { "ready" });
+            var datasourceType = builder.Configuration.GetSection("DataSource:DataSourceType").Value ?? "PX";
+            if (datasourceType.Equals("CNMM", StringComparison.OrdinalIgnoreCase))
+            {
+                // var sqlQuery = builder.Configuration.GetSection("DataSource:CNMM:HealthCheckQuery").Value ?? CnmmConfigurationOptions.DEFAULT_QUERY;
+
+                hBuilder.AddCheck<SqlDbConnectionHealthCheck>(
+                    "Database",
+                    tags: new[] { "ready" });
+            }
 
             // needed to store rate limit counters and ip rules
             builder.Services.AddMemoryCache();
