@@ -19,7 +19,7 @@ namespace Px.Search.Lucene
         {
             if (string.IsNullOrWhiteSpace(indexDirectory))
             {
-                throw new ArgumentNullException("Index directory not defined for Lucene");
+                throw new ArgumentNullException(indexDirectory, "Index directory not defined for Lucene");
             }
 
             _indexDirectoryBase = indexDirectory;
@@ -74,7 +74,7 @@ namespace Px.Search.Lucene
         {
             if (string.IsNullOrWhiteSpace(language))
             {
-                throw new ArgumentNullException("Language not specified");
+                throw new ArgumentNullException(language, "Language not specified");
             }
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
@@ -91,7 +91,7 @@ namespace Px.Search.Lucene
         {
             if (string.IsNullOrWhiteSpace(language))
             {
-                throw new ArgumentNullException("Language not specified");
+                throw new ArgumentNullException(language, "Language not specified");
             }
 
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
