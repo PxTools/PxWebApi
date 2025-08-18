@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.IO.Hashing;
+using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Builder;
@@ -45,20 +47,48 @@ namespace PxWeb.Middleware
 
                 string contentDisposition = httpContext.Response.Headers.ContentDisposition.ToString();
                 CachedResponse response = new CachedResponse(body, contentType, responseCode, contentDisposition);
+
+                if (httpContext.Items.TryGetValue("PX_TableId", out var tableId))
+                {
+                    response.TableId = tableId as string;
+                }
+
+                if (httpContext.Items.TryGetValue("PX_Format", out var format))
+                {
+                    response.Format = format as string;
+                }
+
+                if (httpContext.Items.TryGetValue("PX_Matrix_Size", out var matrixSize))
+                {
+                    response.MatrixSize = matrixSize as int?;
+                }
+
+
                 return response;
             }
         }
 
         private string generateKey(HttpRequest request, string body)
         {
-            // Get url
-            string url = $"{request.Method}:{request.Scheme}://{request.Host.Value}{request.Path}{request.QueryString}";
-            string key = $"{url}";
+            var hasher = new XxHash128();
+            hasher.Append(Encoding.UTF8.GetBytes(request.Method));
+            hasher.Append(Encoding.UTF8.GetBytes(request.Path));
+            hasher.Append(Encoding.UTF8.GetBytes(request.QueryString.Value ?? ""));
+
             if (request.Method == "POST" && body != "")
             {
-                key += $":{body}";
+                hasher.Append(Encoding.UTF8.GetBytes(body));
             }
+
+
+            Span<byte> hashBytes = stackalloc byte[16]; // 128 bitar = 16 byte
+            hasher.GetCurrentHash(hashBytes);
+
+            // Konvertera till hex-sträng
+            string key = Convert.ToHexString(hashBytes);
+
             return key;
+
         }
 
         public async Task Invoke(HttpContext httpContext, IPxCache cache)
@@ -100,6 +130,11 @@ namespace PxWeb.Middleware
             else
             {
                 response = cached;
+            }
+
+            if (response.TableId is not null)
+            {
+                httpContext.AddLoggingContext(response.TableId, response.Format, response.MatrixSize);
             }
 
             httpContext.Response.ContentType = response.ContentType;

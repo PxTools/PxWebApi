@@ -67,7 +67,7 @@ namespace PxWeb.Controllers.Api2
             _savedQueryBackendProxy = savedQueryBackendProxy;
         }
 
-        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist)
+        public override IActionResult GetMetadataById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "defaultSelection")] bool? defaultSelection, [FromQuery(Name = "savedQuery")] string? savedQueryId, [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist)
         {
             lang = _languageHelper.HandleLanguage(lang);
             IPXModelBuilder? builder = _dataSource.CreateBuilder(id, lang);
@@ -80,7 +80,22 @@ namespace PxWeb.Controllers.Api2
                 {
                     builder.BuildForSelection();
 
-                    if (defaultSelection is not null && defaultSelection == true)
+                    if (savedQueryId is not null && savedQueryId != string.Empty)
+                    {
+                        //apply the saved query
+                        var savedQuery = _savedQueryBackendProxy.Load(savedQueryId);
+                        if (savedQuery is not null)
+                        {
+                            _logger.LogDataExctractionBySavedQuery(savedQuery.Id ?? "Unknown");
+                            _selectionHandler.ExpandAndVerfiySelections(savedQuery.Selection, builder, out Problem? problem);
+                        }
+                        else
+                        {
+                            _logger.LogNoSavedQueryWithGivenId();
+                            return NotFound(ProblemUtility.NonExistentSavedQuery());
+                        }
+                    }
+                    else if (defaultSelection is not null && defaultSelection == true)
                     {
                         //apply the default selection
                         var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
@@ -109,6 +124,14 @@ namespace PxWeb.Controllers.Api2
                     }
 
                     var model = builder.Model;
+
+                    Searcher searcher = new Searcher(_dataSource, _backend);
+                    SearchResult? searchResult = searcher.FindTable(id, lang);
+                    if (searchResult != null)
+                    {
+                        model.Meta.Title = searchResult.Label;
+                    }
+
                     Dataset ds = _datasetMapper.Map(model, id, lang);
                     return new ObjectResult(ds);
 
@@ -185,7 +208,7 @@ namespace PxWeb.Controllers.Api2
                 return NotFound(ProblemUtility.OutOfRange());
             }
 
-            return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query));
+            return Ok(_tablesResponseMapper.Map(searchResultContainer, lang, query, pastDays));
 
         }
 
@@ -266,6 +289,8 @@ namespace PxWeb.Controllers.Api2
             Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
             serializationInfo.Serializer.Serialize(model, Response.Body);
 
+            HttpContext.AddLoggingContext(id, outputFormatStr, model.Data.MatrixSize);
+
             return Ok();
         }
 
@@ -321,6 +346,21 @@ namespace PxWeb.Controllers.Api2
             {
                 _logger.LogDataExctractionBySavedQuery(savedQuery.Id ?? "Unknown");
                 selection = savedQuery.Selection;
+
+                var builder = _dataSource.CreateBuilder(id, lang);
+                if (builder == null)
+                {
+                    _logger.LogNoTableWithGivenId();
+                    return NotFound(ProblemUtility.NonExistentTable());
+                }
+
+                builder.BuildForSelection();
+
+                if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+                {
+                    _logger.LogParameterError();
+                    return BadRequest(problem);
+                }
             }
             else //Fallback to the default selection algorithm
             {

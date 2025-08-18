@@ -19,7 +19,7 @@ namespace PxWeb.Mappers
             _configOptions = configOptions.Value;
         }
 
-        public TablesResponse Map(SearchResultContainer searchResultContainer, string lang, string? query)
+        public TablesResponse Map(SearchResultContainer searchResultContainer, string lang, string? query, int? pastDays)
         {
             var tablesResponse = new TablesResponse();
             var linkPageList = new List<Link>();
@@ -28,22 +28,24 @@ namespace PxWeb.Mappers
             var totalElements = searchResultContainer.totalElements;
             var totalPages = searchResultContainer.totalPages;
 
+
+
             if (pageNumber < totalPages)
             {
                 // Links to next page 
-                linkPageList.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.next, lang, query, pageSize, pageNumber + 1, true));
+                linkPageList.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.next, lang, query, pastDays, pageSize, pageNumber + 1, true));
             }
 
             if (pageNumber <= totalPages && pageNumber != 1)
             {
                 // Links to previous page 
-                linkPageList.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.previous, lang, query, pageSize, pageNumber - 1, true));
+                linkPageList.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.previous, lang, query, pastDays, pageSize, pageNumber - 1, true));
             }
 
             if (totalPages > 1)
             {
                 // Links to last page 
-                linkPageList.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.last, lang, query, pageSize, totalPages, true));
+                linkPageList.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.last, lang, query, pastDays, pageSize, totalPages, true));
             }
 
             PageInfo page = new PageInfo
@@ -100,7 +102,7 @@ namespace PxWeb.Mappers
             var linkListTableResponse = new List<Link>();
 
             // Links to tablesResponse
-            linkListTableResponse.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.self, lang, query, page.PageSize, page.PageNumber, true));
+            linkListTableResponse.Add(_linkCreator.GetTablesLink(LinkCreator.LinkRelationEnum.self, lang, query, pastDays, page.PageSize, page.PageNumber, true));
 
             tablesResponse.Links = linkListTableResponse;
 

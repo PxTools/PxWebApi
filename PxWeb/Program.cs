@@ -43,6 +43,18 @@ namespace PxWeb
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // Paxiom settings
+            var omit = builder.Configuration.GetSection("PxApiConfiguration:OmitContentsInTitle");
+            if (omit != null && bool.TryParse(omit.Value, out bool omitContentsInTitle))
+            {
+                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = omitContentsInTitle;
+            }
+            else
+            {
+                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = true; // Default value
+            }
+
+
             // Only use Log4Net provider
             builder.Logging.ClearProviders();
             builder.Logging.AddLog4Net();
@@ -81,7 +93,23 @@ namespace PxWeb
 
             // configuration (resolvers, counter key builders)
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-            builder.Services.AddSingleton<IPxCache, PxCache>();
+            builder.Services.AddSingleton<IPxCache>(provider =>
+            {
+                var logger = provider.GetRequiredService<ILogger<PxCache>>();
+                var instance = new PxCache(logger);
+
+                // Gör något med instansen innan den returneras
+                var clearTime = builder.Configuration.GetSection("PxApiConfiguration:CacheClearTime").Value;
+
+                if (clearTime != null && DateTime.TryParse(clearTime, out DateTime time))
+                {
+                    DefaultCacheClearer.SetNextClearTime(time);
+                    instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
+                }
+
+                return instance;
+            });
+
             builder.Services.AddSingleton<ILinkCreator, LinkCreator>();
             builder.Services.AddSingleton<ISelectionHandler, SelectionHandler>();
             builder.Services.AddSingleton<IPlacementHandler, PlacementHandler>();
@@ -230,6 +258,7 @@ namespace PxWeb
 
             app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin") || context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
+                appBuilder.UseUsageLogMiddleware();
                 appBuilder.UseCacheMiddleware();
             });
 

@@ -6,31 +6,43 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using Px.Abstractions.Interfaces;
+
 using PxWeb.Api2.Server.Models;
 using PxWeb.Code;
 using PxWeb.Code.Api2;
+using PxWeb.Code.Api2.DataSelection;
 using PxWeb.Code.Api2.SavedQueryBackend;
 using PxWeb.Code.Api2.Serialization;
 using PxWeb.Helper.Api2;
+using PxWeb.Mappers;
 
 namespace PxWeb.Controllers.Api2
 {
     [ApiController]
     public class SavedQueryApiController : PxWeb.Api2.Server.Controllers.SavedQueriesApiController
     {
+        private readonly ISelectionResponseMapper _selectionResponseMapper;
+        private readonly IDataSource _dataSource;
+        private readonly ILanguageHelper _languageHelper;
         private readonly PxApiConfigurationOptions _configOptions;
         private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
         private readonly ISerializeManager _serializeManager;
         private readonly IDataWorkflow _dataWorkflow;
         private readonly ILogger<SavedQueryApiController> _logger;
+        private readonly ISelectionHandler _selectionHandler;
 
-        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger<SavedQueryApiController> logger)
+        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger<SavedQueryApiController> logger, IDataSource dataSource, ILanguageHelper languageHelper, ISelectionResponseMapper selectionResponseMapper, ISelectionHandler selectionHandler)
         {
             _dataWorkflow = dataWorkflow;
             _savedQueryBackendProxy = savedQueryStorageBackend;
             _serializeManager = serializeManager;
             _configOptions = configOptions.Value;
             _logger = logger;
+            _dataSource = dataSource;
+            _languageHelper = languageHelper;
+            _selectionResponseMapper = selectionResponseMapper;
+            _selectionHandler = selectionHandler;
         }
 
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
@@ -105,6 +117,13 @@ namespace PxWeb.Controllers.Api2
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
 
+            // Override the language if specified
+            var language = _languageHelper.HandleLanguage(lang);
+            if (!string.Equals(savedQuery.Language, language, StringComparison.OrdinalIgnoreCase))
+            {
+                savedQuery.Language = language;
+            }
+
             _savedQueryBackendProxy.UpdateRunStatistics(id);
 
             // 3. Override parameters to the SavedQuery
@@ -134,7 +153,45 @@ namespace PxWeb.Controllers.Api2
             Response.ContentType = serializationInfo.ContentType;
             Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
             serializationInfo.Serializer.Serialize(model, Response.Body);
+
+            HttpContext.AddLoggingContext(id, outputFormatStr, model.Data.MatrixSize);
+
             return Ok();
+        }
+
+        public override IActionResult GetSavedQuerySelection([FromRoute(Name = "id")][Required] string id, [FromQuery(Name = "lang")] string? lang)
+        {
+            lang = _languageHelper.HandleLanguage(lang);
+
+            VariablesSelection selection;
+
+            var savedQuery = _savedQueryBackendProxy.Load(id);
+            if (savedQuery is null)
+            {
+                _logger.LogNoSavedQueryWithGivenId();
+                return NotFound(ProblemUtility.NonExistentSavedQuery());
+            }
+
+            selection = savedQuery.Selection;
+
+            var builder = _dataSource.CreateBuilder(savedQuery.TableId, lang);
+            if (builder == null)
+            {
+                _logger.LogNoTableWithGivenId();
+                return NotFound(ProblemUtility.NonExistentTable());
+            }
+
+            builder.BuildForSelection();
+
+            if (!_selectionHandler.ExpandAndVerfiySelections(selection, builder, out Problem? problem))
+            {
+                _logger.LogParameterError();
+                return BadRequest(problem);
+            }
+
+            //Map selection to SelectionResponse
+            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, id, lang);
+            return Ok(selectionResponse);
         }
 
     }

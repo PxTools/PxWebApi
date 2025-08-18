@@ -7,6 +7,11 @@
         public int ResponseCode { get; set; }
         public string ContentDisposition { get; set; }
 
+        public string? TableId { get; set; }
+        public string? Format { get; set; }
+        public int? MatrixSize { get; set; }
+
+
         public CachedResponse(byte[] content, string? responseType, int responseCode, string contentDisposition)
         {
             this.Content = content;
