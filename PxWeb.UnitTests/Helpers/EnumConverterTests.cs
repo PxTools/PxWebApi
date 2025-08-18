@@ -42,7 +42,7 @@ namespace PxWeb.UnitTests.Helpers
         public void ConvertFromStringOutputFormatParam_InvalidValue_ThrowsException()
         {
             // Act
-            Assert.ThrowsException<InvalidOperationException>(() => EnumConverter.ToEnum<OutputFormatParamType>("X"));
+            Assert.ThrowsExactly<InvalidOperationException>(() => EnumConverter.ToEnum<OutputFormatParamType>("X"));
 
         }
 
