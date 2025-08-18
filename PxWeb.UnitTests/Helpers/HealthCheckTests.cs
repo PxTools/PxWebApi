@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 
 using PxWeb.Code;
 
@@ -8,7 +9,7 @@ namespace PxWeb.UnitTests.Helpers
 {
 
     [TestClass]
-    public class MaintenanceHealthCheckTests
+    public class HealthCheckTests
     {
 
         [TestMethod]
@@ -56,6 +57,32 @@ namespace PxWeb.UnitTests.Helpers
             Assert.AreEqual(result.Status, HealthStatus.Degraded);
 
             File.Delete(maintenanceFilePath);
+        }
+
+        [TestMethod]
+        public void When_StrangeQuery_Then_DbCheckIsDown()
+        {
+
+            // Arrange
+            var options = new Mock<IOptions<CnmmConfigurationOptions>>();
+
+            var config = new CnmmConfigurationOptions()
+            {
+                DatabaseID = "TestDatabase",
+                HealthCheckQuery = "SELECT * FROM NonExistentTable" // Intentionally wrong query
+            };
+
+            options.Setup(o => o.Value).Returns(config);
+
+            var healthCheck = new SqlDbConnectionHealthCheck(options.Object);
+
+            // Act
+            var context = new HealthCheckContext();
+            var cancellationToken = CancellationToken.None;
+            var result = healthCheck.CheckHealthAsync(context, cancellationToken).Result;
+            // Assert
+            Assert.AreEqual(result.Status, HealthStatus.Unhealthy);
+
         }
 
     }

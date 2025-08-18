@@ -21,11 +21,18 @@ namespace PxWeb.Code
 
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
         {
-            if (ApiUtilStatic.IsDbConnectionHealthy(_query))
+            try
             {
-                return Task.FromResult(HealthCheckResult.Healthy("Db connection ok!"));
+                if (ApiUtilStatic.IsDbConnectionHealthy(_query))
+                {
+                    return Task.FromResult(HealthCheckResult.Healthy("Db connection ok!"));
+                }
+                return Task.FromResult(HealthCheckResult.Unhealthy("Failed to query database!"));
             }
-            return Task.FromResult(HealthCheckResult.Unhealthy("Failed to query database!"));
+            catch
+            {
+                return Task.FromResult(HealthCheckResult.Unhealthy("Failed to query database!"));
+            }
 
         }
     }
