@@ -28,7 +28,7 @@ namespace PxWeb.UnitTests.Helpers
             var cancellationToken = CancellationToken.None;
             var result = healthCheck.CheckHealthAsync(context, cancellationToken).Result;
             // Assert
-            Assert.AreEqual(result.Status, HealthStatus.Healthy);
+            Assert.AreEqual(HealthStatus.Healthy, result.Status);
         }
 
 
@@ -54,7 +54,7 @@ namespace PxWeb.UnitTests.Helpers
             var cancellationToken = CancellationToken.None;
             var result = healthCheck.CheckHealthAsync(context, cancellationToken).Result;
             // Assert
-            Assert.AreEqual(result.Status, HealthStatus.Degraded);
+            Assert.AreEqual(HealthStatus.Degraded, result.Status);
 
             File.Delete(maintenanceFilePath);
         }
@@ -81,7 +81,7 @@ namespace PxWeb.UnitTests.Helpers
             var cancellationToken = CancellationToken.None;
             var result = healthCheck.CheckHealthAsync(context, cancellationToken).Result;
             // Assert
-            Assert.AreEqual(result.Status, HealthStatus.Unhealthy);
+            Assert.AreEqual(HealthStatus.Unhealthy, result.Status);
 
         }
 
