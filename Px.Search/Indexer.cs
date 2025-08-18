@@ -111,7 +111,7 @@
         /// <summary>
         /// Traverses the database and looks for tables to add in the index.
         /// </summary>
-        /// <param name="id">current node id</param>
+        /// <param name="item">the current node</param>
         /// <param name="language">current processing language</param>
         /// <param name="index">the index to use</param>
         private void TraverseDatabase(Item? item, string language, IIndex index)
@@ -246,7 +246,7 @@
             }
         }
 
-        private TableInformation GetTableInformation(string id, TableLink tblLink, PXMeta meta)
+        private static TableInformation GetTableInformation(string id, TableLink tblLink, PXMeta meta)
         {
             TableInformation tbl = new TableInformation(id, tblLink.Text, GetCategory(tblLink), meta.GetFirstTimeValue(), meta.GetLastTimeValue(), (from v in meta.Variables select v.Name).ToArray());
             tbl.Source = meta.Source;
