@@ -159,7 +159,7 @@ namespace PxWeb.Mappers
 
             var selfLink = _linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.self, id.ToUpper(), language, true);
 
-            dataset.AddLinksOnRoot(selfLink);
+            dataset.AddSelfLink(selfLink);
 
 
             return dataset;
