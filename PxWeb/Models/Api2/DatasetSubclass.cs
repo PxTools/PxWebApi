@@ -489,11 +489,6 @@ namespace PxWeb.Models.Api2
             dimensionValue.Extension.CodeLists.AddRange(codeLists);
         }
 
-        public void AddSelfLink(Link selfLink)
-        {
-            this.Href = selfLink.Href;
-        }
-
         public static void AddMeasuringType(DimensionValue dimensionValue, string valueCode, MeasuringType measuringType)
         {
             dimensionValue.Extension ??= new ExtensionDimension();

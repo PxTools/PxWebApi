@@ -1,7 +1,6 @@
 {
   "version": "2.0",
   "class": "dataset",
-  "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en",
   "label": "Disposal facilities by treatment category, waste category, contents and year",
   "source": "Statistics Sweden",
   "updated": "2023-05-25T14:13:00Z",

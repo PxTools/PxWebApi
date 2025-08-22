@@ -1,7 +1,6 @@
 {
   "version": "2.0",
   "class": "dataset",
-  "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en",
   "label": "Total air emissions by sector, greenhouse gas, contents and year",
   "source": "Statistics Sweden",
   "updated": "VALUE_HAS_BEEN_REPLACED",

@@ -156,12 +156,6 @@ namespace PxWeb.Mappers
 
             AddTableNotes(model, dataset);
 
-
-            var selfLink = _linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.self, id.ToUpper(), language, true);
-
-            dataset.AddSelfLink(selfLink);
-
-
             return dataset;
         }
 
