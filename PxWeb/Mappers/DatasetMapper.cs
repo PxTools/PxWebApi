@@ -156,6 +156,8 @@ namespace PxWeb.Mappers
 
             AddTableNotes(model, dataset);
 
+            dataset.Value = new List<double?>();
+
             return dataset;
         }
 
