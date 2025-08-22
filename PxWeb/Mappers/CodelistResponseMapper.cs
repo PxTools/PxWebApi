@@ -19,7 +19,7 @@ namespace PxWeb.Mappers
             _language = _configOptions.DefaultLanguage;
         }
 
-        public CodeListResponse Map(Codelist codelist, string language)
+        public CodelistResponse Map(Codelist codelist, string language)
         {
             string id = codelist.Id;
 
@@ -32,7 +32,7 @@ namespace PxWeb.Mappers
                 id = "vs_" + id;
             }
 
-            CodeListResponse codeListResponse = new CodeListResponse();
+            var codeListResponse = new CodelistResponse();
             codeListResponse.Id = id;
             codeListResponse.Label = codelist.Label;
             codeListResponse.Language = language;
@@ -64,16 +64,16 @@ namespace PxWeb.Mappers
             return codeListResponse;
         }
 
-        private CodeListType GetCodelistType(Codelist.CodelistTypeEnum type)
+        private CodelistType GetCodelistType(Codelist.CodelistTypeEnum type)
         {
             switch (type)
             {
                 case Codelist.CodelistTypeEnum.ValueSet:
-                    return CodeListType.ValuesetEnum;
+                    return CodelistType.ValuesetEnum;
                 case Codelist.CodelistTypeEnum.Aggregation:
-                    return CodeListType.AggregationEnum;
+                    return CodelistType.AggregationEnum;
                 default:
-                    return CodeListType.AggregationEnum;
+                    return CodelistType.AggregationEnum;
             }
         }
 

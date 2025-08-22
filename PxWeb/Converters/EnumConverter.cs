@@ -7,10 +7,10 @@ namespace PxWeb.Converters
 {
     public class EnumConverter
     {
-        public static Table.CategoryEnum ToCategoryEnum(string category)
+        public static TableCategory ToCategoryEnum(string category)
         {
-            Table.CategoryEnum enumCategory = new Table.CategoryEnum();
-            var enumType = typeof(Table.CategoryEnum);
+            TableCategory enumCategory = new TableCategory();
+            var enumType = typeof(TableCategory);
 
             foreach (var name in Enum.GetNames(enumType))
             {
@@ -22,7 +22,7 @@ namespace PxWeb.Converters
 
                 if (enumMemberAttribute.Value == category)
                 {
-                    Table.CategoryEnum categoryEnum = (Table.CategoryEnum)Enum.Parse(enumType, name);
+                    TableCategory categoryEnum = (TableCategory)Enum.Parse(enumType, name);
                     return enumCategory = categoryEnum;
                 }
             }

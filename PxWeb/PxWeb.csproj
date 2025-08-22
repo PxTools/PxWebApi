@@ -49,7 +49,7 @@
     <PackageReference Include="PCAxis.Menu.ConfigDatamodelMenu" Version="1.0.9" />
     <PackageReference Include="PCAxis.Serializers" Version="1.9.1" />
     <PackageReference Include="PcAxis.Sql" Version="1.4.5" />
-    <PackageReference Include="PxWeb.Api2.Server" Version="2.0.0-beta.19" />
+    <PackageReference Include="PxWeb.Api2.Server" Version="2.0.0-beta.22" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="9.0.3" />

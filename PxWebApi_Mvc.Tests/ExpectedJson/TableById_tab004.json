@@ -1,5 +1,5 @@
 {
-  "type": "Table",
+  "language": "en",
   "id": "TAB004",
   "label": "Total air emissions by sector, greenhouse gas, contents and year",
   "description": "",
@@ -40,6 +40,5 @@
       "hreflang": "en",
       "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
     }
-  ],
-  "language": "en"
+  ]
 }

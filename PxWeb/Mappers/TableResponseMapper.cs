@@ -35,8 +35,6 @@ namespace PxWeb.Mappers
 
             TableResponse tableResponse = new TableResponse()
             {
-
-                Type = FolderContentItemTypeEnum.TableEnum,
                 Id = searchResult.Id,
                 Label = searchResult.Label,
                 Description = searchResult.Description,
@@ -47,7 +45,7 @@ namespace PxWeb.Mappers
                 Updated = searchResult.Updated,
                 FirstPeriod = searchResult.FirstPeriod,
                 LastPeriod = searchResult.LastPeriod,
-                Category = EnumConverter.ToCategoryEnum(searchResult.Category),
+                Category = EnumConverter.ToEnum<TableCategory>(searchResult.Category),
                 Discontinued = searchResult.Discontinued,
                 VariableNames = searchResult.VariableNames.ToList(),
                 Links = linkList,

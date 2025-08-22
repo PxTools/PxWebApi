@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 
 using PCAxis.Paxiom;
 
-using Px.Abstractions;
 using Px.Abstractions.Interfaces;
 using Px.Search;
 
@@ -30,14 +29,14 @@ namespace PxWeb.Controllers.Api2
     /// 
     /// </summary>
     [ApiController]
-    public class TableApiController : PxWeb.Api2.Server.Controllers.TableApiController
+    public class TablesApiController : PxWeb.Api2.Server.Controllers.TablesApiController
     {
         private readonly IDataSource _dataSource;
         private readonly ILanguageHelper _languageHelper;
         private readonly IDatasetMapper _datasetMapper;
         private readonly ITablesResponseMapper _tablesResponseMapper;
         private readonly ITableResponseMapper _tableResponseMapper;
-        private readonly ICodelistResponseMapper _codelistResponseMapper;
+
         private readonly ISearchBackend _backend;
         private readonly ISerializeManager _serializeManager;
         private readonly PxApiConfigurationOptions _configOptions;
@@ -46,9 +45,9 @@ namespace PxWeb.Controllers.Api2
         private readonly IDefaultSelectionAlgorithm _defaultSelectionAlgorithm;
         private readonly IDataWorkflow _dataWorkflow;
         private readonly ISavedQueryBackendProxy _savedQueryBackendProxy;
-        private readonly ILogger<TableApiController> _logger;
+        private readonly ILogger<TablesApiController> _logger;
 
-        public TableApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryBackendProxy, ILogger<TableApiController> logger)
+        public TablesApiController(IDataSource dataSource, ILanguageHelper languageHelper, IDatasetMapper datasetMapper, ISearchBackend backend, IOptions<PxApiConfigurationOptions> configOptions, ITablesResponseMapper tablesResponseMapper, ITableResponseMapper tableResponseMapper, ICodelistResponseMapper codelistResponseMapper, ISelectionResponseMapper selectionResponseMapper, ISerializeManager serializeManager, ISelectionHandler selectionHandler, IDefaultSelectionAlgorithm defaultSelectionAlgorithm, IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryBackendProxy, ILogger<TablesApiController> logger)
         {
             _logger = logger;
             _dataSource = dataSource;
@@ -58,7 +57,6 @@ namespace PxWeb.Controllers.Api2
             _configOptions = configOptions.Value;
             _tablesResponseMapper = tablesResponseMapper;
             _tableResponseMapper = tableResponseMapper;
-            _codelistResponseMapper = codelistResponseMapper;
             _serializeManager = serializeManager;
             _selectionHandler = selectionHandler;
             _selectionResponseMapper = selectionResponseMapper;
@@ -172,21 +170,7 @@ namespace PxWeb.Controllers.Api2
 
         }
 
-        public override IActionResult GetTableCodeListById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
-        {
-            lang = _languageHelper.HandleLanguage(lang);
-            Codelist? codelist = _dataSource.GetCodelist(id, lang);
 
-            if (codelist != null)
-            {
-                return Ok(_codelistResponseMapper.Map(codelist, lang));
-            }
-            else
-            {
-                _logger.LogNoCodelistWithGivenId();
-                return NotFound(ProblemUtility.NonExistentCodelist());
-            }
-        }
 
         public override IActionResult ListAllTables([FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "query")] string? query, [FromQuery(Name = "pastDays")] int? pastDays, [FromQuery(Name = "includeDiscontinued")] bool? includeDiscontinued, [FromQuery(Name = "pageNumber")] int? pageNumber, [FromQuery(Name = "pageSize")] int? pageSize)
         {

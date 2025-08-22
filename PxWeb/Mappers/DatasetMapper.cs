@@ -139,7 +139,7 @@ namespace PxWeb.Mappers
 
 
                 //Codelists
-                var codeLists = new System.Collections.Generic.List<CodeListInformation>();
+                var codeLists = new System.Collections.Generic.List<CodelistInformation>();
                 MapCodelists(codeLists, variable);
                 if (codeLists != null)
                 {
@@ -593,25 +593,25 @@ namespace PxWeb.Mappers
 
 
 
-        private CodeListInformation Map(PCAxis.Paxiom.GroupingInfo grouping)
+        private CodelistInformation Map(PCAxis.Paxiom.GroupingInfo grouping)
         {
-            CodeListInformation codelist = new CodeListInformation();
+            var codelist = new CodelistInformation();
 
             codelist.Id = "agg_" + grouping.ID;
             codelist.Label = grouping.Name;
-            codelist.Type = CodeListType.AggregationEnum;
+            codelist.Type = CodelistType.AggregationEnum;
             codelist.Links = new System.Collections.Generic.List<Link>();
             codelist.Links.Add(_linkCreator.GetCodelistLink(LinkCreator.LinkRelationEnum.metadata, codelist.Id, _language));
 
             return codelist;
         }
-        private CodeListInformation Map(PCAxis.Paxiom.ValueSetInfo valueset)
+        private CodelistInformation Map(PCAxis.Paxiom.ValueSetInfo valueset)
         {
-            CodeListInformation codelist = new CodeListInformation();
+            var codelist = new CodelistInformation();
 
             codelist.Id = "vs_" + valueset.ID;
             codelist.Label = valueset.Name;
-            codelist.Type = CodeListType.ValuesetEnum;
+            codelist.Type = CodelistType.ValuesetEnum;
             codelist.Links = new System.Collections.Generic.List<Link>();
             codelist.Links.Add(_linkCreator.GetCodelistLink(LinkCreator.LinkRelationEnum.metadata, codelist.Id, _language));
 
@@ -619,7 +619,7 @@ namespace PxWeb.Mappers
         }
 
 
-        private void MapCodelists(System.Collections.Generic.List<CodeListInformation> codelists, Variable variable)
+        private void MapCodelists(System.Collections.Generic.List<CodelistInformation> codelists, Variable variable)
         {
             if (variable.HasGroupings())
             {
