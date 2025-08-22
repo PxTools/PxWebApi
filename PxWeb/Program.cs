@@ -4,6 +4,7 @@ using System.Text;
 using AspNetCoreRateLimit;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,20 @@ namespace PxWeb
 
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
+
+            var hBuilder = builder.Services.AddHealthChecks()
+                            .AddCheck<MaintenanceHealthCheck>(
+                            "Maintenance",
+                            tags: new[] { "ready" });
+            var datasourceType = builder.Configuration.GetSection("DataSource:DataSourceType").Value ?? "PX";
+            if (datasourceType.Equals("CNMM", StringComparison.OrdinalIgnoreCase))
+            {
+                // var sqlQuery = builder.Configuration.GetSection("DataSource:CNMM:HealthCheckQuery").Value ?? CnmmConfigurationOptions.DEFAULT_QUERY;
+
+                hBuilder.AddCheck<SqlDbConnectionHealthCheck>(
+                    "Database",
+                    tags: new[] { "ready" });
+            }
 
             // needed to store rate limit counters and ip rules
             builder.Services.AddMemoryCache();
@@ -222,6 +237,17 @@ namespace PxWeb
                     appBuilder.UseAdminProtectionKey();
                 });
             }
+
+            app.MapHealthChecks("/healthz/live", new HealthCheckOptions
+            {
+                Predicate = _ => false
+            });
+
+            app.MapHealthChecks("/healthz/ready", new HealthCheckOptions
+            {
+                Predicate = healthCheck => healthCheck.Tags.Contains("ready")
+            });
+
             app.MapControllers();
 
             if (!app.Environment.IsDevelopment())
@@ -229,7 +255,7 @@ namespace PxWeb
                 app.UseIpRateLimiting();
             }
 
-            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin")), appBuilder =>
+            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin") || context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
                 appBuilder.UseUsageLogMiddleware();
                 appBuilder.UseCacheMiddleware();
