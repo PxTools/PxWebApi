@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -156,7 +156,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             if (id.Contains('/'))
             {
-                return Path.GetFileName(id);
+                return System.IO.Path.GetFileName(id);
             }
             else
             {
@@ -202,9 +202,37 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public Item? LoadDatabaseStructure(string language)
         {
-            var filePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+            var filePath = System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
             var menu = new XmlMenu(filePath, language);
             return menu.CurrentItem;
+        }
+
+        public Dictionary<string, List<string>> GetTableLanguages()
+        {
+            var doc = XDocument.Load(System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml"));
+
+            var pairs = doc.Descendants("Link").Where(l => l.Attribute("tableId") != null).Select(l => new { TableId = l.Attribute("tableId"), Lang = l.Ancestors("Language").First().Attribute("lang") });
+
+            var mapping = new Dictionary<string, List<string>>();
+
+            foreach (var pair in pairs)
+            {
+
+                if (pair.TableId is null || pair.Lang is null)
+                {
+                    continue;
+                }
+
+                //Check if mapping already contains the tableId if not create an empty list
+                if (!mapping.ContainsKey(pair.TableId.Value))
+                {
+                    mapping[pair.TableId.Value] = new List<string>();
+                }
+                mapping[pair.TableId.Value].Add(pair.Lang.Value);
+
+            }
+
+            return mapping;
         }
     }
 }

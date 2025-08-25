@@ -31,5 +31,6 @@
         public string Source { get; set; }
         public string TimeUnit { get; set; }
         public string SubjectCode { get; set; } = string.Empty;
+        public string[] Languages { get; set; } = new string[] { };
     }
 }

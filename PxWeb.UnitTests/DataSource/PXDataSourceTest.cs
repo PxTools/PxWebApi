@@ -294,6 +294,42 @@ namespace PxWeb.UnitTests.DataSource
             return resolver;
         }
 
+        [TestMethod]
+        public void ShouldReturnMappingOfTableLanguages()
+        {
 
+            //arrange
+            var testFactory = new TestFactory();
+            var memorymock = new Mock<IPxCache>();
+            var configMock = new Mock<IPxApiConfigurationService>();
+            var configServiceMock = new Mock<IPxFileConfigurationService>();
+            var hostingEnvironmentMock = new Mock<IPxHost>();
+            var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
+            var codelistMapperMock = new Mock<ICodelistMapper>();
+
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+
+            var config = testFactory.GetPxApiConfiguration();
+            configMock.Setup(x => x.GetConfiguration()).Returns(config);
+
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
+
+            var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
+
+            hostingEnvironmentMock
+                .Setup(m => m.RootPath)
+                .Returns(wwwrootPath);
+
+            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
+            var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
+            var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
+
+
+            //act
+            var result = datasource.GetTableLanguages();
+
+            //assert
+            Assert.IsNotNull(result);
+        }
     }
 }

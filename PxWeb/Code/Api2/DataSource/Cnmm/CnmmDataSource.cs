@@ -268,5 +268,11 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
             return outItem;
         }
+
+        public Dictionary<string, List<string>> GetTableLanguages()
+        {
+            throw new NotImplementedException();
+            //GetMenuLockupTables
+        }
     }
 }

@@ -210,6 +210,7 @@ namespace Px.Search.Lucene
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, tbl.TimeUnit, Field.Store.YES));
                 doc.Add(new TextField(SearchConstants.SEARCH_SUBJECT_CODE, tbl.SubjectCode, Field.Store.YES));
                 doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
+                doc.Add(new StoredField(SearchConstants.SEARCH_AVAILABLE_LANGUAGES, string.Join("|", tbl.Languages)));
                 if (!string.IsNullOrEmpty(meta.Synonyms))
                 {
                     doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SYNONYMS, meta.Synonyms, Field.Store.NO));

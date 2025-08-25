@@ -10,6 +10,7 @@
         private readonly ILogger _logger;
         private List<string> _indexedTables;
         private readonly Dictionary<string, List<Level[]>> _breadcrumbs;
+        private Dictionary<string, List<string>> _tableLanguages;
 
         public Indexer(IDataSource dataSource, ISearchBackend backend, ILogger logger)
         {
@@ -18,6 +19,7 @@
             _logger = logger;
             _indexedTables = new List<string>();
             _breadcrumbs = new Dictionary<string, List<Level[]>>();
+            _tableLanguages = new Dictionary<string, List<string>>();
         }
 
         /// <summary>
@@ -26,6 +28,7 @@
         /// <param name="languages">list of languages codes that the search index will be able to be searched for</param>
         public void IndexDatabase(List<string> languages)
         {
+            _tableLanguages = _source.GetTableLanguages();
             using (var index = _backend.GetIndex())
             {
                 foreach (var language in languages)
@@ -170,6 +173,7 @@
         /// <param name="languages">list of languages codes that the search index will be able to be searched for</param>
         public void UpdateTableEntries(List<string> tables, List<string> languages)
         {
+            _tableLanguages = _source.GetTableLanguages();
             using (var index = _backend.GetIndex())
             {
                 foreach (var language in languages)
@@ -207,7 +211,7 @@
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
                     tbl.Paths = _breadcrumbs[id];
-
+                    tbl.Languages = _tableLanguages.TryGetValue(id, out List<string>? value) ? [.. value] : [language];
                     index.AddEntry(tbl, model.Meta);
                 }
                 catch (Exception ex)
@@ -232,7 +236,7 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
-
+                    tbl.Languages = _tableLanguages.TryGetValue(id, out List<string>? value) ? [.. value] : [language];
                     index.UpdateEntry(tbl, model.Meta);
                 }
                 catch (Exception ex)

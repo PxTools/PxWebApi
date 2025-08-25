@@ -56,5 +56,12 @@
         /// <param name="to">Lastest. MaxDate. Inclusive</param>
         /// <returns>A list of (url-type) tableids (cnmm:maintable.tableid) which may be empty</returns>
         List<string> GetTablesPublishedBetween(DateTime from, DateTime to);
+
+        /// <summary>
+        /// Retrieves a dictionary mapping tableId to their associated languages.
+        /// </summary>
+        /// <returns>A dictionary where the keys are tableId and the values are lists of strings representing the languages
+        /// associated with each table. The dictionary will be empty if no tables or languages are available.</returns>
+        Dictionary<string, List<string>> GetTableLanguages();
     }
 }
