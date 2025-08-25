@@ -1,0 +1,43 @@
+name: Publish release assets
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        arch: [win-x64]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: "./global.json"
+
+      - name: Restore dependencies
+        run: dotnet restore --runtime ${{ matrix.arch }}
+
+      - name: Build the application
+        run: dotnet build --no-restore --runtime ${{ matrix.arch }} PxWeb/PxWeb.csproj
+
+      - name: Publish the application
+        run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj
+
+      - name: Create zip file
+        run: zip -x release/wwwroot/Database/\* -r pxwebapi-${{ matrix.arch }}.zip ./release
+
+      - name: Upload release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          gh release upload ${{ env.TAG_NAME }} pxwebapi-${{ matrix.arch }}.zip
