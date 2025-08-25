@@ -204,8 +204,41 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             var filePath = System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
             var menu = new XmlMenu(filePath, language);
+
+            // Fix selection for subitems - we only want the last part...
+            if (menu.CurrentItem is PxMenuItem)
+            {
+                foreach (var item in ((PxMenuItem)(menu.CurrentItem)).SubItems)
+                {
+                    if ((item is PxMenuItem) || (item is TableLink))
+                    {
+                        //Hmm, doesnt this mean that a TableLink for TAB004  will differ when it is root and in a folder? It that ok?
+                        //Yes, it seems. item.ID.Selection is not used by CreateMenuTableLinnk client.  
+                        item.ID.Selection = GetIdentifierWithoutPath(item.ID.Selection);
+                    }
+                }
+            }
+
+            FixItemSelectionRecursive((PxMenuItem)menu.CurrentItem);
             return menu.CurrentItem;
         }
+
+
+        private void FixItemSelectionRecursive(PxMenuItem currentItem)
+        {
+            foreach (var item in currentItem.SubItems)
+            {
+                if ((item is PxMenuItem) || (item is TableLink))
+                {
+                    item.ID.Selection = GetIdentifierWithoutPath(item.ID.Selection);
+                    if (item is PxMenuItem menuItem)
+                    {
+                        FixItemSelectionRecursive(menuItem);
+                    }
+                }
+            }
+        }
+
 
         public Dictionary<string, List<string>> GetTableLanguages()
         {
