@@ -1,6 +1,4 @@
-﻿using System;
-
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 namespace PxWeb.UnitTests.DataSource
 {
@@ -165,9 +163,9 @@ namespace PxWeb.UnitTests.DataSource
         }
 
         [TestMethod]
-        public void GetTableLanguagesShouldThrowExceptionWhnNoDataSourceSpecified()
+        public void GetTableLanguages_ShouldReturn_emptyMappingWhenNoDataSourceSpecified()
         {
-            //todo, mock database 
+
             string language = "en";
             var memorymock = new Mock<IPxCache>();
             var configMock = new Mock<IPxApiConfigurationService>();
@@ -185,8 +183,12 @@ namespace PxWeb.UnitTests.DataSource
             pxApiConfig.Setup(x => x.Value).Returns(config);
             var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object, pxApiConfig.Object);
 
-            Assert.Throws<Exception>(() => datasource.GetTableLanguages());
+            //Act
+            var mapping = datasource.GetTableLanguages();
 
+            //Assert
+            Assert.IsNotNull(mapping);
+            Assert.AreEqual(0, mapping.Count);
 
         }
 

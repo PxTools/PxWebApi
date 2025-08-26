@@ -280,22 +280,27 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
             foreach (var lang in _languages)
             {
-                var tables = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetMenuLookupTables(lang);
-                foreach (var table in tables.Keys)
+                try
                 {
-                    if (mapping.TryGetValue(table, out var list))
+                    var tables = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetMenuLookupTables(lang);
+                    foreach (var table in tables.Keys)
                     {
-                        list.Add(lang);
-                    }
-                    else
-                    {
-                        mapping[table] = new List<string> { lang };
+                        if (mapping.TryGetValue(table, out var list))
+                        {
+                            list.Add(lang);
+                        }
+                        else
+                        {
+                            mapping[table] = new List<string> { lang };
+                        }
                     }
                 }
+                catch
+                {
+                    // Ignore errors for languages that are not configured correctly
+                }
             }
-
             return mapping;
-
         }
     }
 }
