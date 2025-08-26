@@ -130,7 +130,6 @@ namespace PxWeb
             builder.Services.AddTransient<IAdminProtectionConfigurationService, AdminProtectionConfigurationService>();
             builder.Services.AddTransient<ICacheMiddlewareConfigurationService, CacheMiddlewareConfigurationService>();
             builder.Services.AddTransient<ILanguageHelper, LanguageHelper>();
-            builder.Services.AddTransient<IFolderResponseMapper, FolderResponseMapper>();
             builder.Services.AddTransient<IDatasetMapper, DatasetMapper>();
             builder.Services.AddTransient<ITablesResponseMapper, TablesResponseMapper>();
             builder.Services.AddTransient<ITableResponseMapper, TableResponseMapper>();

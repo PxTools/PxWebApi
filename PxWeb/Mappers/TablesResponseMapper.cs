@@ -83,7 +83,6 @@ namespace PxWeb.Mappers
 
                 var tb = new Table()
                 {
-                    Type = FolderContentItemTypeEnum.TableEnum,
                     Id = item.Id,
                     Label = item.Label,
                     Source = item.Source,
@@ -94,7 +93,7 @@ namespace PxWeb.Mappers
                     Updated = item.Updated,
                     FirstPeriod = item.FirstPeriod,
                     LastPeriod = item.LastPeriod,
-                    Category = EnumConverter.ToCategoryEnum(item.Category),
+                    Category = EnumConverter.ToEnum<TableCategory>(item.Category),
                     Discontinued = item.Discontinued,
                     VariableNames = item.VariableNames.ToList(),
                     Links = linkList,

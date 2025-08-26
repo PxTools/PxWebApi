@@ -2,7 +2,6 @@
   "language": "en",
   "tables": [
     {
-      "type": "Table",
       "id": "TAB004",
       "label": "Total air emissions by sector, greenhouse gas, contents and year",
       "description": "",
@@ -50,7 +49,6 @@
       ]
     },
     {
-      "type": "Table",
       "id": "TAB005",
       "label": "Land use in Sweden, hectares by region, land use, contents and year",
       "description": "",
@@ -98,7 +96,6 @@
       ]
     },
     {
-      "type": "Table",
       "id": "TAB003",
       "label": "Disposal facilities by treatment category, waste category, contents and year",
       "description": "",
@@ -146,7 +143,6 @@
       ]
     },
     {
-      "type": "Table",
       "id": "TAB001",
       "label": "Population by region, sex, age, contents and year",
       "description": "",
@@ -194,7 +190,6 @@
       ]
     },
     {
-      "type": "Table",
       "id": "TAB002",
       "label": "Population by region, sex, age, citizenship, contents and year",
       "description": "",

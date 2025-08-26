@@ -6,6 +6,6 @@ namespace PxWeb.Mappers
 {
     public interface ICodelistResponseMapper
     {
-        CodeListResponse Map(Codelist codelist, string language);
+        CodelistResponse Map(Codelist codelist, string language);
     }
 }

@@ -476,7 +476,7 @@ namespace PxWeb.Models.Api2
 
         }
 
-        public static void AddCodelist(DimensionValue dimensionValue, List<CodeListInformation> codeLists)
+        public static void AddCodelist(DimensionValue dimensionValue, List<CodelistInformation> codeLists)
         {
             if (dimensionValue.Extension is null)
             {
@@ -484,7 +484,7 @@ namespace PxWeb.Models.Api2
             }
             if (dimensionValue.Extension.CodeLists == null)
             {
-                dimensionValue.Extension.CodeLists = new List<CodeListInformation>();
+                dimensionValue.Extension.CodeLists = new List<CodelistInformation>();
             }
             dimensionValue.Extension.CodeLists.AddRange(codeLists);
         }
