@@ -331,5 +331,43 @@ namespace PxWeb.UnitTests.DataSource
             //assert
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void LoadDatabaseStructure_ShouldNotHaveDatabaseInId()
+        {
+            //arrange
+            var testFactory = new TestFactory();
+            var memorymock = new Mock<IPxCache>();
+            var configMock = new Mock<IPxApiConfigurationService>();
+            var configServiceMock = new Mock<IPxFileConfigurationService>();
+            var hostingEnvironmentMock = new Mock<IPxHost>();
+            var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
+            var codelistMapperMock = new Mock<ICodelistMapper>();
+
+            var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
+
+            var config = testFactory.GetPxApiConfiguration();
+            configMock.Setup(x => x.GetConfiguration()).Returns(config);
+
+            var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
+
+            var wwwrootPath = GetFullPathToFile(@"PxWeb/wwwroot/");
+
+            hostingEnvironmentMock
+                .Setup(m => m.RootPath)
+                .Returns(wwwrootPath);
+
+            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
+            var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
+            var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
+
+            //act
+            var menu = datasource.LoadDatabaseStructure("en");
+
+            //assert
+            Assert.IsNotNull(menu);
+            Assert.IsFalse(((PxMenuItem)menu).SubItems.Any(t => t.ID.Selection.Contains("Database/")));
+        }
+
     }
 }
