@@ -1,17 +1,9 @@
 {
   "version": "2.0",
   "class": "dataset",
-  "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en",
   "label": "Disposal facilities by treatment category, waste category, contents and year",
   "source": "Statistics Sweden",
   "updated": "2023-05-25T14:13:00Z",
-  "link": {
-    "data": [
-      {
-        "href": "https://www.pxapi.com/api/v2/tables/TAB003/data?lang=en&outputFormat=px"
-      }
-    ]
-  },
   "note": [
     ".. = Data not available"
   ],
@@ -255,5 +247,6 @@
         "raw": "Test3 Testsson3, SCB#Tel: 08-111 222 33#Fax: 08-222 333 44#E-mail: test3.testsson3@scb.se"
       }
     ]
-  }
+  },
+  "value": []
 }
