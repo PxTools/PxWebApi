@@ -108,7 +108,7 @@ namespace PxWebApi_Mvc.Tests
         }
 
         [TestMethod]
-        public async Task GetSavedQuery_WhenOK_ShoudlReturnSameQuery()
+        public async Task GetSavedQuery_WhenOK_ShoudlReturnSaveQuery()
         {
             // Arrange
             await using var application = new WebApplicationFactory<Program>();
@@ -126,7 +126,7 @@ namespace PxWebApi_Mvc.Tests
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             var rawActual = await response.Content.ReadAsStringAsync();
-            var actualQuery = JsonConvert.DeserializeObject<SavedQuery>(rawActual);
+            var actualQuery = JsonConvert.DeserializeObject<SavedQueryResponse>(rawActual)?.SavedQuery;
 
             Assert.IsNotNull(actualQuery);
             Assert.IsNotNull(actualQuery.Id);
