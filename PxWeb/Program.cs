@@ -138,6 +138,7 @@ namespace PxWeb
             builder.Services.AddTransient<ICodelistMapper, CodelistMapper>();
             builder.Services.AddTransient<ICodelistResponseMapper, CodelistResponseMapper>();
             builder.Services.AddTransient<ISelectionResponseMapper, SelectionResponseMapper>();
+            builder.Services.AddTransient<ISavedQueryResponseMapper, SavedQueryResponseMapper>();
             builder.Services.AddTransient<IDefaultSelectionAlgorithm, Bjarte3>();
 
             builder.Services.AddHostedService<LongRunningService>();

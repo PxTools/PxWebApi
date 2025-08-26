@@ -31,8 +31,9 @@ namespace PxWeb.Controllers.Api2
         private readonly IDataWorkflow _dataWorkflow;
         private readonly ILogger<SavedQueryApiController> _logger;
         private readonly ISelectionHandler _selectionHandler;
+        private readonly SavedQueryResponseMapper _savedQueryResponseMapper;
 
-        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger<SavedQueryApiController> logger, IDataSource dataSource, ILanguageHelper languageHelper, ISelectionResponseMapper selectionResponseMapper, ISelectionHandler selectionHandler)
+        public SavedQueryApiController(IDataWorkflow dataWorkflow, ISavedQueryBackendProxy savedQueryStorageBackend, ISerializeManager serializeManager, IOptions<PxApiConfigurationOptions> configOptions, ILogger<SavedQueryApiController> logger, IDataSource dataSource, ILanguageHelper languageHelper, ISelectionResponseMapper selectionResponseMapper, ISelectionHandler selectionHandler, ISavedQueryResponseMapper savedQueryResponseMapper)
         {
             _dataWorkflow = dataWorkflow;
             _savedQueryBackendProxy = savedQueryStorageBackend;
@@ -43,6 +44,7 @@ namespace PxWeb.Controllers.Api2
             _languageHelper = languageHelper;
             _selectionResponseMapper = selectionResponseMapper;
             _selectionHandler = selectionHandler;
+            _savedQueryResponseMapper = (SavedQueryResponseMapper)savedQueryResponseMapper;
         }
 
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
@@ -94,7 +96,9 @@ namespace PxWeb.Controllers.Api2
                 _logger.LogNoSavedQueryWithGivenId();
                 return NotFound(ProblemUtility.NonExistentSavedQuery());
             }
-            return Ok(savedQuery);
+
+
+            return Ok(_savedQueryResponseMapper.Map(savedQuery));
         }
 
         public override IActionResult RunSaveQuery([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat, [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams)
