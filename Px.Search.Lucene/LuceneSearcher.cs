@@ -167,6 +167,7 @@ namespace Px.Search.Lucene
             searchResult.Label = doc.Get(SearchConstants.SEARCH_FIELD_TITLE);
 
             searchResult.Paths = JsonSerializer.Deserialize<List<Level[]>>(doc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS).Bytes) ?? new List<Level[]>();
+            searchResult.Languages = doc.Get(SearchConstants.SEARCH_AVAILABLE_LANGUAGES).Split("|", StringSplitOptions.RemoveEmptyEntries);
 
             return searchResult;
         }

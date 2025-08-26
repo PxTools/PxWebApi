@@ -69,6 +69,12 @@ namespace PxWeb.Mappers
                 // Links to table
                 linkList.Add(_linkCreator.GetTableLink(LinkCreator.LinkRelationEnum.self, item.Id.ToUpper(), lang, true));
 
+                // Links to table in other languages
+                foreach (var language in _configOptions.Languages.Where(l => l.Id != lang && item.Languages.Contains(l.Id)).Select(l => l.Id))
+                {
+                    linkList.Add(_linkCreator.GetTableLink(LinkCreator.LinkRelationEnum.alternate, item.Id.ToUpper(), language, true));
+                }
+
                 // Links to metadata
                 linkList.Add(_linkCreator.GetTableMetadataJsonLink(LinkCreator.LinkRelationEnum.metadata, item.Id.ToUpper(), lang, true));
 

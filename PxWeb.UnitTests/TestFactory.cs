@@ -89,6 +89,9 @@ namespace PxWeb.UnitTests
 
             pxApiConfigurationOptions.MaxDataCells = 100000;
 
+            pxApiConfigurationOptions.Languages = new List<Config.Api2.Language>();
+            pxApiConfigurationOptions.Languages.Add(new Config.Api2.Language() { Id = "en", Label = "English" });
+
             return pxApiConfigurationOptions;
         }
 
