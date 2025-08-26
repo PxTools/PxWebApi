@@ -283,11 +283,15 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 var tables = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetMenuLookupTables(lang);
                 foreach (var table in tables.Keys)
                 {
-                    if (!mapping.ContainsKey(table))
+                    if (mapping.TryGetValue(table, out var list))
                     {
-                        mapping[table] = new List<string>();
+                        list.Add(lang);
                     }
-                    mapping[table].Add(lang);
+                    else
+                    {
+                        var newList = new List<string> { lang };
+                        mapping[table] = newList;
+                    }
                 }
             }
 
