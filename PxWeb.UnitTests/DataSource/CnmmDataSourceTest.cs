@@ -164,6 +164,7 @@ namespace PxWeb.UnitTests.DataSource
             Assert.IsFalse(result);
         }
 
+        [TestMethod]
         public void GetTableLanguagesShouldThrowExceptionWhnNoDataSourceSpecified()
         {
             //todo, mock database 
