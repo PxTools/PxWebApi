@@ -190,7 +190,7 @@ namespace PxWeb.Controllers.Api2
             }
 
             //Map selection to SelectionResponse
-            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, id, lang);
+            SelectionResponse selectionResponse = _selectionResponseMapper.Map(selection, id, lang, true);
             return Ok(selectionResponse);
         }
 
