@@ -117,6 +117,8 @@ namespace PxWeb.UnitTests.Search
                     return builder.Object;
                 });
 
+            dataSource.Setup(d => d.GetTableLanguages()).Returns(new Dictionary<string, List<string>>());
+
             var indexer = new Indexer(dataSource.Object, backend.Object, logger.Object);
             // Act
             indexer.IndexDatabase(new List<string> { "en" });

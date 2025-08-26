@@ -32,6 +32,11 @@
           "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=en"
         },
         {
+          "rel": "alternate",
+          "hreflang": "sv",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=sv"
+        },
+        {
           "rel": "metadata",
           "hreflang": "en",
           "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en"
@@ -72,6 +77,11 @@
           "rel": "self",
           "hreflang": "en",
           "href": "https://www.pxapi.com/api/v2/tables/TAB005?lang=en"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "sv",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB005?lang=sv"
         },
         {
           "rel": "metadata",
@@ -116,6 +126,11 @@
           "href": "https://www.pxapi.com/api/v2/tables/TAB003?lang=en"
         },
         {
+          "rel": "alternate",
+          "hreflang": "sv",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB003?lang=sv"
+        },
+        {
           "rel": "metadata",
           "hreflang": "en",
           "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en"
@@ -158,6 +173,11 @@
           "href": "https://www.pxapi.com/api/v2/tables/TAB001?lang=en"
         },
         {
+          "rel": "alternate",
+          "hreflang": "sv",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB001?lang=sv"
+        },
+        {
           "rel": "metadata",
           "hreflang": "en",
           "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en"
@@ -198,6 +218,11 @@
           "rel": "self",
           "hreflang": "en",
           "href": "https://www.pxapi.com/api/v2/tables/TAB002?lang=en"
+        },
+        {
+          "rel": "alternate",
+          "hreflang": "sv",
+          "href": "https://www.pxapi.com/api/v2/tables/TAB002?lang=sv"
         },
         {
           "rel": "metadata",

@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -156,7 +156,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         {
             if (id.Contains('/'))
             {
-                return Path.GetFileName(id);
+                return System.IO.Path.GetFileName(id);
             }
             else
             {
@@ -202,9 +202,73 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public Item? LoadDatabaseStructure(string language)
         {
-            var filePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+            var filePath = System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
             var menu = new XmlMenu(filePath, language);
+
+            // Fix selection for subitems - we only want the last part...
+            if (menu.CurrentItem is PxMenuItem menuItem)
+            {
+                foreach (var item in menuItem.SubItems)
+                {
+                    if ((item is PxMenuItem) || (item is TableLink))
+                    {
+                        //Hmm, doesnt this mean that a TableLink for TAB004  will differ when it is root and in a folder? It that ok?
+                        //Yes, it seems. item.ID.Selection is not used by CreateMenuTableLinnk client.  
+                        item.ID.Selection = GetIdentifierWithoutPath(item.ID.Selection);
+                    }
+                }
+            }
+
+            FixItemSelectionRecursive((PxMenuItem)menu.CurrentItem);
             return menu.CurrentItem;
+        }
+
+
+        private void FixItemSelectionRecursive(PxMenuItem currentItem)
+        {
+            foreach (var item in currentItem.SubItems)
+            {
+                if ((item is PxMenuItem) || (item is TableLink))
+                {
+                    item.ID.Selection = GetIdentifierWithoutPath(item.ID.Selection);
+                    if (item is PxMenuItem menuItem)
+                    {
+                        FixItemSelectionRecursive(menuItem);
+                    }
+                }
+            }
+        }
+
+
+        public Dictionary<string, List<string>> GetTableLanguages()
+        {
+            var doc = XDocument.Load(System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml"));
+
+            var pairs = doc.Descendants("Link").Where(l => l.Attribute("tableId") != null).Select(l => new { TableId = l.Attribute("tableId"), Lang = l.Ancestors("Language").First().Attribute("lang") });
+
+            var mapping = new Dictionary<string, List<string>>();
+
+            foreach (var pair in pairs)
+            {
+
+                if (pair.TableId is null || pair.Lang is null)
+                {
+                    continue;
+                }
+
+                //Check if mapping already contains the tableId if not create an empty list
+                if (mapping.TryGetValue(pair.TableId.Value, out var list))
+                {
+                    list.Add(pair.Lang.Value);
+                }
+                else
+                {
+                    mapping[pair.TableId.Value] = new List<string>() { pair.Lang.Value };
+                }
+
+            }
+
+            return mapping;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
+
+using Microsoft.Extensions.Options;
 
 using PCAxis.Menu;
 using PCAxis.Menu.Implementations;
@@ -17,13 +20,15 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         private readonly IItemSelectionResolver _itemSelectionResolver;
         private readonly ITablePathResolver _tablePathResolver;
         private readonly ICodelistMapper _codelistMapper;
+        private readonly string[] _languages;
 
-        public CnmmDataSource(ICnmmConfigurationService cnmmConfigurationService, IItemSelectionResolver itemSelectionResolver, ITablePathResolver tablePathResolver, ICodelistMapper codelistMapper)
+        public CnmmDataSource(ICnmmConfigurationService cnmmConfigurationService, IItemSelectionResolver itemSelectionResolver, ITablePathResolver tablePathResolver, ICodelistMapper codelistMapper, IOptions<PxApiConfigurationOptions> configOptions)
         {
             _cnmmConfigurationService = cnmmConfigurationService;
             _itemSelectionResolver = itemSelectionResolver;
             _tablePathResolver = tablePathResolver;
             _codelistMapper = codelistMapper;
+            _languages = [.. configOptions.Value.Languages.Select(l => l.Id)];
         }
 
         public IPXModelBuilder? CreateBuilder(string id, string language)
@@ -267,6 +272,35 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             Item? outItem = CreateMenu(language, itmSel, 10);
 
             return outItem;
+        }
+
+        public Dictionary<string, List<string>> GetTableLanguages()
+        {
+            var mapping = new Dictionary<string, List<string>>();
+
+            foreach (var lang in _languages)
+            {
+                try
+                {
+                    var tables = PCAxis.Sql.ApiUtils.ApiUtilStatic.GetMenuLookupTables(lang);
+                    foreach (var table in tables.Keys)
+                    {
+                        if (mapping.TryGetValue(table, out var list))
+                        {
+                            list.Add(lang);
+                        }
+                        else
+                        {
+                            mapping[table] = new List<string> { lang };
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore errors for languages that are not configured correctly
+                }
+            }
+            return mapping;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PxWeb.UnitTests.DataSource
+﻿using Microsoft.Extensions.Options;
+
+namespace PxWeb.UnitTests.DataSource
 {
     [TestClass]
     public class CnmmDataSourceTest
@@ -68,6 +70,7 @@
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<ICnmmConfigurationService>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
+            var pxApiConfig = new Mock<IOptions<PxApiConfigurationOptions>>();
 
             var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
 
@@ -81,8 +84,9 @@
 
             var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory.Object, configMock.Object);
             var tablePathResolver = new TablePathResolverCnmm(configServiceMock.Object, resolver);
+            pxApiConfig.Setup(x => x.Value).Returns(config);
 
-            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object);
+            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object, pxApiConfig.Object);
 
             bool selectionExists;
 
@@ -101,6 +105,7 @@
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<ICnmmConfigurationService>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
+            var pxApiConfig = new Mock<IOptions<PxApiConfigurationOptions>>();
 
             var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
 
@@ -115,7 +120,9 @@
             var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory.Object, configMock.Object);
             var tablePathResolver = new TablePathResolverCnmm(configServiceMock.Object, resolver);
 
-            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object);
+            pxApiConfig.Setup(x => x.Value).Returns(config);
+
+            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object, pxApiConfig.Object);
 
             var result = datasource.TableExists("Befolkning", language);
 
@@ -132,6 +139,7 @@
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<ICnmmConfigurationService>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
+            var pxApiConfig = new Mock<IOptions<PxApiConfigurationOptions>>();
 
             var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
 
@@ -145,12 +153,43 @@
 
             var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory.Object, configMock.Object);
             var tablePathResolver = new TablePathResolverCnmm(configServiceMock.Object, resolver);
+            pxApiConfig.Setup(x => x.Value).Returns(config);
 
-            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object);
+            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object, pxApiConfig.Object);
 
             var result = datasource.TableExists("select * from Befolkning", language);
 
             Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void GetTableLanguages_ShouldReturn_emptyMappingWhenNoDataSourceSpecified()
+        {
+
+            string language = "en";
+            var memorymock = new Mock<IPxCache>();
+            var configMock = new Mock<IPxApiConfigurationService>();
+            var configServiceMock = new Mock<ICnmmConfigurationService>();
+            var codelistMapperMock = new Mock<ICodelistMapper>();
+            var pxApiConfig = new Mock<IOptions<PxApiConfigurationOptions>>();
+            var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
+            var testFactory = new TestFactory();
+            var dict = testFactory.GetMenuLookupTables();
+            var config = testFactory.GetPxApiConfiguration();
+            configMock.Setup(x => x.GetConfiguration()).Returns(config);
+            pcAxisFactory.Setup(x => x.GetMenuLookupTables(language)).Returns(dict);
+            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory.Object, configMock.Object);
+            var tablePathResolver = new TablePathResolverCnmm(configServiceMock.Object, resolver);
+            pxApiConfig.Setup(x => x.Value).Returns(config);
+            var datasource = new CnmmDataSource(configServiceMock.Object, resolver, tablePathResolver, codelistMapperMock.Object, pxApiConfig.Object);
+
+            //Act
+            var mapping = datasource.GetTableLanguages();
+
+            //Assert
+            Assert.IsNotNull(mapping);
+            Assert.IsEmpty(mapping);
+
         }
 
     }
