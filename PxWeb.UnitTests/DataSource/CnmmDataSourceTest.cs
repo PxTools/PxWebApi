@@ -188,7 +188,7 @@ namespace PxWeb.UnitTests.DataSource
 
             //Assert
             Assert.IsNotNull(mapping);
-            Assert.AreEqual(0, mapping.Count);
+            Assert.IsEmpty(mapping);
 
         }
 
