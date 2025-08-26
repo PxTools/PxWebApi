@@ -13,6 +13,8 @@ jobs:
     strategy:
       matrix:
         arch: [win-x64]
+    env:
+      TAG_NAME: ${{ github.event.release.tag_name }}
 
     steps:
       - name: Checkout repository
@@ -33,11 +35,10 @@ jobs:
         run: dotnet publish --runtime ${{ matrix.arch }} --output ./release PxWeb/PxWeb.csproj
 
       - name: Create zip file
-        run: zip -x release/wwwroot/Database/\* -r pxwebapi-${{ matrix.arch }}.zip ./release
+        run: zip -x release/wwwroot/Database/\* -r pxwebapi-${{ env.TAG_NAME }}-${{ matrix.arch }}.zip ./release
 
       - name: Upload release asset
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
-          gh release upload ${{ env.TAG_NAME }} pxwebapi-${{ matrix.arch }}.zip
+          gh release upload ${{ env.TAG_NAME }} pxwebapi-${{ env.TAG_NAME }}-${{ matrix.arch }}.zip
