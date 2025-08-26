@@ -12,7 +12,7 @@ namespace PxWeb.Mappers
             _linkCreator = linkCreator;
         }
 
-        public SelectionResponse Map(VariablesSelection selections, string tableId, string lang)
+        public SelectionResponse Map(VariablesSelection selections, string tableOrSavedQueryId, string lang, bool fromSavedQuery)
         {
             var response = new SelectionResponse();
             response.Selection = selections.Selection;
@@ -21,8 +21,14 @@ namespace PxWeb.Mappers
 
             response.Links = new List<Link>();
 
-            response.Links.Add(_linkCreator.GetDefaultSelectionLink(LinkCreator.LinkRelationEnum.self, tableId, lang, true));
-
+            if (fromSavedQuery)
+            {
+                response.Links.Add(_linkCreator.GetSavedQuerySelectionLink(LinkCreator.LinkRelationEnum.self, tableOrSavedQueryId, lang, true));
+            }
+            else
+            {
+                response.Links.Add(_linkCreator.GetDefaultSelectionLink(LinkCreator.LinkRelationEnum.self, tableOrSavedQueryId, lang, true));
+            }
             return response;
         }
 
