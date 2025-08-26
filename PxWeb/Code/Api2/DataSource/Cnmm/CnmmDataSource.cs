@@ -289,8 +289,7 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                     }
                     else
                     {
-                        var newList = new List<string> { lang };
-                        mapping[table] = newList;
+                        mapping[table] = new List<string> { lang };
                     }
                 }
             }

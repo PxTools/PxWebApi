@@ -206,9 +206,9 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             var menu = new XmlMenu(filePath, language);
 
             // Fix selection for subitems - we only want the last part...
-            if (menu.CurrentItem is PxMenuItem)
+            if (menu.CurrentItem is PxMenuItem menuItem)
             {
-                foreach (var item in ((PxMenuItem)(menu.CurrentItem)).SubItems)
+                foreach (var item in menuItem.SubItems)
                 {
                     if ((item is PxMenuItem) || (item is TableLink))
                     {
@@ -257,11 +257,14 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                 }
 
                 //Check if mapping already contains the tableId if not create an empty list
-                if (!mapping.ContainsKey(pair.TableId.Value))
+                if (mapping.TryGetValue(pair.TableId.Value, out var list))
                 {
-                    mapping[pair.TableId.Value] = new List<string>();
+                    list.Add(pair.Lang.Value);
                 }
-                mapping[pair.TableId.Value].Add(pair.Lang.Value);
+                else
+                {
+                    mapping[pair.TableId.Value] = new List<string>() { pair.Lang.Value };
+                }
 
             }
 
