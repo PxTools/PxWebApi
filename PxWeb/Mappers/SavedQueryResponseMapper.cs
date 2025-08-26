@@ -19,7 +19,9 @@ namespace PxWeb.Mappers
                 SavedQuery = savedQuery
             };
 
-            response.Links.Add(_linkCreator.GetSavedQueryLink(LinkCreator.LinkRelationEnum.self, response.Id, response.Language, true));
+            response.Links = new List<Link>();
+
+            response.Links.Add(_linkCreator.GetSavedQueryLink(LinkCreator.LinkRelationEnum.self, response.Id, response.Language, false));
 
             return response;
         }
