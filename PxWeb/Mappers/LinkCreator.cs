@@ -181,5 +181,14 @@ namespace PxWeb.Mappers
             return sb.ToString();
         }
 
+        public Link GetSavedQueryLink(LinkRelationEnum relation, string id, string language, bool showLangParam = true)
+        {
+            var link = new Link();
+            link.Rel = relation.ToString();
+            link.Hreflang = language;
+            link.Href = CreateURL($"savedqueries/{id}", language, showLangParam, null);
+
+            return link;
+        }
     }
 }
