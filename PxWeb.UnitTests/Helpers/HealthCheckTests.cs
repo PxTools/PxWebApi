@@ -33,7 +33,7 @@ namespace PxWeb.UnitTests.Helpers
 
 
         [TestMethod]
-        public void When_MaintenanceFile_Then_HealthCheckIsDegraded()
+        public void When_MaintenanceFile_Then_HealthCheckIsUnhealthy()
         {
             var host = new Mock<IPxHost>();
             var tempPath = Path.GetTempPath();
@@ -54,7 +54,7 @@ namespace PxWeb.UnitTests.Helpers
             var cancellationToken = CancellationToken.None;
             var result = healthCheck.CheckHealthAsync(context, cancellationToken).Result;
             // Assert
-            Assert.AreEqual(HealthStatus.Degraded, result.Status);
+            Assert.AreEqual(HealthStatus.Unhealthy, result.Status);
 
             File.Delete(maintenanceFilePath);
         }

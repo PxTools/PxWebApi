@@ -22,7 +22,7 @@ namespace PxWeb.Code
         {
             if (File.Exists(_maintenanceFilePath))
             {
-                return Task.FromResult(HealthCheckResult.Degraded("Maintenance mode is active (.maintenance file found)."));
+                return Task.FromResult(HealthCheckResult.Unhealthy("Maintenance mode is active (.maintenance file found)."));
             }
 
             return Task.FromResult(HealthCheckResult.Healthy("No maintenance file found."));
