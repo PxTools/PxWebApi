@@ -47,14 +47,14 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PCAxis.Menu.ConfigDatamodelMenu" Version="1.0.10" />
-    <PackageReference Include="PCAxis.Serializers" Version="1.9.2" />
+    <PackageReference Include="PCAxis.Serializers" Version="1.9.3" />
     <PackageReference Include="PcAxis.Sql" Version="1.5.2" />
-    <PackageReference Include="PxWeb.Api2.Server" Version="2.0.0-beta.25" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="9.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.3" />
+    <PackageReference Include="PxWeb.Api2.Server" Version="2.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="9.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.4" />
     <PackageReference Include="System.IO.Hashing" Version="9.0.8" />
     <PackageReference Include="System.IO.Packaging" Version="9.0.8" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
