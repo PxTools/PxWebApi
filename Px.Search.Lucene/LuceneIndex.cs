@@ -141,6 +141,7 @@ namespace Px.Search.Lucene
                 var paths = oldDoc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS);
                 if (paths is not null)
                 {
+                    doc.RemoveField(SearchConstants.SEARCH_FIELD_PATHS);
                     doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, paths));
                 }
             }
