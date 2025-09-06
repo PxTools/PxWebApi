@@ -203,7 +203,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         public Item? LoadDatabaseStructure(string language)
         {
             var filePath = System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
-            var menu = new XmlMenu(filePath, language);
+            var menu = new XmlMenu(XDocument.Load(filePath), language, m => m.Restriction = x => true);
 
             // Fix selection for subitems - we only want the last part...
             if (menu.CurrentItem is PxMenuItem menuItem)
