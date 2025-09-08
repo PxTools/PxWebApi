@@ -349,9 +349,17 @@ namespace PXWeb.Database
             DateTime? initPublished = null;
             DateTime? initLastUpdated = null;
 
+
+            var status = TableStatus.AccessibleToAll;
+
+            if (meta.ExtendedProperties.TryGetValue("DISCONTINUED", out var discontinued) && discontinued.Equals("YES", StringComparison.OrdinalIgnoreCase))
+            {
+                status = TableStatus.Discontinued;
+            }
+
             TableLink tbl = new TableLink(!string.IsNullOrEmpty(meta.Description) ? meta.Description : meta.Title,
                 meta.Matrix, _sortOrder(meta, path), cid.Menu, cid.Selection.Replace("\\", "/"), meta.Description ?? "", LinkType.PX,
-                TableStatus.AccessibleToAll, initPublished, initLastUpdated, meta.GetFirstTimeValue(), meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
+                status, initPublished, initLastUpdated, meta.GetFirstTimeValue(), meta.GetLastTimeValue(), meta.Matrix ?? "", PresCategory.Official);
 
             int cellCount = 1;
             for (int i = 0; i < meta.Variables.Count; i++)

@@ -258,7 +258,7 @@
             tbl.Description = tblLink.Description;
             tbl.SortCode = tblLink.SortCode;
             tbl.Updated = tblLink.LastUpdated;
-            tbl.Discontinued = null; // TODO: Implement later
+            tbl.Discontinued = tblLink.Status == TableStatus.Discontinued ? true : null;
             tbl.SubjectCode = meta.SubjectCode ?? string.Empty;
 
             return tbl;
