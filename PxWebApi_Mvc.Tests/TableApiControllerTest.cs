@@ -97,6 +97,39 @@ namespace PxWebApi_Mvc.Tests
         }
 
         [TestMethod]
+        public async Task GetTableData_valueCodes_ShoudlReturnOK()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/tables/TAB004/data?valueCodes[ContentsCode]=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0");
+
+            string rawActual = await response.Content.ReadAsStringAsync();
+
+            string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "tab4_fewcells.px"));
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            Assert.AreEqual(rawActual, rawExpected);
+        }
+
+        [TestMethod]
+        public async Task GetTableData_ShoudlReturnBadRequest_WhenValueCodes_withoutVaiable()
+        {
+            // Arrange
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/tables/TAB004/data?valueCodes=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0");
+            // Assert
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [TestMethod]
         public async Task GetTableData_ShoudlReturnBadRequest_WhenTableIdDoesNotExist()
         {
             // Arrange

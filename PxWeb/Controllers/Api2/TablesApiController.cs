@@ -198,7 +198,8 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetTableData(
             [FromRoute(Name = "id"), Required] string id,
-            [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes,
+            [FromQuery(Name = "lang")] string? lang,
+            [FromQuery(Name = "valuecodes"), ModelBinder(typeof(QueryStringToDictionaryOfStrings))] Dictionary<string, List<string>>? valuecodes,
             [FromQuery(Name = "codelist")] Dictionary<string, string>? codelist,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
             [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(OutputFormatParamsModelBinder))] List<OutputFormatParamType>? outputFormatParams,

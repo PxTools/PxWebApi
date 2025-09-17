@@ -24,11 +24,22 @@ namespace PxWeb.Code.Api2.ModelBinder
 
             foreach (var key in keys)
             {
-                //strip of the variable name format values[variableName]
-                //TODO check that the key starts with [ after the modelname and ends with ]
+                //the valuecodes are not mandatory
+
                 if (key != null)
                 {
+                    //check that the key starts with [ after the modelname and ends with ]  and is not just valuecodes[]
+                    if (!(key.ToLower().StartsWith(modelName + "[") && key.EndsWith("]") && key.Length > modelName.Length + 2))
+                    {
+                        bindingContext.ModelState.AddModelError(bindingContext.ModelName, "valuecodes-parameter should be like valuecodes[<variable>]. " + key + " is not.");
+                        bindingContext.Result = ModelBindingResult.Failed();
+                        return Task.CompletedTask;
+                    }
+
+                    //strip of the variable name format values[variableName]
                     string variableName = key.Substring(modelName.Length + 1, key.Length - (modelName.Length + 2));
+
+
                     string? q = bindingContext.HttpContext.Request.Query[key];
                     if (q != null)
                     {
