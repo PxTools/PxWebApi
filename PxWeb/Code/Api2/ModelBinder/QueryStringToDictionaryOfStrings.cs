@@ -24,7 +24,7 @@ namespace PxWeb.Code.Api2.ModelBinder
 
             foreach (var key in keys)
             {
-                //the valuecodes are not mandatory
+                //the valuecodes-parameters are not mandatory
 
                 if (key != null)
                 {
