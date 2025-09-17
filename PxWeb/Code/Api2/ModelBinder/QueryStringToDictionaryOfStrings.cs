@@ -12,9 +12,7 @@ namespace PxWeb.Code.Api2.ModelBinder
 
         Task IModelBinder.BindModelAsync(ModelBindingContext bindingContext)
         {
-
-            if (bindingContext == null)
-                throw new ArgumentNullException(nameof(bindingContext));
+            ArgumentNullException.ThrowIfNull(bindingContext);
 
             var modelName = bindingContext.ModelName;
 
@@ -24,31 +22,42 @@ namespace PxWeb.Code.Api2.ModelBinder
 
             foreach (var key in keys)
             {
-                //strip of the variable name format values[variableName]
-                //TODO check that the key starts with [ after the modelname and ends with ]
-                if (key != null)
+                //the valuecodes-parameters are not mandatory
+
+                //all keys startswith modelName, so no if null
+
+                //check that the key starts with [ after the modelname and ends with ]  and is not just valuecodes[]
+                if (!(key.StartsWith(modelName + "[", StringComparison.CurrentCultureIgnoreCase) && key.EndsWith(']') && key.Length > modelName.Length + 2))
                 {
-                    string variableName = key.Substring(modelName.Length + 1, key.Length - (modelName.Length + 2));
-                    string? q = bindingContext.HttpContext.Request.Query[key];
-                    if (q != null)
-                    {
-                        var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.None, TimeSpan.FromMilliseconds(100));
-                        var itemsList = new List<string>();
-                        foreach (var item in items)
-                        {
-                            var item2 = item.Trim();
-                            if (item.StartsWith("[") && item.EndsWith("]"))
-                            {
-                                itemsList.Add(item.Substring(1, item.Length - 2));
-                            }
-                            else
-                            {
-                                itemsList.Add(item2);
-                            }
-                        }
-                        result.Add(variableName, itemsList);
-                    }
+                    bindingContext.ModelState.AddModelError(bindingContext.ModelName, "valuecodes-parameter should be like valuecodes[<variable>]. " + key + " is not.");
+                    bindingContext.Result = ModelBindingResult.Failed();
+                    return Task.CompletedTask;
                 }
+
+                //strip of the variable name format values[variableName]
+                string variableName = key.Substring(modelName.Length + 1, key.Length - (modelName.Length + 2));
+
+
+                string? q = bindingContext.HttpContext.Request.Query[key];
+                if (q != null)
+                {
+                    var items = Regex.Split(q, ",(?=[^\\]]*(?:\\[|$))", RegexOptions.None, TimeSpan.FromMilliseconds(100));
+                    var itemsList = new List<string>();
+                    foreach (var item in items)
+                    {
+                        var item2 = item.Trim();
+                        if (item.StartsWith('[') && item.EndsWith(']'))
+                        {
+                            itemsList.Add(item.Substring(1, item.Length - 2));
+                        }
+                        else
+                        {
+                            itemsList.Add(item2);
+                        }
+                    }
+                    result.Add(variableName, itemsList);
+                }
+
             }
 
 
