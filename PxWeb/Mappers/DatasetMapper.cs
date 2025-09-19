@@ -263,33 +263,39 @@ namespace PxWeb.Mappers
 
         private static void AddUpdated(PXModel model, DatasetSubclass dataset)
         {
-            DateTime tempDateTime;
+            DateTime? tempDateTime = null;
+
+            // Try to get the most recent LastUpdated from ContentVariable.Values
             if (model.Meta.ContentVariable != null && model.Meta.ContentVariable.Values.Count > 0)
             {
                 var lastUpdatedContentsVariable = model.Meta.ContentVariable.Values
+                    .Where(x => x.ContentInfo?.LastUpdated != null)
                     .OrderByDescending(x => x.ContentInfo.LastUpdated)
                     .FirstOrDefault();
 
-                // ReSharper disable once PossibleNullReferenceException
-                if (lastUpdatedContentsVariable != null)
+                if (lastUpdatedContentsVariable?.ContentInfo?.LastUpdated != null)
                 {
                     tempDateTime = lastUpdatedContentsVariable.ContentInfo.LastUpdated.PxDateStringToDateTime();
                 }
-                else
-                {
-                    tempDateTime = model.Meta.CreationDate.PxDateStringToDateTime();
-                }
             }
-            else if (model.Meta.ContentInfo.LastUpdated != null)
-            {
-                tempDateTime = model.Meta.ContentInfo.LastUpdated.PxDateStringToDateTime();
-            }
-            else
+
+            // Fallback to CreationDate if not found
+            if (tempDateTime == null && model.Meta.CreationDate != null)
             {
                 tempDateTime = model.Meta.CreationDate.PxDateStringToDateTime();
             }
 
-            dataset.Updated = DateTimeAsUtcString(tempDateTime);
+            // Fallback to ContentInfo.LastUpdated if not found
+            if (tempDateTime == null && model.Meta.ContentInfo?.LastUpdated != null)
+            {
+                tempDateTime = model.Meta.ContentInfo.LastUpdated.PxDateStringToDateTime();
+            }
+
+            // Only set if a valid date was found
+            if (tempDateTime != null)
+            {
+                dataset.Updated = DateTimeAsUtcString(tempDateTime.Value);
+            }
         }
 
         public static string DateTimeAsUtcString(DateTime datetime)
