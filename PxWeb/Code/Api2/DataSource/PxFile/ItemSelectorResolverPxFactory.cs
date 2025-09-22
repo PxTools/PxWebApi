@@ -114,10 +114,10 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                     string selection = childEl.GetAttribute("selection");
                     string tableId = childEl.GetAttribute("tableId");
                     var menu = Path.GetDirectoryName(selection)?.Replace("\\", "/");
-                    if (!menuLookup.ContainsKey(tableId))
+                    if (!menuLookup.ContainsKey(tableId.ToUpper()))
                     {
                         ItemSelection itemSelection = new ItemSelection(menu, selection);
-                        menuLookup.Add(tableId, itemSelection);
+                        menuLookup.Add(tableId.ToUpper(), itemSelection);
                     }
                 }
             }
