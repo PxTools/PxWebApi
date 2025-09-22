@@ -45,7 +45,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="PCAxis.Menu.ConfigDatamodelMenu" Version="1.0.10" />
     <PackageReference Include="PCAxis.Serializers" Version="1.9.3" />
     <PackageReference Include="PcAxis.Sql" Version="1.5.2" />
