@@ -29,22 +29,22 @@
         {
           "rel": "self",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=en"
+          "href": "/api/v2/tables/TAB004?lang=en"
         },
         {
           "rel": "alternate",
           "hreflang": "sv",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=sv"
+          "href": "/api/v2/tables/TAB004?lang=sv"
         },
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en"
+          "href": "/api/v2/tables/TAB004/metadata?lang=en"
         },
         {
           "rel": "data",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
+          "href": "/api/v2/tables/TAB004/data?lang=en&outputFormat=json-stat2"
         }
       ]
     },
@@ -76,22 +76,22 @@
         {
           "rel": "self",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB005?lang=en"
+          "href": "/api/v2/tables/TAB005?lang=en"
         },
         {
           "rel": "alternate",
           "hreflang": "sv",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB005?lang=sv"
+          "href": "/api/v2/tables/TAB005?lang=sv"
         },
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB005/metadata?lang=en"
+          "href": "/api/v2/tables/TAB005/metadata?lang=en"
         },
         {
           "rel": "data",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB005/data?lang=en&outputFormat=px"
+          "href": "/api/v2/tables/TAB005/data?lang=en&outputFormat=json-stat2"
         }
       ]
     },
@@ -123,22 +123,22 @@
         {
           "rel": "self",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB003?lang=en"
+          "href": "/api/v2/tables/TAB003?lang=en"
         },
         {
           "rel": "alternate",
           "hreflang": "sv",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB003?lang=sv"
+          "href": "/api/v2/tables/TAB003?lang=sv"
         },
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB003/metadata?lang=en"
+          "href": "/api/v2/tables/TAB003/metadata?lang=en"
         },
         {
           "rel": "data",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB003/data?lang=en&outputFormat=px"
+          "href": "/api/v2/tables/TAB003/data?lang=en&outputFormat=json-stat2"
         }
       ]
     },
@@ -170,22 +170,22 @@
         {
           "rel": "self",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB001?lang=en"
+          "href": "/api/v2/tables/TAB001?lang=en"
         },
         {
           "rel": "alternate",
           "hreflang": "sv",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB001?lang=sv"
+          "href": "/api/v2/tables/TAB001?lang=sv"
         },
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB001/metadata?lang=en"
+          "href": "/api/v2/tables/TAB001/metadata?lang=en"
         },
         {
           "rel": "data",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB001/data?lang=en&outputFormat=px"
+          "href": "/api/v2/tables/TAB001/data?lang=en&outputFormat=json-stat2"
         }
       ]
     },
@@ -217,22 +217,22 @@
         {
           "rel": "self",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB002?lang=en"
+          "href": "/api/v2/tables/TAB002?lang=en"
         },
         {
           "rel": "alternate",
           "hreflang": "sv",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB002?lang=sv"
+          "href": "/api/v2/tables/TAB002?lang=sv"
         },
         {
           "rel": "metadata",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB002/metadata?lang=en"
+          "href": "/api/v2/tables/TAB002/metadata?lang=en"
         },
         {
           "rel": "data",
           "hreflang": "en",
-          "href": "https://www.pxapi.com/api/v2/tables/TAB002/data?lang=en&outputFormat=px"
+          "href": "/api/v2/tables/TAB002/data?lang=en&outputFormat=json-stat2"
         }
       ]
     }
@@ -248,7 +248,7 @@
     {
       "rel": "self",
       "hreflang": "en",
-      "href": "https://www.pxapi.com/api/v2/tables/?lang=en&pagesize=20&pageNumber=1"
+      "href": "/api/v2/tables/?lang=en&pagesize=20&pageNumber=1"
     }
   ]
 }
