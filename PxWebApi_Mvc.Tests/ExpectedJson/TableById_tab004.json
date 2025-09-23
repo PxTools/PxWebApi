@@ -28,22 +28,22 @@
     {
       "rel": "self",
       "hreflang": "en",
-      "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=en"
+      "href": "/api/v2/tables/TAB004?lang=en"
     },
     {
       "rel": "alternate",
       "hreflang": "sv",
-      "href": "https://www.pxapi.com/api/v2/tables/TAB004?lang=sv"
+      "href": "/api/v2/tables/TAB004?lang=sv"
     },
     {
       "rel": "metadata",
       "hreflang": "en",
-      "href": "https://www.pxapi.com/api/v2/tables/TAB004/metadata?lang=en"
+      "href": "/api/v2/tables/TAB004/metadata?lang=en"
     },
     {
       "rel": "data",
       "hreflang": "en",
-      "href": "https://www.pxapi.com/api/v2/tables/TAB004/data?lang=en&outputFormat=px"
+      "href": "/api/v2/tables/TAB004/data?lang=en&outputFormat=json-stat2"
     }
   ]
 }

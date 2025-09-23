@@ -106,7 +106,7 @@ namespace PxWebApi_Mvc.Tests
             using var client = application.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/tables/TAB004/data?valueCodes[ContentsCode]=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/TAB004/data?valueCodes[ContentsCode]=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0&outputFormat=px", TestContext.CancellationTokenSource.Token);
             string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
 
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "tab4_fewcells.px"));

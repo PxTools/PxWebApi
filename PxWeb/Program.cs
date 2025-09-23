@@ -43,6 +43,17 @@ namespace PxWeb
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // Only use Log4Net provider
+            builder.Logging.ClearProviders();
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Logging.AddLog4Net("log4net.Development.config");
+            }
+            else
+            {
+                builder.Logging.AddLog4Net("log4net.config");
+            }
+
             // Paxiom settings
             var omit = builder.Configuration.GetSection("PxApiConfiguration:OmitContentsInTitle");
             if (omit != null && bool.TryParse(omit.Value, out bool omitContentsInTitle))
@@ -53,11 +64,6 @@ namespace PxWeb
             {
                 PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = true; // Default value
             }
-
-
-            // Only use Log4Net provider
-            builder.Logging.ClearProviders();
-            builder.Logging.AddLog4Net();
 
             // Add services to the container.
             Console.WriteLine("Starting!");
@@ -98,7 +104,7 @@ namespace PxWeb
                 var logger = provider.GetRequiredService<ILogger<PxCache>>();
                 var instance = new PxCache(logger);
 
-                // Gör något med instansen innan den returneras
+                // Gï¿½r nï¿½got med instansen innan den returneras
                 var clearTime = builder.Configuration.GetSection("PxApiConfiguration:CacheClearTime").Value;
 
                 if (clearTime != null && DateTime.TryParse(clearTime, out DateTime time))
@@ -178,7 +184,7 @@ namespace PxWeb
                 c.SwaggerDoc("v2", new OpenApiInfo
                 {
                     Title = "PxWebApi",
-                    Version = "v2-beta"
+                    Version = "v2"
                 }
                 );
             });
@@ -216,11 +222,9 @@ namespace PxWeb
             app.UseSwaggerUI(options =>
                 {
                     options.RoutePrefix = string.Empty;
-                    options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0-beta");
+                    options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0");
                 });
 
-            // Configure the HTTP request pipeline.
-            app.UseHttpsRedirection();
 
             if (corsEnbled)
             {
@@ -230,6 +234,8 @@ namespace PxWeb
 
             if (!app.Environment.IsDevelopment())
             {
+                app.UseHttpsRedirection();
+
                 app.UseAuthorization();
 
                 app.UseWhen(context => context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
@@ -280,10 +286,14 @@ namespace PxWeb
 
         private static List<OpenApiServer> GetOpenApiServers(string pxApiConfiguration_BaseURL, string pxApiConfiguration_RoutePrepix)
         {
-            var part1 = (new Uri(pxApiConfiguration_BaseURL)).PathAndQuery;
-            if (part1.Equals("/"))
+            var part1 = "";
+            if (!string.IsNullOrEmpty(pxApiConfiguration_BaseURL))
             {
-                part1 = "";    // To aviod double /
+                part1 = (new Uri(pxApiConfiguration_BaseURL)).PathAndQuery;
+                if (string.IsNullOrEmpty(part1) || part1 == "/")
+                {
+                    part1 = "";
+                }
             }
 
             return
