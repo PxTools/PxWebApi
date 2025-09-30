@@ -178,6 +178,7 @@
             {
                 foreach (var language in languages)
                 {
+                    _logger.LogIndexingStarted(language);
                     index.BeginUpdate(language);
 
                     foreach (var table in tables)
@@ -195,6 +196,7 @@
                     }
 
                     index.EndUpdate(language);
+                    _logger.LogIndexingEnded(language, tables.Count);
                 }
             }
         }
