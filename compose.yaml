@@ -10,6 +10,10 @@ services:
       - "8080:8080"
     volumes:
       - ./docker/pxweb2/public/config:/usr/share/nginx/html/config:rw
+      - ./docker/pxweb2/public/content:/usr/share/nginx/html/content:rw
+      - ./docker/pxweb2/public/fonts:/usr/share/nginx/html/fonts:rw
+      - ./docker/pxweb2/public/icons:/usr/share/nginx/html/icons:rw
+      - ./docker/pxweb2/public/images:/usr/share/nginx/html/images:rw
       - ./docker/pxweb2/public/locales:/usr/share/nginx/html/locales:rw
       - ./docker/pxweb2/public/theme:/usr/share/nginx/html/theme:rw
 

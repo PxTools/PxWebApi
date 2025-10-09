@@ -1,0 +1,71 @@
+{
+  "startPage": {
+    "breadCrumb": {
+      "enabled": false,
+      "items": [
+        {
+          "label": "Forsiden",
+          "href": "#"
+        },
+        {
+          "label": "Statistikkbanken",
+          "href": "/"
+        }
+      ]
+    },
+    "detailsSection": {
+      "enabled": true,
+      "detailHeader": "Mer om Statistikkbanken",
+      "detailContent": [
+        {
+          "textBlock": {
+            "header": "Oppdatering av metadata",
+            "text": "Vi oppdaterer metadata hver dag klokken 05:00 og 11:30. Dette gjør alle tabeller midlertidig utilgjengelige i opptil fem minutter. Publiserte tall som skal revideres vises som « . » eller « 0 » mellom klokken 05:00–8:00."
+          }
+        },
+        {
+          "links": {
+            "header": "Nyttige ressurser",
+            "items": [
+              {
+                "text": "Kom i gang med Statistikkbanken",
+                "url": "#"
+              },
+              {
+                "text": "Kom i gang med API",
+                "url": "#"
+              },
+              {
+                "text": "Endringer i tabeller",
+                "url": "#"
+              },
+              {
+                "text": "Tabeller som bruker ny regioninndeling også for årene før 2024",
+                "url": "#"
+              },
+              {
+                "text": "Kontakt Statistikkbanken",
+                "url": "#"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "footer": {
+    "columns": [
+      {
+        "header": "PxWeb 2.0",
+        "links": [
+          {
+            "text": "Om PxWeb 2.0 (GitHub)",
+            "url": "https://www.pxtools.net/PxWeb2/",
+            "external": true
+          },
+          { "text": "Kontakt", "url": "mailto:px@scb.se" }
+        ]
+      }
+    ]
+  }
+}
