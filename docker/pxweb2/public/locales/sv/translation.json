@@ -1,42 +1,33 @@
 {
-  "meta": {
-    "languageName": "Svenska",
-    "shorthand": "sv"
-  },
   "common": {
     "title": "PxWeb 2.0",
     "header": {
-      "title": "PxWeb 2.0 [Main]",
-      "logo": "PxWeb 2.0"
+      "logo": "PxWeb 2.0",
+      "logo_alt": "Till startsidan",
+      "language_selector": "Språk/Language"
     },
-    "not_found": {
-      "page_not_found": {
-        "title": "Sidan hittades inte",
-        "description": "Sidan du letar efter finns inte. Kontrollera URL:en eller återgå till startsidan."
+    "errors": {
+      "not_found": {
+        "title": "Sidan kunde inte hittas",
+        "description": "Sidan du har gått till kan ha blivit flyttad eller tagits bort. Det kan också vara länken som är fel.",
+        "action_text": "Gå tillbaks till föregående sida"
       },
-      "unsupported_language": {
-        "title": "Ogiltigt språk",
-        "description": "Det valda språket stöds inte."
+      "generic": {
+        "title": "Tyvärr har något blivit fel ",
+        "description": "Det har uppstått ett tekniskt fel hos oss. Testa att ladda om sidan eller försök igen om några minuter.",
+        "action_text": "Ladda om  sidan"
+      },
+      "no_tables_loaded": {
+        "title": "Kunde inte ladda tabellerna",
+        "description": "Det har uppstått ett tekniskt fel hos oss. Testa att ladda om sidan eller försök igen om några minuter.",
+        "action_text": "Ladda om sidan"
       }
     },
     "skip_to_main": "Gå direkt till huvudinnehållet",
     "footer": {
-      "contact": {
-        "title": "Kontakt",
-        "description": "Beskrivande text..."
-      },
-      "about": {
-        "title": "Om",
-        "description": "Beskrivande text..."
-      },
-      "accessibility": {
-        "title": "Tillgänglighet",
-        "description": "Beskrivande text..."
-      },
-      "version": {
-        "title": "Version",
-        "description": "Beskrivande text..."
-      }
+      "language_header": "Språk",
+      "copyright": "© Upphovsrätt PxTools",
+      "top_button_text": "Till toppen"
     },
     "generic_buttons": {
       "ok": "OK",
@@ -47,6 +38,26 @@
     },
     "generic_tags": {
       "mandatory": "Obligatorisk"
+    },
+    "alert": {
+      "info": "Information:",
+      "success": "Lyckad åtgärd:",
+      "warning": "Varning:",
+      "error": "Fel:"
+    },
+    "status_messages": {
+      "welcome": "Välkommen till nya PxWeb! Vi fortsätter att jobba med att göra det enklare för dig att hitta och använda siffrorna du behöver 📊✨",
+      "drawer_view": "Visning av diagram är under arbete.",
+      "drawer_save_file": "Fler filformat är under arbete.",
+      "drawer_save_api": "Funktionen för API-uttag är under arbete.",
+      "drawer_edit": "Fler verktyg för att redigera tabellen är under arbete.",
+      "drawer_help": "Hjälp-knappen måste länkas till egna hjälpsidor.",
+      "tab_definitions": "Innehållet i denna fliken är under arbete."
+    },
+    "breadcrumbs": {
+      "aria_label_breadcrumb": "Brödsmulor",
+      "breadcrumb_root_title": "Hem",
+      "show_more_breadcrumbs": "Visa mer"
     }
   },
   "start_page": {
@@ -54,19 +65,32 @@
     "ingress": "Letar du efter den perfekta tabellen? Använd sökfältet och filtren för att hitta de data du behöver. Oavsett om du letar efter trender, fakta eller bara något intressant samband, så har PxWeb 2.0 det du behöver.",
     "more_about_label": "Mer om Statistikdatabasen",
     "more_about_text": "more about text SV",
-    "search_placeholder": "Sök i Statistikdatabasen",
+    "result_hidden_header": "Resultat",
+    "search_label": "Sök i Statistikdatabasen",
+    "search_placeholder": "Sök efter tabellrubrik eller variabel",
     "filter": {
       "button": "Filter",
       "back": "Tilbaka",
       "show_results": "Visa {{value}} träffar",
       "close": "Lukk filter",
       "header": "Filter",
+      "list_filters_aria": "Valda filter",
       "remove_all_filter": "Ta bort alla filter",
-      "remove_filter_aria": "Slett {{value}}",
+      "remove_filter_aria": "Ta bort filter, {{value}}",
       "subject": "Ämnesområde",
-      "timeUnit": "Tidsperiod",
-      "year": "År",
+      "time_unit": "Tidsperiod",
+      "year": {
+        "title": "År",
+        "from_label": "Från",
+        "to_label": "Till",
+        "from_year": "Från år",
+        "to_year": "Till år",
+        "clear_selection": "Rensa",
+        "no_option": "Ingen sökträff"
+      },
       "variabel": "Variabel",
+      "variabel_search": "Sök efter variabel",
+      "variable_count": "Viser {{countShown}} av {{countTotal}} variabler",
       "frequency": {
         "annual": "År",
         "monthly": "Månad",
@@ -74,23 +98,28 @@
         "term": "Termin",
         "weekly": "Vecka",
         "other": "Annan"
+      },
+      "status": {
+        "title": "Status",
+        "updating": "Uppdateras",
+        "not_updating": "Uppdateras inte längre"
       }
     },
     "table": {
+      "card_description": "{{title}}. År: {{yearFrom}}-{{yearTo}}. Tidsperiod {{frequency}}. uppdaterad {{updatedDate}}. Tabellnummer {{tableNumber}}.",
       "number_of_tables": "<strong>{{count}}</strong> tabeller",
       "number_of_tables_found": "Träff på <strong>{{count}}</strong> tabeller",
       "updated_label": "Senast uppdaterad",
-      "show_more": "Visa flere"
+      "show_more": "Visa fler",
+      "show_less": "Visa färre",
+      "loading": "Laddar...",
+      "show_number_of_tables": "Visar {{countShown}} av {{countTotal}}",
+      "show_number_of_tables_aria": "Träff på {{count}}tabeller, visar {{countShown}} av {{countTotal}}"
     }
   },
   "presentation_page": {
-    "header": {
-      "searchbutton": "Sök",
-      "languagebutton": "språk",
-      "statistics": "Statistikdatabasen"
-    },
-    "sidemenu": {
-      "arialabeltoolsidemenu": "Verktygsmeny för tabell",
+    "side_menu": {
+      "aria_label_tool_side_menu": "Verktygsmeny för tabell",
       "hide": "Dölj",
       "selection": {
         "title": "Filtrera",
@@ -98,8 +127,8 @@
           "search": {
             "placeholder": "Sök i listan",
             "label": "Sök",
-            "arialabelicontext": "Sök ikon",
-            "ariallabelclearbuttontext": "Ikon för att ta bort text i sökfältet"
+            "aria_label_icon_text": "Sök ikon",
+            "aria_label_clear_button_text": "Ikon för att ta bort text i sökfältet"
           },
           "header": {
             "tag_selected": "{{selected}} av {{total}} valda",
@@ -115,13 +144,10 @@
                 "confirm_button": "Spara"
               }
             },
-            "mixed_checkbox": {
-              "select_all": "Välj alla",
-              "deselect_all": "Ta bort alla"
-            },
+            "mixed_checkbox": "Välj alla",
+            "mixed_checkbox_search": "Välj alla sökträffar",
             "values_list": {
               "aria_label": "Lista över {{total}} värden.",
-              "aria_description": "Variabelns lista med {{total}} totala värden. För att komma in i listan, tryck på nedåtpilen. Tabbtangenten lämnar listan.",
               "no_results_heading": "Tyvärr hittades inte ”{{search}}”",
               "no_results_bodyshort": "Försök med en annan stavning eller ett annat ord."
             }
@@ -142,7 +168,9 @@
         "customize": {
           "title": "Anpassa",
           "pivot": {
-            "title": "Pivotera"
+            "title": "Rotera tabellen",
+            "aria_label": "Rotera tabellen medsols",
+            "screen_reader_announcement": "Tabell roterat efter {{first_variables}} och {{last_variable}}"
           },
           "rearrange": {
             "title": "Anpassa tabell",
@@ -168,7 +196,31 @@
         "title": "Spara",
         "file": {
           "title": "Spara som fil",
-          "excel": "Excel (xlsx)"
+          "loading_announcement": "Filen bearbetas fortfarande. Vänligen vänta.",
+          "formats": {
+            "excel": "Excel (.xlsx)",
+            "csv": "Semikolonavgränsad med rubrik (.csv)",
+            "px": "PC-Axis (.px)",
+            "jsonstat2": "JSON-stat2 (.json)",
+            "html": "HTML (.html)",
+            "parquet": "Parquet (.parquet)"
+          }
+        },
+        "savequery": {
+          "title": "Länk till uppdaterad tabell",
+          "info": "Du får en unik länk till din tabell, som vi håller uppdaterad åt dig. Hur nya tidsperioder läggs till väljer du själv.",
+          "radio_legend": "Val av nya tidsperioder",
+          "period_options": {
+            "selected": "Lägg inte till nya (tabellen visar samma tidsperioder som du valt nu)",
+            "from": "Lägg till nya (nya tidsperioder läggs till de du har valt nu)",
+            "top": "Lägg till nya men behåll samma antal (när en ny tidsperiod läggs till tas den äldsta bort)"
+          },
+          "create_button": "Skapa länk",
+          "copy_button": "Kopiera länk",
+          "copied_button": "Länk kopierad",
+          "create_status": "Länk skapad. Tryck igen för att kopera länken",
+          "copy_status": "Länk kopierad till utklipp",
+          "loading_status": "Länk skapas"
         },
         "imagefile": {
           "title": "Spara som diagram",
@@ -180,7 +232,8 @@
         },
         "api": {
           "title": "API",
-          "description": "Beskrivande text..."
+          "description": "Beskrivande text...",
+          "query": "API-uttag"
         }
       },
       "help": {
@@ -188,9 +241,11 @@
       }
     },
     "main_content": {
-      "arialabelbreadcrumb": "Brödsmulor",
+      "expand_view": "Utöka visning",
+      "shrink_view": "Minimera visning",
       "last_updated": "Senast uppdaterad",
       "show_details": "Visa detaljer",
+      "dynamic_table_title": "{{table_content_type}} efter {{table_content_label_first_part}} och {{table_content_label_last_part}}",
       "table": {
         "warnings": {
           "missing_mandatory": {
@@ -218,7 +273,13 @@
           "mandatory_heading": "Viktigt om tabellen",
           "mandatory_variable_heading": "Viktigt om",
           "non_mandatory_heading": "Gäller hela tabellen",
-          "show_all_footnotes": "Visa alla fotnoter för tabellen"
+          "show_all_footnotes": "Visa alla fotnoter för tabellen",
+          "important_about_selection_heading_1": "Det finns ",
+          "important_about_selection_heading_2": " viktiga noter för vald filtrering ",
+          "important_about_selection_body": "Tryck på detta meddelande för att läsa noterna. ",
+          "important_about_selection_heading_one_note_1": "Det finns ",
+          "important_about_selection_heading_one_note_2": " viktig not för vald filtrering ",
+          "important_about_selection_body_one_note": "Tryck på detta meddelande för att läsa noten. "
         },
         "definitions": {
           "title": "Definitioner",
@@ -247,10 +308,6 @@
           "description": "Beskrivande text...",
           "missing_heading": "Ingen kontaktinformation",
           "missing_text": "Tabellen har ingen kontaktinformation."
-        },
-        "notes": {
-          "important_about_table": "Viktigt om tabellen",
-          "important_about_variable": "Viktigt om "
         }
       },
       "related": {
@@ -279,6 +336,7 @@
     "simple_number_with_three_decimals": "{{value, pxNumber(minimumFractionDigits: 3; maximumFractionDigits: 3;)}}",
     "simple_number_with_four_decimals": "{{value, pxNumber(minimumFractionDigits: 4; maximumFractionDigits: 4;)}}",
     "simple_number_with_five_decimals": "{{value, pxNumber(minimumFractionDigits: 5; maximumFractionDigits: 5;)}}",
+    "simple_number_with_six_decimals": "{{value, pxNumber(minimumFractionDigits: 6; maximumFractionDigits: 6;)}}",
     "simple_number_with_default_formatter": "{{value, number(minimumFractionDigits: 5; maximumFractionDigits: 5; roundingMode: 'halfExpand')}}"
   }
 }

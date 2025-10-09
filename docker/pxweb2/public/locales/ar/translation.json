@@ -1,42 +1,33 @@
 {
-  "meta": {
-    "languageName": "إنجليزي",
-    "shorthand": "ar"
-  },
   "common": {
     "title": "مرحبًا بك في PxWeb 2.0",
     "header": {
-      "title": "PxWeb 2.0 [Main]",
-      "logo": "بيكس ويب 2.0"
+      "logo": "بيكس ويب 2.0",
+      "logo_alt": "إلى الصفحة الرئيسية",
+      "language_selector": "اللغة/Language"
     },
-    "not_found": {
-      "page_not_found": {
+    "errors": {
+      "not_found": {
         "title": "لم يتم العثور على الصفحة",
-        "description": "الصفحة التي تبحث عنها غير موجودة. يرجى التحقق من عنوان URL أو العودة إلى الصفحة الرئيسية."
+        "description": "ربما تم نقل الصفحة التي تبحث عنها أو حذفها، أو قد يكون هناك خطأ في عنوان URL.",
+        "action_text": "العودة إلى الصفحة السابقة"
       },
-      "unsupported_language": {
-        "title": "لغة غير مدعومة",
-        "description": "اللغة المحددة غير مدعومة."
+      "generic": {
+        "title": "عذرًا، حدث خطأ ما",
+        "description": "حدث خطأ تقني من جانبنا. يرجى محاولة تحديث الصفحة أو العودة بعد بضع دقائق.",
+        "action_text": "أعد تحميل الصفحة."
+      },
+      "no_tables_loaded": {
+        "title": "لم يتمكن من تحميل الجداول.",
+        "description": "واجهنا خطأً فنيًا. يُرجى إعادة تحميل الصفحة أو العودة بعد بضع دقائق.",
+        "action_text": "أعد تحميل الصفحة."
       }
     },
     "skip_to_main": "انتقل إلى المحتوى الرئيسي",
     "footer": {
-      "contact": {
-        "title": "اتصال",
-        "description": "نص الوصف..."
-      },
-      "about": {
-        "title": "عن",
-        "description": "نص الوصف..."
-      },
-      "accessibility": {
-        "title": "إمكانية الوصول",
-        "description": "نص الوصف..."
-      },
-      "version": {
-        "title": "إصدار",
-        "description": "نص الوصف..."
-      }
+      "language_header": "اللغة",
+      "copyright": "© حقوق الطبع والنشر PxTools",
+      "top_button_text": "إلى الأعلى"
     },
     "generic_buttons": {
       "ok": "نعم",
@@ -47,6 +38,26 @@
     },
     "generic_tags": {
       "mandatory": "إلزامي"
+    },
+    "alert": {
+      "info": "معلومة:",
+      "success": "نجاح:",
+      "warning": "تحذير:",
+      "error": "خطأ:"
+    },
+    "status_messages": {
+      "welcome": "أهلاً بكم في PxWeb 2.0 الجديد! ما زلنا نعمل على تحسينه لمساعدتك في العثور على الأرقام التي تحتاجها واستخدامها.",
+      "drawer_view": "عرض الرسم البياني قيد الإنشاء.",
+      "drawer_save_file": "هناك المزيد من تنسيقات الملفات قيد العمل.",
+      "drawer_save_api": "ميزة استعلام API قيد الإنشاء.",
+      "drawer_edit": "يتم إنشاء المزيد من الأدوات لتحرير الجدول.",
+      "drawer_help": "لن يُضاف أي محتوى هنا. يجب أن يرتبط زر المساعدة مباشرةً بصفحات المساعدة الخاصة به.",
+      "tab_definitions": "محتوى هذه علامة التبويب قيد الإنشاء."
+    },
+    "breadcrumbs": {
+      "aria_label_breadcrumb": "خبز",
+      "breadcrumb_root_title": "الصفحة الرئيسية",
+      "show_more_breadcrumbs": "عرض المزيد"
     }
   },
   "start_page": {
@@ -54,13 +65,8 @@
     "welcome_trans_test": "مرحبا بكم في <1>برنامج</1> لبكسي ويب 2.0!"
   },
   "presentation_page": {
-    "header": {
-      "searchbutton": "يبحث",
-      "languagebutton": "اللغات",
-      "statistics": "بنك الإحصائيات"
-    },
-    "sidemenu": {
-      "arialabeltoolsidemenu": "قائمة الأدوات للجدول",
+    "side_menu": {
+      "aria_label_tool_side_menu": "قائمة الأدوات للجدول",
       "hide": "يخفي",
       "selection": {
         "title": "فلتر",
@@ -68,8 +74,8 @@
           "search": {
             "placeholder": "البحث في القائمة",
             "label": "يبحث",
-            "arialabelicontext": "أيقونة البحث",
-            "ariallabelclearbuttontext": "مسح أيقونة البحث"
+            "aria_label_icon_text": "أيقونة البحث",
+            "aria_label_clear_button_text": "مسح أيقونة البحث"
           },
           "header": {
             "tag_selected": "{{selected}} ل {{total}} مختارة",
@@ -85,13 +91,10 @@
                 "confirm_button": "يحفظ"
               }
             },
-            "mixed_checkbox": {
-              "select_all": "حدد الكل",
-              "deselect_all": "قم بإلغاء تحديد الكل"
-            },
+            "mixed_checkbox": "حدد الكل",
+            "mixed_checkbox_search": "حدد جميع النتائج",
             "values_list": {
               "aria_label": "قائمة {{total}} قيم.",
-              "aria_description": "قائمة المتغير {{total}} القيم الإجمالية. ",
               "no_results_heading": "“{{search}}” لا توجد نتائج ل",
               "no_results_bodyshort": "جرّب كلمة رئيسية أو تهجئة مختلفة."
             }
@@ -112,7 +115,9 @@
         "customize": {
           "title": "تخصيص",
           "pivot": {
-            "title": "المحور"
+            "title": "تدوير الجدول",
+            "aria_label": "تدوير الجدول في اتجاه عقارب الساعة",
+            "screen_reader_announcement": "جدول مدور بعد {{first_variables}} و {{last_variable}}"
           },
           "rearrange": {
             "title": "إعادة ترتيب الجدول",
@@ -138,7 +143,31 @@
         "title": "يحفظ",
         "file": {
           "title": "حفظ كملف",
-          "excel": "اكسل (xlsx)"
+          "loading_announcement": "الملف لا يزال قيد المعالجة. يرجى الانتظار.",
+          "formats": {
+            "excel": "اكسل (xlsx)",
+            "csv": "مفصولة بفاصلة منقوطة مع عنوان (.csv)",
+            "px": "PC-Axis (.px)",
+            "jsonstat2": "JSON-stat2 (.json)",
+            "html": "HTML (.html)",
+            "parquet": "Parquet (.parquet)"
+          }
+        },
+        "savequery": {
+          "title": "رابط إلى الجدول المحدث",
+          "info": "ستحصل على رابط فريد لجدولك، وسنُحدّثه لك باستمرار. إضافة الفترات الزمنية الجديدة أمرٌ متروك لك.",
+          "radio_legend": "خيارات لفترات زمنية جديدة",
+          "period_options": {
+            "selected": "لا تقم بإضافة فترات زمنية جديدة (سيعرض الجدول فقط الفترات الزمنية المحددة حاليًا)",
+            "from": "إضافة فترات زمنية جديدة (سيتم إضافتها إلى الفترات المحددة حاليًا)",
+            "top": "إضافة فترات زمنية جديدة وإزالة الفترات الأقدم"
+          },
+          "create_button": "إنشاء رابط",
+          "copy_button": "نسخ الوصلة",
+          "copied_button": "تم نسخ الرابط",
+          "create_status": "احفظ الاستعلام المُولّد بالمعرّف “{{query}}”. انقر مجددًا لنسخ الرابط.",
+          "copy_status": "حفظ الاستعلام المنسوخ إلى الحافظة",
+          "loading_status": "جاري إنشاء استعلام محفوظ."
         },
         "imagefile": {
           "title": "حفظ كرسم بياني",
@@ -150,7 +179,8 @@
         },
         "api": {
           "title": "واجهة برمجة التطبيقات",
-          "description": "نص الوصف..."
+          "description": "نص الوصف...",
+          "query": "استعلام API"
         }
       },
       "help": {
@@ -158,9 +188,11 @@
       }
     },
     "main_content": {
-      "arialabelbreadcrumb": "مسار التنقل",
+      "expand_view": "توسيع العرض",
+      "shrink_view": "عرض الانكماش",
       "last_updated": "آخر تحديث",
       "show_details": "إظهار التفاصيل",
+      "dynamic_table_title": "{{table_content_type}} بعد {{table_content_label_first_part}} و {{table_content_label_last_part}}",
       "table": {
         "warnings": {
           "missing_mandatory": {
@@ -237,6 +269,7 @@
     "simple_number_with_three_decimals": "{{value, pxNumber(minimumFractionDigits: 3; maximumFractionDigits: 3;)}}",
     "simple_number_with_four_decimals": "{{value, pxNumber(minimumFractionDigits: 4; maximumFractionDigits: 4;)}}",
     "simple_number_with_five_decimals": "{{value, pxNumber(minimumFractionDigits: 5; maximumFractionDigits: 5;)}}",
+    "simple_number_with_six_decimals": "{{value, pxNumber(minimumFractionDigits: 6; maximumFractionDigits: 6;)}}",
     "simple_number_with_default_formatter": "{{value, number(minimumFractionDigits: 5; maximumFractionDigits: 5; roundingMode: 'halfExpand')}}"
   }
 }

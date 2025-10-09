@@ -1,0 +1,63 @@
+{
+  "startPage": {
+    "breadCrumb": {
+      "enabled": false,
+      "items": [
+        {
+          "label": "Home",
+          "href": "#"
+        },
+        {
+          "label": "PxWeb",
+          "href": "/"
+        }
+      ]
+    },
+    "detailsSection": {
+      "enabled": true,
+      "detailHeader": "More about PxWeb",
+      "detailContent": [
+        {
+          "textBlock": {
+            "header": "When to use this section",
+            "text": "This is an optional section that can be used for content that may be useful for some users, but is not essential for everyone. Key information that all users need to see should always appear in the lead paragraph."
+          }
+        },
+        {
+          "links": {
+            "header": "Useful resources",
+            "items": [
+              {
+                "text": "Example link 1",
+                "url": "#"
+              },
+              {
+                "text": "Example link 2",
+                "url": "#"
+              },
+              {
+                "text": "Example link 3",
+                "url": "#"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "footer": {
+    "columns": [
+      {
+        "header": "PxWeb 2.0",
+        "links": [
+          {
+            "text": "About PxWeb 2.0 (GitHub)",
+            "url": "https://www.pxtools.net/PxWeb2/",
+            "external": true
+          },
+          { "text": "Contact", "url": "mailto:px@scb.se" }
+        ]
+      }
+    ]
+  }
+}
