@@ -123,7 +123,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TO(Code_5_clsv_A)", out problem);
 
             // Assert
-            Assert.AreEqual(6, selection.ValueCodes.Count);
+            Assert.HasCount(6, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -144,7 +144,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TO(Code_5_clsv_A)", out problem);
 
             // Assert
-            Assert.AreEqual(6, selection.ValueCodes.Count);
+            Assert.HasCount(6, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -162,7 +162,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TO(1995)", out problem);
 
             // Assert
-            Assert.AreEqual(6, selection.ValueCodes.Count);
+            Assert.HasCount(6, selection.ValueCodes);
             Assert.IsNull(problem);
         }
     }

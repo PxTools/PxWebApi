@@ -18,7 +18,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.AreEqual(defaultOutputFormat, format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.AreEqual("px", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.AreEqual("csv", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.AreEqual("csv", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.AreEqual("xlsx", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(1, formatParams.Count);
+            Assert.HasCount(1, formatParams);
 
         }
     }

@@ -162,7 +162,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TOP(10)", out problem);
 
             // Assert
-            Assert.AreEqual(10, selection.ValueCodes.Count);
+            Assert.HasCount(10, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -179,7 +179,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TOP(10)", out problem);
 
             // Assert
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.HasCount(5, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -196,7 +196,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TOP(10,2)", out problem);
 
             // Assert
-            Assert.AreEqual(3, selection.ValueCodes.Count);
+            Assert.HasCount(3, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -213,7 +213,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TOP(10, 20)", out problem);
 
             // Assert
-            Assert.AreEqual(0, selection.ValueCodes.Count); // No values should be added
+            Assert.HasCount(0, selection.ValueCodes); // No values should be added
             Assert.IsNull(problem);
         }
 
@@ -233,7 +233,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TOP(10)", out problem);
 
             // Assert
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.HasCount(5, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -251,7 +251,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "TOP(1)", out problem);
 
             // Assert
-            Assert.AreEqual(1, selection.ValueCodes.Count);
+            Assert.HasCount(1, selection.ValueCodes);
             Assert.AreEqual("2009", selection.ValueCodes[0]);
             Assert.IsNull(problem);
         }
@@ -270,7 +270,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "Top(1, 5)", out problem);
 
             // Assert
-            Assert.AreEqual(1, selection.ValueCodes.Count);
+            Assert.HasCount(1, selection.ValueCodes);
             Assert.AreEqual("2004", selection.ValueCodes[0]);
             Assert.IsNull(problem);
         }

@@ -106,8 +106,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
             var expected = RemoveElements(expectedFilePath).ToString();
 
             //Ensuring we dont compare empty things
-            Assert.IsTrue(expected.Length > 10000, "Problems reading expectedMenu.xml or it no longer contains more than 10000 chars");
-
+            Assert.IsGreaterThan(10000, expected.Length, "Problems reading expectedMenu.xml or it no longer contains more than 10000 chars");
 
 
             var actual = RemoveElements(actualFilePath).ToString();
@@ -115,7 +114,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
             Assert.AreEqual(expected.Substring(0, 5), actual.Substring(0, 5), "Diff in first 5.");
 
-            //Comparing them in chunks or it is imposible to spot the diff 
+            //Comparing them in chunks or it is imposible to spot the diff
             for (int i = 0; i < actual.Length; i += 25)
             {
                 int lengthToCompare = Math.Min(50, actual.Length - i);

@@ -129,7 +129,7 @@ namespace PxWeb.UnitTests.Data
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Length);
+            Assert.HasCount(3, result);
         }
 
         [TestMethod]

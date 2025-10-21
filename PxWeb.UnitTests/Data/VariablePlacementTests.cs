@@ -220,7 +220,7 @@
             // Assert
             Assert.IsNull(problem);
             Assert.IsNotNull(placement);
-            Assert.AreEqual(2, placement.Heading.Count);
+            Assert.HasCount(2, placement.Heading);
         }
 
         [TestMethod]
@@ -248,7 +248,7 @@
             // Assert
             Assert.IsNull(problem);
             Assert.IsNotNull(placement);
-            Assert.AreEqual(2, placement.Stub.Count);
+            Assert.HasCount(2, placement.Stub);
         }
 
         [TestMethod]
@@ -276,7 +276,7 @@
             // Assert
             Assert.IsNull(problem);
             Assert.IsNotNull(placement);
-            Assert.AreEqual(1, placement.Stub.Count);
+            Assert.HasCount(1, placement.Stub);
         }
 
         private static Selection[] GetSelectionForAllVariables()
