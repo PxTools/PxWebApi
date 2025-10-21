@@ -176,7 +176,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "X*", out problem);
 
             // Assert
-            Assert.AreEqual(0, selection.ValueCodes.Count);
+            Assert.HasCount(0, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -194,7 +194,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "*", out problem);
 
             // Assert
-            Assert.AreEqual(20, selection.ValueCodes.Count);
+            Assert.HasCount(20, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -213,7 +213,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "*", out problem);
 
             // Assert
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.HasCount(5, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -230,7 +230,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "Code_0*", out problem);
 
             // Assert
-            Assert.AreEqual(1, selection.ValueCodes.Count);
+            Assert.HasCount(1, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -247,7 +247,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "*9_clsv_A", out problem);
 
             // Assert
-            Assert.AreEqual(2, selection.ValueCodes.Count);
+            Assert.HasCount(2, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 

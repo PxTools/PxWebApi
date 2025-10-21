@@ -24,3 +24,4 @@ global using PxWeb.Code.Api2.Serialization;
 global using PxWeb.Config.Api2;
 global using PxWeb.Mappers;
 
+[assembly: Parallelize(Scope = ExecutionScope.ClassLevel)]

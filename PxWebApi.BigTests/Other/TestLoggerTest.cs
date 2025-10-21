@@ -21,8 +21,8 @@ namespace PxWebApi.BigTests.Other
             var logged = testLogger.LogMessages;
 
             Assert.IsNotNull(logged);
-            Assert.IsTrue(logged.Count == 3);
-            Assert.IsTrue(logged[0].Contains("XXX"));
+            Assert.HasCount(3, logged);
+            Assert.Contains("XXX", logged[0]);
         }
 
     }

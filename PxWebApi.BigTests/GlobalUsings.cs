@@ -14,3 +14,4 @@ global using PxWeb.Mappers;
 
 global using PxwebApi.BigTests;
 
+[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
