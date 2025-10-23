@@ -161,14 +161,14 @@ namespace PxWeb.Code
 
 
         [LoggerMessage(
-            Message = "Menu.xml file created",
+            Message = "Menu2.xml file created",
             Level = LogLevel.Information,
             SkipEnabledCheck = false)]
         internal static partial void LogDatabaseGenerated(
             this ILogger logger);
 
         [LoggerMessage(
-            Message = "Failed to generate Menu.xml file",
+            Message = "Failed to generate Menu2.xml file",
             Level = LogLevel.Warning,
             SkipEnabledCheck = false)]
         internal static partial void LogFaildToGenerateDatabase(

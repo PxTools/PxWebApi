@@ -18,13 +18,13 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
 
         /// <summary>
-        /// Get the whole Menu.xml as an XmlDocument
+        /// Get the whole Menu2.xml as an XmlDocument
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception">If file does not exist</exception>
         public XmlDocument GetAsXmlDocument()
         {
-            string xmlFilePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+            string xmlFilePath = Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu2.xml");
 
             if (!System.IO.File.Exists(xmlFilePath))
             {
