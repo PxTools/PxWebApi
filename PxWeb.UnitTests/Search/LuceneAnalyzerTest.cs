@@ -20,7 +20,7 @@
         private void TestSearcher(string language, string searchFor, int expectedCount)
         {
             LuceneConfigurationOptions luceneConfigurationOptions = new LuceneConfigurationOptions();
-            luceneConfigurationOptions.IndexDirectory = @"Database\_INDEX\";
+            luceneConfigurationOptions.IndexDirectory = @"Database/_INDEX/";
 
             //seeking "C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot" 
             string pathRunning = Directory.GetCurrentDirectory();
