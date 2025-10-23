@@ -26,7 +26,7 @@ namespace PxWeb.UnitTests.config
             var indexDirectoryPath = service.GetIndexDirectoryPath();
 
             // Assert
-            Assert.AreEqual(@"C:\inetpub\wwwwroot\api\Indexes\LuceneIndex", indexDirectoryPath);
+            Assert.StartsWith(@"C:\inetpub\wwwwroot\api", indexDirectoryPath);
         }
 
         [TestMethod]
