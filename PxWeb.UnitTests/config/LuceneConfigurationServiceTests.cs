@@ -38,7 +38,7 @@ namespace PxWeb.UnitTests.config
             hostMock.Setup(h => h.RootPath).Returns(hostPath);
             var luceneConfig = new LuceneConfigurationOptions
             {
-                IndexDirectory = @"\\apishare\Indexes\LuceneIndex"
+                IndexDirectory = @"C:/apishare/Indexes/LuceneIndex"
             };
 
             var optionsMock = new Mock<IOptions<LuceneConfigurationOptions>>();
@@ -50,7 +50,7 @@ namespace PxWeb.UnitTests.config
             var indexDirectoryPath = service.GetIndexDirectoryPath();
 
             // Assert
-            Assert.AreEqual(@"\\apishare\Indexes\LuceneIndex", indexDirectoryPath);
+            Assert.AreEqual(@"C:/apishare/Indexes/LuceneIndex", indexDirectoryPath);
         }
     }
 }
