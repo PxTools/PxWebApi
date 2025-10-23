@@ -40,14 +40,7 @@
                 indexDirectory = Path.Combine(_hostingEnvironment.RootPath, path);
             }
 
-            if (System.IO.Directory.Exists(indexDirectory))
-            {
-                return indexDirectory;
-            }
-            else
-            {
-                throw new Exception("Non existing index directory configured for Lucene index: " + indexDirectory);
-            }
+            return indexDirectory;
         }
     }
 }
