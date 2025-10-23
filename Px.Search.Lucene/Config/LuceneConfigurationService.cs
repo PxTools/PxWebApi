@@ -28,15 +28,21 @@
                 throw new Exception("Index directory not configured for Lucene index");
             }
 
-            string indexDirectory = Path.Combine(_hostingEnvironment.RootPath, luceneOptions.IndexDirectory);
+            string path = luceneOptions.IndexDirectory;
+
+            string indexDirectory;
+            if (Path.IsPathFullyQualified(path))
+            {
+                indexDirectory = path;
+            }
+            else
+            {
+                indexDirectory = Path.Combine(_hostingEnvironment.RootPath, path);
+            }
 
             if (System.IO.Directory.Exists(indexDirectory))
             {
-                StringBuilder dir = new StringBuilder(indexDirectory);
-
-                dir.Append(@"/_INDEX/");
-
-                return dir.ToString();
+                return indexDirectory;
             }
             else
             {
