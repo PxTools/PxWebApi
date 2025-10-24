@@ -89,7 +89,7 @@ namespace PxWebApi.BigTests.AdminDatabaseController
 
 
 
-            var actualFilePath = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/Menu.xml");
+            var actualFilePath = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/Menu2.xml");
             var expectedFilePath = Util.GetFullPathToFile(@"PxWebApi.BigTests/AdminDatabaseController/expectedMenu.xml");
 
             FileInfo fileInfo = new FileInfo(actualFilePath);

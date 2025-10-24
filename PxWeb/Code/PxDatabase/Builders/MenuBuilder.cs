@@ -41,7 +41,7 @@ namespace PXWeb.Database
         }
 
         /// <summary>
-        /// Constructor for the MenuBuilder. This builder will create a Menu.xml file
+        /// Constructor for the MenuBuilder. This builder will create a Menu2.xml file
         /// for all languages specified by the languages parameter
         /// </summary>
         /// <param name="languages">Languages that the database structure will be created for</param>
@@ -103,7 +103,7 @@ namespace PXWeb.Database
 
             try
             {
-                doc.Save(System.IO.Path.Combine(path, "Menu.xml"));
+                doc.Save(System.IO.Path.Combine(path, "Menu2.xml"));
                 _logger.LogInformation("Finished building menu for {Path}", path);
             }
             catch (Exception e)

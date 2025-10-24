@@ -202,7 +202,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public Item? LoadDatabaseStructure(string language)
         {
-            var filePath = System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml");
+            var filePath = System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu2.xml");
             var menu = new XmlMenu(XDocument.Load(filePath), language, m => m.Restriction = x => true);
 
             // Fix selection for subitems - we only want the last part...
@@ -242,7 +242,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
 
         public Dictionary<string, List<string>> GetTableLanguages()
         {
-            var doc = XDocument.Load(System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu.xml"));
+            var doc = XDocument.Load(System.IO.Path.Combine(_hostingEnvironment.RootPath, "Database", "Menu2.xml"));
 
             var pairs = doc.Descendants("Link").Where(l => l.Attribute("tableId") != null).Select(l => new { TableId = l.Attribute("tableId"), Lang = l.Ancestors("Language").First().Attribute("lang") });
 
