@@ -22,9 +22,91 @@ namespace PxWeb.PxFile
 
         public override bool BuildForPresentation(Selection[] selection)
         {
-            var map = new MatrixMap(Model.Meta.Variables.Select(
+            var cMap = new MatrixMap(Model.Meta.Variables.Select(
                     v => (IDimensionMap)(new DimensionMap(
                             v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
+
+            // TODO Handle aggregations
+            // Create the matrix map add selections for eliminated values
+            if (selection == null || selection.Length != Model.Meta.Variables.Count)
+            {
+                throw new PXException("Selection is null or selection contains all variables.");
+            }
+
+            var dMap = new List<IDimensionMap>();
+            foreach (var variable in Model.Meta.Variables)
+            {
+                //var variable = Model.Meta.Variables.GetByCode(s.VariableCode);
+                var s = selection.FirstOrDefault(sel => sel.VariableCode == variable.Code);
+
+                if (s == null)
+                {
+                    throw new PXException("Selection not found for variable.");
+                }
+
+                // Check that variable exists
+                if (variable == null)
+                {
+                    throw new PXException("Variable not found for selection.");
+                }
+
+                if (s.ValueCodes.Count == 0)
+                {
+                    if (variable.Elimination)
+                    {
+                        if (variable.EliminationValue == null)
+                        {
+                            // Elimination is done by sum all values for the variable
+                            // We need to add all values for the variable
+                            dMap.Add(new DimensionMap(variable.Code, variable.Values.Select(v => v.Code).ToList()));
+                        }
+                        else
+                        {
+                            // Elimination is done by a specific value
+                            // We need to add only the elimination value for the variable
+                            dMap.Add(new DimensionMap(variable.Code, new List<string>() { variable.EliminationValue.Code }));
+                            //Model.Meta.RemoveVariable(variable);
+                            var unusedValues = variable.Values.Where(val => val != variable.EliminationValue).ToList();
+                            foreach (var val in unusedValues)
+                            {
+                                variable.Values.Remove(val);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new PXException("No values selected for non-eliminated variable.");
+                    }
+                }
+                else
+                {
+                    var codes = new List<string>();
+                    // Check that the selected values exist
+                    foreach (var valCode in s.ValueCodes)
+                    {
+                        var value = variable.Values.GetByCode(valCode);
+                        if (value == null)
+                        {
+                            throw new PXException("Value not found for selection.");
+                        }
+                        if (valCode != null)
+                        {
+                            codes.Add(valCode);
+                        }
+                    }
+                    var unselectedValues = variable.Values.Select(v => v.Code).Except(codes).ToList();
+                    //Removed unselected values from the variable
+                    foreach (var val in unselectedValues)
+                    {
+                        var value = variable.Values.GetByCode(val);
+                        variable.Values.Remove(value);
+                    }
+
+                    dMap.Add(new DimensionMap(variable.Code, codes));
+                }
+            }
+
+            var map = new MatrixMap(dMap);
 
             using Stream fileStream = new FileStream(m_path, FileMode.Open, FileAccess.Read);
             fileStream.Position = 0;
@@ -36,9 +118,14 @@ namespace PxWeb.PxFile
             var buffer = new double[map.GetSize()];
             using PxFileStreamDataReader dataReader = new(fileStream);
             var missingEncoding = new double[] { PXConstant.DATASYMBOL_NIL, PXConstant.DATASYMBOL_1, PXConstant.DATASYMBOL_2, PXConstant.DATASYMBOL_3, PXConstant.DATASYMBOL_4, PXConstant.DATASYMBOL_5 };
-            dataReader.ReadUnsafeDoubles(buffer, 0, map, map, missingEncoding);
+            dataReader.ReadUnsafeDoubles(buffer, 0, map, cMap, missingEncoding);
 
             var count = m_model.Data.Write(buffer, 0, buffer.Length - 1);
+
+            // TODO Handle eliminations
+            // TODO Handle aggregations
+            // TODO Trim notes etc
+
             return true;
         }
 
