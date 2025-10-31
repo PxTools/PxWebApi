@@ -22,29 +22,50 @@ namespace PxWeb.PxFile
 
         public override bool BuildForPresentation(Selection[] selection)
         {
-            var cMap = new MatrixMap(Model.Meta.Variables.Select(
-                    v => (IDimensionMap)(new DimensionMap(
-                            v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
-
-            // TODO Handle aggregations
-            // Create the matrix map add selections for eliminated values
             if (selection == null || selection.Length != Model.Meta.Variables.Count)
             {
                 throw new PXException("Selection is null or selection contains all variables.");
             }
 
-            var dMap = new List<IDimensionMap>();
-            foreach (var variable in Model.Meta.Variables)
+            var totalMap = new MatrixMap(Model.Meta.Variables.Select(
+                    v => (IDimensionMap)(new DimensionMap(
+                            v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
+
+            // TODO Handle aggregations
+            // Create the matrix map add selections for eliminated values
+            RemoveUnselectedValues(selection);
+            var targetMap = new MatrixMap(Model.Meta.Variables.Select(
+                    v => (IDimensionMap)(new DimensionMap(
+                            v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
+
+            using Stream fileStream = new FileStream(m_path, FileMode.Open, FileAccess.Read);
+            fileStream.Position = 0;
+
+
+            SetMatrixSize();
+
+            // Read data & build the matrix
+            var buffer = new double[targetMap.GetSize()];
+            using PxFileStreamDataReader dataReader = new(fileStream);
+            var missingEncoding = new double[] { PXConstant.DATASYMBOL_NIL, PXConstant.DATASYMBOL_1, PXConstant.DATASYMBOL_2, PXConstant.DATASYMBOL_3, PXConstant.DATASYMBOL_4, PXConstant.DATASYMBOL_5 };
+            dataReader.ReadUnsafeDoubles(buffer, 0, targetMap, totalMap, missingEncoding);
+
+            var count = m_model.Data.Write(buffer, 0, buffer.Length - 1);
+
+            // TODO Handle eliminations
+            // TODO Handle aggregations
+            // TODO Trim notes etc
+
+            return true;
+        }
+
+        private void RemoveUnselectedValues(Selection[] selection)
+        {
+            foreach (var s in selection)
             {
-                //var variable = Model.Meta.Variables.GetByCode(s.VariableCode);
-                var s = selection.FirstOrDefault(sel => sel.VariableCode == variable.Code);
+                var variable = Model.Meta.Variables.GetByCode(s.VariableCode);
+                //var s = selection.FirstOrDefault(sel => sel.VariableCode == variable.Code);
 
-                if (s == null)
-                {
-                    throw new PXException("Selection not found for variable.");
-                }
-
-                // Check that variable exists
                 if (variable == null)
                 {
                     throw new PXException("Variable not found for selection.");
@@ -54,23 +75,22 @@ namespace PxWeb.PxFile
                 {
                     if (variable.Elimination)
                     {
-                        if (variable.EliminationValue == null)
+                        if (variable.EliminationValue != null)
                         {
-                            // Elimination is done by sum all values for the variable
-                            // We need to add all values for the variable
-                            dMap.Add(new DimensionMap(variable.Code, variable.Values.Select(v => v.Code).ToList()));
-                        }
-                        else
-                        {
+
+
                             // Elimination is done by a specific value
                             // We need to add only the elimination value for the variable
-                            dMap.Add(new DimensionMap(variable.Code, new List<string>() { variable.EliminationValue.Code }));
-                            //Model.Meta.RemoveVariable(variable);
                             var unusedValues = variable.Values.Where(val => val != variable.EliminationValue).ToList();
                             foreach (var val in unusedValues)
                             {
                                 variable.Values.Remove(val);
                             }
+                        }
+                        else
+                        {
+                            // Elimination is done by sum all values for the variable
+                            // We need to add all values for the variable
                         }
                     }
                     else
@@ -101,35 +121,9 @@ namespace PxWeb.PxFile
                         var value = variable.Values.GetByCode(val);
                         variable.Values.Remove(value);
                     }
-
-                    dMap.Add(new DimensionMap(variable.Code, codes));
                 }
             }
-
-            var map = new MatrixMap(dMap);
-
-            using Stream fileStream = new FileStream(m_path, FileMode.Open, FileAccess.Read);
-            fileStream.Position = 0;
-
-
-            SetMatrixSize();
-
-            // Read data & build the matrix
-            var buffer = new double[map.GetSize()];
-            using PxFileStreamDataReader dataReader = new(fileStream);
-            var missingEncoding = new double[] { PXConstant.DATASYMBOL_NIL, PXConstant.DATASYMBOL_1, PXConstant.DATASYMBOL_2, PXConstant.DATASYMBOL_3, PXConstant.DATASYMBOL_4, PXConstant.DATASYMBOL_5 };
-            dataReader.ReadUnsafeDoubles(buffer, 0, map, cMap, missingEncoding);
-
-            var count = m_model.Data.Write(buffer, 0, buffer.Length - 1);
-
-            // TODO Handle eliminations
-            // TODO Handle aggregations
-            // TODO Trim notes etc
-
-            return true;
         }
-
-
 
         private void SetMatrixSize()
         {
