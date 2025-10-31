@@ -12,6 +12,13 @@ namespace PxWeb.PxFile
     public class PxBuilder : PXModelBuilderAdapter
     {
 
+        private enum PostProcessingActionType
+        {
+            None,
+            EliminateByValue,
+            EliminateBySum
+        }
+
         public override void SetPath(string path)
         {
             base.SetPath(path);
@@ -33,7 +40,7 @@ namespace PxWeb.PxFile
 
             // TODO Handle aggregations
             // Create the matrix map add selections for eliminated values
-            RemoveUnselectedValues(selection);
+            var actions = RemoveUnselectedValues(selection);
             var targetMap = new MatrixMap(Model.Meta.Variables.Select(
                     v => (IDimensionMap)(new DimensionMap(
                             v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
@@ -55,12 +62,22 @@ namespace PxWeb.PxFile
             // TODO Handle eliminations
             // TODO Handle aggregations
             // TODO Trim notes etc
+            foreach (var action in actions)
+            {
+                var variable = Model.Meta.Variables.GetByCode(action.Key);
+                if (action.Value == PostProcessingActionType.EliminateByValue)
+                {
+                    m_model.Meta.RemoveVariable(variable);
+                }
 
+            }
             return true;
         }
 
-        private void RemoveUnselectedValues(Selection[] selection)
+        private Dictionary<string, PostProcessingActionType> RemoveUnselectedValues(Selection[] selection)
         {
+            var actions = new Dictionary<string, PostProcessingActionType>();
+
             foreach (var s in selection)
             {
                 var variable = Model.Meta.Variables.GetByCode(s.VariableCode);
@@ -86,11 +103,13 @@ namespace PxWeb.PxFile
                             {
                                 variable.Values.Remove(val);
                             }
+                            actions.Add(variable.Code, PostProcessingActionType.EliminateByValue);
                         }
                         else
                         {
                             // Elimination is done by sum all values for the variable
                             // We need to add all values for the variable
+                            actions.Add(variable.Code, PostProcessingActionType.EliminateBySum);
                         }
                     }
                     else
@@ -121,8 +140,10 @@ namespace PxWeb.PxFile
                         var value = variable.Values.GetByCode(val);
                         variable.Values.Remove(value);
                     }
+                    actions.Add(variable.Code, PostProcessingActionType.None);
                 }
             }
+            return actions;
         }
 
         private void SetMatrixSize()
