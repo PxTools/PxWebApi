@@ -219,7 +219,7 @@ namespace PxWeb.UnitTests.SavedQuery
             var backend = new SavedQueryDatabaseStorageBackend(mockDataSourceOptions.Object, mockStorageOptions.Object, resolver.Object);
 
             // Act
-           Assert.Throws<Exception>(() => backend.Save("", "0", "sv"));
+            Assert.Throws<Exception>(() => backend.Save("", "0", "sv"));
 
         }
 
