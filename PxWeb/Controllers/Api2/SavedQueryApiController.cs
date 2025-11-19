@@ -62,6 +62,11 @@ namespace PxWeb.Controllers.Api2
 
             _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem);
 
+            if (problem is not null)
+            {
+                return BadRequest(problem);
+            }
+
             string id;
             try
             {
