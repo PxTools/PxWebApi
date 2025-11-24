@@ -18,7 +18,7 @@ services:
       - ./docker/pxweb2/public/theme:/usr/share/nginx/html/theme:rw
 
   api:
-    image: ghcr.io/pxtools/pxwebapi:2.0.2
+    image: ghcr.io/pxtools/pxwebapi:2.0.3
     pull_policy: always
     ports:
       - "8081:8080"
