@@ -193,7 +193,7 @@ namespace PxWeb.UnitTests.SavedQuery
         }
 
         [TestMethod]
-        public void Save_ShouldReturnEmptyString_WhenNoConnectionStringSpecified()
+        public void Save_ShouldThrowException_WhenNoConnectionStringSpecified()
         {
             // Arrange
             var options = new SavedQueryDatabaseStorageOptions
@@ -219,10 +219,7 @@ namespace PxWeb.UnitTests.SavedQuery
             var backend = new SavedQueryDatabaseStorageBackend(mockDataSourceOptions.Object, mockStorageOptions.Object, resolver.Object);
 
             // Act
-            var result = backend.Save("", "0", "sv");
-
-            // Assert
-            Assert.AreEqual(string.Empty, result);
+            Assert.Throws<Exception>(() => backend.Save("", "0", "sv"));
 
         }
 
