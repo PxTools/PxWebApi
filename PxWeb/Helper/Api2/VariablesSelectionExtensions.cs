@@ -17,7 +17,7 @@ namespace PxWeb.Helper.Api2
             selections.Placement?.Stub.Add(variable.Code);
         }
 
-        public static void AddHeadingVariable(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 11)
+        public static void AddHeadingVariable(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 13)
         {
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
