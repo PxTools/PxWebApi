@@ -11,6 +11,7 @@ using Px.Abstractions.Interfaces;
 using Px.Search;
 
 using PxWeb.Code;
+using PxWeb.Code.Api2.Cache;
 using PxWeb.Code.BackgroundWorker;
 
 using Swashbuckle.AspNetCore.Annotations;
@@ -27,14 +28,16 @@ namespace PxWeb.Controllers.Api2.Admin
         private readonly ILogger<SearchindexController> _logger;
         private readonly BackgroundWorkerQueue _backgroundWorkerQueue;
         private readonly IControllerState _responseState;
+        private readonly IPxCache _pxCache;
 
-        public SearchindexController(BackgroundWorkerQueue backgroundWorkerQueue, IControllerStateProvider stateProvider, IDataSource dataSource, ISearchBackend backend, IPxApiConfigurationService pxApiConfigurationService, ILogger<SearchindexController> logger)
+        public SearchindexController(BackgroundWorkerQueue backgroundWorkerQueue, IControllerStateProvider stateProvider, IDataSource dataSource, ISearchBackend backend, IPxApiConfigurationService pxApiConfigurationService, ILogger<SearchindexController> logger, IPxCache pxCache)
         {
             _dataSource = dataSource;
             _backend = backend;
             _pxApiConfigurationService = pxApiConfigurationService;
             _logger = logger;
             _backgroundWorkerQueue = backgroundWorkerQueue;
+            _pxCache = pxCache;
             System.Type tempType = GetType();
             string id = (tempType.FullName != null) ? tempType.FullName : "GetType_has_no_FullName";
             _responseState = stateProvider.Load(id);
@@ -67,8 +70,9 @@ namespace PxWeb.Controllers.Api2.Admin
                         _logger.LogUpdatedTableBetween(from, to, tableList.Count);
                         if (tableList.Count > 0)
                         {
-
                             await UpdateFromTableList(tableList, token);
+                            _pxCache.Clear();
+                            _logger.LogCacheCleared();
                         }
                     }
                     catch (System.Exception ex)
@@ -89,6 +93,8 @@ namespace PxWeb.Controllers.Api2.Admin
 
                         Indexer indexer = new Indexer(_dataSource, _backend, _logger);
                         await Task.Run(() => indexer.IndexDatabase(languages), token);
+                        _pxCache.Clear();
+                        _logger.LogCacheCleared();
                     }
                     catch (System.Exception ex)
                     {
@@ -121,6 +127,8 @@ namespace PxWeb.Controllers.Api2.Admin
                         .ToList();
 
                     await UpdateFromTableList(tableList, token);
+                    _pxCache.Clear();
+                    _logger.LogCacheCleared();
                 }
                 catch (System.Exception ex)
                 {
