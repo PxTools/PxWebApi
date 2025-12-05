@@ -7,8 +7,11 @@ namespace PxWeb.Helper.Api2
 {
     public static class OutputParameterUtil
     {
-        public static (string, List<string>) TranslateOutputParamters(OutputFormatType? outputFormat, string defaultOutputFormat, List<OutputFormatParamType>? outputFormatParams, out bool paramError)
+
+        public static (string, List<string>) TranslateOutputParamters(OutputFormatType? outputFormat, PxApiConfigurationOptions configOptions, List<OutputFormatParamType>? outputFormatParams, out bool paramError)
         {
+
+
             paramError = false;
             string format;
             List<string> formatParams;
@@ -17,10 +20,15 @@ namespace PxWeb.Helper.Api2
                 if (outputFormat is not null)
                 {
                     format = EnumConverter.ToEnumString(outputFormat.Value);
+
+                    if (!configOptions.OutputFormats.Contains(format))
+                    {
+                        paramError = true;
+                    }
                 }
                 else
                 {
-                    format = defaultOutputFormat;
+                    format = configOptions.DefaultOutputFormat;
                 }
 
                 if (outputFormatParams is not null)
@@ -32,11 +40,9 @@ namespace PxWeb.Helper.Api2
                     formatParams = new List<string>();
                 }
 
-                if ((format.Equals("px", StringComparison.OrdinalIgnoreCase) ||
-                    format.Equals("json-stat2", StringComparison.OrdinalIgnoreCase) ||
-                    format.Equals("px-json", StringComparison.OrdinalIgnoreCase) ||
-                    format.Equals("parquet", StringComparison.OrdinalIgnoreCase)) &&
-                    formatParams.Count > 0)
+
+                // these output formats does not take any arguments
+                if (new List<string>() { "px", "json-stat2", "px-json", "parquet" }.Contains(format) && formatParams.Count > 0)
                 {
                     paramError = true;
                 }

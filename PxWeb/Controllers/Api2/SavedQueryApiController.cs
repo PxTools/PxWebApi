@@ -140,7 +140,7 @@ namespace PxWeb.Controllers.Api2
             string outputFormatStr;
             List<string> outputFormatParamsStr;
 
-            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat ?? savedQuery.OutputFormat, _configOptions.DefaultOutputFormat, outputFormatParams ?? savedQuery.OutputFormatParams, out paramError);
+            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat ?? savedQuery.OutputFormat, _configOptions, outputFormatParams ?? savedQuery.OutputFormatParams, out paramError);
 
             if (paramError)
             {
