@@ -11,7 +11,7 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
             selections.Selection.Add(selection);
             selections.Placement?.Stub.Add(variable.Code);
@@ -22,7 +22,7 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
             selections.Selection.Add(selection);
             selections.Placement?.Heading.Add(variable.Code);
@@ -33,7 +33,7 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, 1));
             selections.Selection.Add(selection);
             selections.Placement?.Heading.Add(variable.Code);
@@ -44,7 +44,7 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selections.Selection.Add(selection);
 
         }

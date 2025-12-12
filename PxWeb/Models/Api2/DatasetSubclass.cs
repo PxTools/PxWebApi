@@ -482,11 +482,11 @@ namespace PxWeb.Models.Api2
             {
                 dimensionValue.Extension = new ExtensionDimension();
             }
-            if (dimensionValue.Extension.CodeLists == null)
+            if (dimensionValue.Extension.Codelists == null)
             {
-                dimensionValue.Extension.CodeLists = new List<CodelistInformation>();
+                dimensionValue.Extension.Codelists = new List<CodelistInformation>();
             }
-            dimensionValue.Extension.CodeLists.AddRange(codeLists);
+            dimensionValue.Extension.Codelists.AddRange(codeLists);
         }
 
         public static void AddMeasuringType(DimensionValue dimensionValue, string valueCode, MeasuringType measuringType)
