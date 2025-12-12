@@ -83,7 +83,9 @@ namespace PxWeb.Controllers.Api2
 
             // 3. Return the SavedQuery with the id set.
             savedQuery.Id = id;
-            return Created(savedQuery.Id, savedQuery);
+            var response = _savedQueryResponseMapper.Map(savedQuery);
+            var uri = response.Links.FirstOrDefault(link => link.Rel == "self")?.Href ?? id;
+            return Created(uri, _savedQueryResponseMapper.Map(savedQuery));
 
         }
 

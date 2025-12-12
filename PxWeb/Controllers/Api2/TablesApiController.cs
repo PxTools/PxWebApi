@@ -304,7 +304,7 @@ namespace PxWeb.Controllers.Api2
                     variableSelection.ValueCodes = valuecodes[variableCode];
                     if (codelist != null && codelist.ContainsKey(variableCode))
                     {
-                        variableSelection.CodeList = codelist[variableCode];
+                        variableSelection.Codelist = codelist[variableCode];
                     }
                     selections.Selection.Add(variableSelection);
                 }
