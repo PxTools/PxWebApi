@@ -69,7 +69,7 @@ namespace PxWeb.UnitTests.Search
                     new string[] { "TIME" });
             tableInformation.Description = "Test";
             tableInformation.SortCode = "001";
-            tableInformation.Paths.Add(new Level[] { new Level("A", "Test") });
+            tableInformation.Paths.Add(new Level[] { new Level("A", "Test", "A") });
 
             var meta = new PXMeta();
             meta.Matrix = "TAB001";

@@ -82,7 +82,7 @@
                         }
                         if (subitem is PxMenuItem)
                         {
-                            path.Add(new Level(subitem.ID.Selection, subitem.Text));
+                            path.Add(new Level(subitem.ID.Selection, subitem.Text, subitem.SortCode));
                             GenerateBreadcrumbs(subitem, language, index, path);
                             path.RemoveAt(path.Count - 1);
                         }
