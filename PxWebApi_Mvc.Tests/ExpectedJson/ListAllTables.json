@@ -18,11 +18,13 @@
         [
           {
             "id": "EN",
-            "label": "Environment"
+            "label": "Environment",
+            "sortCode": "Environment"
           },
           {
             "id": "EN02",
-            "label": "Miscellaneous"
+            "label": "Miscellaneous",
+            "sortCode": "Miscellaneous"
           }
         ]
       ],
@@ -66,11 +68,13 @@
         [
           {
             "id": "EN",
-            "label": "Environment"
+            "label": "Environment",
+            "sortCode": "Environment"
           },
           {
             "id": "EN02",
-            "label": "Miscellaneous"
+            "label": "Miscellaneous",
+            "sortCode": "Miscellaneous"
           }
         ]
       ],
@@ -114,11 +118,13 @@
         [
           {
             "id": "EN",
-            "label": "Environment"
+            "label": "Environment",
+            "sortCode": "Environment"
           },
           {
             "id": "EN01",
-            "label": "Waste"
+            "label": "Waste",
+            "sortCode": "Waste"
           }
         ]
       ],
@@ -162,11 +168,13 @@
         [
           {
             "id": "PO",
-            "label": "Population"
+            "label": "Population",
+            "sortCode": "Population"
           },
           {
             "id": "PO01",
-            "label": "Population census"
+            "label": "Population census",
+            "sortCode": "Population census"
           }
         ]
       ],
@@ -210,11 +218,13 @@
         [
           {
             "id": "PO",
-            "label": "Population"
+            "label": "Population",
+            "sortCode": "Population"
           },
           {
             "id": "PO01",
-            "label": "Population census"
+            "label": "Population census",
+            "sortCode": "Population census"
           }
         ]
       ],
