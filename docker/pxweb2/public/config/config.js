@@ -1,8 +1,6 @@
 window.PxWeb2Config = {
   language: {
-    supportedLanguages: [
-      { shorthand: 'en', languageName: 'English' },
-    ],
+    supportedLanguages: [{ shorthand: 'en', languageName: 'English' }],
     defaultLanguage: 'en',
     fallbackLanguage: 'en',
     showDefaultLanguageInPath: true,
@@ -10,6 +8,7 @@ window.PxWeb2Config = {
   baseApplicationPath: '/',
   apiUrl: '//localhost:8081/api/v2',
   maxDataCells: 150000,
+  showBreadCrumbOnStartPage: false,
   specialCharacters: ['.', '..', ':', '-', '...', '*'],
   variableFilterExclusionList: {
     en: [
@@ -20,5 +19,10 @@ window.PxWeb2Config = {
       'every other year',
       'every fifth year',
     ]
+  },
+  homePage: {
+    no: '', // Set to your Norwegian homepage URL
+    sv: '', // Set to your Swedish homepage URL
+    en: '', // Set to your English homepage URL
   },
 };

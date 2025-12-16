@@ -1,18 +1,5 @@
 {
   "startPage": {
-    "breadCrumb": {
-      "enabled": false,
-      "items": [
-        {
-          "label": "Home",
-          "href": "#"
-        },
-        {
-          "label": "PxWeb",
-          "href": "/"
-        }
-      ]
-    },
     "detailsSection": {
       "enabled": true,
       "detailHeader": "More about PxWeb",
@@ -42,6 +29,14 @@
             ]
           }
         }
+      ]
+    },
+    "noResultSearchHelp": {
+      "enabled": true,
+      "helpText": [
+        "You can search by table name, variables, or table number",
+        "Currently, you cannot search for content in the tables, such as the name of a municipality or county",
+        "We're working to improve the search, so it will be easier to find the numbers you need"
       ]
     }
   },
