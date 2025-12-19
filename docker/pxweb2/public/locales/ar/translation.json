@@ -51,7 +51,7 @@
       "drawer_save_file": "هناك المزيد من تنسيقات الملفات قيد العمل.",
       "drawer_save_api": "ميزة استعلام API قيد الإنشاء.",
       "drawer_edit": "يتم إنشاء المزيد من الأدوات لتحرير الجدول.",
-      "drawer_help": "لن يُضاف أي محتوى هنا. يجب أن يرتبط زر المساعدة مباشرةً بصفحات المساعدة الخاصة به.",
+      "drawer_help": "قسم المساعدة قيد الإنشاء. سيُتاح لك إنشاء روابط تُحيلك مباشرةً إلى صفحات المساعدة الخاصة بك.",
       "tab_definitions": "محتوى هذه علامة التبويب قيد الإنشاء."
     },
     "breadcrumbs": {
@@ -62,7 +62,9 @@
   },
   "start_page": {
     "header": "مرحبا بكم في التطبيق!",
-    "welcome_trans_test": "مرحبا بكم في <1>برنامج</1> لبكسي ويب 2.0!"
+    "welcome_trans_test": "مرحبا بكم في <1>برنامج</1> لبكسي ويب 2.0!",
+    "skip_to_filter": "تخطي إلى الفلتر",
+    "skip_to_result": "تخطي إلى النتيجة"
   },
   "presentation_page": {
     "side_menu": {
@@ -74,7 +76,6 @@
           "search": {
             "placeholder": "البحث في القائمة",
             "label": "يبحث",
-            "aria_label_icon_text": "أيقونة البحث",
             "aria_label_clear_button_text": "مسح أيقونة البحث"
           },
           "header": {
@@ -96,7 +97,9 @@
             "values_list": {
               "aria_label": "قائمة {{total}} قيم.",
               "no_results_heading": "“{{search}}” لا توجد نتائج ل",
-              "no_results_bodyshort": "جرّب كلمة رئيسية أو تهجئة مختلفة."
+              "no_results_bodyshort": "جرّب كلمة رئيسية أو تهجئة مختلفة.",
+              "showing_number_of_values": " {{searchResultsCount}} قيم",
+              "showing_number_of_one_value": " {{searchResultsCount}} قيمة"
             }
           }
         }
@@ -114,9 +117,16 @@
         "title": "يحرر",
         "customize": {
           "title": "تخصيص",
+          "auto_pivot": {
+            "title": "تحسين تخطيط الجدول",
+            "aria_label": "تحسين تخطيط الجدول",
+            "description": "ينظم الصفوف والأعمدة تلقائيًا لتخطيط جدول أوضح",
+            "screen_reader_announcement": "تم تحسين تخطيط الجدول وتنظيمه بعد {{first_variables}} و {{last_variable}}"
+          },
           "pivot": {
             "title": "تدوير الجدول",
             "aria_label": "تدوير الجدول في اتجاه عقارب الساعة",
+            "description": "",
             "screen_reader_announcement": "جدول مدور بعد {{first_variables}} و {{last_variable}}"
           },
           "rearrange": {
