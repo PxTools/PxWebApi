@@ -21,14 +21,16 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
         private readonly ITablePathResolver _tablePathResolver;
         private readonly ICodelistMapper _codelistMapper;
         private readonly string[] _languages;
+        private readonly string? _rootNode;
 
-        public CnmmDataSource(ICnmmConfigurationService cnmmConfigurationService, IItemSelectionResolver itemSelectionResolver, ITablePathResolver tablePathResolver, ICodelistMapper codelistMapper, IOptions<PxApiConfigurationOptions> configOptions)
+        public CnmmDataSource(ICnmmConfigurationService cnmmConfigurationService, IItemSelectionResolver itemSelectionResolver, ITablePathResolver tablePathResolver, ICodelistMapper codelistMapper, IOptions<PxApiConfigurationOptions> configOptions, IOptions<CnmmConfigurationOptions> cnmmConfigOptions)
         {
             _cnmmConfigurationService = cnmmConfigurationService;
             _itemSelectionResolver = itemSelectionResolver;
             _tablePathResolver = tablePathResolver;
             _codelistMapper = codelistMapper;
             _languages = [.. configOptions.Value.Languages.Select(l => l.Id)];
+            _rootNode = cnmmConfigOptions.Value.RootNode;
         }
 
         public IPXModelBuilder? CreateBuilder(string id, string language)
@@ -263,7 +265,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
         public Item? LoadDatabaseStructure(string language)
         {
-            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, "", out var selectionExists);
+            var rootNode = _rootNode ?? "";
+            ItemSelection itmSel = _itemSelectionResolver.ResolveFolder(language, rootNode, out var selectionExists);
             if (!selectionExists)
             {
                 return null;

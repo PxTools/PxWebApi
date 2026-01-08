@@ -2,6 +2,8 @@
 
 using System;
 
+using Microsoft.Extensions.Options;
+
 namespace PxWeb.UnitTests.DataSource
 {
     [TestClass]
@@ -79,7 +81,7 @@ namespace PxWeb.UnitTests.DataSource
                 .Setup(m => m.RootPath)
                 .Returns(wwwrootPath);
 
-            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
+            var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
             bool selectionExists;
@@ -200,7 +202,7 @@ namespace PxWeb.UnitTests.DataSource
                 .Setup(m => m.RootPath)
                 .Returns(wwwrootPath);
 
-            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
+            var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
 
@@ -320,7 +322,7 @@ namespace PxWeb.UnitTests.DataSource
                 .Setup(m => m.RootPath)
                 .Returns(wwwrootPath);
 
-            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
+            var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
 
@@ -343,6 +345,7 @@ namespace PxWeb.UnitTests.DataSource
             var hostingEnvironmentMock = new Mock<IPxHost>();
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
+            var cnmmConfigMock = new Mock<IOptions<CnmmConfigurationOptions>>();
 
             var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
 
@@ -357,7 +360,7 @@ namespace PxWeb.UnitTests.DataSource
                 .Setup(m => m.RootPath)
                 .Returns(wwwrootPath);
 
-            var resolver = new ItemSelectionResolverCnmm(memorymock.Object, pcAxisFactory, configMock.Object);
+            var resolver = new ItemSelectionResolverPxFile(memorymock.Object, pcAxisFactory, configMock.Object);
             var tablePathResolver = new TablePathResolverPxFile(memorymock.Object, hostingEnvironmentMock.Object, configMock.Object, loggerMock.Object);
             var datasource = new PxFileDataSource(configServiceMock.Object, resolver, tablePathResolver, hostingEnvironmentMock.Object, codelistMapperMock.Object);
 
