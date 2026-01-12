@@ -47,7 +47,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="PCAxis.Menu.ConfigDatamodelMenu" Version="1.0.10" />
-    <PackageReference Include="PCAxis.Serializers" Version="1.9.3" />
+    <PackageReference Include="PCAxis.Serializers" Version="1.9.4" />
     <PackageReference Include="PcAxis.Sql" Version="1.5.2" />
     <PackageReference Include="PxWeb.Api2.Server" Version="2.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
