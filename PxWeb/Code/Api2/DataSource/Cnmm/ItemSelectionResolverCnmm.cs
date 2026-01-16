@@ -37,7 +37,6 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 lookupTable = _itemSelectionResolverFactory.GetMenuLookupFolders(language);
                 if (!string.IsNullOrEmpty(_rootNode))
                 {
-                    // TODO remove unrooted entry from lookup table
                     lookupTable = RemoveUnrootedEntries(lookupTable, _rootNode);
                 }
                 _pxCache.Set(lookupTableName, lookupTable);
