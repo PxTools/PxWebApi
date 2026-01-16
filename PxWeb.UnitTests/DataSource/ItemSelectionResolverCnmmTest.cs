@@ -92,7 +92,8 @@ namespace PxWeb.UnitTests.DataSource
                 { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
                 { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
                 { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
-                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } }
+                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } },
+                { "BE0101A", new ItemSelection { Menu = "BE0101", Selection = "BE0101A" }   }
             };
 
             var cacheMock = new Mock<IPxCache>();
