@@ -103,9 +103,9 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
             foreach (var selection in lookupTable.Values)
             {
-                if (filter.ContainsKey(selection.Menu))
+                if (filter.TryGetValue(selection.Menu, out var selections))
                 {
-                    filter[selection.Menu].Add(selection);
+                    selections.Add(selection);
                 }
                 else
                 {
@@ -124,12 +124,10 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
 
         private static void AddRecursive(string item, Dictionary<string, ItemSelection> result, Dictionary<string, List<ItemSelection>> lookup)
         {
-            if (!lookup.ContainsKey(item))
+            if (!lookup.TryGetValue(item, out var selections))
             {
                 return;
             }
-
-            var selections = lookup[item];
 
             if (selections != null && selections.Count > 0)
             {
