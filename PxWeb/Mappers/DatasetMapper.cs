@@ -95,6 +95,9 @@ namespace PxWeb.Mappers
                             //refPeriod extension dimension
                             DatasetSubclass.AddRefPeriod(dimensionValue, variableValue.Code, variableValue.ContentInfo.RefPeriod);
 
+                            //alternativeText extension dimension
+                            DatasetSubclass.AddAlternativeText(dimensionValue, variableValue.Code, variableValue.ContentInfo.AlternativeText);
+
                             //measuringType extension dimension
                             DatasetSubclass.AddMeasuringType(dimensionValue, variableValue.Code, GetMeasuringType(variableValue.ContentInfo.StockFa));
 
@@ -240,6 +243,9 @@ namespace PxWeb.Mappers
 
             //refPeriod extension dimension
             DatasetSubclass.AddRefPeriod(dimensionValue, eliminatedValue, model.Meta.ContentInfo.RefPeriod);
+
+            //alternativeText extension dimension
+            DatasetSubclass.AddAlternativeText(dimensionValue, eliminatedValue, model.Meta.ContentInfo.AlternativeText);
 
             //measuringType extension dimension
             DatasetSubclass.AddMeasuringType(dimensionValue, eliminatedValue, GetMeasuringType(model.Meta.ContentInfo.StockFa));
