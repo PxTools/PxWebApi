@@ -118,5 +118,141 @@ namespace PxWeb.UnitTests.DataSource
             Assert.IsNotNull(result);
             Assert.IsFalse(selectionExists);
         }
+
+
+        [TestMethod]
+        public void WhenResolvingTableExist_ThenSelectionExistsIsTrue()
+        {
+            // Arrange
+            string language = "sv";
+
+            var folders = new Dictionary<string, ItemSelection>
+            {
+                { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
+                { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
+                { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
+                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } },
+                { "BE0101A", new ItemSelection { Menu = "BE0101", Selection = "BE0101A" }   }
+            };
+
+            var tableLookup = new Dictionary<string, ItemSelection>
+            {
+                { "TAB001", new ItemSelection { Menu = "BE0101A", Selection = "TAB001" } },
+                { "TAB002", new ItemSelection { Menu = "AM0101", Selection = "TAB002" } }
+            };
+
+            var cacheMock = new Mock<IPxCache>();
+            cacheMock.Setup(x => x.Get<Dictionary<string, ItemSelection>?>(It.IsAny<object>())).Returns((Dictionary<string, ItemSelection>?)null);
+
+
+
+            var configMock = new Mock<IPxApiConfigurationService>();
+            var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
+            var cnmmConfigMock = new Mock<IOptions<CnmmConfigurationOptions>>();
+            cnmmConfigMock.Setup(x => x.Value).Returns(new CnmmConfigurationOptions() { RootNode = "" });
+            var testFactory = new TestFactory();
+
+            var config = testFactory.GetPxApiConfiguration();
+            configMock.Setup(x => x.GetConfiguration()).Returns(config);
+            pcAxisFactory.Setup(x => x.GetMenuLookupFolders(language)).Returns(folders);
+            pcAxisFactory.Setup(x => x.GetMenuLookupTables(language)).Returns(tableLookup);
+            var resolver = new ItemSelectionResolverCnmm(cacheMock.Object, pcAxisFactory.Object, configMock.Object, cnmmConfigMock.Object);
+            bool selectionExists;
+            // Act
+            var result = resolver.ResolveTable(language, "TAB001", out selectionExists);
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(selectionExists);
+        }
+
+        [TestMethod]
+        public void WhenRootedResolvingTableExist_ThenSelectionExistsIsTrue()
+        {
+            // Arrange
+            string language = "sv";
+
+            var folders = new Dictionary<string, ItemSelection>
+            {
+                { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
+                { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
+                { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
+                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } },
+                { "BE0101A", new ItemSelection { Menu = "BE0101", Selection = "BE0101A" }   }
+            };
+
+            var tableLookup = new Dictionary<string, ItemSelection>
+            {
+                { "TAB001", new ItemSelection { Menu = "BE0101A", Selection = "TAB001" } },
+                { "TAB002", new ItemSelection { Menu = "AM0101", Selection = "TAB002" } }
+            };
+
+            var cacheMock = new Mock<IPxCache>();
+            cacheMock.Setup(x => x.Get<Dictionary<string, ItemSelection>?>(It.IsAny<object>())).Returns((Dictionary<string, ItemSelection>?)null);
+
+
+
+            var configMock = new Mock<IPxApiConfigurationService>();
+            var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
+            var cnmmConfigMock = new Mock<IOptions<CnmmConfigurationOptions>>();
+            cnmmConfigMock.Setup(x => x.Value).Returns(new CnmmConfigurationOptions() { RootNode = "BE" });
+            var testFactory = new TestFactory();
+
+            var config = testFactory.GetPxApiConfiguration();
+            configMock.Setup(x => x.GetConfiguration()).Returns(config);
+            pcAxisFactory.Setup(x => x.GetMenuLookupFolders(language)).Returns(folders);
+            pcAxisFactory.Setup(x => x.GetMenuLookupTables(language)).Returns(tableLookup);
+            var resolver = new ItemSelectionResolverCnmm(cacheMock.Object, pcAxisFactory.Object, configMock.Object, cnmmConfigMock.Object);
+            bool selectionExists;
+            // Act
+            var result = resolver.ResolveTable(language, "TAB001", out selectionExists);
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(selectionExists);
+        }
+
+        [TestMethod]
+        public void WhenRootedResolvingTableNoesNotExist_ThenSelectionExistsIsTrue()
+        {
+            // Arrange
+            string language = "sv";
+
+            var folders = new Dictionary<string, ItemSelection>
+            {
+                { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
+                { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
+                { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
+                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } },
+                { "BE0101A", new ItemSelection { Menu = "BE0101", Selection = "BE0101A" }   }
+            };
+
+            var tableLookup = new Dictionary<string, ItemSelection>
+            {
+                { "TAB001", new ItemSelection { Menu = "BE0101A", Selection = "TAB001" } },
+                { "TAB002", new ItemSelection { Menu = "AM0101", Selection = "TAB002" } }
+            };
+
+            var cacheMock = new Mock<IPxCache>();
+            cacheMock.Setup(x => x.Get<Dictionary<string, ItemSelection>?>(It.IsAny<object>())).Returns((Dictionary<string, ItemSelection>?)null);
+
+
+
+            var configMock = new Mock<IPxApiConfigurationService>();
+            var pcAxisFactory = new Mock<IItemSelectionResolverFactory>();
+            var cnmmConfigMock = new Mock<IOptions<CnmmConfigurationOptions>>();
+            cnmmConfigMock.Setup(x => x.Value).Returns(new CnmmConfigurationOptions() { RootNode = "BE" });
+            var testFactory = new TestFactory();
+
+            var config = testFactory.GetPxApiConfiguration();
+            configMock.Setup(x => x.GetConfiguration()).Returns(config);
+            pcAxisFactory.Setup(x => x.GetMenuLookupFolders(language)).Returns(folders);
+            pcAxisFactory.Setup(x => x.GetMenuLookupTables(language)).Returns(tableLookup);
+            var resolver = new ItemSelectionResolverCnmm(cacheMock.Object, pcAxisFactory.Object, configMock.Object, cnmmConfigMock.Object);
+            bool selectionExists;
+            // Act
+            var result = resolver.ResolveTable(language, "TAB002", out selectionExists);
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsFalse(selectionExists);
+        }
     }
 }
