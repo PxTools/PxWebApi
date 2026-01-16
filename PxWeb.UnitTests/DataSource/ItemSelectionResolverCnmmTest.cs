@@ -17,7 +17,7 @@ namespace PxWeb.UnitTests.DataSource
                 { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
                 { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
                 { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
-                { "BE0101", new ItemSelection { Menu = "START", Selection = "BE0101" } }
+                { "BE", new ItemSelection { Menu = "START", Selection = "BE0101" } }
             };
 
             var cacheMock = new Mock<IPxCache>();
@@ -55,7 +55,7 @@ namespace PxWeb.UnitTests.DataSource
                 { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
                 { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
                 { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
-                { "BE0101", new ItemSelection { Menu = "START", Selection = "BE0101" } }
+                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } }
             };
 
             var cacheMock = new Mock<IPxCache>();
@@ -92,7 +92,7 @@ namespace PxWeb.UnitTests.DataSource
                 { "AM", new ItemSelection { Menu = "START", Selection = "AM" } },
                 { "BE", new ItemSelection { Menu = "START", Selection = "BE" } },
                 { "AM0101", new ItemSelection { Menu = "AM", Selection = "AM0101" } },
-                { "BE0101", new ItemSelection { Menu = "START", Selection = "BE0101" } }
+                { "BE0101", new ItemSelection { Menu = "BE", Selection = "BE0101" } }
             };
 
             var cacheMock = new Mock<IPxCache>();
