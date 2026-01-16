@@ -27,7 +27,7 @@
     }
   ],
   "defaultDataFormat": "json-stat2",
-  "dataFormats": [ "json-stat2", "csv", "px", "xlsx", "html", "json-px", "parquet" ],
+  "dataFormats": [ "json-stat2", "csv", "px", "xlsx", "html", "json-px" ],
   "features": [
     {
       "id": "CORS",

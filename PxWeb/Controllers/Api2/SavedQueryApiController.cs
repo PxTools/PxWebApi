@@ -62,6 +62,11 @@ namespace PxWeb.Controllers.Api2
 
             _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem);
 
+            if (problem is not null)
+            {
+                return BadRequest(problem);
+            }
+
             string id;
             try
             {
@@ -78,7 +83,9 @@ namespace PxWeb.Controllers.Api2
 
             // 3. Return the SavedQuery with the id set.
             savedQuery.Id = id;
-            return Created(savedQuery.Id, savedQuery);
+            var response = _savedQueryResponseMapper.Map(savedQuery);
+            var uri = response.Links.FirstOrDefault(link => link.Rel == "self")?.Href ?? id;
+            return Created(uri, response);
 
         }
 
@@ -135,7 +142,7 @@ namespace PxWeb.Controllers.Api2
             string outputFormatStr;
             List<string> outputFormatParamsStr;
 
-            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat ?? savedQuery.OutputFormat, _configOptions.DefaultOutputFormat, outputFormatParams ?? savedQuery.OutputFormatParams, out paramError);
+            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat ?? savedQuery.OutputFormat, _configOptions, outputFormatParams ?? savedQuery.OutputFormatParams, out paramError);
 
             if (paramError)
             {

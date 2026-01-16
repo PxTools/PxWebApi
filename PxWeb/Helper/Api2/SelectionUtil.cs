@@ -74,7 +74,7 @@ namespace PxWeb.Helper.Api2
             {
                 var selection = new VariableSelection();
                 selection.VariableCode = key;
-                selection.CodeList = codelist[key];
+                selection.Codelist = codelist[key];
                 selections.Selection.Add(selection);
             }
 
@@ -157,7 +157,7 @@ namespace PxWeb.Helper.Api2
             foreach (var variableSelection in selection.Selection)
             {
                 var newVariableSelection = new VariableSelection();
-                newVariableSelection.CodeList = variableSelection.CodeList;
+                newVariableSelection.Codelist = variableSelection.Codelist;
                 newVariableSelection.VariableCode = variableSelection.VariableCode;
                 newVariableSelection.ValueCodes = new List<string>(variableSelection.ValueCodes);
                 copy.Selection.Add(newVariableSelection);

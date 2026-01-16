@@ -132,7 +132,7 @@ namespace PxWeb.UnitTests.Helpers
             Assert.IsNotNull(result);
             Assert.HasCount(1, result.Selection);
             Assert.AreEqual("A", result.Selection[0].VariableCode);
-            Assert.AreEqual("B", result.Selection[0].CodeList);
+            Assert.AreEqual("B", result.Selection[0].Codelist);
 
         }
     }
