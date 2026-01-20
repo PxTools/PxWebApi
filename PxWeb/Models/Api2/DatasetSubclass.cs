@@ -467,6 +467,21 @@ namespace PxWeb.Models.Api2
             dimensionValue.Extension.Refperiod.Add(valueCode, refPeriod);
         }
 
+        public static void AddAlternativeText(DimensionValue dimensionValue, string valueCode, string altText)
+        {
+            if (altText == null) return;
+
+            if (dimensionValue.Extension is null)
+            {
+                dimensionValue.Extension = new ExtensionDimension();
+            }
+
+            if (dimensionValue.Extension.AlternativeText == null)
+                dimensionValue.Extension.AlternativeText = new Dictionary<string, string>();
+
+            dimensionValue.Extension.AlternativeText.Add(valueCode, altText);
+        }
+
         public void AddDimensionLink(DimensionValue dimensionValue, Dictionary<string, string> metaIds)
         {
             dimensionValue.Link = new JsonstatExtensionLink
