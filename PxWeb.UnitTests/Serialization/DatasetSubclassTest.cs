@@ -7,7 +7,7 @@ namespace PxWeb.UnitTests.Serialization
     {
 
         [TestMethod]
-        public void DatasetSubclass_AddAlternativeText_ShouldShouldNotBeSetWhenNoAlternativeTextExists()
+        public void DatasetSubclass_AddAlternativeText_ShouldNotBeSetWhenNoAlternativeTextExists()
         {
 
             // Arrange
@@ -25,7 +25,7 @@ namespace PxWeb.UnitTests.Serialization
         }
 
         [TestMethod]
-        public void DatasetSubclass_AddAlternativeText_ShouldShouldNotBeSetWhenNoAlternativeTextExistsEvenIfExtensionExists()
+        public void DatasetSubclass_AddAlternativeText_ShouldNotBeSetWhenNoAlternativeTextExistsEvenIfExtensionExists()
         {
 
             // Arrange
@@ -45,7 +45,7 @@ namespace PxWeb.UnitTests.Serialization
         }
 
         [TestMethod]
-        public void DatasetSubclass_AddAlternativeText_ShouldShouldBeSetWhenAlternativeTextExists()
+        public void DatasetSubclass_AddAlternativeText_ShouldBeSetWhenAlternativeTextExists()
         {
 
             // Arrange
