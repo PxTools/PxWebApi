@@ -1,13 +1,12 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Text;
-
 using PCAxis.Paxiom;
-
 using Px.Utils.ModelBuilders;
 using Px.Utils.Models.Metadata;
 using Px.Utils.PxFile.Metadata;
+
+using PxWeb.Code.PxFile;
 
 namespace PxWeb.PxFile
 {
@@ -29,18 +28,17 @@ namespace PxWeb.PxFile
             using Stream fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read);
             PxFileMetadataReader reader = new();
             Encoding encoding = reader.GetEncoding(fileStream);
+            fileStream.Position = 0;
             IEnumerable<KeyValuePair<string, string>> entries = reader.ReadMetadata(fileStream, encoding);
 
-            fileStream.Position = 0;
 
-            MetadataEntryKeyBuilder entryKeyBuilder = new();
-            Dictionary<MetadataEntryKey, string> entries2 = [];
+            var entryBuilder = new MetaEntryBuilder();
             foreach (KeyValuePair<string, string> entry in entries)
             {
-                MetadataEntryKey entryKey = entryKeyBuilder.Parse(entry.Key);
+                var entryKey = entryBuilder.Parse(entry.Key);
                 var values = ParseStringToList(entry.Value);
-                handler(entryKey.KeyWord, entryKey.Language, $"{entryKey.FirstIdentifier}", values);
-                entries2[entryKey] = entry.Value;
+                var subkey = entryKey.SubKey == null ? "" : entryKey.SubKey.Trim('"');
+                handler(entryKey.KeyWord, entryKey.Lang, subkey, values);
             }
         }
 

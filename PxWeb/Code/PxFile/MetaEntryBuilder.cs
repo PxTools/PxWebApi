@@ -1,14 +1,9 @@
-using System.Linq;
-using System.Text;
-
-using DocumentFormat.OpenXml.Presentation;
-
 namespace PxWeb.Code.PxFile
 {
     /// <summary>
     /// Class for building <see cref="MetadataEntryKey"/> records from strings.
     /// </summary>
-    public class MetadataEntryKeyBuilder
+    public class MetaEntryBuilder
     {
         public struct EntryKeyParseResult(string keyWord, string? lang, string? subKey)
         {
@@ -46,11 +41,8 @@ namespace PxWeb.Code.PxFile
             string name = ParseKeyName(ref key);
             string? lang = ParseLang(ref key);
 
-            List<string> specifiers = ParseSpecifier(key);
-
-            if(specifiers.Count > 2) throw new ArgumentException($"Too many specifiers found in key {key}");
-
-            return new EntryKeyParseResult(name, lang, string.Join(_listSeparator, specifiers));
+            string? specifiers = ParseSpecifier(key);
+            return new EntryKeyParseResult(name, lang, specifiers);
         }
 
         private string ParseKeyName(ref string remaining)
@@ -104,50 +96,21 @@ namespace PxWeb.Code.PxFile
             }
         }
 
-        private List<string> ParseSpecifier(string remaining)
+        private static string? ParseSpecifier(string remaining)
         {
+            // input: ("foo", "bar") -> output: "foo", "bar"
             remaining = remaining.Trim();
-            if (remaining.Length == 0) return [];
-            else if (remaining.Length > 4 && 
+            if (remaining.Length == 0) return null;
+            else if (remaining.Length > 4 &&
                 remaining[0] == _spesifierParamStart &&
                 remaining[^1] == _spesifierParamEnd)
             {
-                return [.. SplitSpecifierParts(remaining[1..^1], _listSeparator).Select(ValidateAndTrimSpecifierValue)];
+                return remaining[1..^1].Trim();
             }
             else
             {
                 throw new ArgumentException($"Unable to parse key specifier from input {remaining}");
             }
-        }
-
-        private string ValidateAndTrimSpecifierValue(string input)
-        {
-            input = input.Trim();
-            if (input.Length > 2 && input[0] == _stringDelimeter && input[^1] == _stringDelimeter)
-            {
-                string trimmed = input[1..^1];
-                if (!trimmed.Contains(_stringDelimeter)) return trimmed;
-            }
-            throw new ArgumentException($"Invalid symbol found when parsing specifer value from string {input}");
-        }
-
-        private string[] SplitSpecifierParts(string input, char listSeparator)
-        {
-            bool inString = false;
-            List<string> output = [];
-            StringBuilder current = new();
-            foreach (char c in input)
-            {
-                if (c == _stringDelimeter) inString = !inString;
-                if (c == listSeparator && !inString)
-                {
-                    output.Add(current.ToString());
-                    current.Clear();
-                }
-                else current.Append(c);
-            }
-            output.Add(current.ToString());
-            return [.. output];
         }
     }
 }
