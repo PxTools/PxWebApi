@@ -1,10 +1,14 @@
-﻿using System.IO;
+using System.IO;
 using System.Linq;
 
 using PCAxis.Paxiom;
+using PCAxis.Paxiom.Operations;
 
+using Px.Utils.Models;
 using Px.Utils.Models.Metadata;
+using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
+using Px.Utils.Operations;
 using Px.Utils.PxFile.Data;
 
 namespace PxWeb.PxFile
@@ -57,20 +61,19 @@ namespace PxWeb.PxFile
             var missingEncoding = new double[] { PXConstant.DATASYMBOL_NIL, PXConstant.DATASYMBOL_1, PXConstant.DATASYMBOL_2, PXConstant.DATASYMBOL_3, PXConstant.DATASYMBOL_4, PXConstant.DATASYMBOL_5 };
             dataReader.ReadUnsafeDoubles(buffer, 0, targetMap, totalMap, missingEncoding);
 
-            var count = m_model.Data.Write(buffer, 0, buffer.Length - 1);
+            var _ = m_model.Data.Write(buffer, 0, buffer.Length - 1);
+            var elimOper = new Elimination();
 
             // TODO Handle eliminations
             // TODO Handle aggregations
             // TODO Trim notes etc
-            foreach (var action in actions)
-            {
-                var variable = Model.Meta.Variables.GetByCode(action.Key);
-                if (action.Value == PostProcessingActionType.EliminateByValue)
-                {
-                    m_model.Meta.RemoveVariable(variable);
-                }
+            EliminationDescription[] elimDescriptions = actions.Where(
+                a => a.Value == PostProcessingActionType.EliminateByValue ||
+                a.Value == PostProcessingActionType.EliminateBySum)
+             .Select(e => new EliminationDescription(e.Key, e.Value == PostProcessingActionType.EliminateByValue))
+             .ToArray();
+            m_model = elimOper.Execute(m_model, elimDescriptions);
 
-            }
             return true;
         }
 
