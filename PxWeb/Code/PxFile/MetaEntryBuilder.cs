@@ -47,6 +47,7 @@ namespace PxWeb.Code.PxFile
 
         private string ParseKeyName(ref string remaining)
         {
+            if(string.IsNullOrEmpty(remaining)) throw new ArgumentException("Input string is null or empty");
             char[] sectionStartTokens = [_langParamStart, _spesifierParamStart];
             string output = new(remaining);
             int index = remaining.IndexOfAny(sectionStartTokens);

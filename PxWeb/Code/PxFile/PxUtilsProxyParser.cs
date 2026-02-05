@@ -25,12 +25,14 @@ namespace PxWeb.PxFile
 
         public void ParseMeta(IPXModelParser.MetaHandler handler, string preferredLanguage)
         {
-            using Stream fileStream = new FileStream(_filePath, FileMode.Open, FileAccess.Read);
+            using Stream fileStream = OpenFileStream();
             PxFileMetadataReader reader = new();
             Encoding encoding = reader.GetEncoding(fileStream);
-            fileStream.Position = 0;
-            IEnumerable<KeyValuePair<string, string>> entries = reader.ReadMetadata(fileStream, encoding);
 
+            if(fileStream.CanSeek) fileStream.Position = 0;
+            else throw new InvalidOperationException("The provided stream does not support seeking, which is required for reading metadata.");
+
+            IEnumerable<KeyValuePair<string, string>> entries = reader.ReadMetadata(fileStream, encoding);
 
             var entryBuilder = new MetaEntryBuilder();
             foreach (KeyValuePair<string, string> entry in entries)
@@ -40,6 +42,11 @@ namespace PxWeb.PxFile
                 var subkey = entryKey.SubKey == null ? "" : entryKey.SubKey.Trim('"');
                 handler(entryKey.KeyWord, entryKey.Lang, subkey, values);
             }
+        }
+
+        internal virtual Stream OpenFileStream()
+        {
+            return new FileStream(_filePath, FileMode.Open, FileAccess.Read);
         }
 
         /// <summary>
