@@ -10,7 +10,7 @@ namespace PxWeb.UnitTests.Helpers
         {
             var result = CommaSeparatedListToListConverter.ToList<string>(string.Empty, x => x);
             Assert.IsNotNull(result);
-            Assert.AreEqual(0, result.Count);
+            Assert.HasCount(0, result);
         }
 
         [TestMethod]
@@ -18,14 +18,14 @@ namespace PxWeb.UnitTests.Helpers
         {
             var result = CommaSeparatedListToListConverter.ToList<string>("First value", x => x);
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.HasCount(1, result);
         }
         [TestMethod]
         public void ToList_WhenCalledWithOneValueWithCommaString_ReturnsOneItemInList()
         {
             var result = CommaSeparatedListToListConverter.ToList<string>("[First, value]", x => x);
             Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Count);
+            Assert.HasCount(1, result);
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace PxWeb.UnitTests.Helpers
         {
             var result = CommaSeparatedListToListConverter.ToList<string>("[First, value], Second value", x => x);
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Count);
+            Assert.HasCount(2, result);
         }
     }
 }

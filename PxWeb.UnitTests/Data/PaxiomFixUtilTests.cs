@@ -14,7 +14,7 @@ namespace PxWeb.UnitTests.Data
             // Act
             var result = PaxiomFixUtil.ExtractNotes(variable);
             // Assert
-            Assert.AreEqual(0, result.Count);
+            Assert.HasCount(0, result);
         }
 
         [TestMethod]
@@ -36,9 +36,9 @@ namespace PxWeb.UnitTests.Data
             // Act
             var result = PaxiomFixUtil.ExtractNotes(variable);
             // Assert
-            Assert.AreEqual(1, result.Count);
+            Assert.HasCount(1, result);
             Assert.IsTrue(result.ContainsKey("v1"));
-            Assert.AreEqual(1, result["v1"].Count);
+            Assert.HasCount(1, result["v1"]);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace PxWeb.UnitTests.Data
             PaxiomFixUtil.RestoreNotes(variable, notes);
 
             // Assert
-            Assert.AreEqual(1, variable.Values[0].Notes.Count);
+            Assert.HasCount(1, variable.Values[0].Notes);
         }
 
         [TestMethod]
@@ -91,7 +91,7 @@ namespace PxWeb.UnitTests.Data
             PaxiomFixUtil.RestoreNotes(variable, notes);
 
             // Assert
-            Assert.AreEqual(1, variable.Values[0].Notes.Count);
+            Assert.HasCount(1, variable.Values[0].Notes);
         }
 
         [TestMethod]
@@ -179,7 +179,7 @@ namespace PxWeb.UnitTests.Data
 
             // Assert
             Assert.AreEqual(1, result);
-            Assert.AreEqual(2, meta.CellNotes.Count);
+            Assert.HasCount(2, meta.CellNotes);
         }
     }
 }

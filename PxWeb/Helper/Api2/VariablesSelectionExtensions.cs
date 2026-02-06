@@ -11,18 +11,18 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
             selections.Selection.Add(selection);
             selections.Placement?.Stub.Add(variable.Code);
         }
 
-        public static void AddHeadingVariable(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 11)
+        public static void AddHeadingVariable(this VariablesSelection selections, Variable variable, Func<Variable, int, string[]> valuesFunction, int numberOfValues = 13)
         {
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, numberOfValues));
             selections.Selection.Add(selection);
             selections.Placement?.Heading.Add(variable.Code);
@@ -33,7 +33,7 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selection.ValueCodes.AddRange(valuesFunction(variable, 1));
             selections.Selection.Add(selection);
             selections.Placement?.Heading.Add(variable.Code);
@@ -44,7 +44,7 @@ namespace PxWeb.Helper.Api2
             var selection = new VariableSelection();
             selection.ValueCodes = new List<string>();
             selection.VariableCode = variable.Code;
-            selection.CodeList = GetCodeList(variable);
+            selection.Codelist = GetCodeList(variable);
             selections.Selection.Add(selection);
 
         }

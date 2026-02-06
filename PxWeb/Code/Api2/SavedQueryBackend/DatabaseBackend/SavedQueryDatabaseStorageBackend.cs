@@ -53,20 +53,10 @@ namespace PxWeb.Code.Api2.SavedQueryBackend.DatabaseBackend
             var mainTable = _tablePathResolver.Resolve(language, tableId, out exists);
             if (!exists)
             {
-                mainTable = "?";
+                mainTable = "?";  //better to throw something isnt it?
             }
 
-            try
-            {
-                return _savedQueryDatabaseAccessor.Save(savedQuery, mainTable, null).ToString();
-            }
-            catch (Exception ex)
-            {
-                // Log the error (not implemented in this example)
-                Debug.WriteLine($"Error saving query: {ex.Message}");
-            }
-            return string.Empty;
-
+            return _savedQueryDatabaseAccessor.Save(savedQuery, mainTable, null).ToString();
         }
 
         public bool UpdateRunStatistics(string id)

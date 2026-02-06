@@ -4,17 +4,21 @@ services:
   web:
     depends_on:
       - api
-    image: ghcr.io/pxtools/pxweb2:latest
+    image: ghcr.io/pxtools/pxweb2:2.6.0
     pull_policy: always 
     ports:
       - "8080:8080"
     volumes:
       - ./docker/pxweb2/public/config:/usr/share/nginx/html/config:rw
+      - ./docker/pxweb2/public/content:/usr/share/nginx/html/content:rw
+      - ./docker/pxweb2/public/fonts:/usr/share/nginx/html/fonts:rw
+      - ./docker/pxweb2/public/icons:/usr/share/nginx/html/icons:rw
+      - ./docker/pxweb2/public/images:/usr/share/nginx/html/images:rw
       - ./docker/pxweb2/public/locales:/usr/share/nginx/html/locales:rw
       - ./docker/pxweb2/public/theme:/usr/share/nginx/html/theme:rw
 
   api:
-    image: ghcr.io/pxtools/pxwebapi:latest
+    image: ghcr.io/pxtools/pxwebapi:2.2.0
     pull_policy: always
     ports:
       - "8081:8080"

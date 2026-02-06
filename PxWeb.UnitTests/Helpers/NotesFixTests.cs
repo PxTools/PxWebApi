@@ -18,7 +18,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(Dictionary<string, Notes>));
-            Assert.AreEqual(0, ((Dictionary<string, Notes>)result).Count);
+            Assert.HasCount(0, ((Dictionary<string, Notes>)result));
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.IsNotNull(result);
             Assert.IsInstanceOfType(result, typeof(Dictionary<string, Notes>));
-            Assert.AreEqual(1, ((Dictionary<string, Notes>)result).Count);
+            Assert.HasCount(1, ((Dictionary<string, Notes>)result));
             Assert.IsTrue(((Dictionary<string, Notes>)result).ContainsKey(valueCode));
         }
 
@@ -60,7 +60,7 @@ namespace PxWeb.UnitTests.Helpers
             // Assert
             Assert.IsTrue(variable2.Values[0].HasNotes());
             Assert.AreEqual(noteText, variable2.Values[0].Notes[0].Text);
-            Assert.AreEqual(1, variable2.Values[0].Notes.Count);
+            Assert.HasCount(1, variable2.Values[0].Notes);
 
         }
     }

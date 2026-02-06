@@ -51,7 +51,7 @@ namespace PxWeb.Controllers.Api2.Admin
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
         [SwaggerResponse(statusCode: 405, description: "Method Not Allowed")]
-        public IActionResult Database([FromQuery(Name = "langdependent")] bool? langDependent, [FromQuery(Name = "sortorder")] string? sortOrder)
+        public IActionResult Database([FromQuery(Name = "sortorder")] string? sortOrder)
         {
             if (_dataSource.GetType() != typeof(PxFileDataSource))
             {
@@ -60,7 +60,7 @@ namespace PxWeb.Controllers.Api2.Admin
 
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
-                await createMenuXml(langDependent, sortOrder, token);
+                await createMenuXml(true, sortOrder, token);
             });
 
             return new AcceptedResult();
@@ -124,7 +124,7 @@ namespace PxWeb.Controllers.Api2.Admin
         {
             if (langDependent == null)
             {
-                return false;
+                return true;
             }
             else
             {

@@ -16,8 +16,8 @@
 
             // Assert
             Assert.IsNotNull(selection);
-            Assert.AreEqual(1, selection.Selection.Count);
-            Assert.AreEqual(1500, selection.Selection[0].ValueCodes.Count);
+            Assert.HasCount(1, selection.Selection);
+            Assert.HasCount(1500, selection.Selection[0].ValueCodes);
         }
 
         [TestMethod]
@@ -32,8 +32,8 @@
 
             // Assert
             Assert.IsNotNull(selection);
-            Assert.AreEqual(1, selection.Selection.Count);
-            Assert.AreEqual(50, selection.Selection[0].ValueCodes.Count);
+            Assert.HasCount(1, selection.Selection);
+            Assert.HasCount(50, selection.Selection[0].ValueCodes);
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(2, selection.Selection.Count);
+            Assert.HasCount(2, selection.Selection);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@
 
             // Assert
 
-            Assert.AreEqual(4, selection.Selection.Count);
+            Assert.HasCount(4, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var m1 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -71,13 +71,13 @@
             var o3 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[3].Code);
 
             Assert.IsNotNull(m1);
-            Assert.AreEqual(11, m1.ValueCodes.Count);
+            Assert.HasCount(13, m1.ValueCodes);
             Assert.IsNotNull(o1);
-            Assert.AreEqual(0, o1.ValueCodes.Count);
+            Assert.HasCount(0, o1.ValueCodes);
             Assert.IsNotNull(o2);
-            Assert.AreEqual(0, o2.ValueCodes.Count);
+            Assert.HasCount(0, o2.ValueCodes);
             Assert.IsNotNull(o3);
-            Assert.AreEqual(150, o3.ValueCodes.Count);
+            Assert.HasCount(150, o3.ValueCodes);
         }
 
         [TestMethod]
@@ -91,7 +91,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(4, selection.Selection.Count);
+            Assert.HasCount(4, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var m1 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -100,13 +100,13 @@
             var o3 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[3].Code);
 
             Assert.IsNotNull(m1);
-            Assert.AreEqual(10, m1.ValueCodes.Count);
+            Assert.HasCount(10, m1.ValueCodes);
             Assert.IsNotNull(m2);
-            Assert.AreEqual(10, m2.ValueCodes.Count);
+            Assert.HasCount(10, m2.ValueCodes);
             Assert.IsNotNull(o2);
-            Assert.AreEqual(0, o2.ValueCodes.Count);
+            Assert.HasCount(0, o2.ValueCodes);
             Assert.IsNotNull(o3);
-            Assert.AreEqual(0, o3.ValueCodes.Count);
+            Assert.HasCount(0, o3.ValueCodes);
         }
 
         [TestMethod]
@@ -120,7 +120,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(4, selection.Selection.Count);
+            Assert.HasCount(4, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var m1 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -129,13 +129,13 @@
             var o3 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[3].Code);
 
             Assert.IsNotNull(m1);
-            Assert.AreEqual(10, m1.ValueCodes.Count);
+            Assert.HasCount(10, m1.ValueCodes);
             Assert.IsNotNull(m2);
-            Assert.AreEqual(1, m2.ValueCodes.Count);
+            Assert.HasCount(1, m2.ValueCodes);
             Assert.IsNotNull(m3);
-            Assert.AreEqual(10, m3.ValueCodes.Count);
+            Assert.HasCount(10, m3.ValueCodes);
             Assert.IsNotNull(o3);
-            Assert.AreEqual(0, o3.ValueCodes.Count);
+            Assert.HasCount(0, o3.ValueCodes);
         }
 
         [TestMethod]
@@ -149,7 +149,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(2, selection.Selection.Count);
+            Assert.HasCount(2, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -157,9 +157,9 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(3, contens.ValueCodes.Count);
+            Assert.HasCount(3, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(13, time.ValueCodes.Count);
+            Assert.HasCount(13, time.ValueCodes);
         }
 
         [TestMethod]
@@ -173,7 +173,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(2, selection.Selection.Count);
+            Assert.HasCount(2, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -181,9 +181,9 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(30, contens.ValueCodes.Count);
+            Assert.HasCount(30, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(13, time.ValueCodes.Count);
+            Assert.HasCount(13, time.ValueCodes);
         }
 
         [TestMethod]
@@ -197,7 +197,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(3, selection.Selection.Count);
+            Assert.HasCount(3, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -206,11 +206,11 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(1, contens.ValueCodes.Count);
+            Assert.HasCount(1, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(13, time.ValueCodes.Count);
+            Assert.HasCount(13, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(1500, cls1.ValueCodes.Count);
+            Assert.HasCount(1500, cls1.ValueCodes);
         }
 
         [TestMethod]
@@ -224,7 +224,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(3, selection.Selection.Count);
+            Assert.HasCount(3, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -233,11 +233,11 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(10, contens.ValueCodes.Count);
+            Assert.HasCount(10, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(1, time.ValueCodes.Count);
+            Assert.HasCount(1, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(1500, cls1.ValueCodes.Count);
+            Assert.HasCount(1500, cls1.ValueCodes);
         }
 
         [TestMethod]
@@ -251,7 +251,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(5, selection.Selection.Count);
+            Assert.HasCount(5, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -262,15 +262,15 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(1, contens.ValueCodes.Count);
+            Assert.HasCount(1, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(1, time.ValueCodes.Count);
+            Assert.HasCount(1, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(11, cls1.ValueCodes.Count);
+            Assert.HasCount(13, cls1.ValueCodes);
             Assert.IsNotNull(cls2);
-            Assert.AreEqual(0, cls2.ValueCodes.Count);
+            Assert.HasCount(0, cls2.ValueCodes);
             Assert.IsNotNull(cls3);
-            Assert.AreEqual(20, cls3.ValueCodes.Count);
+            Assert.HasCount(20, cls3.ValueCodes);
         }
 
         [TestMethod]
@@ -284,7 +284,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(5, selection.Selection.Count);
+            Assert.HasCount(5, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -295,15 +295,15 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(1, contens.ValueCodes.Count);
+            Assert.HasCount(1, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(1, time.ValueCodes.Count);
+            Assert.HasCount(1, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(0, cls1.ValueCodes.Count);
+            Assert.HasCount(0, cls1.ValueCodes);
             Assert.IsNotNull(cls2);
-            Assert.AreEqual(20, cls2.ValueCodes.Count);
+            Assert.HasCount(20, cls2.ValueCodes);
             Assert.IsNotNull(cls3m);
-            Assert.AreEqual(11, cls3m.ValueCodes.Count);
+            Assert.HasCount(13, cls3m.ValueCodes);
         }
 
         [TestMethod]
@@ -317,7 +317,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(5, selection.Selection.Count);
+            Assert.HasCount(5, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -328,15 +328,15 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(1, contens.ValueCodes.Count);
+            Assert.HasCount(1, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(1, time.ValueCodes.Count);
+            Assert.HasCount(1, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(0, cls1.ValueCodes.Count);
+            Assert.HasCount(0, cls1.ValueCodes);
             Assert.IsNotNull(cls2m);
-            Assert.AreEqual(11, cls2m.ValueCodes.Count);
+            Assert.HasCount(13, cls2m.ValueCodes);
             Assert.IsNotNull(cls3m);
-            Assert.AreEqual(20, cls3m.ValueCodes.Count);
+            Assert.HasCount(20, cls3m.ValueCodes);
         }
 
         [TestMethod]
@@ -350,7 +350,7 @@
             var selection = selectionHandler.GetDefaultSelection(builderMock.Object);
 
             // Assert
-            Assert.AreEqual(6, selection.Selection.Count);
+            Assert.HasCount(6, selection.Selection);
 
             var meta = builderMock.Object.Model.Meta;
             var contens = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[0].Code);
@@ -362,17 +362,17 @@
 
 
             Assert.IsNotNull(contens);
-            Assert.AreEqual(1, contens.ValueCodes.Count);
+            Assert.HasCount(1, contens.ValueCodes);
             Assert.IsNotNull(time);
-            Assert.AreEqual(1, time.ValueCodes.Count);
+            Assert.HasCount(1, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.AreEqual(0, cls1.ValueCodes.Count);
+            Assert.HasCount(0, cls1.ValueCodes);
             Assert.IsNotNull(cls2m);
-            Assert.AreEqual(11, cls2m.ValueCodes.Count);
+            Assert.HasCount(13, cls2m.ValueCodes);
             Assert.IsNotNull(cls3m);
-            Assert.AreEqual(1, cls3m.ValueCodes.Count);
+            Assert.HasCount(1, cls3m.ValueCodes);
             Assert.IsNotNull(cls4m);
-            Assert.AreEqual(20, cls4m.ValueCodes.Count);
+            Assert.HasCount(20, cls4m.ValueCodes);
         }
 
 

@@ -18,7 +18,7 @@ namespace PxWebApi_Mvc.Tests
 
             var response = await client.GetAsync("/config");
 
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
             string rawActual = await response.Content.ReadAsStringAsync();
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "GetApiConfiguration.json"));

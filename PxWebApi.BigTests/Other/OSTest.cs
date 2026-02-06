@@ -24,7 +24,7 @@ namespace PxWebApi.BigTests.Other
             string path = Util.GetFullPathToFile(@"PxWeb/wwwroot/Database/EN");
             string[] filesInDir = System.IO.Directory.GetFiles(path);
             Array.Sort(filesInDir, new AliasTxtFirstComparer());
-            Assert.IsTrue(filesInDir[0].EndsWith("Alias.txt"));
+            Assert.EndsWith("Alias.txt", filesInDir[0]);
 
         }
 

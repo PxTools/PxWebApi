@@ -5,20 +5,28 @@ namespace PxWeb.UnitTests.Helpers
     [TestClass]
     public class OutputParameterUtilTests
     {
+        readonly PxApiConfigurationOptions _configOptions = new PxApiConfigurationOptions();
+
+        public OutputParameterUtilTests()
+        {
+            _configOptions.DefaultOutputFormat = "CSV";
+            _configOptions.OutputFormats.Add("xlsx");
+        }
+
+
         [TestMethod]
         public void TranslateOutputParamters_WhenCalledWithNullOutputFormat_ReturnsDefaultOutputFormat()
         {
             // Arrange
             OutputFormatType? outputFormat = null;
-            string defaultOutputFormat = "CSV";
             List<OutputFormatParamType>? outputFormatParams = null;
             bool paramError;
             // Act
-            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, defaultOutputFormat, outputFormatParams, out paramError);
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
             // Assert
-            Assert.AreEqual(defaultOutputFormat, format);
+            Assert.AreEqual(_configOptions.DefaultOutputFormat, format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -26,15 +34,14 @@ namespace PxWeb.UnitTests.Helpers
         {
             // Arrange
             OutputFormatType? outputFormat = OutputFormatType.PxEnum;
-            string defaultOutputFormat = "CSV";
             List<OutputFormatParamType>? outputFormatParams = null;
             bool paramError;
             // Act
-            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, defaultOutputFormat, outputFormatParams, out paramError);
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
             // Assert
             Assert.AreEqual("px", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -42,15 +49,14 @@ namespace PxWeb.UnitTests.Helpers
         {
             // Arrange
             OutputFormatType? outputFormat = OutputFormatType.CsvEnum;
-            string defaultOutputFormat = "CSV";
             List<OutputFormatParamType>? outputFormatParams = null;
             bool paramError;
             // Act
-            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, defaultOutputFormat, outputFormatParams, out paramError);
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
             // Assert
             Assert.AreEqual("csv", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -58,15 +64,14 @@ namespace PxWeb.UnitTests.Helpers
         {
             // Arrange
             OutputFormatType? outputFormat = OutputFormatType.CsvEnum;
-            string defaultOutputFormat = "CSV";
             List<OutputFormatParamType>? outputFormatParams = null;
             bool paramError;
             // Act
-            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, defaultOutputFormat, outputFormatParams, out paramError);
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
             // Assert
             Assert.AreEqual("csv", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(0, formatParams.Count);
+            Assert.HasCount(0, formatParams);
         }
 
         [TestMethod]
@@ -74,14 +79,27 @@ namespace PxWeb.UnitTests.Helpers
         {
             // Arrange
             OutputFormatType? outputFormat = OutputFormatType.PxEnum;
-            string defaultOutputFormat = "CSV";
             List<OutputFormatParamType>? outputFormatParams = new List<OutputFormatParamType>();
             outputFormatParams.Add(OutputFormatParamType.IncludeTitleEnum);
             bool paramError;
             // Act
-            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, defaultOutputFormat, outputFormatParams, out paramError);
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
             // Assert
             Assert.AreEqual("px", format);
+            Assert.IsTrue(paramError);
+        }
+
+        [TestMethod]
+        public void TranslateOutputParamters_WhenCalledWith_Disabled_Parquet_ReturnsParameterError()
+        {
+            // Arrange
+            OutputFormatType? outputFormat = OutputFormatType.ParquetEnum;
+            List<OutputFormatParamType>? outputFormatParams = null;
+            bool paramError;
+            // Act
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
+            // Assert
+
             Assert.IsTrue(paramError);
         }
 
@@ -90,16 +108,15 @@ namespace PxWeb.UnitTests.Helpers
         {
             // Arrange
             OutputFormatType? outputFormat = OutputFormatType.XlsxEnum;
-            string defaultOutputFormat = "CSV";
             List<OutputFormatParamType>? outputFormatParams = new List<OutputFormatParamType>();
             outputFormatParams.Add(OutputFormatParamType.IncludeTitleEnum);
             bool paramError;
             // Act
-            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, defaultOutputFormat, outputFormatParams, out paramError);
+            var (format, formatParams) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
             // Assert
             Assert.AreEqual("xlsx", format);
             Assert.IsFalse(paramError);
-            Assert.AreEqual(1, formatParams.Count);
+            Assert.HasCount(1, formatParams);
 
         }
     }

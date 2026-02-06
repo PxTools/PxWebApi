@@ -231,7 +231,7 @@ namespace PxWeb.Controllers.Api2
             string outputFormatStr;
             List<string> outputFormatParamsStr;
 
-            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions.DefaultOutputFormat, outputFormatParams, out paramError);
+            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
 
             if (paramError)
             {
@@ -304,7 +304,7 @@ namespace PxWeb.Controllers.Api2
                     variableSelection.ValueCodes = valuecodes[variableCode];
                     if (codelist != null && codelist.ContainsKey(variableCode))
                     {
-                        variableSelection.CodeList = codelist[variableCode];
+                        variableSelection.Codelist = codelist[variableCode];
                     }
                     selections.Selection.Add(variableSelection);
                 }

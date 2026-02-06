@@ -7,5 +7,7 @@
         public string DatabaseID { get; set; } = string.Empty;
 
         public string HealthCheckQuery { get; set; } = DEFAULT_QUERY;
+
+        public string? RootNode { get; set; }
     }
 }

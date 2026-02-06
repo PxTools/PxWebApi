@@ -132,7 +132,7 @@ namespace PxWeb.UnitTests.Data
 
             // Assert
             Assert.IsTrue(ok);
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.HasCount(5, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -152,7 +152,7 @@ namespace PxWeb.UnitTests.Data
 
             // Assert
             Assert.IsTrue(ok);
-            Assert.AreEqual(5, selection.ValueCodes.Count);
+            Assert.HasCount(5, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -172,7 +172,7 @@ namespace PxWeb.UnitTests.Data
 
             // Assert
             Assert.IsFalse(ok);
-            Assert.AreEqual(1, selection.ValueCodes.Count);
+            Assert.HasCount(1, selection.ValueCodes);
             Assert.IsNotNull(problem);
         }
 
@@ -190,7 +190,7 @@ namespace PxWeb.UnitTests.Data
             expression.AddToSelection(variable, selection, "RANGE(1995,2000)", out problem);
 
             // Assert
-            Assert.AreEqual(6, selection.ValueCodes.Count);
+            Assert.HasCount(6, selection.ValueCodes);
             Assert.IsNull(problem);
         }
 
@@ -209,7 +209,7 @@ namespace PxWeb.UnitTests.Data
 
             // Assert
             Assert.IsFalse(ok);
-            Assert.AreEqual(0, selection.ValueCodes.Count);
+            Assert.HasCount(0, selection.ValueCodes);
             Assert.IsNotNull(problem);
         }
 

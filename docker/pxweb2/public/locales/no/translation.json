@@ -1,42 +1,33 @@
 {
-  "meta": {
-    "languageName": "Norsk",
-    "shorthand": "no"
-  },
   "common": {
     "title": "PxWeb 2.0",
     "header": {
-      "title": "PxWeb 2.0 [Main]",
-      "logo": "PxWeb 2.0"
+      "logo": "PxWeb 2.0",
+      "logo_alt": "Til forsiden",
+      "language_selector": "Språk/Language"
     },
-    "not_found": {
-      "page_not_found": {
-        "title": "Side ikke funnet",
-        "description": "Siden du leter etter eksisterer ikke. Vennligst sjekk URL-en eller gå tilbake til startsiden."
+    "errors": {
+      "not_found": {
+        "title": "Vi finner ikke siden",
+        "description": "Siden du leter etter kan ha blitt flyttet eller slettet. Det kan også være en feil i nettadressen.",
+        "action_text": "Gå tilbake til forrige side"
       },
-      "unsupported_language": {
-        "title": "Ikke støttet språk",
-        "description": "Det valgte språket støttes ikke."
+      "generic": {
+        "title": "Beklager, noe gikk galt",
+        "description": "Det oppstod en teknisk feil hos oss. Prøv å laste siden på nytt eller kom tilbake om noen minutter.",
+        "action_text": "Last siden på nytt"
+      },
+      "no_tables_loaded": {
+        "title": "Kunne ikke laste inn tabellene",
+        "description": "Det oppstod en teknisk feil hos oss. Prøv å laste siden på nytt eller kom tilbake om noen minutter.",
+        "action_text": "Last siden på nytt"
       }
     },
     "skip_to_main": "Hopp til hovedinnhold",
     "footer": {
-      "contact": {
-        "title": "Kontakt",
-        "description": "Beskrivelsestekst..."
-      },
-      "about": {
-        "title": "Om",
-        "description": "Beskrivelsestekst..."
-      },
-      "accessibility": {
-        "title": "Tilgjengelighet",
-        "description": "Beskrivelsestekst..."
-      },
-      "version": {
-        "title": "Versjon",
-        "description": "Beskrivelsestekst..."
-      }
+      "language_header": "Språk",
+      "copyright": "© Opphavsrett PxTools",
+      "top_button_text": "Til toppen"
     },
     "generic_buttons": {
       "ok": "OK",
@@ -47,6 +38,27 @@
     },
     "generic_tags": {
       "mandatory": "Må velges"
+    },
+    "alert": {
+      "info": "Informasjon:",
+      "success": "Suksess:",
+      "warning": "Advarsel:",
+      "error": "Feil:"
+    },
+    "status_messages": {
+      "welcome": "Velkommen til nye PxWeb 2.0! Vi jobber fortsatt med å gjøre det enklere for deg å finne og bruke tallene du trenger 📊✨",
+      "drawer_view": "Visning for graf er under arbeid.",
+      "drawer_save_file": "Flere filformat er under arbeid.",
+      "drawer_save_api": "Funksjon for API-spørring er under arbeid.",
+      "drawer_edit": "Flere verktøy for å redigere tabellen er under arbeid.",
+      "drawer_help": "Området for hjelp er under arbeid. Her vi det bli mulig å legge til lenker som kobles direkte til egne hjelpesider.",
+      "tab_definitions": "Innholdet til denne fanen er under arbeid."
+    },
+    "breadcrumbs": {
+      "aria_label_breadcrumb": "Brødsmulesti",
+      "breadcrumb_home_title": "Hjem",
+      "breadcrumb_root_title": "Nye statistikkbanken",
+      "show_more_breadcrumbs": "Vis mer"
     }
   },
   "start_page": {
@@ -54,19 +66,37 @@
     "ingress": "Leter du etter den perfekte tabellen? Bruk søkefeltet og filtrene for å finne tallene du trenger. Enten du er på jakt etter trender, fakta eller bare et merkelig tilfredsstillende datasett, så har PxWeb 2.0 det du trenger.",
     "more_about_label": "Mer om Statistikkbanken",
     "more_about_text": "More about Text NO",
-    "search_placeholder": "Søk i Statistikkbanken",
+    "no_result_header": "Vi fant ingen tabeller",
+    "no_result_description": "Prøv med et annet søkeord eller juster valgt filtrering.",
+    "no_result_search_help": "Søkehjelp",
+    "result_hidden_header": "Resultat",
+    "search_label": "Søk i Statistikkbanken",
+    "search_placeholder": "Søk etter tabellnavn eller variabler",
+    "skip_to.filter": "Gå til filter",
+    "skip_to.result": "Gå til resultat",
     "filter": {
       "button": "Filter",
       "back": "Tilbake",
       "show_results": "Vis {{value}} treff",
       "close": "Lukk filter",
       "header": "Filter",
+      "list_filters_aria": "Valgte filter",
       "remove_all_filter": "Fjern alle filter",
-      "remove_filter_aria": "Slett {{value}}",
+      "remove_filter_aria": "Fjern filter, {{value}}",
       "subject": "Emne",
-      "timeUnit": "Tidsperiode",
-      "year": "Årstall",
+      "time_unit": "Tidsperiode",
+      "year": {
+        "title": "År",
+        "from_label": "Fra",
+        "to_label": "Til",
+        "from_year": "Fra år",
+        "to_year": "Til år",
+        "clear_selection": "Fjern valg",
+        "no_option": "Ingen søketreff"
+      },
       "variabel": "Variabel",
+      "variabel_search": "Søk etter variabel",
+      "variable_count": "Viser {{countShown}} av {{countTotal}} variabler",
       "frequency": {
         "annual": "År",
         "monthly": "Måned",
@@ -74,23 +104,28 @@
         "term": "Termin",
         "weekly": "Uke",
         "other": "Annet"
+      },
+      "status": {
+        "title": "Status",
+        "updating": "Oppdateres",
+        "not_updating": "Oppdateres ikke lenger"
       }
     },
     "table": {
+      "card_description": "{{title}}. År: {{yearFrom}}-{{yearTo}}. Tidsperiode {{frequency}}. Oppdatert {{updatedDate}}. Tabellnummer {{tableNumber}}.",
       "number_of_tables": "<strong>{{count}}</strong> tabeller",
       "number_of_tables_found": "Treff på <strong>{{count}}</strong> tabeller",
       "updated_label": "Oppdatert",
-      "show_more": "Vis flere"
+      "show_more": "Vis flere",
+      "show_less": "Vis færre",
+      "loading": "Laster...",
+      "show_number_of_tables": "Viser {{countShown}} av {{countTotal}}",
+      "show_number_of_tables_aria": "Treff på {{count}} tabeller, viser {{countShown}} av {{countTotal}}"
     }
   },
   "presentation_page": {
-    "header": {
-      "searchbutton": "Søk",
-      "languagebutton": "språk",
-      "statistics": "Statistikkbanken"
-    },
-    "sidemenu": {
-      "arialabeltoolsidemenu": "Verktøymeny for tabell",
+    "side_menu": {
+      "aria_label_tool_side_menu": "Verktøymeny for tabell",
       "hide": "Skjul",
       "selection": {
         "title": "Filtrer",
@@ -98,8 +133,7 @@
           "search": {
             "placeholder": "Søk i listen",
             "label": "Søk",
-            "arialabelicontext": "Søkeikon",
-            "ariallabelclearbuttontext": "Ikon for å fjerne tekst i søkefeltet"
+            "aria_label_clear_button_text": "Ikon for å fjerne tekst i søkefeltet"
           },
           "header": {
             "tag_selected": "{{selected}} av {{total}} valgt",
@@ -115,15 +149,14 @@
                 "confirm_button": "Bekreft"
               }
             },
-            "mixed_checkbox": {
-              "select_all": "Velg alle",
-              "deselect_all": "Fjern alle"
-            },
+            "mixed_checkbox": "Velg alle",
+            "mixed_checkbox_search": "Velg alle søketreff",
             "values_list": {
               "aria_label": "Liste av {{total}} verdier.",
-              "aria_description": "Variabelens liste over {{total}} totale verdier. For å gå inn i listen, trykk på pil ned-tasten. Tab-tasten går ut av listen.",
               "no_results_heading": "Ingen treff på «{{search}}»",
-              "no_results_bodyshort": "Prøv med et annet søkeord eller en annen stavemåte."
+              "no_results_bodyshort": "Prøv med et annet søkeord eller en annen stavemåte.",
+              "showing_number_of_values": " {{searchResultsCount}} treff",
+              "showing_number_of_one_value": " {{searchResultsCount}} treff"
             }
           }
         }
@@ -141,8 +174,17 @@
         "title": "Rediger",
         "customize": {
           "title": "Tilpass",
+          "auto_pivot": {
+            "title": "Rydd opp i tabellen",
+            "aria_label": "Rydd opp i tabellen",
+            "description": "Gjør tabellen mer oversiktlig ved å automatisk organisere rader og kolonner",
+            "screen_reader_announcement": "Tabell ryddet opp og organisert etter {{first_variables}} og {{last_variable}}"
+          },
           "pivot": {
-            "title": "Pivot"
+            "title": "Roter tabellen",
+            "aria_label": "Roter tabellen mot høyre",
+            "description": "",
+            "screen_reader_announcement": "Tabell rotert etter {{first_variables}} og {{last_variable}}"
           },
           "rearrange": {
             "title": "Omorganiser tabell",
@@ -167,8 +209,32 @@
       "save": {
         "title": "Lagre",
         "file": {
-          "title": "Lagre som fil",
-          "excel": "Excel (xlsx)"
+          "title": "Last ned som fil",
+          "loading_announcement": "Filen behandles fortsatt. Vennligst vent.",
+          "formats": {
+            "excel": "Excel (.xlsx)",
+            "csv": "Semikolonseparert med overskrift (.csv)",
+            "px": "PC-Axis (.px)",
+            "jsonstat2": "JSON-stat2 (.json)",
+            "html": "HTML (.html)",
+            "parquet": "Parquet (.parquet)"
+          }
+        },
+        "savequery": {
+          "title": "Lenke til oppdatert tabell",
+          "info": "Du får en unik lenke til tabellen din, som vi holder oppdatert for deg. Hvordan nye tidsperioder legges til, velger du selv.",
+          "radio_legend": "Valg for nye tidsperioder",
+          "period_options": {
+            "selected": "Ikke legg til nye (tabellen vil kun vise de du har valgt nå)",
+            "from": "Legg til nye (de nye vil komme i tillegg til de du har valgt nå)",
+            "top": "Legg til nye, men behold samme antall (når en ny tidsperiode legges til, fjernes den eldste)"
+          },
+          "create_button": "Få lenke",
+          "copy_button": "Kopier lenke",
+          "copied_button": "Lenke kopiert",
+          "create_status": "Lenke laget. Trykk igjen for å kopiere lenken",
+          "copy_status": "Lenke kopiert til utklippstavle",
+          "loading_status": "Lager lenke"
         },
         "imagefile": {
           "title": "Lagre som graf",
@@ -180,7 +246,8 @@
         },
         "api": {
           "title": "API",
-          "description": "Beskrivelsestekst..."
+          "description": "Beskrivelsestekst...",
+          "query": "API-spørring"
         }
       },
       "help": {
@@ -188,9 +255,11 @@
       }
     },
     "main_content": {
-      "arialabelbreadcrumb": "Brødsmulesti",
-      "last_updated": "Sist oppdatert",
+      "expand_view": "Utvid visning",
+      "shrink_view": "Minimer visning",
+      "last_updated": "Oppdatert",
       "show_details": "Vis detaljer",
+      "dynamic_table_title": "{{table_content_type}} etter {{table_content_label_first_part}} og {{table_content_label_last_part}}",
       "table": {
         "warnings": {
           "missing_mandatory": {
@@ -218,7 +287,13 @@
           "mandatory_heading": "Viktig om tabellen",
           "mandatory_variable_heading": "Viktig om",
           "non_mandatory_heading": "Gjelder hele tabellen",
-          "show_all_footnotes": "Vis alle noter for tabellen"
+          "show_all_footnotes": "Vis alle noter for tabellen",
+          "important_about_selection_heading_1": "Det er ",
+          "important_about_selection_heading_2": " viktige merknader for valgt filtrering ",
+          "important_about_selection_body": "Trykk på denne meldingen for å lese merknadene. ",
+          "important_about_selection_heading_one_note_1": "Det er ",
+          "important_about_selection_heading_one_note_2": " viktig merknad for valgt filtrering ",
+          "important_about_selection_body_one_note": "Trykk på denne meldingen for å lese merknaden. "
         },
         "definitions": {
           "title": "Definisjoner",
@@ -235,7 +310,7 @@
           "link": "Lenke",
           "copyright": "Opphavsrett",
           "matrix": "Matrise",
-          "last_updated": "Sist oppdatert",
+          "last_updated": "Oppdatert",
           "next_update": "Neste oppdatering",
           "source": "Kilde",
           "official_statistics": "Offisiell statistikk",
@@ -247,10 +322,6 @@
           "description": "Beskrivelsestekst...",
           "missing_heading": "Ingen kontaktinformasjon",
           "missing_text": "Tabellen har ikke kontaktinformasjon."
-        },
-        "notes": {
-          "important_about_table": "Viktig om tabellen",
-          "important_about_variable": "Viktig om "
         }
       },
       "related": {
@@ -268,8 +339,8 @@
     }
   },
   "date": {
-    "simple_date": "{{value, datetime}}",
-    "simple_date_with_time": "{{value, datetime(year: 'numeric'; month: 'numeric'; day: 'numeric'; hour: 'numeric'; minute: 'numeric')}}"
+    "simple_date": "{{value, datetime(day: '2-digit'; month: '2-digit'; year: 'numeric')}}",
+    "simple_date_with_time": "{{value, datetime(year: 'numeric'; month: '2-digit'; day: '2-digit'; hour: 'numeric'; minute: 'numeric')}}"
   },
   "number": {
     "simple_number": "{{value, pxNumber}}",
@@ -279,6 +350,7 @@
     "simple_number_with_three_decimals": "{{value, pxNumber(minimumFractionDigits: 3; maximumFractionDigits: 3;)}}",
     "simple_number_with_four_decimals": "{{value, pxNumber(minimumFractionDigits: 4; maximumFractionDigits: 4;)}}",
     "simple_number_with_five_decimals": "{{value, pxNumber(minimumFractionDigits: 5; maximumFractionDigits: 5;)}}",
+    "simple_number_with_six_decimals": "{{value, pxNumber(minimumFractionDigits: 6; maximumFractionDigits: 6;)}}",
     "simple_number_with_default_formatter": "{{value, number(minimumFractionDigits: 5; maximumFractionDigits: 5; roundingMode: 'halfExpand')}}"
   }
 }
