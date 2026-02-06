@@ -1,6 +1,7 @@
 using System;
-using System.Text;
 using System.Collections.Specialized;
+using System.Text;
+
 using PxWeb.PxFile;
 using PxWeb.UnitTests.Fixtures;
 
@@ -49,7 +50,7 @@ namespace PxWeb.UnitTests.PxFile
 
             Assert.AreEqual(1, parser.HandlerCalls.Count(call => call.Keyword == "LANGUAGE"));
             Assert.AreEqual(1, parser.HandlerCalls.Count(call => call.Keyword == "LANGUAGES"));
-            Assert.AreEqual(3, parser.HandlerCalls.First(call => call.Keyword == "LANGUAGES").Values.Count);
+            Assert.HasCount(3, parser.HandlerCalls.First(call => call.Keyword == "LANGUAGES").Values);
         }
 
         [TestMethod]
@@ -69,10 +70,10 @@ namespace PxWeb.UnitTests.PxFile
             parser.ParseMeta(parser.TestMetaHandler, preferredLanguage: "en");
 
             Assert.AreEqual(3, parser.HandlerCalls.Count(call => call.Keyword == "STUB"));
-            Assert.AreEqual(1, parser.HandlerCalls.First(call => call.Keyword == "STUB").Values.Count);
+            Assert.HasCount(1, parser.HandlerCalls.First(call => call.Keyword == "STUB").Values);
             Assert.AreEqual("Year", parser.HandlerCalls.First(call => call.Keyword == "STUB" && call.Language == "en").Values[0]);
             Assert.AreEqual(3, parser.HandlerCalls.Count(call => call.Keyword == "HEADING"));
-            Assert.AreEqual(1, parser.HandlerCalls.First(call => call.Keyword == "HEADING").Values.Count);
+            Assert.HasCount(1, parser.HandlerCalls.First(call => call.Keyword == "HEADING").Values);
             Assert.AreEqual("Information", parser.HandlerCalls.First(call => call.Keyword == "HEADING" && call.Language == "en").Values[0]);
         }
 
@@ -89,7 +90,7 @@ namespace PxWeb.UnitTests.PxFile
             Assert.HasCount(1, yearValuesCalls);
 
             var values = yearValuesCalls[0].Values;
-            Assert.AreEqual(54, values.Count);
+            Assert.HasCount(54, values);
             Assert.AreEqual("1970", values[0]);
             Assert.AreEqual("2023*", values[^1]);
         }
