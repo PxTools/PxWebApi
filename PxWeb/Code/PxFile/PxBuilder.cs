@@ -178,16 +178,33 @@ namespace PxWeb.PxFile
                 throw new PXException("Selection is null or selection contains all variables.");
             }
 
-            var totalMap = new MatrixMap(Model.Meta.Variables.Select(
-                    v => (IDimensionMap)(new DimensionMap(
-                            v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
 
-            // TODO Handle aggregations
+            var totalList = new List<IDimensionMap>();
+            foreach (var variable in Model.Meta.Variables)
+            {
+                if (_originalVariables.TryGetValue(variable.Code, out VariableGroupingInfo? orgVariable))
+                {
+                    totalList.Add(new DimensionMap(
+                            orgVariable.Variable.Code, orgVariable.Variable.Values.Select(val => val.Code).ToList()));
+                }
+                else
+                {
+                    totalList.Add(new DimensionMap(
+                            variable.Code, variable.Values.Select(val => val.Code).ToList()));
+                }
+            }
+            var totalMap = new MatrixMap(totalList);
+
+
+
+            // Restore variables and modyfy selection for groupings
+            var groupedVariables = RestoreOriginalVariablesForDataRetrival(selection);
             // Create the matrix map add selections for eliminated values
             var actions = RemoveUnselectedValues(selection);
+
             var targetMap = new MatrixMap(Model.Meta.Variables.Select(
-                    v => (IDimensionMap)(new DimensionMap(
-                            v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
+                v => (IDimensionMap)(new DimensionMap(
+                    v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
 
             using Stream fileStream = new FileStream(m_path, FileMode.Open, FileAccess.Read);
             fileStream.Position = 0;
@@ -204,9 +221,6 @@ namespace PxWeb.PxFile
             var _ = m_model.Data.Write(buffer, 0, buffer.Length - 1);
             var elimOper = new Elimination();
 
-            // TODO Handle eliminations
-            // TODO Handle aggregations
-            // TODO Trim notes etc
             EliminationDescription[] elimDescriptions = actions.Where(
                 a => a.Value == PostProcessingActionType.EliminateByValue ||
                 a.Value == PostProcessingActionType.EliminateBySum)
@@ -214,8 +228,124 @@ namespace PxWeb.PxFile
              .ToArray();
             m_model = elimOper.Execute(m_model, elimDescriptions);
 
+            if (groupedVariables.Count > 0)
+            {
+                var sumGroupOp = new SumGrouping();
+
+                var groupIncludes = groupedVariables.Select(v => _originalVariables[v.Code].IncludeType).ToList();
+                var sumGroupDescriptions = new SumGroupingDescription()
+                {
+                    GroupVariables = groupedVariables,
+                    KeepValues = groupIncludes
+                };
+                try
+                {
+                    m_model = sumGroupOp.Execute(m_model, sumGroupDescriptions);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error during sum grouping: " + ex.Message);
+                    throw;
+                }
+
+            }
+
+            this.m_builderState = ModelBuilderStateType.BuildForPresentation;
+
+            // TODO Trim notes etc
             return true;
         }
+
+        // Substitutes variables in variables collection
+        private void SubstituteVariables(Variables variables, Variable oldVar, Variable newVar)
+        {
+            int index = variables.IndexOf(oldVar);
+            variables.RemoveAt(index);
+            variables.Insert(index, newVar);
+        }
+
+        private void SubstituteVariablesInModel(Variable oldVar, Variable newVar)
+        {
+            // Substitute variables
+            if (oldVar.Placement == PlacementType.Heading)
+            {
+                SubstituteVariables(Model.Meta.Heading, oldVar, newVar);
+            }
+            else
+            {
+                SubstituteVariables(Model.Meta.Stub, oldVar, newVar);
+            }
+
+            SubstituteVariables(Model.Meta.Variables, oldVar, newVar);
+        }
+
+        private Variables RestoreOriginalVariablesForDataRetrival(Selection[] selection)
+        {
+            var groupedVariables = new Variables();
+
+            if (!Model.Meta.Variables.HasGroupingsApplied())
+            {
+                return groupedVariables;
+            }
+
+
+            var groupingValues = new Dictionary<string, List<Value>>();
+
+            foreach (var variable in Model.Meta.Variables.Where(v => v.CurrentGrouping != null).ToList())
+            {
+                // 1. Substitue the grouped variable with the stored original variable
+                var orgVariable = _originalVariables[variable.Code].Variable;
+
+                orgVariable.Domain = null; // Remove domain for the variable - cannot be grouped as before
+                orgVariable.Map = string.IsNullOrEmpty(variable.CurrentGrouping.Map) ? null : variable.CurrentGrouping.Map; // Set the map of the original variable to the map of the grouping (if any)
+                SubstituteVariablesInModel(variable, orgVariable);
+
+                var s = selection.First(sel => sel.VariableCode == variable.Code);
+
+                groupedVariables.Add(variable);
+
+
+                var copyOfGroupedValues = new List<Value>(variable.Values);
+                groupingValues.Add(variable.Code, copyOfGroupedValues);
+
+                variable.Values.RemoveAll(val => !s.ValueCodes.Contains(val.Code));
+
+                var newSelectedValues = new HashSet<string>();
+
+                foreach (var selectedCode in s.ValueCodes)
+                {
+                    if (selectedCode == null) continue;
+
+                    var children = variable.CurrentGrouping.Groups.Where(g => g.GroupCode == selectedCode).SelectMany(g => g.ChildCodes);
+
+                    if (children.Any())
+                    {
+                        foreach (var child in children)
+                        {
+                            newSelectedValues.Add(child.Code);
+                        }
+                    }
+                    else
+                    {
+                        newSelectedValues.Add(selectedCode);
+                    }
+                }
+
+                if (newSelectedValues.Count == 0)
+                {
+                    throw new ArgumentException($"Grouping, {variable.CurrentGrouping.ID}, could not match any values");
+                }
+
+                s.ValueCodes.Clear();
+                s.ValueCodes.AddRange([.. newSelectedValues]);
+
+            }
+
+            return groupedVariables;
+        }
+
+
+
 
         private Dictionary<string, PostProcessingActionType> RemoveUnselectedValues(Selection[] selection)
         {

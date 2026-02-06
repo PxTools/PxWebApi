@@ -2,11 +2,9 @@
 
 using PCAxis.Paxiom;
 
-using PxWeb.PxFile;
-
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
-    internal class PxFileBuilder2 : PxBuilder
+    internal class PxFileBuilder2 : PXFileBuilder
     {
         public override bool BuildForSelection()
         {
