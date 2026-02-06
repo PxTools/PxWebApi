@@ -4,17 +4,20 @@ using System.Linq;
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Operations;
 
-using Px.Utils.Models;
 using Px.Utils.Models.Metadata;
-using Px.Utils.Models.Metadata.Dimensions;
 using Px.Utils.Models.Metadata.ExtensionMethods;
-using Px.Utils.Operations;
 using Px.Utils.PxFile.Data;
+
+using PxWeb.Code.PxFile;
 
 namespace PxWeb.PxFile
 {
     public class PxBuilder : PXModelBuilderAdapter
     {
+
+        private sealed record VariableGroupingInfo(Variable Variable, GroupingIncludesType IncludeType);
+
+        private readonly Dictionary<string, VariableGroupingInfo> _originalVariables = [];
 
         private enum PostProcessingActionType
         {
@@ -30,6 +33,143 @@ namespace PxWeb.PxFile
             var parser = new PxUtilsProxyParser(path);
             m_parser = parser;
         }
+
+        protected virtual GroupRegistryWrapper GetGroupRegistryProvider()
+        {
+            return new GroupRegistryWrapper();
+        }
+
+
+        /// <summary>
+        /// Builds the Meta part of the model based on the PX file and add groupings from the group registry to each variable.
+        /// If any error occurs during parsing of the PX file, an error message is added to the builder's Errors collection and false is returned.
+        /// </summary>
+        /// <returns></returns>
+        public override bool BuildForSelection()
+        {
+            try
+            {
+                base.BuildForSelection();
+            }
+            catch (PXModelParserException ex)
+            {
+                this.Errors.Add(new BuilderMessage("Error parsing the PX file: " + ex.Message));
+                return false;
+            }
+
+            var groupRegistry = GetGroupRegistryProvider();
+
+            if (!groupRegistry.IsLoaded) return true;
+
+            var currentLanguageIndex = Model.Meta.CurrentLanguageIndex;
+
+            for (int i = 0; i < Model.Meta.NumberOfLanguages; i++)
+            {
+                Model.Meta.SetLanguage(i);
+                foreach (var variable in Model.Meta.Variables.Where(v => !string.IsNullOrEmpty(v.Domain)))
+                {
+                    foreach (var groupingInfo in groupRegistry.GetDefaultGroupings(variable.Domain))
+                    {
+                        variable.AddGrouping(groupingInfo);
+                    }
+                }
+            }
+
+            Model.Meta.SetLanguage(currentLanguageIndex);
+
+            return true;
+        }
+
+        public override void ApplyGrouping(string variableCode, GroupingInfo groupingInfo, GroupingIncludesType include)
+        {
+
+            var groupRegistry = GetGroupRegistryProvider();
+
+            var grouping = groupRegistry.GetGrouping(groupingInfo);
+            if (grouping == null)
+            {
+                return;
+            }
+
+            grouping.GroupPres = include;
+
+            var variable = this.Model.Meta.Variables.GetByCode(variableCode);
+
+            // Store the original variable and the grouping include type in the builder. It will be used when the aggregated sum should be calculated in BuildForPresentation.
+            var varOriginal = variable.CreateCopyWithValues();
+            _originalVariables.TryAdd(variable.Code, new VariableGroupingInfo(varOriginal, include));
+
+
+            variable.CurrentGrouping = grouping;
+
+            //List of added values. Asserts that two values with the same code is not added. All value codes must be unique!
+            var valueCodes = new HashSet<string>();
+
+
+            //Initializes the Values collection
+            variable.RecreateValues();
+
+            // Adds the new values from the grouping
+            foreach (var group in grouping.Groups)
+            {
+                // Add aggregated (group) values
+                if (include == GroupingIncludesType.AggregatedValues || include == GroupingIncludesType.All)
+                {
+                    if (!valueCodes.Contains(group.GroupCode))
+                    {
+                        valueCodes.Add(group.GroupCode);
+                        var val = new Value();
+                        PaxiomUtil.SetCode(val, group.GroupCode);
+                        val.Value = group.Name;
+                        variable.Values.Add(val);
+                    }
+                }
+
+                // Add single (child) values
+                if (include == GroupingIncludesType.SingleValues || include == GroupingIncludesType.All)
+                {
+                    foreach (var child in group.ChildCodes)
+                    {
+                        if (!valueCodes.Contains(child.Code))
+                        {
+                            valueCodes.Add(child.Code);
+                            var val = new Value();
+                            PaxiomUtil.SetCode(val, child.Code);
+                            val.Value = child.Name;
+                            variable.Values.Add(val);
+                        }
+                    }
+                }
+            }
+
+            // Removed the hierarchical information
+            if (variable.Hierarchy.IsHierarchy)
+            {
+                variable.Hierarchy.RootLevel = null;
+            }
+
+            //'Remove elimination for variable 
+            variable.Elimination = false;
+            variable.EliminationValue = null;
+
+
+            // Model no longer multilingual after grouping has been selected
+            if (Model.Meta.NumberOfLanguages > 1)
+            {
+                int lang = Model.Meta.CurrentLanguageIndex;
+
+                // Remove languages from model
+                Model.Meta.DeleteAllLanguagesExceptCurrent();
+
+                // Also remove languages from original variables stored in builder (if available)
+                foreach (var kvp in _originalVariables)
+                {
+                    var v = kvp.Value.Variable;
+                    PCAxis.Paxiom.VariableHelper.DeleteAllLanguagesExceptOne(v, lang);
+                }
+            }
+        }
+
 
         public override bool BuildForPresentation(Selection[] selection)
         {
