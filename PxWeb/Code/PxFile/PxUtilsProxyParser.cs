@@ -39,7 +39,7 @@ namespace PxWeb.PxFile
                 var entryKey = entryBuilder.Parse(entry.Key);
                 var values = FileProcessingUtils.ParseStringToList(entry.Value);
                 // The handler expects the subkey in  format: first", "second", "third, so we need to trim the quotes and keep the separator for the handler to work correctly.
-                var subkey = entryKey.SubKey == null ? "" : entryKey.SubKey.Trim('"');
+                var subkey = entryKey.SubKey == null ? null : entryKey.SubKey.Trim('"');
                 handler(entryKey.KeyWord, entryKey.Lang, subkey, values);
             }
         }
