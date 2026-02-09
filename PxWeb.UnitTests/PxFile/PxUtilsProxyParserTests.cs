@@ -10,7 +10,7 @@ namespace PxWeb.UnitTests.PxFile
     [TestClass]
     public class PxUtilsProxyParserTests
     {
-        private sealed class TestablePxUtilsProxyParser(string fixture) : PxUtilsProxyParser(filePath: "in-memory")
+        public sealed class TestablePxUtilsProxyParser(string fixture) : PxUtilsProxyParser(filePath: "in-memory")
         {
             internal readonly struct HandlerCallInfo
             {
