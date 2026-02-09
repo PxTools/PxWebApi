@@ -77,6 +77,14 @@ namespace PxWeb.PxFile
 
             Model.Meta.SetLanguage(currentLanguageIndex);
 
+            foreach (var variable in Model.Meta.Variables)
+            {
+                if (!variable.Values.ValuesHaveCodes)
+                {
+                    variable.Values.SetFictionalCodes();
+                }
+            }
+
             return true;
         }
 
@@ -171,6 +179,12 @@ namespace PxWeb.PxFile
         }
 
 
+        protected virtual Stream GetStream()
+        {
+            return new FileStream(m_path, FileMode.Open, FileAccess.Read);
+        }
+
+
         public override bool BuildForPresentation(Selection[] selection)
         {
             if (selection == null || selection.Length != Model.Meta.Variables.Count)
@@ -206,8 +220,7 @@ namespace PxWeb.PxFile
                 v => (IDimensionMap)(new DimensionMap(
                     v.Code, v.Values.Select(val => val.Code).ToList()))).ToList());
 
-            using Stream fileStream = new FileStream(m_path, FileMode.Open, FileAccess.Read);
-            fileStream.Position = 0;
+            using Stream fileStream = GetStream();
 
 
             SetMatrixSize();
