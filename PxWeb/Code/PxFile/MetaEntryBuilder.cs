@@ -21,7 +21,7 @@ namespace PxWeb.Code.PxFile
         private const char _stringDelimeter = '"';
         private const char _listSeparator = ',';
         private readonly char[] _illegalKeyTokens =
-            [ 
+            [
                 _langParamEnd,
                 _spesifierParamEnd,
                 _stringDelimeter,
@@ -47,7 +47,7 @@ namespace PxWeb.Code.PxFile
 
         private string ParseKeyName(ref string remaining)
         {
-            if(string.IsNullOrEmpty(remaining)) throw new ArgumentException("Input string is null or empty");
+            if (string.IsNullOrEmpty(remaining)) throw new ArgumentException("Input string is null or empty");
             char[] sectionStartTokens = [_langParamStart, _spesifierParamStart];
             string output = new(remaining);
             int index = remaining.IndexOfAny(sectionStartTokens);

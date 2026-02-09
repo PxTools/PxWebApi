@@ -8,7 +8,6 @@ using Px.Utils.Models.Metadata;
 using Px.Utils.Models.Metadata.ExtensionMethods;
 using Px.Utils.PxFile.Data;
 
-using PxWeb.Code.Api2.DataSource.PxFile;
 using PxWeb.Code.PxFile;
 
 namespace PxWeb.PxFile
