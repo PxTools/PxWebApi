@@ -70,7 +70,7 @@ namespace PxWeb.UnitTests.PxFile
 
             builder.BuildForPresentation(selection);
 
-            Assert.HasCount(2, builder.Model.Meta.Variables);
+            Assert.HasCount(3, builder.Model.Meta.Variables);
             Assert.AreEqual(4456408, builder.Model.Data.ReadElement(0, 0));
         }
 
@@ -87,7 +87,7 @@ namespace PxWeb.UnitTests.PxFile
 
             builder.BuildForPresentation(selection);
 
-            Assert.HasCount(2, builder.Model.Meta.Variables);
+            Assert.HasCount(3, builder.Model.Meta.Variables);
             Assert.AreEqual(8816890, builder.Model.Data.ReadElement(0, 0));
         }
 
@@ -157,7 +157,7 @@ namespace PxWeb.UnitTests.PxFile
 
 
             variable = builder.Model.Meta.Variables.First(v => v.Code == "marital status");
-            Assert.HasCount(2, builder.Model.Meta.Variables, "Eliminated variable sex, variable count missmatch");
+            Assert.HasCount(3, builder.Model.Meta.Variables, "Eliminated variable sex, variable count missmatch");
             Assert.HasCount(3, variable.Values, "Grouped values count mismatch");
             Assert.AreEqual("S", variable.Values[0].Code, "First grouped value code mismatch");
             Assert.AreEqual("L", variable.Values[1].Code, "Second grouped value code mismatch");
