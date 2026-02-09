@@ -79,5 +79,25 @@ namespace PxWeb.UnitTests.PxFile
             Assert.HasCount(2, builder.Model.Meta.Variables);
             Assert.AreEqual(8816890, builder.Model.Data.ReadElement(0, 0));
         }
+
+
+        [TestMethod]
+        public void BuildForPresentation_WithOneTimeValue_ShouldCleanTimeValue()
+        {
+            var builder = new TestablePxBuilder(PxFileFixtures.EliminationPxFile);
+            var model = builder.BuildForSelection();
+
+            var selections = Selection.SelectAll(builder.Model.Meta);
+            var selection = selections.First(v => v.VariableCode == "period");
+            selection.ValueCodes.Clear();
+            selection.ValueCodes.Add("2001");
+
+            builder.BuildForPresentation(selections);
+
+            var timeVal = builder.Model.Meta.Variables.First(v => v.Code == "period").TimeValue;
+
+            Assert.AreEqual(@"TLIST(A1),""2001""", timeVal);
+        }
+
     }
 }

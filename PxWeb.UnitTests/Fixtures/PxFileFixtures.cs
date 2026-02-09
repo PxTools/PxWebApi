@@ -233,6 +233,7 @@ VALUES(""period"")=""2001"",""2002"",""2003"",""2004"",""2005"",""2006"";
 TIMEVAL(""period"")=TLIST(A1),""2001"",""2002"",""2003"",""2004"",""2005"",""2006"";
 CODES(""marital status"")=""OG"",""G"",""ÄNKL"",""SK"",""total"";
 CODES(""sex"")=""1"",""2"",""total"";
+CODES(""period"")=""2001"",""2002"",""2003"",""2004"",""2005"",""2006"";
 DOMAIN(""marital status"")=""Marital status"";
 DOMAIN(""sex"")=""Sex"";
 ELIMINATION(""marital status"")=YES;
