@@ -265,6 +265,14 @@ namespace PxWeb.PxFile
 
             this.m_builderState = ModelBuilderStateType.BuildForPresentation;
 
+            var time = Model.Meta.Variables.FirstOrDefault(v => v.IsTime);
+            if (time != null)
+            {
+                time.BuildTimeValuesString();
+            }
+
+            Model.Meta.Prune();
+
             // TODO Trim notes etc
             return true;
         }
