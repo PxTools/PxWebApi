@@ -37,7 +37,7 @@
 
         [LoggerMessage(
             Message = "Start creating breadcrumbs for language {language}",
-            Level = LogLevel.Information,
+            Level = LogLevel.Debug,
             SkipEnabledCheck = false)]
         internal static partial void LogCreateBreadcrumbsStarted(
             this ILogger logger,
