@@ -52,7 +52,7 @@ namespace PxWeb.Controllers.Api2.Admin
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
-        public IActionResult IndexDatabase(int? pastHours)
+        public IActionResult IndexDatabase(int? pastHours, bool? updateBreadcrumbInfo)
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -70,7 +70,7 @@ namespace PxWeb.Controllers.Api2.Admin
                         _logger.LogUpdatedTableBetween(from, to, tableList.Count);
                         if (tableList.Count > 0)
                         {
-                            await UpdateFromTableList(tableList, token);
+                            await UpdateFromTableList(tableList, updateBreadcrumbInfo, token);
                             _pxCache.Clear();
                             _logger.LogCacheCleared();
                         }
@@ -116,7 +116,7 @@ namespace PxWeb.Controllers.Api2.Admin
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
-        public IActionResult IndexDatabase([FromBody, Required] string[] tables)
+        public IActionResult IndexDatabase([FromBody, Required] string[] tables, bool? updateBreadcrumbInfo)
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -126,7 +126,7 @@ namespace PxWeb.Controllers.Api2.Admin
                         .Select(table => Regex.Replace(table.Trim(), @"[^0-9a-zA-Z]+", "", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                         .ToList();
 
-                    await UpdateFromTableList(tableList, token);
+                    await UpdateFromTableList(tableList, updateBreadcrumbInfo, token);
                     _pxCache.Clear();
                     _logger.LogCacheCleared();
                 }
@@ -141,8 +141,9 @@ namespace PxWeb.Controllers.Api2.Admin
             return new AcceptedResult();
         }
 
-        private async Task UpdateFromTableList(List<string> tableList, CancellationToken token)
+        private async Task UpdateFromTableList(List<string> tableList, bool? updateBreadcrumbInfo, CancellationToken token)
         {
+            bool doUpdateBreadcrumbInfo = updateBreadcrumbInfo ?? false;
 
             if (tableList.Count == 0 || (tableList.Count == 1 && string.IsNullOrEmpty(tableList[0])))
             {
@@ -152,6 +153,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 return;
             }
 
+
             List<string> languages = GetLangaugesFromConfig();
             if (languages.Count == 0)
             {
@@ -159,7 +161,7 @@ namespace PxWeb.Controllers.Api2.Admin
             }
 
             Indexer indexer = new Indexer(_dataSource, _backend, _logger);
-            await Task.Run(() => indexer.UpdateTableEntries(tableList, languages), token);
+            await Task.Run(() => indexer.UpdateTableEntries(tableList, languages, doUpdateBreadcrumbInfo), token);
         }
 
         [HttpGet]

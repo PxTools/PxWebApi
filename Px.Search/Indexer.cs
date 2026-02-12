@@ -171,7 +171,8 @@
         /// </summary>
         /// <param name="tables">List of tables that the search index</param>
         /// <param name="languages">list of languages codes that the search index will be able to be searched for</param>
-        public void UpdateTableEntries(List<string> tables, List<string> languages)
+        /// <param name="updateBreadcrumbInfo">true if the menutree should be traversed for breadcrumbs.</param>
+        public void UpdateTableEntries(List<string> tables, List<string> languages, bool updateBreadcrumbInfo)
         {
             _tableLanguages = _source.GetTableLanguages();
             using (var index = _backend.GetIndex())
@@ -180,6 +181,27 @@
                 {
                     _logger.LogIndexingStarted(language);
                     index.BeginUpdate(language);
+
+                    if (updateBreadcrumbInfo)
+                    {
+                        _logger.LogCreateBreadcrumbsStarted(language);
+                        var item = _source.LoadDatabaseStructure(language);
+
+                        if (item == null)
+                        {
+                            _logger.LogNoRootLevel();
+                            return;
+                        }
+
+                        if (item is PxMenuItem)
+                        {
+                            var path = new List<Level>();
+                            _breadcrumbs.Clear();
+                            GenerateBreadcrumbs(item, language, index, path);
+                        }
+                        _logger.LogCreateBreadcrumbsEnded(language);
+                    }
+
 
                     foreach (var table in tables)
                     {
@@ -227,6 +249,7 @@
             }
 
         }
+
         private void UpdateTable(string id, TableLink tblLink, string language, IIndex index)
         {
             IPXModelBuilder? builder = _source.CreateBuilder(id, language);
@@ -238,6 +261,11 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
+                    if (_breadcrumbs.ContainsKey(id))
+                    {
+                        tbl.Paths = _breadcrumbs[id];
+                    }
+
                     tbl.Languages = _tableLanguages.TryGetValue(id, out List<string>? value) ? [.. value] : [language];
                     index.UpdateEntry(tbl, model.Meta);
                 }
