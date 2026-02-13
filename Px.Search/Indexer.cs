@@ -214,6 +214,8 @@
                         else
                         {
                             index.RemoveEntry(table);
+                            _logger.LogRemoveEntry(table, language);
+
                         }
                     }
 

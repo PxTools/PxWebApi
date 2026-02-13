@@ -81,6 +81,15 @@
             this ILogger logger,
             int count);
 
+        [LoggerMessage(
+            Message = "Removing entry {table} for language {language}.",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogRemoveEntry(
+            this ILogger logger,
+            string table,
+            string language);
+
 
         [LoggerMessage(
             Message = "Table {tableId} have already been indexed.",
