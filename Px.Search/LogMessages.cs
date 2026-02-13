@@ -35,6 +35,22 @@
             string language,
             Exception ex);
 
+        [LoggerMessage(
+            Message = "Start creating breadcrumbs for language {language}",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogCreateBreadcrumbsStarted(
+            this ILogger logger,
+            string language);
+
+        [LoggerMessage(
+            Message = "Ended creating breadcrumbs for language {language}",
+            Level = LogLevel.Debug,
+            SkipEnabledCheck = false)]
+        internal static partial void LogCreateBreadcrumbsEnded(
+            this ILogger logger,
+            string language);
+
 
         [LoggerMessage(
             Message = "Could not CreateMenu for id {level} for language {language}",
@@ -64,6 +80,15 @@
         internal static partial void LogProgression(
             this ILogger logger,
             int count);
+
+        [LoggerMessage(
+            Message = "Removing entry {table} for language {language}.",
+            Level = LogLevel.Information,
+            SkipEnabledCheck = false)]
+        internal static partial void LogRemoveEntry(
+            this ILogger logger,
+            string table,
+            string language);
 
 
         [LoggerMessage(

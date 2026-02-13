@@ -56,6 +56,33 @@ namespace PxWeb.UnitTests.Search
             index.Verify(b => b.EndWrite(It.IsAny<string>()), Times.Exactly(2));
         }
 
+
+        [TestMethod]
+        public void UpdateDatabase_OneLanguage_RunsOnce()
+        { // Arrange
+            var backend = new Mock<ISearchBackend>();
+            var index = new Mock<IIndex>();
+            var dataSource = new Mock<IDataSource>();
+            var logger = new Mock<ILogger>();
+            var tableLink = new TableLink("Population in the world", "Population", "AA", "POP", "01", "World population", LinkType.Table, TableStatus.AccessibleToAll, DateTime.Now, DateTime.Now, "2000", "2005", "001", PresCategory.Official);
+
+            dataSource.Setup(d => d.LoadDatabaseStructure(It.IsAny<string>())).Returns(tableLink);
+
+
+            backend.Setup(b => b.GetIndex()).Returns(index.Object);
+
+            var indexer = new Indexer(dataSource.Object, backend.Object, logger.Object);
+
+            // Act
+            indexer.IndexDatabase(new List<string> { "en" });
+            indexer.UpdateTableEntries(new List<string> { "001" }, new List<string> { "en" }, true);
+
+            // Assert
+            index.Verify(b => b.BeginUpdate(It.IsAny<string>()), Times.Exactly(1));
+            index.Verify(b => b.EndUpdate(It.IsAny<string>()), Times.Exactly(1));
+
+        }
+
         [TestMethod]
         public void IndexDatabase_NoMenu_ReturnsNoException()
         {

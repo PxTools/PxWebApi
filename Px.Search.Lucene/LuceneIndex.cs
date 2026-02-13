@@ -138,11 +138,14 @@ namespace Px.Search.Lucene
 
             if (oldDoc is not null)
             {
-                var paths = oldDoc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS);
-                if (paths is not null)
+                var oldPaths = oldDoc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS);
+
+                //if the optional endpoint-parameter updateBreadcrumbInfo was not true
+                //then the new doc will not have paths set (it uses tbl.Paths), so we use the old
+                if (oldPaths is not null && (tbl.Paths is null || tbl.Paths.Count == 0))
                 {
                     doc.RemoveField(SearchConstants.SEARCH_FIELD_PATHS);
-                    doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, paths));
+                    doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, oldPaths));
                 }
             }
             if (_writer != null)
