@@ -133,21 +133,31 @@ namespace Px.Search.Lucene
 
         public void UpdateEntry(TableInformation tbl, PXMeta meta)
         {
-            var oldDoc = FindDocument(tbl.Id);
             Document doc = GetDocument(tbl, meta);
-
-            if (oldDoc is not null)
+            if (tbl.Paths is null || tbl.Paths.Count == 0)
             {
-                var paths = oldDoc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS);
-                if (paths is not null)
-                {
-                    doc.RemoveField(SearchConstants.SEARCH_FIELD_PATHS);
-                    doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, paths));
-                }
+                //if the optional endpoint-parameter updateBreadcrumbInfo was not true
+                //then the new doc will not have paths set (it uses tbl.Paths), so we use the old.
+                RestorePathFromOld(tbl, doc);
             }
             if (_writer != null)
             {
                 _writer.UpdateDocument(new Term(SearchConstants.SEARCH_FIELD_DOCID, doc.Get(SearchConstants.SEARCH_FIELD_DOCID)), doc);
+            }
+        }
+
+        private void RestorePathFromOld(TableInformation tbl, Document doc)
+        {
+            var oldDoc = FindDocument(tbl.Id);
+            if (oldDoc is not null)
+            {
+                var oldPaths = oldDoc.GetBinaryValue(SearchConstants.SEARCH_FIELD_PATHS);
+
+                if (oldPaths is not null)
+                {
+                    doc.RemoveField(SearchConstants.SEARCH_FIELD_PATHS);
+                    doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, oldPaths));
+                }
             }
         }
 
