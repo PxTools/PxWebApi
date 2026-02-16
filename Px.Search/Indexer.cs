@@ -263,9 +263,9 @@
                     builder.BuildForSelection();
                     var model = builder.Model;
                     TableInformation tbl = GetTableInformation(id, tblLink, model.Meta);
-                    if (_breadcrumbs.ContainsKey(id))
+                    if (_breadcrumbs.TryGetValue(id, out var paths))
                     {
-                        tbl.Paths = _breadcrumbs[id];
+                        tbl.Paths = paths;
                     }
 
                     tbl.Languages = _tableLanguages.TryGetValue(id, out List<string>? value) ? [.. value] : [language];
