@@ -46,13 +46,15 @@ namespace PxWeb.Controllers.Api2.Admin
         /// <summary>
         /// Index the whole database in all languages
         /// </summary>
+        /// <param name="pastHours">Incrementally index tables published in pastHours.</param>
+        /// <param name="updateBreadcrumbInfo">This is ignored when pastHours is null.</param>
         /// <returns></returns>
         [HttpPost]
         [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
-        public IActionResult IndexDatabase(int? pastHours, bool? updateBreadcrumbInfo)
+        public IActionResult IndexDatabase(int? pastHours, bool updateBreadcrumbInfo = false)
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -109,14 +111,15 @@ namespace PxWeb.Controllers.Api2.Admin
         /// <summary>
         /// Update index for the specified tables
         /// </summary>
-        /// <param name="tables"></param>
+        /// <param name="tables">List of tableid</param>
+        /// <param name="updateBreadcrumbInfo">Set this to true if you want to traverse the db to find the paths.</param>
         /// <returns></returns>
         [HttpPatch]
         [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
-        public IActionResult IndexDatabase([FromBody, Required] string[] tables, bool? updateBreadcrumbInfo)
+        public IActionResult IndexDatabase([FromBody, Required] string[] tables, bool updateBreadcrumbInfo = false)
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -141,9 +144,8 @@ namespace PxWeb.Controllers.Api2.Admin
             return new AcceptedResult();
         }
 
-        private async Task UpdateFromTableList(List<string> tableList, bool? updateBreadcrumbInfo, CancellationToken token)
+        private async Task UpdateFromTableList(List<string> tableList, bool updateBreadcrumbInfo, CancellationToken token)
         {
-            bool doUpdateBreadcrumbInfo = updateBreadcrumbInfo ?? false;
 
             if (tableList.Count == 0 || (tableList.Count == 1 && string.IsNullOrEmpty(tableList[0])))
             {
@@ -161,7 +163,7 @@ namespace PxWeb.Controllers.Api2.Admin
             }
 
             Indexer indexer = new Indexer(_dataSource, _backend, _logger);
-            await Task.Run(() => indexer.UpdateTableEntries(tableList, languages, doUpdateBreadcrumbInfo), token);
+            await Task.Run(() => indexer.UpdateTableEntries(tableList, languages, updateBreadcrumbInfo), token);
         }
 
         [HttpGet]
