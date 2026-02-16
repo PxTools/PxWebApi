@@ -66,7 +66,7 @@ namespace PxWeb.Controllers.Api2.Admin
                         DateTime from = to - TimeSpan.FromHours(pastHours.Value);
                         List<string> tableList = _dataSource.GetTablesPublishedBetween(from, to);
 
-                        string message = $"Looked for tables published between {from:yyyy-MM-dd HH:mm:ss} and {to:yyyy-MM-dd HH:mm:ss}. Found {tableList.Count()}";
+                        string message = $"Looked for tables published between {from:yyyy-MM-dd HH:mm:ss} and {to:yyyy-MM-dd HH:mm:ss}. Found {tableList.Count}";
 
                         _responseState.AddEvent(new Event("Information", message));
                         _logger.LogUpdatedTableBetween(from, to, tableList.Count);
