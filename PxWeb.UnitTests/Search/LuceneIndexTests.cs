@@ -97,6 +97,43 @@ namespace PxWeb.UnitTests.Search
             Assert.ThrowsExactly<ArgumentNullException>(() => { var index = new LuceneIndex(""); });
         }
 
+
+        [TestMethod]
+        public void UsageWithoutOpening_ShouldThrowExcpetion()
+        {
+
+            // Arrange
+
+            var tableInformation = new TableInformation(
+                    "TAB001",
+                    "Population in the world",
+                    "Population",
+                    "2000",
+                    "2005",
+                    new string[] { "TIME" });
+            tableInformation.Description = "Test";
+            tableInformation.SortCode = "001";
+            tableInformation.Paths.Add(new Level[] { new Level("A", "Test", "A") });
+
+            var meta = new PXMeta();
+            meta.Matrix = "TAB001";
+            meta.Variables.Add(ModelStore.CreateTimeVariable("", PlacementType.Stub, 2000, 2005));
+
+
+            //
+            Assert.ThrowsExactly<InvalidOperationException>(() => _luceneIndex.AddEntry(tableInformation, meta));
+            Assert.ThrowsExactly<InvalidOperationException>(() => _luceneIndex.RemoveEntry("removable"));
+
+            //update with path
+            Assert.ThrowsExactly<InvalidOperationException>(() => _luceneIndex.UpdateEntry(tableInformation, meta));
+
+            //update withOut path
+            tableInformation.Paths.Clear();
+            Assert.ThrowsExactly<InvalidOperationException>(() => _luceneIndex.UpdateEntry(tableInformation, meta));
+
+
+        }
+
     }
 
 }

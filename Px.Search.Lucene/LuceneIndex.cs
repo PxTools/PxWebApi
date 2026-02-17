@@ -243,7 +243,8 @@ namespace Px.Search.Lucene
         {
             if (_indexSearcher is null)
             {
-                return null;
+                throw new InvalidOperationException(
+                    "IndexSearcher is not initialized. Call BeginWrite or BeginUpdate before modifying the index.");
             }
 
             string[] field = new[] { SearchConstants.SEARCH_FIELD_SEARCHID };
