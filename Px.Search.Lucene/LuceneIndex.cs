@@ -40,7 +40,7 @@ namespace Px.Search.Lucene
             FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
             if (IndexWriter.IsLocked(fsDir))
             {
-                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
+                throw new IOException("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
             }
 
             Analyzer analyzer = LuceneAnalyzer.GetAnalyzer(language);
@@ -83,10 +83,6 @@ namespace Px.Search.Lucene
             _writer = CreateIndexWriter(false, language);
             CreateIndexReader();
 
-            if (_writer == null)
-            {
-                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
-            }
         }
 
         public void BeginWrite(string language)
@@ -99,10 +95,6 @@ namespace Px.Search.Lucene
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
             _writer = CreateIndexWriter(true, language);
 
-            if (_writer == null)
-            {
-                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
-            }
         }
 
         public void EndUpdate(string language)
