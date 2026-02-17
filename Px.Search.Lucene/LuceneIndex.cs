@@ -3,8 +3,10 @@
 namespace Px.Search.Lucene
 {
 
-    public class LuceneIndex : IIndex
+    public sealed class LuceneIndex : IIndex
     {
+        private bool _disposed;
+
         private readonly string _indexDirectoryBase = "";
         private string _indexDirectoryCurrent = "";
         private IndexWriter? _writer;
@@ -38,7 +40,7 @@ namespace Px.Search.Lucene
             FSDirectory fsDir = FSDirectory.Open(_indexDirectoryCurrent);
             if (IndexWriter.IsLocked(fsDir))
             {
-                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
+                throw new IOException("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
             }
 
             Analyzer analyzer = LuceneAnalyzer.GetAnalyzer(language);
@@ -81,10 +83,6 @@ namespace Px.Search.Lucene
             _writer = CreateIndexWriter(false, language);
             CreateIndexReader();
 
-            if (_writer == null)
-            {
-                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
-            }
         }
 
         public void BeginWrite(string language)
@@ -97,10 +95,6 @@ namespace Px.Search.Lucene
             _indexDirectoryCurrent = Path.Combine(_indexDirectoryBase, language);
             _writer = CreateIndexWriter(true, language);
 
-            if (_writer == null)
-            {
-                throw new Exception("Could not create IndexWriter. Index directory may be locked by another IndexWriter");
-            }
         }
 
         public void EndUpdate(string language)
@@ -125,10 +119,12 @@ namespace Px.Search.Lucene
         public void AddEntry(TableInformation tbl, PXMeta meta)
         {
             Document doc = GetDocument(tbl, meta);
-            if (_writer != null)
+            if (_writer == null)
             {
-                _writer.AddDocument(doc);
+                throw new InvalidOperationException(
+                    "IndexWriter is not initialized. Call BeginWrite or BeginUpdate before modifying the index.");
             }
+            _writer.AddDocument(doc);
         }
 
         public void UpdateEntry(TableInformation tbl, PXMeta meta)
@@ -140,10 +136,14 @@ namespace Px.Search.Lucene
                 //then the new doc will not have paths set (it uses tbl.Paths), so we use the old.
                 RestorePathFromOld(tbl, doc);
             }
-            if (_writer != null)
+            if (_writer == null)
             {
-                _writer.UpdateDocument(new Term(SearchConstants.SEARCH_FIELD_DOCID, doc.Get(SearchConstants.SEARCH_FIELD_DOCID)), doc);
+                throw new InvalidOperationException(
+                    "IndexWriter is not initialized. Call BeginWrite or BeginUpdate before modifying the index.");
             }
+
+            _writer.UpdateDocument(new Term(SearchConstants.SEARCH_FIELD_DOCID, doc.Get(SearchConstants.SEARCH_FIELD_DOCID)), doc);
+
         }
 
         private void RestorePathFromOld(TableInformation tbl, Document doc)
@@ -165,10 +165,12 @@ namespace Px.Search.Lucene
         {
             //check if document exists, if true deletes existing
             var searchQuery = new TermQuery(new Term(SearchConstants.SEARCH_FIELD_DOCID, id));
-            if (_writer != null)
+            if (_writer == null)
             {
-                _writer.DeleteDocuments(searchQuery);
+                throw new InvalidOperationException(
+                    "IndexWriter is not initialized. Call BeginWrite or BeginUpdate before modifying the index.");
             }
+            _writer.DeleteDocuments(searchQuery);
         }
 
 
@@ -178,54 +180,52 @@ namespace Px.Search.Lucene
         /// <param name="tbl">TableInformation object</param>
         /// <param name="meta">PxMeta object</param>
         /// <returns>Document object representing the table</returns>
-        private Document GetDocument(TableInformation tbl, PXMeta meta)
+        private static Document GetDocument(TableInformation tbl, PXMeta meta)
         {
             Document doc = new Document();
             DateTime updated2;
             string strUpdated = "";
 
-            if (tbl != null && meta != null)
+            if (string.IsNullOrEmpty(tbl.Label) || string.IsNullOrEmpty(meta.Matrix) || meta.Variables.Count == 0)
             {
-                if (string.IsNullOrEmpty(tbl.Label) || string.IsNullOrEmpty(meta.Matrix) || meta.Variables.Count == 0)
-                {
-                    return doc;
-                }
+                throw new InvalidOperationException(
+                    "Call to GetDocument must suppy data for Label, Matrix and meta.Variables.");
+            }
 
-                if (tbl.Updated != null)
-                {
-                    updated2 = tbl.Updated.Value;
-                    strUpdated = DateTools.DateToString(updated2, DateResolution.SECOND);
-                }
+            if (tbl.Updated != null)
+            {
+                updated2 = tbl.Updated.Value;
+                strUpdated = DateTools.DateToString(updated2, DateResolution.SECOND);
+            }
 
-                doc.Add(new StringField(SearchConstants.SEARCH_FIELD_DOCID, tbl.Id, Field.Store.YES)); // Used as id when updating a document - NOT searchable!!!
-                doc.Add(new StringField(SearchConstants.SEARCH_FIELD_SEARCHID, tbl.Id.ToLower(), Field.Store.NO)); // Used for finding a document by id - will be used for generating URL from just the tableid - Searchable!!!
-                doc.Add(new StringField(SearchConstants.SEARCH_FIELD_UPDATED, strUpdated, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_MATRIX, meta.Matrix, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TITLE, tbl.Label, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DESCRIPTION, tbl.Description, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SORTCODE, tbl.SortCode, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_CATEGORY, tbl.Category, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_FIRSTPERIOD, tbl.FirstPeriod, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_LASTPERIOD, tbl.LastPeriod, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VARIABLES, string.Join("|", tbl.VariableNames), Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_PERIOD, meta.GetTimeValues(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUES, meta.GetAllValues(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_CODES, meta.GetAllCodes(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_GROUPINGS, meta.GetAllGroupings(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_GROUPINGCODES, meta.GetAllGroupingCodes(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUESETS, meta.GetAllValuesets(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUESETCODES, meta.GetAllValuesetCodes(), Field.Store.NO));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DISCONTINUED, tbl.Discontinued == null ? "Unknown" : tbl.Discontinued.ToString(), Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TAGS, GetAllTags(tbl.Tags), Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SOURCE, tbl.Source, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, tbl.TimeUnit, Field.Store.YES));
-                doc.Add(new TextField(SearchConstants.SEARCH_SUBJECT_CODE, tbl.SubjectCode, Field.Store.YES));
-                doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
-                doc.Add(new StoredField(SearchConstants.SEARCH_AVAILABLE_LANGUAGES, string.Join("|", tbl.Languages)));
-                if (!string.IsNullOrEmpty(meta.Synonyms))
-                {
-                    doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SYNONYMS, meta.Synonyms, Field.Store.NO));
-                }
+            doc.Add(new StringField(SearchConstants.SEARCH_FIELD_DOCID, tbl.Id, Field.Store.YES)); // Used as id when updating a document - NOT searchable!!!
+            doc.Add(new StringField(SearchConstants.SEARCH_FIELD_SEARCHID, tbl.Id.ToLower(), Field.Store.NO)); // Used for finding a document by id - will be used for generating URL from just the tableid - Searchable!!!
+            doc.Add(new StringField(SearchConstants.SEARCH_FIELD_UPDATED, strUpdated, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_MATRIX, meta.Matrix, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TITLE, tbl.Label, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DESCRIPTION, tbl.Description, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SORTCODE, tbl.SortCode, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_CATEGORY, tbl.Category, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_FIRSTPERIOD, tbl.FirstPeriod, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_LASTPERIOD, tbl.LastPeriod, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VARIABLES, string.Join("|", tbl.VariableNames), Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_PERIOD, meta.GetTimeValues(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUES, meta.GetAllValues(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_CODES, meta.GetAllCodes(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_GROUPINGS, meta.GetAllGroupings(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_GROUPINGCODES, meta.GetAllGroupingCodes(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUESETS, meta.GetAllValuesets(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_VALUESETCODES, meta.GetAllValuesetCodes(), Field.Store.NO));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_DISCONTINUED, tbl.Discontinued == null ? "Unknown" : tbl.Discontinued.ToString(), Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TAGS, GetAllTags(tbl.Tags), Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SOURCE, tbl.Source, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, tbl.TimeUnit, Field.Store.YES));
+            doc.Add(new TextField(SearchConstants.SEARCH_SUBJECT_CODE, tbl.SubjectCode, Field.Store.YES));
+            doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
+            doc.Add(new StoredField(SearchConstants.SEARCH_AVAILABLE_LANGUAGES, string.Join("|", tbl.Languages)));
+            if (!string.IsNullOrEmpty(meta.Synonyms))
+            {
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_SYNONYMS, meta.Synonyms, Field.Store.NO));
             }
 
             return doc;
@@ -235,7 +235,8 @@ namespace Px.Search.Lucene
         {
             if (_indexSearcher is null)
             {
-                return null;
+                throw new InvalidOperationException(
+                    "IndexSearcher is not initialized. Call BeginWrite or BeginUpdate before modifying the index.");
             }
 
             string[] field = new[] { SearchConstants.SEARCH_FIELD_SEARCHID };
@@ -257,11 +258,24 @@ namespace Px.Search.Lucene
 
         public void Dispose()
         {
+            if (_disposed)
+                return;
+
             if (_writer != null)
             {
                 _writer.Rollback();
+                _writer.Dispose();
                 _writer = null;
             }
+
+            _reader?.Dispose();
+            _reader = null;
+            _indexSearcher = null;
+
+            _disposed = true;
+
+            GC.SuppressFinalize(this);
+
         }
 
         public static string GetAllTags(string[] tags)
