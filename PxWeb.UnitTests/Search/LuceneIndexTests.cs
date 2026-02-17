@@ -134,6 +134,26 @@ namespace PxWeb.UnitTests.Search
 
         }
 
+        [TestMethod]
+        public void Dispose_ShouldNotThrowExcpetion()
+        {
+
+            // Arrange
+            try
+            {
+                LuceneIndex luceneIndex2 = new LuceneIndex("testIndex2Directory");
+                luceneIndex2.Dispose();
+                luceneIndex2.Dispose();
+            }
+            catch
+            {
+                Assert.Fail();
+            }
+        }
+
+
+
+
     }
 
 }
