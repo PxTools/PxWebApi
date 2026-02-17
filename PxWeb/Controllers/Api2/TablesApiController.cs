@@ -214,7 +214,7 @@ namespace PxWeb.Controllers.Api2
             [FromRoute(Name = "id"), Required] string id,
             [FromQuery(Name = "lang")] string? lang,
             [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat,
-            [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams,
+            [FromQuery(Name = "outputFormatParams"), ModelBinder(typeof(OutputFormatParamsModelBinder))] List<OutputFormatParamType>? outputFormatParams,
             [FromBody] VariablesSelection? variablesSelection)
         {
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<OutputFormatParamType>() : outputFormatParams);
