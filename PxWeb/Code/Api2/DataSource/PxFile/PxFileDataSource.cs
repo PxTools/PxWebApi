@@ -10,6 +10,7 @@ using Px.Abstractions;
 using Px.Abstractions.Interfaces;
 
 using PxWeb.Mappers;
+using PxWeb.PxFile;
 
 namespace PxWeb.Code.Api2.DataSource.PxFile
 {
@@ -19,6 +20,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         private readonly ITablePathResolver _tablePathResolver;
         private readonly IPxHost _hostingEnvironment;
         private readonly ICodelistMapper _codelistMapper;
+        private readonly bool _usePxUtilsParser;
 
         public PxFileDataSource(IPxFileConfigurationService pxFileConfigurationService, IItemSelectionResolver itemSelectionResolver, ITablePathResolver tablePathResolver, IPxHost hostingEnvironment, ICodelistMapper codelistMapper)
         {
@@ -26,6 +28,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
             _tablePathResolver = tablePathResolver;
             _hostingEnvironment = hostingEnvironment;
             _codelistMapper = codelistMapper;
+            _usePxUtilsParser = pxFileConfigurationService.GetConfiguration().UsePxUtilsParser;
         }
 
         /// <summary>
@@ -36,7 +39,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
         /// <returns>Builder object, null if builder could not be created</returns>
         public IPXModelBuilder? CreateBuilder(string id, string language)
         {
-            var builder = new PxFileBuilder2();
+            IPXModelBuilder builder = _usePxUtilsParser ? new PxBuilder() : new PxFileBuilder2();
 
             var path = _tablePathResolver.Resolve(language, id, out bool selectionExists);
 
