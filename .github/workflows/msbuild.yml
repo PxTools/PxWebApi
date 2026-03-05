@@ -6,11 +6,12 @@ on:
       - main
   pull_request:
 
-permissions:
-  contents: read
+
 
 jobs:
   build:
+    permissions:
+      contents: read
     strategy:
       matrix:
         configuration: [Debug]
@@ -43,6 +44,7 @@ jobs:
 
   docker:
     permissions:
+      contents: read
       security-events: write
     runs-on: ubuntu-latest
     steps:
