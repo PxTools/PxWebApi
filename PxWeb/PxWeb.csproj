@@ -36,6 +36,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="setup.ps1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="setup.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\README.md" />
     <None Include="wwwroot\web.config" />
   </ItemGroup>
