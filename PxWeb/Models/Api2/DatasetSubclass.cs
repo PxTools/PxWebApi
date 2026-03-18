@@ -546,5 +546,33 @@ namespace PxWeb.Models.Api2
                 dimensionValue.Extension.BasePeriod.Add(valueCode, basePeriod);
             }
         }
+
+
+        //On Dimension
+        public static void AddRelatedLink(DimensionValue dimensionValue, RelatedLink theLink)
+        {
+            if (dimensionValue.Link is null)
+            {
+                dimensionValue.Link = new JsonstatExtensionLink();
+            }
+            if (dimensionValue.Link.Related is null)
+            {
+                dimensionValue.Link.Related = new List<RelatedLink>();
+            }
+            dimensionValue.Link.Related.Add(theLink);
+        }
+
+        //On root
+        public void AddRelatedLink(RelatedLink theLink)
+        {
+            if (this.Link is null)
+            {
+                this.Link = new JsonstatLink();
+                this.Link.Related = new List<RelatedLink>();
+            }
+            this.Link.Related.Add(theLink);
+        }
+
     }
+
 }
