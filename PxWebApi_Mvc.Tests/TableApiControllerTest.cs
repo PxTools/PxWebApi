@@ -93,7 +93,7 @@ namespace PxWebApi_Mvc.Tests
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab001_js2.json"));
 
             Util.AssertJson(rawExpected, rawActual, ["updated", "nextUpdate"]);

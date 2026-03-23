@@ -175,7 +175,7 @@ namespace PxWeb.Mappers
             return dataset;
         }
 
-        private void AddMetaidOnVariable(DimensionValue dimensionValue, Variable variable, string language)
+        private static void AddMetaidOnVariable(DimensionValue dimensionValue, Variable variable, string language)
         {
             if (String.IsNullOrEmpty(variable.MetaId))
             {
@@ -188,7 +188,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddMetaidOnValue(DimensionValue dimensionValue, Variable variable, Value variableValue, string language)
+        private static void AddMetaidOnValue(DimensionValue dimensionValue, Variable variable, Value variableValue, string language)
         {
             if (String.IsNullOrEmpty(variableValue.MetaId))
             {
@@ -203,7 +203,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void AddMetaid(DatasetSubclass dataset, string metaIdRaw, string language)
+        private static void AddMetaid(DatasetSubclass dataset, string metaIdRaw, string language)
         {
             if (String.IsNullOrEmpty(metaIdRaw))
             {
