@@ -1,0 +1,337 @@
+{
+  "version": "2.0",
+  "class": "dataset",
+  "label": "Population by region, sex, age, contents and year",
+  "source": "Eurostat",
+  "updated": "2023-05-25T13:42:00Z",
+  "link": {
+    "related": [
+      {
+        "extension": {
+          "relation": "statistics-homepage",
+          "metaid": "KORTNAVN:sykefratot"
+        },
+        "href": "https://www.ssb.no/en/sykefratot",
+        "label": "Statistics homepage",
+        "type": "text/html"
+      },
+      {
+        "extension": {
+          "relation": "about-statistics",
+          "metaid": "KORTNAVN:sykefratot"
+        },
+        "href": "https://www.ssb.no/en/sykefratot#om-statistikken",
+        "label": "About the statistics",
+        "type": "text/html"
+      }
+    ]
+  },
+  "note": [
+    ".. = Data not available"
+  ],
+  "role": {
+    "time": [
+      "TIME"
+    ],
+    "geo": [
+      "REGION"
+    ],
+    "metric": [
+      "ContentsCode"
+    ]
+  },
+  "id": [
+    "REGION",
+    "SEX",
+    "AGE",
+    "ContentsCode",
+    "TIME"
+  ],
+  "size": [
+    30,
+    3,
+    22,
+    1,
+    3
+  ],
+  "dimension": {
+    "REGION": {
+      "label": "region",
+      "category": {
+        "index": {
+          "AT": 0,
+          "BE": 1,
+          "BG": 2,
+          "CH": 3,
+          "CY": 4,
+          "CZ": 5,
+          "DE": 6,
+          "DK": 7,
+          "EE": 8,
+          "ES": 9,
+          "FI": 10,
+          "FR": 11,
+          "GR": 12,
+          "HU": 13,
+          "IE": 14,
+          "IS": 15,
+          "IT": 16,
+          "LI": 17,
+          "LT": 18,
+          "LU": 19,
+          "LV": 20,
+          "NL": 21,
+          "NO": 22,
+          "PL": 23,
+          "PT": 24,
+          "RO": 25,
+          "SE": 26,
+          "SI": 27,
+          "SK": 28,
+          "UK": 29
+        },
+        "label": {
+          "AT": "Austria",
+          "BE": "Belgium",
+          "BG": "Bulgaria",
+          "CH": "Switzerland",
+          "CY": "Cyprus",
+          "CZ": "Czechia",
+          "DE": "Germany (until 1990 former territory of the FRG)",
+          "DK": "Denmark",
+          "EE": "Estonia",
+          "ES": "Spain",
+          "FI": "Finland",
+          "FR": "France",
+          "GR": "Greece",
+          "HU": "Hungary",
+          "IE": "Ireland",
+          "IS": "Iceland",
+          "IT": "Italy",
+          "LI": "Liechtenstein",
+          "LT": "Lithuania",
+          "LU": "Luxembourg",
+          "LV": "Latvia",
+          "NL": "Netherlands",
+          "NO": "Norway",
+          "PL": "Poland",
+          "PT": "Portugal",
+          "RO": "Romania",
+          "SE": "Sweden",
+          "SI": "Slovenia",
+          "SK": "Slovakia",
+          "UK": "United Kingdom"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codelists": []
+      }
+    },
+    "SEX": {
+      "label": "sex",
+      "category": {
+        "index": {
+          "F": 0,
+          "M": 1,
+          "T": 2
+        },
+        "label": {
+          "F": "Female",
+          "M": "Male",
+          "T": "Total"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codelists": []
+      },
+      "link": {
+        "describedby": [
+          {
+            "extension": {
+              "T": "urn:ssb:conceptvariable:vardok:2",
+              "SEX": "urn:ssb:classification:klass:545 urn:ssb:conceptvariable:vardok:1"
+            }
+          }
+        ],
+        "related": [
+          {
+            "extension": {
+              "relation": "definitions",
+              "category": "T",
+              "metaid": "urn:ssb:conceptvariable:vardok:2"
+            },
+            "href": "https://www.ssb.no/a/metadata/conceptvariable/vardok/2/en",
+            "label": "Definition of Total for vaiable sex.",
+            "type": "text/html"
+          },
+          {
+            "extension": {
+              "relation": "definitions",
+              "metaid": "urn:ssb:classification:klass:545"
+            },
+            "href": "https://www.ssb.no/en/klass/klassifikasjoner/545",
+            "label": "Classification for sex.",
+            "type": "text/html"
+          },
+          {
+            "extension": {
+              "relation": "definitions",
+              "metaid": "urn:ssb:conceptvariable:vardok:1"
+            },
+            "href": "https://www.ssb.no/a/metadata/conceptvariable/vardok/1/en",
+            "label": "Definition of sex.",
+            "type": "text/html"
+          }
+        ]
+      }
+    },
+    "AGE": {
+      "label": "age",
+      "category": {
+        "index": {
+          "TOTAL": 0,
+          "Y_LT5": 1,
+          "Y5-9": 2,
+          "Y10-14": 3,
+          "Y_LT15": 4,
+          "Y15-19": 5,
+          "Y15-64": 6,
+          "Y20-24": 7,
+          "Y25-29": 8,
+          "Y30-34": 9,
+          "Y35-39": 10,
+          "Y40-44": 11,
+          "Y45-49": 12,
+          "Y50-54": 13,
+          "Y55-59": 14,
+          "Y60-64": 15,
+          "Y65-69": 16,
+          "Y_GE65": 17,
+          "Y70-74": 18,
+          "Y75-79": 19,
+          "Y_GE80": 20,
+          "UNK": 21
+        },
+        "label": {
+          "TOTAL": "Total",
+          "Y_LT5": "Less than 5 years",
+          "Y5-9": "From 5 to 9 years",
+          "Y10-14": "From 10 to 14 years",
+          "Y_LT15": "Less than 15 years",
+          "Y15-19": "From 15 to 19 years",
+          "Y15-64": "From 15 to 64 years",
+          "Y20-24": "From 20 to 24 years",
+          "Y25-29": "From 25 to 29 years",
+          "Y30-34": "From 30 to 34 years",
+          "Y35-39": "From 35 to 39 years",
+          "Y40-44": "From 40 to 44 years",
+          "Y45-49": "From 45 to 49 years",
+          "Y50-54": "From 50 to 54 years",
+          "Y55-59": "From 55 to 59 years",
+          "Y60-64": "From 60 to 64 years",
+          "Y65-69": "From 65 to 69 years",
+          "Y_GE65": "65 years or over",
+          "Y70-74": "From 70 to 74 years",
+          "Y75-79": "From 75 to 79 years",
+          "Y_GE80": "80 years or over",
+          "UNK": "Unknown"
+        }
+      },
+      "extension": {
+        "elimination": true,
+        "eliminationValueCode": "TOTAL",
+        "show": "value",
+        "codelists": []
+      }
+    },
+    "ContentsCode": {
+      "label": "contents",
+      "category": {
+        "index": {
+          "HNMGA": 0
+        },
+        "label": {
+          "HNMGA": "Population"
+        },
+        "unit": {
+          "HNMGA": {
+            "base": "amount",
+            "decimals": 0
+          }
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "value",
+        "codelists": [],
+        "measuringType": {
+          "HNMGA": "Stock"
+        },
+        "priceType": {
+          "HNMGA": "NotApplicable"
+        },
+        "adjustment": {
+          "HNMGA": "None"
+        }
+      }
+    },
+    "TIME": {
+      "label": "year",
+      "category": {
+        "index": {
+          "1981": 0,
+          "1991": 1,
+          "2001": 2
+        },
+        "label": {
+          "1981": "1981",
+          "1991": "1991",
+          "2001": "2001"
+        }
+      },
+      "extension": {
+        "elimination": false,
+        "show": "code",
+        "codelists": []
+      }
+    }
+  },
+  "extension": {
+    "px": {
+      "infofile": "CENSUS",
+      "tableid": "TAB001",
+      "decimals": 0,
+      "official-statistics": false,
+      "aggregallowed": false,
+      "copyright": false,
+      "language": "en",
+      "contents": "Population",
+      "descriptiondefault": false,
+      "heading": [
+        "ContentsCode",
+        "TIME"
+      ],
+      "stub": [
+        "REGION",
+        "SEX",
+        "AGE"
+      ],
+      "matrix": "TAB001",
+      "subject-code": "PO",
+      "subject-area": "Population"
+    },
+    "contact": [
+      {
+        "raw": "Test Testsson, SCB#Tel: 08-111 222 33#Fax: 08-222 333 44#E-mail: test.testsson@scb.se"
+      },
+      {
+        "raw": "Test2 Testsson2, SCB#Tel: 08-333 444 55#Fax: 08-444 555 66#E-mail: test2.testsson2@scb.se"
+      }
+    ]
+  },
+  "value": []
+}
