@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using PCAxis.Metadata;
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Extensions;
-using PCAxis.Serializers.JsonStat2.Model;
 using PCAxis.Serializers.Util.MetaId;
 
 using PxWeb.Api2.Server.Models;
@@ -528,7 +527,7 @@ namespace PxWeb.Mappers
                 Organization = contact.OrganizationName
             };
 
-            
+
 
             if (contInfo.Contact != null)
             {
