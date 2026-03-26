@@ -511,7 +511,7 @@ namespace PxWeb.Models.Api2
         {
             if (this.Link is null)
             {
-                this.Link = new JsonstatLink();
+                this.Link = new JsonstatExtensionLink();
                 this.Link.Related = new List<RelatedLink>();
             }
             this.Link.Related.Add(theLink);
