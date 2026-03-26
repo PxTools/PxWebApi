@@ -107,6 +107,12 @@ VARIABLE-TYPE[sv]("region")="G";
 VARIABLE-TYPE[sv]("kön")="V";
 VARIABLE-TYPE[sv]("ålder")="V";
 VARIABLE-TYPE[sv]("år")="T";
+META-ID="KORTNAVN:sykefratot";
+META-ID[sv]="KORTNAVN:sykefratot_sv";
+META-ID("sex")="urn:ssb:classification:klass:545 urn:ssb:conceptvariable:vardok:1";
+META-ID[sv]("kön")="urn:ssb:classification:klass:2545 urn:ssb:conceptvariable:vardok:21";
+META-ID("sex","Total")="urn:ssb:conceptvariable:vardok:2";
+META-ID[sv]("kön","Totalt")="urn:ssb:conceptvariable:vardok:22";
 DATA=
 ".." 4041797 4143737 
 ".." 220426 199944 

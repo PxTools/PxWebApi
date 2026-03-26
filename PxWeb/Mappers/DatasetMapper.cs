@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using PCAxis.Metadata;
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Extensions;
+using PCAxis.Serializers.Util.MetaId;
 
 using PxWeb.Api2.Server.Models;
 using PxWeb.Models.Api2;
@@ -47,6 +48,10 @@ namespace PxWeb.Mappers
             //Label
             dataset.AddLabel(model.Meta.Title);
 
+            //Metaid handeling and output comes in OldWay and NewWay
+            //OldWay will hopfully end in 3.0. On root there is just the NewWay
+            AddMetaid(dataset, model.Meta.MetaId, _language);
+
             //Extension PX
             AddPxToExtension(model, dataset);
 
@@ -60,7 +65,7 @@ namespace PxWeb.Mappers
 
             foreach (var variable in model.Meta.Variables)
             {
-                //temporary collector storage
+                //temporary collector storage (For Old Way)
                 var metaIdsHelper = new Dictionary<string, string>();
 
                 dataset.AddDimensionValue(variable.Code, variable.Name, out var dimensionValue);
@@ -76,6 +81,8 @@ namespace PxWeb.Mappers
                     }
 
                     CollectMetaIdsForValue(variableValue, ref metaIdsHelper);
+
+                    AddMetaidOnValue(dimensionValue, variable, variableValue, _language);
 
                     // ValueNote
                     AddValueNotes(variableValue, dimensionValue);
@@ -133,12 +140,16 @@ namespace PxWeb.Mappers
                 AddVariableNotes(variable, dimensionValue);
 
                 //MetaID
+                //OldWay
                 CollectMetaIdsForVariable(variable, ref metaIdsHelper);
 
                 if (metaIdsHelper.Count > 0)
                 {
                     dataset.AddDimensionLink(dimensionValue, metaIdsHelper);
                 }
+
+                //NewWay
+                AddMetaidOnVariable(dimensionValue, variable, _language);
 
 
                 //Codelists
@@ -162,6 +173,67 @@ namespace PxWeb.Mappers
             dataset.Value = new List<double?>();
 
             return dataset;
+        }
+
+        private static void AddMetaidOnVariable(DimensionValue dimensionValue, Variable variable, string language)
+        {
+            if (String.IsNullOrEmpty(variable.MetaId))
+            {
+                return;
+            }
+
+            foreach (var metalink in MetaIdResolverStatic.GetVariableLinks(variable.MetaId, language, variable.Name))
+            {
+                DatasetSubclass.AddRelatedLink(dimensionValue, ToRelatedLink(metalink, null));
+            }
+        }
+
+        private static void AddMetaidOnValue(DimensionValue dimensionValue, Variable variable, Value variableValue, string language)
+        {
+            if (String.IsNullOrEmpty(variableValue.MetaId))
+            {
+                return;
+            }
+
+            // There are 3 props on a "Variable Value": Code + Value + Text (combo of Code and Value)
+            // 
+            foreach (var metalink in MetaIdResolverStatic.GetValueLinks(variableValue.MetaId, language, variable.Name, variableValue.Text))
+            {
+                DatasetSubclass.AddRelatedLink(dimensionValue, ToRelatedLink(metalink, variableValue.Code));
+            }
+        }
+
+        private static void AddMetaid(DatasetSubclass dataset, string metaIdRaw, string language)
+        {
+            if (String.IsNullOrEmpty(metaIdRaw))
+            {
+                return;
+            }
+
+            foreach (PCAxis.Serializers.Util.MetaId.Link metalink in MetaIdResolverStatic.GetTableLinks(metaIdRaw, language))
+            {
+                dataset.AddRelatedLink(ToRelatedLink(metalink, null));
+            }
+
+        }
+
+
+        private static RelatedLink ToRelatedLink(PCAxis.Serializers.Util.MetaId.Link metalink, string? category)
+        {
+            RelatedLink myOut = new RelatedLink();
+            myOut.Extension = new RelatedLinkExtension();
+            myOut.Extension.Relation = metalink.Relation;
+            if (!String.IsNullOrEmpty(category))
+            {
+                myOut.Extension.Category = category;
+            }
+            myOut.Extension.Metaid = metalink.MetaId;
+
+            myOut.Href = metalink.Url;
+            myOut.Label = metalink.Label;
+            myOut.Type = metalink.Type;
+
+            return myOut;
         }
 
         private static PriceType GetPriceType(string cfprices)
@@ -455,6 +527,8 @@ namespace PxWeb.Mappers
                 Organization = contact.OrganizationName
             };
 
+
+
             if (contInfo.Contact != null)
             {
                 var contacts = contInfo.Contact.Split(new[] { "##" }, StringSplitOptions.RemoveEmptyEntries);
@@ -602,7 +676,7 @@ namespace PxWeb.Mappers
             codelist.Id = "agg_" + grouping.ID;
             codelist.Label = grouping.Name;
             codelist.Type = CodelistType.AggregationEnum;
-            codelist.Links = new System.Collections.Generic.List<Link>();
+            codelist.Links = new System.Collections.Generic.List<Api2.Server.Models.Link>();
             codelist.Links.Add(_linkCreator.GetCodelistLink(LinkCreator.LinkRelationEnum.metadata, codelist.Id, _language));
 
             return codelist;
@@ -614,7 +688,7 @@ namespace PxWeb.Mappers
             codelist.Id = "vs_" + valueset.ID;
             codelist.Label = valueset.Name;
             codelist.Type = CodelistType.ValuesetEnum;
-            codelist.Links = new System.Collections.Generic.List<Link>();
+            codelist.Links = new System.Collections.Generic.List<Api2.Server.Models.Link>();
             codelist.Links.Add(_linkCreator.GetCodelistLink(LinkCreator.LinkRelationEnum.metadata, codelist.Id, _language));
 
             return codelist;
