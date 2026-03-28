@@ -64,6 +64,7 @@ namespace PxWeb.UnitTests.DataSource
             var memorymock = new Mock<IPxCache>();
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<IPxFileConfigurationService>();
+            configServiceMock.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
             var hostingEnvironmentMock = new Mock<IPxHost>();
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
@@ -150,6 +151,7 @@ namespace PxWeb.UnitTests.DataSource
             var memorymock = new Mock<IPxCache>();
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<IPxFileConfigurationService>();
+            configServiceMock.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
             var hostingEnvironmentMock = new Mock<IPxHost>();
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
@@ -186,12 +188,15 @@ namespace PxWeb.UnitTests.DataSource
             var memorymock = new Mock<IPxCache>();
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<IPxFileConfigurationService>();
+            configServiceMock.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
             var hostingEnvironmentMock = new Mock<IPxHost>();
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
 
             var config = testFactory.GetPxApiConfiguration();
             configMock.Setup(x => x.GetConfiguration()).Returns(config);
+
+            configServiceMock.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
 
             var itemLoggerMock = new Mock<ILogger<ItemSelectorResolverPxFactory>>();
             var pcAxisFactory = new ItemSelectorResolverPxFactory(configServiceMock.Object, hostingEnvironmentMock.Object, itemLoggerMock.Object);
@@ -246,8 +251,12 @@ namespace PxWeb.UnitTests.DataSource
                 .Setup(m => m.RootPath)
                 .Returns(wwwPath);
 
+
+            var configService = new Mock<IPxFileConfigurationService>();
+            configService.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
+
             var dataSource = new PxFileDataSource(
-                new Mock<IPxFileConfigurationService>().Object,
+                configService.Object,
                 new Mock<IItemSelectionResolver>().Object,
                 new Mock<ITablePathResolver>().Object,
                 hostingEnvironmentMock.Object,
@@ -257,6 +266,11 @@ namespace PxWeb.UnitTests.DataSource
 
             Assert.IsNotNull(updataedTables);
 
+        }
+
+        private object Mock<T>()
+        {
+            throw new NotImplementedException();
         }
 
         private TablePathResolverPxFile GetTablePathResolver()
@@ -305,6 +319,7 @@ namespace PxWeb.UnitTests.DataSource
             var memorymock = new Mock<IPxCache>();
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<IPxFileConfigurationService>();
+            configServiceMock.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
             var hostingEnvironmentMock = new Mock<IPxHost>();
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
@@ -342,6 +357,7 @@ namespace PxWeb.UnitTests.DataSource
             var memorymock = new Mock<IPxCache>();
             var configMock = new Mock<IPxApiConfigurationService>();
             var configServiceMock = new Mock<IPxFileConfigurationService>();
+            configServiceMock.Setup(x => x.GetConfiguration()).Returns(new PxFileConfigurationOptions());
             var hostingEnvironmentMock = new Mock<IPxHost>();
             var loggerMock = new Mock<ILogger<TablePathResolverPxFile>>();
             var codelistMapperMock = new Mock<ICodelistMapper>();
