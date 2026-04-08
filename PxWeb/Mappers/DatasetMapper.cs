@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using PCAxis.Metadata;
+//using PCAxis.Metadata;
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Extensions;
 using PCAxis.Serializers.Util.MetaId;
@@ -22,7 +22,7 @@ namespace PxWeb.Mappers
         private readonly ILogger _logger;
         private string _language;
 
-        private readonly MetaLinkManager _metaLinkManager = new MetaLinkManager();
+        //private readonly MetaLinkManager _metaLinkManager = new MetaLinkManager();
 
         public DatasetMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions, ILogger<DatasetMapper> logger)
         {
@@ -644,11 +644,18 @@ namespace PxWeb.Mappers
 
         private string SerializeMetaIds(string metaId)
         {
-            var metaIds = metaId.Split(_metaLinkManager.GetSystemSeparator(), StringSplitOptions.RemoveEmptyEntries);
+            // these 2 are taken from  PCAxis.Metadata/MetaLinkManager.cs
+            // so that using PCAxis.Metadata;  can be removed
+            // This is the OldWay
+
+            char[] _systemSeparator = { ',' };
+            char[] _paramSeparator = { ':' };
+
+            var metaIds = metaId.Split(_systemSeparator, StringSplitOptions.RemoveEmptyEntries);
             var metaIdsAsString = new List<string>();
             foreach (var meta in metaIds)
             {
-                var metaLinks = meta.Split(_metaLinkManager.GetParamSeparator(), StringSplitOptions.RemoveEmptyEntries);
+                var metaLinks = meta.Split(_paramSeparator, StringSplitOptions.RemoveEmptyEntries);
                 if (metaLinks.Length > 0)
                 {
                     metaIdsAsString.Add(meta);
