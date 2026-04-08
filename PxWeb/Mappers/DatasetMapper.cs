@@ -19,7 +19,6 @@ namespace PxWeb.Mappers
     public class DatasetMapper : IDatasetMapper
     {
         private readonly ILinkCreator _linkCreator;
-        private readonly PxApiConfigurationOptions _configOptions;
         private readonly ILogger _logger;
         private string _language;
 
@@ -28,8 +27,7 @@ namespace PxWeb.Mappers
         public DatasetMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions, ILogger<DatasetMapper> logger)
         {
             _linkCreator = linkCreator;
-            _configOptions = configOptions.Value;
-            _language = _configOptions.DefaultLanguage;
+            _language = configOptions.Value.DefaultLanguage;
             _logger = logger;
         }
 
@@ -526,8 +524,6 @@ namespace PxWeb.Mappers
                 Phone = contact.PhoneNo,
                 Organization = contact.OrganizationName
             };
-
-
 
             if (contInfo.Contact != null)
             {

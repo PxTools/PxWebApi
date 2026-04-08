@@ -572,9 +572,5 @@ namespace PxWeb.Models.Api2
                 dimensionValue.Extension.BasePeriod.Add(valueCode, basePeriod);
             }
         }
-
-
-
     }
-
 }
