@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-//using PCAxis.Metadata;
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Extensions;
 using PCAxis.Serializers.Util.MetaId;
@@ -21,8 +20,6 @@ namespace PxWeb.Mappers
         private readonly ILinkCreator _linkCreator;
         private readonly ILogger _logger;
         private string _language;
-
-        //private readonly MetaLinkManager _metaLinkManager = new MetaLinkManager();
 
         public DatasetMapper(ILinkCreator linkCreator, IOptions<PxApiConfigurationOptions> configOptions, ILogger<DatasetMapper> logger)
         {
@@ -642,7 +639,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private string SerializeMetaIds(string metaId)
+        private static string SerializeMetaIds(string metaId)
         {
             // these 2 are taken from  PCAxis.Metadata/MetaLinkManager.cs
             // so that using PCAxis.Metadata;  can be removed
