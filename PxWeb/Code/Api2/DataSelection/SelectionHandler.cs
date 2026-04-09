@@ -260,18 +260,18 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             problem = null;
 
-            if (!string.IsNullOrWhiteSpace(variable.CodeList))
+            if (!string.IsNullOrWhiteSpace(variable.Codelist))
             {
                 var notes = PaxiomFixUtil.ExtractNotes(pxVariable);
 
-                if (variable.CodeList.StartsWith("agg_"))
+                if (variable.Codelist.StartsWith("agg_"))
                 {
                     if (!ApplyGrouping(builder, pxVariable, variable, out problem))
                     {
                         return false;
                     }
                 }
-                else if (variable.CodeList.StartsWith("vs_"))
+                else if (variable.Codelist.StartsWith("vs_"))
                 {
                     if (!ApplyValueset(builder, pxVariable, variable, out problem))
                     {
@@ -298,13 +298,13 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             problem = null;
 
-            if (string.IsNullOrWhiteSpace(variable.CodeList))
+            if (string.IsNullOrWhiteSpace(variable.Codelist))
             {
                 problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
-            GroupingInfo grpInfo = pxVariable.GetGroupingInfoById(variable.CodeList.Replace("agg_", ""));
+            GroupingInfo grpInfo = pxVariable.GetGroupingInfoById(variable.Codelist.Replace("agg_", ""));
 
             if (grpInfo is null)
             {
@@ -332,13 +332,13 @@ namespace PxWeb.Code.Api2.DataSelection
         {
             problem = null;
 
-            if (string.IsNullOrWhiteSpace(variable.CodeList))
+            if (string.IsNullOrWhiteSpace(variable.Codelist))
             {
                 problem = ProblemUtility.NonExistentCodelist();
                 return false;
             }
 
-            ValueSetInfo vsInfo = pxVariable.GetValuesetById(variable.CodeList.Replace("vs_", ""));
+            ValueSetInfo vsInfo = pxVariable.GetValuesetById(variable.Codelist.Replace("vs_", ""));
 
             if (vsInfo is null)
             {

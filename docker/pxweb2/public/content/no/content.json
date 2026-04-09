@@ -1,18 +1,5 @@
 {
   "startPage": {
-    "breadCrumb": {
-      "enabled": false,
-      "items": [
-        {
-          "label": "Forsiden",
-          "href": "#"
-        },
-        {
-          "label": "Statistikkbanken",
-          "href": "/"
-        }
-      ]
-    },
     "detailsSection": {
       "enabled": true,
       "detailHeader": "Mer om Statistikkbanken",
@@ -50,6 +37,14 @@
             ]
           }
         }
+      ]
+    },
+    "noResultSearchHelp": {
+      "enabled": true,
+      "helpText": [
+        "Du kan søke på tabellnavn, variabler og tabellnummer",
+        "Foreløpig kan du ikke søke på innhold i tabellene, som navnet på en kommune eller et fylke",
+        "Vi jobber med å gjøre søket bedre, slik at det blir enklere å finne tallene du trenger"
       ]
     }
   },

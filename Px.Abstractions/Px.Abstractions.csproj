@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PcAxis.Core" Version="1.2.7" />
+    <PackageReference Include="PcAxis.Core" Version="1.3.0" />
     <PackageReference Include="PCAxis.Menu" Version="1.0.5" />
   </ItemGroup>
 

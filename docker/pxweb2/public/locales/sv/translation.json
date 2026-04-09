@@ -51,11 +51,12 @@
       "drawer_save_file": "Fler filformat är under arbete.",
       "drawer_save_api": "Funktionen för API-uttag är under arbete.",
       "drawer_edit": "Fler verktyg för att redigera tabellen är under arbete.",
-      "drawer_help": "Hjälp-knappen måste länkas till egna hjälpsidor.",
+      "drawer_help": "Hjälpytan är under arbete. Här kommer det bli möjligt att lägga länkar direkt till egna hjälpsidor.",
       "tab_definitions": "Innehållet i denna fliken är under arbete."
     },
     "breadcrumbs": {
       "aria_label_breadcrumb": "Brödsmulor",
+      "breadcrumb_home_title": "Hem",
       "breadcrumb_root_title": "Hem",
       "show_more_breadcrumbs": "Visa mer"
     }
@@ -65,9 +66,14 @@
     "ingress": "Letar du efter den perfekta tabellen? Använd sökfältet och filtren för att hitta de data du behöver. Oavsett om du letar efter trender, fakta eller bara något intressant samband, så har PxWeb 2.0 det du behöver.",
     "more_about_label": "Mer om Statistikdatabasen",
     "more_about_text": "more about text SV",
+    "no_result_header": "Vi hittade inga tabeller",
+    "no_result_description": "Prova med annat sökord eller justera vald filtrering.",
+    "no_result_search_help": "Sökhjälp",
     "result_hidden_header": "Resultat",
     "search_label": "Sök i Statistikdatabasen",
     "search_placeholder": "Sök efter tabellrubrik eller variabel",
+    "skip_to.filter": "Gå till filter",
+    "skip_to.result": "Gå till resultat",
     "filter": {
       "button": "Filter",
       "back": "Tilbaka",
@@ -127,7 +133,6 @@
           "search": {
             "placeholder": "Sök i listan",
             "label": "Sök",
-            "aria_label_icon_text": "Sök ikon",
             "aria_label_clear_button_text": "Ikon för att ta bort text i sökfältet"
           },
           "header": {
@@ -149,7 +154,9 @@
             "values_list": {
               "aria_label": "Lista över {{total}} värden.",
               "no_results_heading": "Tyvärr hittades inte ”{{search}}”",
-              "no_results_bodyshort": "Försök med en annan stavning eller ett annat ord."
+              "no_results_bodyshort": "Försök med en annan stavning eller ett annat ord.",
+              "showing_number_of_values": " {{searchResultsCount}} träffar",
+              "showing_number_of_one_value": " {{searchResultsCount}} träff"
             }
           }
         }
@@ -167,9 +174,16 @@
         "title": "Ändra",
         "customize": {
           "title": "Anpassa",
+          "auto_pivot": {
+            "title": "Ordna tabellen",
+            "aria_label": "Ordna tabellen",
+            "description": "Visa tabellen med automatiskt ordnade rader och kolumner",
+            "screen_reader_announcement": "Tabell ordnad efter {{first_variables}} och {{last_variable}}"
+          },
           "pivot": {
             "title": "Rotera tabellen",
             "aria_label": "Rotera tabellen medsols",
+            "description": "",
             "screen_reader_announcement": "Tabell roterat efter {{first_variables}} och {{last_variable}}"
           },
           "rearrange": {

@@ -16,11 +16,13 @@
     [
       {
         "id": "EN",
-        "label": "Environment"
+        "label": "Environment",
+        "sortCode": "Environment"
       },
       {
         "id": "EN02",
-        "label": "Miscellaneous"
+        "label": "Miscellaneous",
+        "sortCode": "Miscellaneous"
       }
     ]
   ],

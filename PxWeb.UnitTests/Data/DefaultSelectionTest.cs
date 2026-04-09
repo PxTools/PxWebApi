@@ -71,7 +71,7 @@
             var o3 = selection.Selection.FirstOrDefault(x => x.VariableCode == meta.Variables[3].Code);
 
             Assert.IsNotNull(m1);
-            Assert.HasCount(11, m1.ValueCodes);
+            Assert.HasCount(13, m1.ValueCodes);
             Assert.IsNotNull(o1);
             Assert.HasCount(0, o1.ValueCodes);
             Assert.IsNotNull(o2);
@@ -266,7 +266,7 @@
             Assert.IsNotNull(time);
             Assert.HasCount(1, time.ValueCodes);
             Assert.IsNotNull(cls1);
-            Assert.HasCount(11, cls1.ValueCodes);
+            Assert.HasCount(13, cls1.ValueCodes);
             Assert.IsNotNull(cls2);
             Assert.HasCount(0, cls2.ValueCodes);
             Assert.IsNotNull(cls3);
@@ -303,7 +303,7 @@
             Assert.IsNotNull(cls2);
             Assert.HasCount(20, cls2.ValueCodes);
             Assert.IsNotNull(cls3m);
-            Assert.HasCount(11, cls3m.ValueCodes);
+            Assert.HasCount(13, cls3m.ValueCodes);
         }
 
         [TestMethod]
@@ -334,7 +334,7 @@
             Assert.IsNotNull(cls1);
             Assert.HasCount(0, cls1.ValueCodes);
             Assert.IsNotNull(cls2m);
-            Assert.HasCount(11, cls2m.ValueCodes);
+            Assert.HasCount(13, cls2m.ValueCodes);
             Assert.IsNotNull(cls3m);
             Assert.HasCount(20, cls3m.ValueCodes);
         }
@@ -368,7 +368,7 @@
             Assert.IsNotNull(cls1);
             Assert.HasCount(0, cls1.ValueCodes);
             Assert.IsNotNull(cls2m);
-            Assert.HasCount(11, cls2m.ValueCodes);
+            Assert.HasCount(13, cls2m.ValueCodes);
             Assert.IsNotNull(cls3m);
             Assert.HasCount(1, cls3m.ValueCodes);
             Assert.IsNotNull(cls4m);

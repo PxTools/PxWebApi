@@ -51,12 +51,13 @@
       "drawer_save_file": "Flere filformat er under arbeid.",
       "drawer_save_api": "Funksjon for API-spørring er under arbeid.",
       "drawer_edit": "Flere verktøy for å redigere tabellen er under arbeid.",
-      "drawer_help": "Det vil ikke komme noe innhold her. Knappen for hjelp må kobles direkte til egne hjelpesider.",
+      "drawer_help": "Området for hjelp er under arbeid. Her vi det bli mulig å legge til lenker som kobles direkte til egne hjelpesider.",
       "tab_definitions": "Innholdet til denne fanen er under arbeid."
     },
     "breadcrumbs": {
       "aria_label_breadcrumb": "Brødsmulesti",
-      "breadcrumb_root_title": "Hjem",
+      "breadcrumb_home_title": "Hjem",
+      "breadcrumb_root_title": "Nye statistikkbanken",
       "show_more_breadcrumbs": "Vis mer"
     }
   },
@@ -65,9 +66,14 @@
     "ingress": "Leter du etter den perfekte tabellen? Bruk søkefeltet og filtrene for å finne tallene du trenger. Enten du er på jakt etter trender, fakta eller bare et merkelig tilfredsstillende datasett, så har PxWeb 2.0 det du trenger.",
     "more_about_label": "Mer om Statistikkbanken",
     "more_about_text": "More about Text NO",
+    "no_result_header": "Vi fant ingen tabeller",
+    "no_result_description": "Prøv med et annet søkeord eller juster valgt filtrering.",
+    "no_result_search_help": "Søkehjelp",
     "result_hidden_header": "Resultat",
     "search_label": "Søk i Statistikkbanken",
     "search_placeholder": "Søk etter tabellnavn eller variabler",
+    "skip_to.filter": "Gå til filter",
+    "skip_to.result": "Gå til resultat",
     "filter": {
       "button": "Filter",
       "back": "Tilbake",
@@ -127,7 +133,6 @@
           "search": {
             "placeholder": "Søk i listen",
             "label": "Søk",
-            "aria_label_icon_text": "Søkeikon",
             "aria_label_clear_button_text": "Ikon for å fjerne tekst i søkefeltet"
           },
           "header": {
@@ -149,7 +154,9 @@
             "values_list": {
               "aria_label": "Liste av {{total}} verdier.",
               "no_results_heading": "Ingen treff på «{{search}}»",
-              "no_results_bodyshort": "Prøv med et annet søkeord eller en annen stavemåte."
+              "no_results_bodyshort": "Prøv med et annet søkeord eller en annen stavemåte.",
+              "showing_number_of_values": " {{searchResultsCount}} treff",
+              "showing_number_of_one_value": " {{searchResultsCount}} treff"
             }
           }
         }
@@ -167,9 +174,16 @@
         "title": "Rediger",
         "customize": {
           "title": "Tilpass",
+          "auto_pivot": {
+            "title": "Rydd opp i tabellen",
+            "aria_label": "Rydd opp i tabellen",
+            "description": "Gjør tabellen mer oversiktlig ved å automatisk organisere rader og kolonner",
+            "screen_reader_announcement": "Tabell ryddet opp og organisert etter {{first_variables}} og {{last_variable}}"
+          },
           "pivot": {
             "title": "Roter tabellen",
             "aria_label": "Roter tabellen mot høyre",
+            "description": "",
             "screen_reader_announcement": "Tabell rotert etter {{first_variables}} og {{last_variable}}"
           },
           "rearrange": {
@@ -243,7 +257,7 @@
     "main_content": {
       "expand_view": "Utvid visning",
       "shrink_view": "Minimer visning",
-      "last_updated": "Sist oppdatert",
+      "last_updated": "Oppdatert",
       "show_details": "Vis detaljer",
       "dynamic_table_title": "{{table_content_type}} etter {{table_content_label_first_part}} og {{table_content_label_last_part}}",
       "table": {
@@ -296,7 +310,7 @@
           "link": "Lenke",
           "copyright": "Opphavsrett",
           "matrix": "Matrise",
-          "last_updated": "Sist oppdatert",
+          "last_updated": "Oppdatert",
           "next_update": "Neste oppdatering",
           "source": "Kilde",
           "official_statistics": "Offisiell statistikk",
@@ -325,8 +339,8 @@
     }
   },
   "date": {
-    "simple_date": "{{value, datetime}}",
-    "simple_date_with_time": "{{value, datetime(year: 'numeric'; month: 'numeric'; day: 'numeric'; hour: 'numeric'; minute: 'numeric')}}"
+    "simple_date": "{{value, datetime(day: '2-digit'; month: '2-digit'; year: 'numeric')}}",
+    "simple_date_with_time": "{{value, datetime(year: 'numeric'; month: '2-digit'; day: '2-digit'; hour: 'numeric'; minute: 'numeric')}}"
   },
   "number": {
     "simple_number": "{{value, pxNumber}}",

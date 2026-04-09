@@ -84,7 +84,7 @@ namespace PxWeb.Mappers
                 var p = new List<PathElement>();
                 foreach (var level in path)
                 {
-                    p.Add(new PathElement() { Id = level.Code, Label = level.Text });
+                    p.Add(new PathElement() { Id = level.Code, Label = level.Text, SortCode = level.SortCode });
                 }
                 list.Add(p);
             }

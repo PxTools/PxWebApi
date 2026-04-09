@@ -9,6 +9,11 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
 {
     public class SavedQueryBackendProxy : ISavedQueryBackendProxy
     {
+        private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
         private readonly ISavedQueryStorageBackend _backend;
         public SavedQueryBackendProxy(ISavedQueryStorageBackend backend)
         {
@@ -24,7 +29,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
                 return null;
             }
 
-            var savedQuery = JsonSerializer.Deserialize<SavedQuery>(savedQueryString);
+            var savedQuery = JsonSerializer.Deserialize<SavedQuery>(savedQueryString, _jsonSerializerOptions);
 
             if (savedQuery is not null)
             {
@@ -60,7 +65,7 @@ namespace PxWeb.Code.Api2.SavedQueryBackend
                 return null;
             }
 
-            var savedQuery = JsonSerializer.Deserialize<SavedQuery>(savedQueryString);
+            var savedQuery = JsonSerializer.Deserialize<SavedQuery>(savedQueryString, _jsonSerializerOptions);
 
             if (savedQuery is not null)
             {

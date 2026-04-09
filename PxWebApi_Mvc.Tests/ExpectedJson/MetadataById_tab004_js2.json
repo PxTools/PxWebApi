@@ -71,7 +71,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codelists": []
       }
     },
     "GREENHOUSEGAS": {
@@ -112,7 +112,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codelists": []
       }
     },
     "ContentsCode": {
@@ -134,7 +134,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
+        "codelists": [],
         "measuringType": {
           "Emission": "Stock"
         },
@@ -213,7 +213,7 @@
       "extension": {
         "elimination": false,
         "show": "code",
-        "codeLists": []
+        "codelists": []
       }
     }
   },

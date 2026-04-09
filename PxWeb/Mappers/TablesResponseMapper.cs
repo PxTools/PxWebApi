@@ -85,10 +85,10 @@ namespace PxWeb.Mappers
                 {
                     Id = item.Id,
                     Label = item.Label,
+                    Description = item.Description,
                     Source = item.Source,
                     TimeUnit = TableResponseMapper.Convert(item.TimeUnit),
                     Paths = TableResponseMapper.Convert(item.Paths),
-                    Description = item.Description,
                     //Tags = item.Tags.ToList(), // TODO: Implement later
                     Updated = item.Updated,
                     FirstPeriod = item.FirstPeriod,
@@ -97,6 +97,7 @@ namespace PxWeb.Mappers
                     Discontinued = item.Discontinued,
                     VariableNames = item.VariableNames.ToList(),
                     Links = linkList,
+                    SortCode = item.SortCode ?? string.Empty,
                     SubjectCode = item.SubjectCode ?? string.Empty,
                 };
                 tableList.Add(tb);

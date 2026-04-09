@@ -11,6 +11,7 @@ using Px.Abstractions.Interfaces;
 using Px.Search;
 
 using PxWeb.Code;
+using PxWeb.Code.Api2.Cache;
 using PxWeb.Code.BackgroundWorker;
 
 using Swashbuckle.AspNetCore.Annotations;
@@ -27,14 +28,16 @@ namespace PxWeb.Controllers.Api2.Admin
         private readonly ILogger<SearchindexController> _logger;
         private readonly BackgroundWorkerQueue _backgroundWorkerQueue;
         private readonly IControllerState _responseState;
+        private readonly IPxCache _pxCache;
 
-        public SearchindexController(BackgroundWorkerQueue backgroundWorkerQueue, IControllerStateProvider stateProvider, IDataSource dataSource, ISearchBackend backend, IPxApiConfigurationService pxApiConfigurationService, ILogger<SearchindexController> logger)
+        public SearchindexController(BackgroundWorkerQueue backgroundWorkerQueue, IControllerStateProvider stateProvider, IDataSource dataSource, ISearchBackend backend, IPxApiConfigurationService pxApiConfigurationService, ILogger<SearchindexController> logger, IPxCache pxCache)
         {
             _dataSource = dataSource;
             _backend = backend;
             _pxApiConfigurationService = pxApiConfigurationService;
             _logger = logger;
             _backgroundWorkerQueue = backgroundWorkerQueue;
+            _pxCache = pxCache;
             System.Type tempType = GetType();
             string id = (tempType.FullName != null) ? tempType.FullName : "GetType_has_no_FullName";
             _responseState = stateProvider.Load(id);
@@ -43,13 +46,15 @@ namespace PxWeb.Controllers.Api2.Admin
         /// <summary>
         /// Index the whole database in all languages
         /// </summary>
+        /// <param name="pastHours">Incrementally index tables published in pastHours.</param>
+        /// <param name="updateBreadcrumbInfo">This is ignored when pastHours is null.</param>
         /// <returns></returns>
         [HttpPost]
         [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
-        public IActionResult IndexDatabase(int? pastHours)
+        public IActionResult IndexDatabase(int? pastHours, bool updateBreadcrumbInfo = false)
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -61,14 +66,15 @@ namespace PxWeb.Controllers.Api2.Admin
                         DateTime from = to - TimeSpan.FromHours(pastHours.Value);
                         List<string> tableList = _dataSource.GetTablesPublishedBetween(from, to);
 
-                        string message = $"Looked for tables published between {from:yyyy-MM-dd HH:mm:ss} and {to:yyyy-MM-dd HH:mm:ss}. Found {tableList.Count()}";
+                        string message = $"Looked for tables published between {from:yyyy-MM-dd HH:mm:ss} and {to:yyyy-MM-dd HH:mm:ss}. Found {tableList.Count}";
 
                         _responseState.AddEvent(new Event("Information", message));
                         _logger.LogUpdatedTableBetween(from, to, tableList.Count);
                         if (tableList.Count > 0)
                         {
-
-                            await UpdateFromTableList(tableList, token);
+                            await UpdateFromTableList(tableList, updateBreadcrumbInfo, token);
+                            _pxCache.Clear();
+                            _logger.LogCacheCleared();
                         }
                     }
                     catch (System.Exception ex)
@@ -89,6 +95,8 @@ namespace PxWeb.Controllers.Api2.Admin
 
                         Indexer indexer = new Indexer(_dataSource, _backend, _logger);
                         await Task.Run(() => indexer.IndexDatabase(languages), token);
+                        _pxCache.Clear();
+                        _logger.LogCacheCleared();
                     }
                     catch (System.Exception ex)
                     {
@@ -103,14 +111,15 @@ namespace PxWeb.Controllers.Api2.Admin
         /// <summary>
         /// Update index for the specified tables
         /// </summary>
-        /// <param name="tables"></param>
+        /// <param name="tables">List of tableid</param>
+        /// <param name="updateBreadcrumbInfo">Set this to true if you want to traverse the db to find the paths.</param>
         /// <returns></returns>
         [HttpPatch]
         [Route("/admin/searchindex")]
         [SwaggerOperation("IndexDatabase")]
         [SwaggerResponse(statusCode: 202, description: "Accepted")]
         [SwaggerResponse(statusCode: 401, description: "Unauthorized")]
-        public IActionResult IndexDatabase([FromBody, Required] string[] tables)
+        public IActionResult IndexDatabase([FromBody, Required] string[] tables, bool updateBreadcrumbInfo = false)
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
@@ -120,7 +129,9 @@ namespace PxWeb.Controllers.Api2.Admin
                         .Select(table => Regex.Replace(table.Trim(), @"[^0-9a-zA-Z]+", "", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                         .ToList();
 
-                    await UpdateFromTableList(tableList, token);
+                    await UpdateFromTableList(tableList, updateBreadcrumbInfo, token);
+                    _pxCache.Clear();
+                    _logger.LogCacheCleared();
                 }
                 catch (System.Exception ex)
                 {
@@ -133,7 +144,7 @@ namespace PxWeb.Controllers.Api2.Admin
             return new AcceptedResult();
         }
 
-        private async Task UpdateFromTableList(List<string> tableList, CancellationToken token)
+        private async Task UpdateFromTableList(List<string> tableList, bool updateBreadcrumbInfo, CancellationToken token)
         {
 
             if (tableList.Count == 0 || (tableList.Count == 1 && string.IsNullOrEmpty(tableList[0])))
@@ -144,6 +155,7 @@ namespace PxWeb.Controllers.Api2.Admin
                 return;
             }
 
+
             List<string> languages = GetLangaugesFromConfig();
             if (languages.Count == 0)
             {
@@ -151,7 +163,7 @@ namespace PxWeb.Controllers.Api2.Admin
             }
 
             Indexer indexer = new Indexer(_dataSource, _backend, _logger);
-            await Task.Run(() => indexer.UpdateTableEntries(tableList, languages), token);
+            await Task.Run(() => indexer.UpdateTableEntries(tableList, languages, updateBreadcrumbInfo), token);
         }
 
         [HttpGet]

@@ -57,7 +57,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codelists": []
       }
     },
     "WASTE_CAT": {
@@ -139,7 +139,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": []
+        "codelists": []
       }
     },
     "ContentsCode": {
@@ -167,7 +167,7 @@
       "extension": {
         "elimination": false,
         "show": "value",
-        "codeLists": [],
+        "codelists": [],
         "measuringType": {
           "WasteHazard": "Flow",
           "WasteNonHazard": "Average"
@@ -205,7 +205,7 @@
       "extension": {
         "elimination": false,
         "show": "code",
-        "codeLists": []
+        "codelists": []
       }
     }
   },
