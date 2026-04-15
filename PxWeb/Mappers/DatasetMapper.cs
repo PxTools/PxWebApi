@@ -623,7 +623,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void CollectMetaIdsForVariable(Variable variable, ref Dictionary<string, string> metaIds)
+        private static void CollectMetaIdsForVariable(Variable variable, ref Dictionary<string, string> metaIds)
         {
             if (!string.IsNullOrWhiteSpace(variable.MetaId))
             {
@@ -631,7 +631,7 @@ namespace PxWeb.Mappers
             }
         }
 
-        private void CollectMetaIdsForValue(Value value, ref Dictionary<string, string> metaIds)
+        private static void CollectMetaIdsForValue(Value value, ref Dictionary<string, string> metaIds)
         {
             if (!string.IsNullOrWhiteSpace(value.MetaId))
             {
