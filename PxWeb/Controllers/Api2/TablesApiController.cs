@@ -123,8 +123,9 @@ namespace PxWeb.Controllers.Api2
 
                     var model = builder.Model;
 
-                    Searcher searcher = new Searcher(_dataSource, _backend);
-                    SearchResult? searchResult = searcher.FindTable(id, lang);
+                    ISearcher searcher = _backend.GetSearcher(lang);
+                    SearchResult? searchResult = searcher.FindTable(id);
+
                     if (searchResult != null)
                     {
                         model.Meta.Title = searchResult.Label;
@@ -149,7 +150,6 @@ namespace PxWeb.Controllers.Api2
 
         public override IActionResult GetTableById([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang)
         {
-            Searcher searcher = new Searcher(_dataSource, _backend);
             lang = _languageHelper.HandleLanguage(lang);
 
             if (!_dataSource.TableExists(id, lang))
@@ -158,7 +158,9 @@ namespace PxWeb.Controllers.Api2
                 return NotFound(ProblemUtility.NonExistentTable());
             }
 
-            SearchResult? searchResult = searcher.FindTable(id, lang);
+            ISearcher searcher = _backend.GetSearcher(lang);
+            SearchResult? searchResult = searcher.FindTable(id);
+
             if (searchResult == null)
             {
                 _logger.LogNoTableWithGivenIdInSearchIndex();
@@ -166,17 +168,15 @@ namespace PxWeb.Controllers.Api2
             }
 
             return Ok(_tableResponseMapper.Map(searchResult, lang));
-
-
         }
 
 
 
         public override IActionResult ListAllTables([FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "query")] string? query, [FromQuery(Name = "pastDays")] int? pastDays, [FromQuery(Name = "includeDiscontinued")] bool? includeDiscontinued, [FromQuery(Name = "pageNumber")] int? pageNumber, [FromQuery(Name = "pageSize")] int? pageSize)
         {
-            Searcher searcher = new Searcher(_dataSource, _backend);
-
             lang = _languageHelper.HandleLanguage(lang);
+
+            ISearcher searcher = _backend.GetSearcher(lang);
 
             if (pageNumber == null || pageNumber <= 0)
                 pageNumber = 1;
@@ -184,8 +184,7 @@ namespace PxWeb.Controllers.Api2
             if (pageSize == null || pageSize <= 0)
                 pageSize = _configOptions.PageSize;
 
-            var searchResultContainer = searcher.Find(query, lang, pastDays, includeDiscontinued ?? false, pageSize.Value, pageNumber.Value);
-
+            var searchResultContainer = searcher.Find(query, pageSize.Value, pageNumber.Value, pastDays, includeDiscontinued ?? false);
             if (searchResultContainer.outOfRange == true)
             {
                 _logger.LogPageOutOfRange(pageNumber.Value, pageSize.Value);
