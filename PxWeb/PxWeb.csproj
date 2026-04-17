@@ -55,6 +55,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.6" />
     <PackageReference Include="System.IO.Hashing" Version="10.0.6" />
     <PackageReference Include="System.IO.Packaging" Version="10.0.6" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
   </ItemGroup>
 
   <ItemGroup>
