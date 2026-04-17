@@ -484,11 +484,37 @@ namespace PxWeb.Models.Api2
 
         public void AddDimensionLink(DimensionValue dimensionValue, Dictionary<string, string> metaIds)
         {
-            dimensionValue.Link = new JsonstatExtensionLink
+            if (dimensionValue.Link is null)
             {
-                Describedby = new List<DimensionExtension>() { new DimensionExtension() { Extension = metaIds } }
-            };
+                dimensionValue.Link = new JsonstatExtensionLink();
+            }
+            dimensionValue.Link.Describedby = new List<DimensionExtension>() { new DimensionExtension() { Extension = metaIds } };
+        }
 
+
+        //On Dimension
+        public static void AddRelatedLink(DimensionValue dimensionValue, RelatedLink theLink)
+        {
+            if (dimensionValue.Link is null)
+            {
+                dimensionValue.Link = new JsonstatExtensionLink();
+            }
+            if (dimensionValue.Link.Related is null)
+            {
+                dimensionValue.Link.Related = new List<RelatedLink>();
+            }
+            dimensionValue.Link.Related.Add(theLink);
+        }
+
+        //On root
+        public void AddRelatedLink(RelatedLink theLink)
+        {
+            if (this.Link is null)
+            {
+                this.Link = new JsonstatExtensionLink();
+                this.Link.Related = new List<RelatedLink>();
+            }
+            this.Link.Related.Add(theLink);
         }
 
         public static void AddCodelist(DimensionValue dimensionValue, List<CodelistInformation> codeLists)
