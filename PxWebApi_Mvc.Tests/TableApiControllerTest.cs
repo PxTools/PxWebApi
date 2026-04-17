@@ -18,11 +18,11 @@ namespace PxWebApi_Mvc.Tests
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            var response = await client.GetAsync("/tables?lang=en", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables?lang=en", TestContext.CancellationToken);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "ListAllTables.json"));
 
             //updated causes problems. When expected and actual is made in different places and input is in localtime.
@@ -37,11 +37,11 @@ namespace PxWebApi_Mvc.Tests
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            var response = await client.GetAsync("/tables/tab004?lang=en", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/tab004?lang=en", TestContext.CancellationToken);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "TableById_tab004.json"));
 
             Util.AssertJson(rawExpected, rawActual, ["updated"]);
@@ -54,11 +54,11 @@ namespace PxWebApi_Mvc.Tests
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            var response = await client.GetAsync("/tables/tab004/metadata?lang=en", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/tab004/metadata?lang=en", TestContext.CancellationToken);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab004_js2.json"));
 
             Util.AssertJson(rawExpected, rawActual, ["updated"]);
@@ -71,16 +71,35 @@ namespace PxWebApi_Mvc.Tests
             await using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            var response = await client.GetAsync("/tables/tab003/metadata?lang=en", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/tab003/metadata?lang=en", TestContext.CancellationToken);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab003_js2.json"));
 
             Util.AssertJson(rawExpected, rawActual, ["updated", "nextUpdate"]);
 
         }
+
+
+        [TestMethod]
+        public async Task GetMetadataById_tab001_js2()
+        {
+            await using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            var response = await client.GetAsync("/tables/tab001/metadata?lang=en", TestContext.CancellationToken);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
+            string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "MetadataById_tab001_js2.json"));
+
+            Util.AssertJson(rawExpected, rawActual, ["updated", "nextUpdate"]);
+
+        }
+
 
         [TestMethod]
         public async Task GetTableData_WhenDefault_ShoudlReturnOK()
@@ -90,7 +109,7 @@ namespace PxWebApi_Mvc.Tests
             using var client = application.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/tables/tab003/data?lang=en", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/tab003/data?lang=en", TestContext.CancellationToken);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
@@ -106,8 +125,8 @@ namespace PxWebApi_Mvc.Tests
             using var client = application.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/tables/TAB004/data?valueCodes[ContentsCode]=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0&outputFormat=px", TestContext.CancellationTokenSource.Token);
-            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/TAB004/data?valueCodes[ContentsCode]=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0&outputFormat=px", TestContext.CancellationToken);
+            string rawActual = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
 
             string rawExpected = File.ReadAllText(Path.Combine(Util.ExpectedJsonDir(), "tab4_fewcells.px"));
 
@@ -125,7 +144,7 @@ namespace PxWebApi_Mvc.Tests
             using var client = application.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/tables/TAB004/data?valueCodes=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/TAB004/data?valueCodes=Emission&valueCodes[TIME]=2017&valueCodes[GREENHOUSEGAS]=CO2&valueCodes[SECTOR]=7.0", TestContext.CancellationToken);
             // Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -138,7 +157,7 @@ namespace PxWebApi_Mvc.Tests
             using var client = application.CreateClient();
 
             // Act
-            var response = await client.GetAsync("/tables/tabXYZ/data?lang=en", TestContext.CancellationTokenSource.Token);
+            var response = await client.GetAsync("/tables/tabXYZ/data?lang=en", TestContext.CancellationToken);
 
             // Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
