@@ -34,6 +34,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner begin /k:PxTools_PxWebApi
           /o:pxtools
+          /d:sonar.verbose=false
+          /d:sonar.exclusions=docker/**
           /d:sonar.token=$SONAR_TOKEN
           /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 

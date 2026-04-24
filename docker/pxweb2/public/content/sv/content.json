@@ -27,9 +27,9 @@
     "noResultSearchHelp": {
       "enabled": true,
       "helpText": [
-        "Du kan söka på tabellrubrik, variabler och tabellnummer",
-        "För tillfället kan du inte söka på innehållet i tabellerna, som namnet på en kommun eller landskap",
-        "Vi jobbar på att göra söken bättre så att det ska bli lättare att hitta de siffror du behöver"
+        "Sökning på hela meningar ger få eller inga resultat. Försök göra en mer generell sökning med ett fåtal ord och använd sen filtret för att begränsa sökresultatet.",
+        "Använd citattecken för att söka efter en exakt fras, till exempel *”privat sektor”*. Detta visar bara träffar som innehåller exakt den ordkombinationen.",
+        "Använd *title:* för att bara söka i tabellnamnet, till exempel *title:folkmängd*."
       ]
     }
   },
@@ -43,9 +43,27 @@
             "url": "https://www.pxtools.net/PxWeb2/",
             "external": true
           },
-          { "text": "Kontakt", "url": "mailto:px@scb.se" }
+          {
+            "text": "Kontakt",
+            "url": "mailto:px@scb.se"
+          }
         ]
       }
     ]
+  },
+  "tableViewer": {
+    "helpSection": {
+      "description": "Hjälp och tips om hur du använder Statistikdatabasen hittar du på sidan:",
+      "links": [
+        {
+          "text": "Kom igång med Statistikdatabasen",
+          "url": "#"
+        }
+      ],
+      "informationCard": {
+        "enabled": true,
+        "text": "Har du frågor om siffrorna och innehållet i tabellen, se under knappen  ”Information”."
+      }
+    }
   }
 }
