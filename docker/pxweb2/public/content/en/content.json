@@ -34,9 +34,10 @@
     "noResultSearchHelp": {
       "enabled": true,
       "helpText": [
-        "You can search by table name, variables, or table number",
-        "Currently, you cannot search for content in the tables, such as the name of a municipality or county",
-        "We're working to improve the search, so it will be easier to find the numbers you need"
+        "Whole sentences usually give few or no results. Try a more general search with few words, and use the filter to narrow it down.",
+        "Use quotation marks to search for an exact phrase, for example *“private sector”*. This will show only tables that contain that exact combination of words.",
+        "Use *title:* to search only in the table name, for example *title:stockholm*.",
+        "You can add or remove items from this search help list to make it relevant for your specific database."
       ]
     }
   },
@@ -50,9 +51,31 @@
             "url": "https://www.pxtools.net/PxWeb2/",
             "external": true
           },
-          { "text": "Contact", "url": "mailto:px@scb.se" }
+          {
+            "text": "Contact",
+            "url": "mailto:px@scb.se"
+          }
         ]
       }
     ]
+  },
+  "tableViewer": {
+    "helpSection": {
+      "description": "Help and guidance on how to use the PxWeb interface can be found on our help pages:",
+      "links": [
+        {
+          "text": "Example link 1",
+          "url": "#"
+        },
+        {
+          "text": "Example link 2",
+          "url": "#"
+        }
+      ],
+      "informationCard": {
+        "enabled": true,
+        "text": "For questions about the figures and table content, see the “Information” button."
+      }
+    }
   }
 }
