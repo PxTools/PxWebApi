@@ -32,7 +32,7 @@ jobs:
       - name: Begin SonarScanner
         run: dotnet sonarscanner begin /k:PxTools_PxWebApi
           /o:pxtools
-          /d:sonar.verbose=true
+          /d:sonar.verbose=false
           /d:sonar.exclusions=docker/**
           /d:sonar.token=${{ secrets.SONAR_TOKEN }}
           /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
