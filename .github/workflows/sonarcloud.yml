@@ -30,9 +30,11 @@ jobs:
         run: dotnet tool install -g dotnet-sonarscanner
 
       - name: Begin SonarScanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner begin /k:PxTools_PxWebApi
           /o:pxtools
-          /d:sonar.token=${{ secrets.SONAR_TOKEN }}
+          /d:sonar.token=$SONAR_TOKEN
           /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
 
       - name: Build
@@ -42,4 +44,6 @@ jobs:
         run: dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
 
       - name: End SonarScanner
-        run: dotnet sonarscanner end /d:sonar.token=${{ secrets.SONAR_TOKEN }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet sonarscanner end /d:sonar.token=$SONAR_TOKEN
