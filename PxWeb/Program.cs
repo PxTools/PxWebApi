@@ -67,23 +67,23 @@ namespace PxWeb
 
             // Add services to the container.
             Console.WriteLine("Starting!");
-            RegisterServices(builder, out var langList, out var corsEnbled, out var pxApiConfiguration);
+            RegisterServices(builder, out var corsEnbled, out var pxApiConfiguration);
             var app = builder.Build();
             ConfigureMiddleware(app, pxApiConfiguration, corsEnbled);
             app.Run();
         }
 
-        private static void RegisterServices(WebApplicationBuilder builder, out List<string> langList, out bool corsEnabled, out PxApiConfigurationOptions pxApiConfiguration)
+        private static void RegisterServices(WebApplicationBuilder builder, out bool corsEnabled, out PxApiConfigurationOptions pxApiConfiguration)
         {
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
 
             var hBuilder = builder.Services.AddHealthChecks()
-                .AddCheck<MaintenanceHealthCheck>("Maintenance", tags: new[] { "ready" });
+                .AddCheck<MaintenanceHealthCheck>("Maintenance", tags: ["ready"]);
             var datasourceType = builder.Configuration.GetSection("DataSource:DataSourceType").Value ?? "PX";
             if (datasourceType.Equals("CNMM", StringComparison.OrdinalIgnoreCase))
             {
-                hBuilder.AddCheck<SqlDbConnectionHealthCheck>("Database", tags: new[] { "ready" });
+                hBuilder.AddCheck<SqlDbConnectionHealthCheck>("Database", tags: ["ready"]);
             }
 
             builder.Services.AddMemoryCache();
@@ -137,7 +137,6 @@ namespace PxWeb
                 .Where(p => p.Value != null && p.Key.ToLower().Contains("id"))
                 .Select(p => p.Value ?? "")
                 .ToList();
-            langList = languages;
             builder.Services.AddControllers(x =>
                 x.Filters.Add(new LangValidationFilter(languages))
                 )
