@@ -205,5 +205,35 @@ namespace PxWeb.UnitTests
             // Assert
             Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded
         }
+
+        [TestMethod]
+        public void ConfigureLogging_DevelopmentEnvironment_DoesNotThrow()
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder(["--environment=Development"]);
+            var configureLogging = typeof(Program).GetMethod("ConfigureLogging", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configureLogging, "Expected Program.ConfigureLogging to be available via reflection.");
+
+            // Act
+            configureLogging.Invoke(null, [builder]);
+
+            // Assert
+            Assert.IsNotNull(builder.Logging); // if no exception was thrown, logging configuration succeeded
+        }
+
+        [TestMethod]
+        public void ConfigureLogging_ProductionEnvironment_DoesNotThrow()
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder(["--environment=Production"]);
+            var configureLogging = typeof(Program).GetMethod("ConfigureLogging", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configureLogging, "Expected Program.ConfigureLogging to be available via reflection.");
+
+            // Act
+            configureLogging.Invoke(null, [builder]);
+
+            // Assert
+            Assert.IsNotNull(builder.Logging); // if no exception was thrown, logging configuration succeeded
+        }
     }
 }

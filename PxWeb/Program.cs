@@ -44,16 +44,7 @@ namespace PxWeb
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Only use Log4Net provider
-            builder.Logging.ClearProviders();
-            if (builder.Environment.IsDevelopment())
-            {
-                builder.Logging.AddLog4Net("log4net.Development.config");
-            }
-            else
-            {
-                builder.Logging.AddLog4Net("log4net.config");
-            }
+            ConfigureLogging(builder);
 
             // Paxiom settings
             var omit = builder.Configuration.GetSection("PxApiConfiguration:OmitContentsInTitle");
@@ -72,6 +63,20 @@ namespace PxWeb
             var app = builder.Build();
             ConfigureMiddleware(app, pxApiConfiguration, corsEnbled);
             app.Run();
+        }
+
+        private static void ConfigureLogging(WebApplicationBuilder builder)
+        {
+            // Only use Log4Net provider
+            builder.Logging.ClearProviders();
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Logging.AddLog4Net("log4net.Development.config");
+            }
+            else
+            {
+                builder.Logging.AddLog4Net("log4net.config");
+            }
         }
 
         private static void RegisterServices(WebApplicationBuilder builder, out bool corsEnabled, out PxApiConfigurationOptions pxApiConfiguration)
