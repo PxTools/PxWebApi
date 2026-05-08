@@ -144,7 +144,7 @@ namespace PxWeb.UnitTests
         public void ConfigureMiddleware_DevelopmentEnvironment_DoesNotThrow()
         {
             // Arrange
-            var builder = WebApplication.CreateBuilder(new[] { "--environment=Development" });
+            var builder = WebApplication.CreateBuilder(["--environment=Development"]);
             builder.Services.AddControllers();
             builder.Services.AddHealthChecks();
             builder.Services.AddSwaggerGen();
@@ -173,7 +173,7 @@ namespace PxWeb.UnitTests
         public void ConfigureMiddleware_ProductionEnvironment_DoesNotThrow()
         {
             // Arrange
-            var builder = WebApplication.CreateBuilder(new[] { "--environment=Production" });
+            var builder = WebApplication.CreateBuilder(["--environment=Production"]);
             builder.Services.AddControllers();
             builder.Services.AddHealthChecks();
             builder.Services.AddSwaggerGen();
