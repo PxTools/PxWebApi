@@ -235,5 +235,54 @@ namespace PxWeb.UnitTests
             // Assert
             Assert.IsNotNull(builder.Logging); // if no exception was thrown, logging configuration succeeded
         }
+
+        [TestMethod]
+        [DataRow("Development")]
+        [DataRow("Production")]
+        public void ConfigurePaxiomSettings_WithEnvironment_SetsDefaultValue(string environment)
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder(new[] { $"--environment={environment}" });
+            var configurePaxiomSettings = typeof(Program).GetMethod("ConfigurePaxiomSettings", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configurePaxiomSettings, "Expected Program.ConfigurePaxiomSettings to be available via reflection.");
+
+            // Act
+            configurePaxiomSettings.Invoke(null, new object[] { builder });
+
+            // Assert
+            Assert.IsTrue(PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle); // default value
+        }
+
+        [TestMethod]
+        public void ConfigurePaxiomSettings_WithConfigValueFalse_SetsFalse()
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder();
+            builder.Configuration["PxApiConfiguration:OmitContentsInTitle"] = "false";
+            var configurePaxiomSettings = typeof(Program).GetMethod("ConfigurePaxiomSettings", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configurePaxiomSettings);
+
+            // Act
+            configurePaxiomSettings.Invoke(null, new object[] { builder });
+
+            // Assert
+            Assert.IsFalse(PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle);
+        }
+
+        [TestMethod]
+        public void ConfigurePaxiomSettings_WithConfigValueTrue_SetsTrue()
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder();
+            builder.Configuration["PxApiConfiguration:OmitContentsInTitle"] = "true";
+            var configurePaxiomSettings = typeof(Program).GetMethod("ConfigurePaxiomSettings", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configurePaxiomSettings);
+
+            // Act
+            configurePaxiomSettings.Invoke(null, new object[] { builder });
+
+            // Assert
+            Assert.IsTrue(PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle);
+        }
     }
 }
