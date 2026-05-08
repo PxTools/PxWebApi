@@ -95,7 +95,7 @@ namespace PxWeb
                 var logger = provider.GetRequiredService<ILogger<PxCache>>();
                 var instance = new PxCache(logger);
                 var clearTime = ApiConfiguration?.CacheClearTime;
-                if (!string.IsNullOrEmpty(clearTime) && DateTime.TryParse(clearTime, out DateTime time))
+                if (!string.IsNullOrEmpty(clearTime) && DateTime.TryParse(clearTime, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime time))
                 {
                     DefaultCacheClearer.SetNextClearTime(time);
                     instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
@@ -216,12 +216,9 @@ namespace PxWeb
         private static OpenApiPaths RemoveAdminEndpoints(OpenApiPaths paths)
         {
             var openApiPaths = new OpenApiPaths();
-            foreach (var path in paths)
+            foreach (var path in paths.Where(p => !p.Key.StartsWith(AdminPath)))
             {
-                if (!path.Key.StartsWith(AdminPath))
-                {
-                    openApiPaths.Add(path.Key, path.Value);
-                }
+                openApiPaths.Add(path.Key, path.Value);
             }
             return openApiPaths;
         }
