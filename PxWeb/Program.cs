@@ -36,6 +36,7 @@ namespace PxWeb
 {
     public class Program
     {
+        private const string AdminPath = "/admin";
         public static void Main(string[] args)
         {
 
@@ -194,7 +195,7 @@ namespace PxWeb
             {
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
-                app.UseWhen(context => context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
+                app.UseWhen(context => context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
@@ -213,7 +214,7 @@ namespace PxWeb
             {
                 app.UseIpRateLimiting();
             }
-            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin") || context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
+            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath) || context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
                 appBuilder.UseUsageLogMiddleware();
                 appBuilder.UseCacheMiddleware();
@@ -225,7 +226,7 @@ namespace PxWeb
             var openApiPaths = new OpenApiPaths();
             foreach (var path in paths)
             {
-                if (!path.Key.StartsWith("/admin"))
+                if (!path.Key.StartsWith(AdminPath))
                 {
                     openApiPaths.Add(path.Key, path.Value);
                 }
