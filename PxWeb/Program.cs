@@ -246,7 +246,7 @@ namespace PxWeb
             }
             return new List<OpenApiServer>
             {
-                new OpenApiServer { Url = part1 + pxApiConfiguration_RoutePrefix }
+                new() { Url = part1 + pxApiConfiguration_RoutePrefix }
             };
         }
     }

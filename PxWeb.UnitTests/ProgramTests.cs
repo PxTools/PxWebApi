@@ -139,5 +139,71 @@ namespace PxWeb.UnitTests
             // Assert
             Assert.IsNotNull(builder.Services);
         }
+
+        [TestMethod]
+        public void ConfigureMiddleware_DevelopmentEnvironment_DoesNotThrow()
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder(new[] { "--environment=Development" });
+            builder.Services.AddControllers();
+            builder.Services.AddHealthChecks();
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGenNewtonsoftSupport();
+            builder.Services.AddRouting();
+
+            var app = builder.Build();
+            var pxApiConfiguration = new PxApiConfigurationOptions
+            {
+                RoutePrefix = "/api",
+                EnableAllEndpointsSwaggerUI = true,
+                BaseURL = string.Empty
+            };
+
+            var configureMiddleware = typeof(Program).GetMethod("ConfigureMiddleware", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configureMiddleware, "Expected Program.ConfigureMiddleware to be available via reflection.");
+
+            // Act
+            configureMiddleware.Invoke(null, new object[] { app, pxApiConfiguration, false });
+
+            // Assert
+            Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded
+        }
+
+        [TestMethod]
+        public void ConfigureMiddleware_ProductionEnvironment_DoesNotThrow()
+        {
+            // Arrange
+            var builder = WebApplication.CreateBuilder(new[] { "--environment=Production" });
+            builder.Services.AddControllers();
+            builder.Services.AddHealthChecks();
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGenNewtonsoftSupport();
+            builder.Services.AddRouting();
+            builder.Services.AddAuthorization();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddInMemoryRateLimiting();
+            builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+            builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            builder.Services.AddSingleton<IAdminProtectionConfigurationService>(new Mock<IAdminProtectionConfigurationService>().Object);
+            builder.Services.AddSingleton<ILogger<GlobalRoutePrefixMiddleware>>(new Mock<ILogger<GlobalRoutePrefixMiddleware>>().Object);
+
+            var app = builder.Build();
+            var pxApiConfiguration = new PxApiConfigurationOptions
+            {
+                RoutePrefix = "/api",
+                EnableAllEndpointsSwaggerUI = false,
+                BaseURL = "https://example.com"
+            };
+
+            var configureMiddleware = typeof(Program).GetMethod("ConfigureMiddleware", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.IsNotNull(configureMiddleware, "Expected Program.ConfigureMiddleware to be available via reflection.");
+
+            // Act
+            configureMiddleware.Invoke(null, new object[] { app, pxApiConfiguration, false });
+
+            // Assert
+            Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded
+        }
     }
 }
