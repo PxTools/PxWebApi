@@ -29,7 +29,9 @@ namespace PxWeb.Config.Api2
         public List<SourceReference>? SourceReferences { get; set; }
         public Cors? Cors { get; set; }
         public int CacheTime { get; set; } = 5;
-        public int PageSize { get; set; }
+        public string CacheClearTime { get; set; } = string.Empty;
+        public string SearchEngine { get; set; } = String.Empty;
+        public int PageSize { get; set; } = 20;
         public string BaseURL { get; set; } = String.Empty;
         public string RoutePrefix { get; set; } = String.Empty;
         public List<string> OutputFormats { get; set; } = new List<string>();

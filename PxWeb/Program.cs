@@ -37,22 +37,23 @@ namespace PxWeb
     public class Program
     {
         private const string AdminPath = "/admin";
+        private static PxApiConfigurationOptions? ApiConfiguration { get; set; }
+
         public static void Main(string[] args)
         {
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = WebApplication.CreateBuilder(args);
+            ApiConfiguration = new PxApiConfigurationOptions();
+            builder.Configuration.Bind("PxApiConfiguration", ApiConfiguration);
 
             ConfigureLogging(builder);
+            PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = ApiConfiguration.OmitContentsInTitle;
 
-            ConfigurePaxiomSettings(builder);
-
-            // Add services to the container.
             Console.WriteLine("Starting!");
-            RegisterServices(builder, out var corsEnbled, out var pxApiConfiguration);
+            RegisterServices(builder, out var corsEnabled);
             var app = builder.Build();
-            ConfigureMiddleware(app, pxApiConfiguration, corsEnbled);
+            ConfigureMiddleware(app, ApiConfiguration!, corsEnabled);
             app.Run();
         }
 
@@ -70,23 +71,10 @@ namespace PxWeb
             }
         }
 
-        private static void ConfigurePaxiomSettings(WebApplicationBuilder builder)
-        {
-            // Paxiom settings
-            var omit = builder.Configuration.GetSection("PxApiConfiguration:OmitContentsInTitle");
-            if (omit != null && bool.TryParse(omit.Value, out bool omitContentsInTitle))
-            {
-                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = omitContentsInTitle;
-            }
-            else
-            {
-                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = true; // Default value
-            }
-        }
 
-        private static void RegisterServices(WebApplicationBuilder builder, out bool corsEnabled, out PxApiConfigurationOptions pxApiConfiguration)
+
+        private static void RegisterServices(WebApplicationBuilder builder, out bool corsEnabled)
         {
-            // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
 
             var hBuilder = builder.Services.AddHealthChecks()
@@ -106,8 +94,8 @@ namespace PxWeb
             {
                 var logger = provider.GetRequiredService<ILogger<PxCache>>();
                 var instance = new PxCache(logger);
-                var clearTime = builder.Configuration.GetSection("PxApiConfiguration:CacheClearTime").Value;
-                if (clearTime != null && DateTime.TryParse(clearTime, out DateTime time))
+                var clearTime = ApiConfiguration?.CacheClearTime;
+                if (!string.IsNullOrEmpty(clearTime) && DateTime.TryParse(clearTime, out DateTime time))
                 {
                     DefaultCacheClearer.SetNextClearTime(time);
                     instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
@@ -143,11 +131,7 @@ namespace PxWeb
             builder.Services.AddHostedService<LongRunningService>();
             builder.Services.AddSingleton<BackgroundWorkerQueue>();
             builder.Services.AddPxSearchEngine(builder);
-            var languages = builder.Configuration.GetSection("PxApiConfiguration:Languages")
-                .AsEnumerable()
-                .Where(p => p.Value != null && p.Key.ToLower().Contains("id"))
-                .Select(p => p.Value ?? "")
-                .ToList();
+            var languages = ApiConfiguration?.Languages?.Select(l => l.Id).ToList() ?? new List<string>();
             builder.Services.AddControllers(x =>
                 x.Filters.Add(new LangValidationFilter(languages))
                 )
@@ -172,8 +156,6 @@ namespace PxWeb
             });
             builder.Services.AddSwaggerGenNewtonsoftSupport();
             corsEnabled = builder.Services.ConfigurePxCORS(builder);
-            pxApiConfiguration = new PxApiConfigurationOptions();
-            builder.Configuration.Bind("PxApiConfiguration", pxApiConfiguration);
         }
 
         private static void ConfigureMiddleware(WebApplication app, PxApiConfigurationOptions pxApiConfiguration, bool corsEnabled)
