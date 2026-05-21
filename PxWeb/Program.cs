@@ -37,14 +37,13 @@ namespace PxWeb
     public class Program
     {
         private const string AdminPath = "/admin";
-        private static PxApiConfigurationOptions? PxApiConfiguration { get; set; }
+        private static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
 
         public static void Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = WebApplication.CreateBuilder(args);
-            PxApiConfiguration = new PxApiConfigurationOptions();
             builder.Configuration.Bind("PxApiConfiguration", PxApiConfiguration);
 
             ConfigureLogging(builder);
@@ -53,7 +52,7 @@ namespace PxWeb
             Console.WriteLine("Starting!");
             RegisterServices(builder, out var corsEnabled);
             var app = builder.Build();
-            ConfigureMiddleware(app, PxApiConfiguration!, corsEnabled);
+            ConfigureMiddleware(app, corsEnabled);
             app.Run();
         }
 
@@ -158,19 +157,19 @@ namespace PxWeb
             corsEnabled = builder.Services.ConfigurePxCORS(builder);
         }
 
-        private static void ConfigureMiddleware(WebApplication app, PxApiConfigurationOptions pxApiConfiguration, bool corsEnabled)
+        private static void ConfigureMiddleware(WebApplication app, bool corsEnabled)
         {
-            app.UseMiddleware<GlobalRoutePrefixMiddleware>(pxApiConfiguration.RoutePrefix);
-            app.UsePathBase(new PathString(pxApiConfiguration.RoutePrefix));
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>(PxApiConfiguration.RoutePrefix);
+            app.UsePathBase(new PathString(PxApiConfiguration.RoutePrefix));
             app.UseSwagger(options =>
             {
                 options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
-                    if (!(pxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
+                    if (!(PxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
                     {
                         swaggerDoc.Paths = RemoveAdminEndpoints(swaggerDoc.Paths);
                     }
-                    swaggerDoc.Servers = GetOpenApiServers(pxApiConfiguration.BaseURL, pxApiConfiguration.RoutePrefix);
+                    swaggerDoc.Servers = GetOpenApiServers(PxApiConfiguration.BaseURL, PxApiConfiguration.RoutePrefix);
                 });
             });
             app.UseSwaggerUI(options =>
@@ -187,7 +186,7 @@ namespace PxWeb
             {
                 app.UseHttpsRedirection();
                 app.UseAuthorization();
-                app.UseWhen(context => context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath), appBuilder =>
+                app.UseWhen(context => context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
@@ -206,7 +205,7 @@ namespace PxWeb
             {
                 app.UseIpRateLimiting();
             }
-            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath) || context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
+            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath) || context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
                 appBuilder.UseUsageLogMiddleware();
                 appBuilder.UseCacheMiddleware();

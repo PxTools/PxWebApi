@@ -152,18 +152,12 @@ namespace PxWeb.UnitTests
             builder.Services.AddRouting();
 
             var app = builder.Build();
-            var pxApiConfiguration = new PxApiConfigurationOptions
-            {
-                RoutePrefix = "/api",
-                EnableAllEndpointsSwaggerUI = true,
-                BaseURL = string.Empty
-            };
 
             var configureMiddleware = typeof(Program).GetMethod("ConfigureMiddleware", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.IsNotNull(configureMiddleware, "Expected Program.ConfigureMiddleware to be available via reflection.");
 
             // Act
-            configureMiddleware.Invoke(null, new object[] { app, pxApiConfiguration, false });
+            configureMiddleware.Invoke(null, new object[] { app, false });
 
             // Assert
             Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded
@@ -189,18 +183,12 @@ namespace PxWeb.UnitTests
             builder.Services.AddSingleton<ILogger<GlobalRoutePrefixMiddleware>>(new Mock<ILogger<GlobalRoutePrefixMiddleware>>().Object);
 
             var app = builder.Build();
-            var pxApiConfiguration = new PxApiConfigurationOptions
-            {
-                RoutePrefix = "/api",
-                EnableAllEndpointsSwaggerUI = false,
-                BaseURL = "https://example.com"
-            };
 
             var configureMiddleware = typeof(Program).GetMethod("ConfigureMiddleware", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.IsNotNull(configureMiddleware, "Expected Program.ConfigureMiddleware to be available via reflection.");
 
             // Act
-            configureMiddleware.Invoke(null, new object[] { app, pxApiConfiguration, false });
+            configureMiddleware.Invoke(null, new object[] { app, false });
 
             // Assert
             Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded
