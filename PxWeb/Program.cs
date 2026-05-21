@@ -37,23 +37,23 @@ namespace PxWeb
     public class Program
     {
         private const string AdminPath = "/admin";
-        private static PxApiConfigurationOptions? ApiConfiguration { get; set; }
+        private static PxApiConfigurationOptions? PxApiConfiguration { get; set; }
 
         public static void Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = WebApplication.CreateBuilder(args);
-            ApiConfiguration = new PxApiConfigurationOptions();
-            builder.Configuration.Bind("PxApiConfiguration", ApiConfiguration);
+            PxApiConfiguration = new PxApiConfigurationOptions();
+            builder.Configuration.Bind("PxApiConfiguration", PxApiConfiguration);
 
             ConfigureLogging(builder);
-            PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = ApiConfiguration.OmitContentsInTitle;
+            PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = PxApiConfiguration.OmitContentsInTitle;
 
             Console.WriteLine("Starting!");
             RegisterServices(builder, out var corsEnabled);
             var app = builder.Build();
-            ConfigureMiddleware(app, ApiConfiguration!, corsEnabled);
+            ConfigureMiddleware(app, PxApiConfiguration!, corsEnabled);
             app.Run();
         }
 
@@ -94,7 +94,7 @@ namespace PxWeb
             {
                 var logger = provider.GetRequiredService<ILogger<PxCache>>();
                 var instance = new PxCache(logger);
-                var clearTime = ApiConfiguration?.CacheClearTime;
+                var clearTime = PxApiConfiguration?.CacheClearTime;
                 if (!string.IsNullOrEmpty(clearTime) && DateTime.TryParse(clearTime, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime time))
                 {
                     DefaultCacheClearer.SetNextClearTime(time);
@@ -131,7 +131,7 @@ namespace PxWeb
             builder.Services.AddHostedService<LongRunningService>();
             builder.Services.AddSingleton<BackgroundWorkerQueue>();
             builder.Services.AddPxSearchEngine(builder);
-            var languages = ApiConfiguration?.Languages?.Select(l => l.Id).ToList() ?? [];
+            var languages = PxApiConfiguration?.Languages?.Select(l => l.Id).ToList() ?? [];
             builder.Services.AddControllers(x =>
                 x.Filters.Add(new LangValidationFilter(languages))
                 )
