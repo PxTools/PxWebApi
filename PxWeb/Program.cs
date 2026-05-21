@@ -72,6 +72,7 @@ namespace PxWeb
 
         private static void RegisterServices(WebApplicationBuilder builder)
         {
+            // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
 
             var hBuilder = builder.Services.AddHealthChecks()
@@ -82,10 +83,14 @@ namespace PxWeb
                 hBuilder.AddCheck<SqlDbConnectionHealthCheck>("Database", tags: ["ready"]);
             }
 
+            // needed to store rate limit counters and ip rules
             builder.Services.AddMemoryCache();
+            //load ip rules from appsettings.json
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
             builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+            // inject counter and rules stores
             builder.Services.AddInMemoryRateLimiting();
+            // configuration (resolvers, counter key builders)
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             builder.Services.AddSingleton<IPxCache>(provider =>
             {
@@ -142,8 +147,13 @@ namespace PxWeb
                     opts.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     opts.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ssZ"; // UTC
                 });
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // builder.Services.AddEndpointsApiExplorer(); //only needed for minimal APIS according to
+            // https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio
             builder.Services.AddSwaggerGen(c =>
             {
+                // Sort endpoints
                 c.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
                 c.SwaggerDoc("v2", new OpenApiInfo
                 {
@@ -152,6 +162,8 @@ namespace PxWeb
                 });
             });
             builder.Services.AddSwaggerGenNewtonsoftSupport();
+
+            // Handle CORS configuration from appsettings.json
             CorsEnabled = builder.Services.ConfigurePxCORS(builder);
         }
 
