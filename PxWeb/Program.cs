@@ -149,6 +149,7 @@ namespace PxWeb
             builder.Services.AddSingleton<BackgroundWorkerQueue>();
 
             builder.Services.AddPxSearchEngine(builder);
+
             var languages = PxApiConfiguration.Languages?.Select(l => l.Id).ToList() ?? [];
             builder.Services.AddControllers(x =>
                 x.Filters.Add(new LangValidationFilter(languages))
@@ -201,34 +202,43 @@ namespace PxWeb
                 options.RoutePrefix = string.Empty;
                 options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0");
             });
+
             if (CorsEnabled)
             {
                 app.UseCors();
                 app.UseOptions();
             }
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseHttpsRedirection();
+
                 app.UseAuthorization();
+
                 app.UseWhen(context => context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
                 });
             }
+
             app.MapHealthChecks("/healthz/live", new HealthCheckOptions
             {
                 Predicate = _ => false
             });
+
             app.MapHealthChecks("/healthz/ready", new HealthCheckOptions
             {
                 Predicate = healthCheck => healthCheck.Tags.Contains("ready")
             });
+
             app.MapControllers();
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseIpRateLimiting();
             }
+
             app.UseWhen(context => !(context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath) || context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
                 appBuilder.UseUsageLogMiddleware();
@@ -257,10 +267,12 @@ namespace PxWeb
                     part1 = "";
                 }
             }
+
             return
             [
                 new() { Url = part1 + PxApiConfiguration.RoutePrefix }
             ];
+
         }
     }
 }
