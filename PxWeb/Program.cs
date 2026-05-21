@@ -44,9 +44,13 @@ namespace PxWeb
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = WebApplication.CreateBuilder(args);
+
+            // Bind the configuration to the PxApiConfigurationOptions class
             builder.Configuration.Bind("PxApiConfiguration", PxApiConfiguration);
 
             ConfigureLogging(builder);
+
+            // Paxiom settings
             PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = PxApiConfiguration.OmitContentsInTitle;
 
             Console.WriteLine("Starting!");
@@ -86,8 +90,10 @@ namespace PxWeb
             // needed to store rate limit counters and ip rules
             builder.Services.AddMemoryCache();
 
-            //load ip rules from appsettings.json
+            //load general configuration from appsettings.json
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+
+            //load ip rules from appsettings.json
             builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
 
             // inject counter and rules stores
