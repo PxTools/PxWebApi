@@ -31,6 +31,7 @@ using PxWeb.Helper.Api2;
 using PxWeb.Mappers;
 using PxWeb.Middleware;
 
+
 namespace PxWeb
 {
     public class Program
@@ -53,8 +54,10 @@ namespace PxWeb
             // Paxiom settings
             PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = PxApiConfiguration.OmitContentsInTitle;
 
+            // Add services to the container.
             Console.WriteLine("Starting!");
             RegisterServices(builder);
+
             var app = builder.Build();
             ConfigureMiddleware(app);
             app.Run();
@@ -105,12 +108,15 @@ namespace PxWeb
             {
                 var logger = provider.GetRequiredService<ILogger<PxCache>>();
                 var instance = new PxCache(logger);
+
                 var clearTime = PxApiConfiguration.CacheClearTime;
+
                 if (!string.IsNullOrEmpty(clearTime) && DateTime.TryParse(clearTime, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime time))
                 {
                     DefaultCacheClearer.SetNextClearTime(time);
                     instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
                 }
+
                 return instance;
             });
 
