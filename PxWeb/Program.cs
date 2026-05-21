@@ -131,7 +131,7 @@ namespace PxWeb
             builder.Services.AddHostedService<LongRunningService>();
             builder.Services.AddSingleton<BackgroundWorkerQueue>();
             builder.Services.AddPxSearchEngine(builder);
-            var languages = ApiConfiguration?.Languages?.Select(l => l.Id).ToList() ?? new List<string>();
+            var languages = ApiConfiguration?.Languages?.Select(l => l.Id).ToList() ?? [];
             builder.Services.AddControllers(x =>
                 x.Filters.Add(new LangValidationFilter(languages))
                 )
@@ -170,7 +170,7 @@ namespace PxWeb
                     {
                         swaggerDoc.Paths = RemoveAdminEndpoints(swaggerDoc.Paths);
                     }
-                    swaggerDoc.Servers = Program.GetOpenApiServers(pxApiConfiguration.BaseURL, pxApiConfiguration.RoutePrefix);
+                    swaggerDoc.Servers = GetOpenApiServers(pxApiConfiguration.BaseURL, pxApiConfiguration.RoutePrefix);
                 });
             });
             app.UseSwaggerUI(options =>
@@ -234,10 +234,10 @@ namespace PxWeb
                     part1 = "";
                 }
             }
-            return new List<OpenApiServer>
-            {
+            return
+            [
                 new() { Url = part1 + pxApiConfiguration_RoutePrefix }
-            };
+            ];
         }
     }
 }
