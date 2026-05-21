@@ -157,7 +157,7 @@ namespace PxWeb.UnitTests
             Assert.IsNotNull(configureMiddleware, "Expected Program.ConfigureMiddleware to be available via reflection.");
 
             // Act
-            configureMiddleware.Invoke(null, new object[] { app, false });
+            configureMiddleware.Invoke(null, new object[] { app });
 
             // Assert
             Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded
@@ -188,7 +188,7 @@ namespace PxWeb.UnitTests
             Assert.IsNotNull(configureMiddleware, "Expected Program.ConfigureMiddleware to be available via reflection.");
 
             // Act
-            configureMiddleware.Invoke(null, new object[] { app, false });
+            configureMiddleware.Invoke(null, new object[] { app });
 
             // Assert
             Assert.IsNotNull(app); // if no exception was thrown, middleware configuration succeeded

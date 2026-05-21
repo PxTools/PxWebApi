@@ -38,6 +38,7 @@ namespace PxWeb
     {
         private const string AdminPath = "/admin";
         private static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
+        private static bool CorsEnabled { get; set; }
 
         public static void Main(string[] args)
         {
@@ -50,9 +51,9 @@ namespace PxWeb
             PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = PxApiConfiguration.OmitContentsInTitle;
 
             Console.WriteLine("Starting!");
-            RegisterServices(builder, out var corsEnabled);
+            RegisterServices(builder);
             var app = builder.Build();
-            ConfigureMiddleware(app, corsEnabled);
+            ConfigureMiddleware(app);
             app.Run();
         }
 
@@ -72,7 +73,7 @@ namespace PxWeb
 
 
 
-        private static void RegisterServices(WebApplicationBuilder builder, out bool corsEnabled)
+        private static void RegisterServices(WebApplicationBuilder builder)
         {
             builder.Services.AddOptions();
 
@@ -154,10 +155,10 @@ namespace PxWeb
                 });
             });
             builder.Services.AddSwaggerGenNewtonsoftSupport();
-            corsEnabled = builder.Services.ConfigurePxCORS(builder);
+            CorsEnabled = builder.Services.ConfigurePxCORS(builder);
         }
 
-        private static void ConfigureMiddleware(WebApplication app, bool corsEnabled)
+        private static void ConfigureMiddleware(WebApplication app)
         {
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(PxApiConfiguration.RoutePrefix);
             app.UsePathBase(new PathString(PxApiConfiguration.RoutePrefix));
@@ -177,7 +178,7 @@ namespace PxWeb
                 options.RoutePrefix = string.Empty;
                 options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0");
             });
-            if (corsEnabled)
+            if (CorsEnabled)
             {
                 app.UseCors();
                 app.UseOptions();
