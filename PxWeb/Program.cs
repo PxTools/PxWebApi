@@ -71,8 +71,6 @@ namespace PxWeb
             }
         }
 
-
-
         private static void RegisterServices(WebApplicationBuilder builder)
         {
             builder.Services.AddOptions();
@@ -162,17 +160,14 @@ namespace PxWeb
         {
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(PxApiConfiguration.RoutePrefix);
             app.UsePathBase(new PathString(PxApiConfiguration.RoutePrefix));
-            app.UseSwagger(options =>
-            {
-                options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+            app.UseSwagger(options => options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     if (!(PxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
                     {
                         swaggerDoc.Paths = RemoveAdminEndpoints(swaggerDoc.Paths);
                     }
-                    swaggerDoc.Servers = GetOpenApiServers(PxApiConfiguration.BaseURL, PxApiConfiguration.RoutePrefix);
-                });
-            });
+                    swaggerDoc.Servers = GetOpenApiServers();
+                }));
             app.UseSwaggerUI(options =>
             {
                 options.RoutePrefix = string.Empty;
@@ -223,12 +218,12 @@ namespace PxWeb
             return openApiPaths;
         }
 
-        private static List<OpenApiServer> GetOpenApiServers(string pxApiConfiguration_BaseURL, string pxApiConfiguration_RoutePrefix)
+        private static List<OpenApiServer> GetOpenApiServers()
         {
             var part1 = "";
-            if (!string.IsNullOrEmpty(pxApiConfiguration_BaseURL))
+            if (!string.IsNullOrEmpty(PxApiConfiguration.BaseURL))
             {
-                part1 = (new Uri(pxApiConfiguration_BaseURL)).PathAndQuery;
+                part1 = new Uri(PxApiConfiguration.BaseURL).PathAndQuery;
                 if (string.IsNullOrEmpty(part1) || part1 == "/")
                 {
                     part1 = "";
@@ -236,7 +231,7 @@ namespace PxWeb
             }
             return
             [
-                new() { Url = part1 + pxApiConfiguration_RoutePrefix }
+                new() { Url = part1 + PxApiConfiguration.RoutePrefix }
             ];
         }
     }
