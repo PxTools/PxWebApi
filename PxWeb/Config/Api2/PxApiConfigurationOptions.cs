@@ -22,20 +22,20 @@ namespace PxWeb.Config.Api2
         public string AppVersion => _appVersion;
 
         public List<Language> Languages { get; set; } = new List<Language>();
-        public string DefaultLanguage { get; set; } = String.Empty;
+        public string DefaultLanguage { get; set; } = string.Empty;
         public virtual int MaxDataCells { get; set; } = 1;
         public List<ApiFeature> Features { get; set; } = new List<ApiFeature>();
-        public string License { get; set; } = String.Empty;
+        public string License { get; set; } = string.Empty;
         public List<SourceReference>? SourceReferences { get; set; }
         public Cors? Cors { get; set; }
         public int CacheTime { get; set; } = 5;
         public string CacheClearTime { get; set; } = string.Empty;
-        public string SearchEngine { get; set; } = String.Empty;
+        public string SearchEngine { get; set; } = string.Empty;
         public int PageSize { get; set; } = 20;
-        public string BaseURL { get; set; } = String.Empty;
-        public string RoutePrefix { get; set; } = String.Empty;
+        public string BaseURL { get; set; } = string.Empty;
+        public string RoutePrefix { get; set; } = string.Empty;
         public List<string> OutputFormats { get; set; } = new List<string>();
-        public string DefaultOutputFormat { get; set; } = String.Empty;
+        public string DefaultOutputFormat { get; set; } = string.Empty;
         public bool EnableAllEndpointsSwaggerUI { get; set; } = false;
         public bool OmitContentsInTitle { get; set; } = true;
 
