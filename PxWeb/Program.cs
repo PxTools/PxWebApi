@@ -85,11 +85,14 @@ namespace PxWeb
 
             // needed to store rate limit counters and ip rules
             builder.Services.AddMemoryCache();
+
             //load ip rules from appsettings.json
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
             builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+
             // inject counter and rules stores
             builder.Services.AddInMemoryRateLimiting();
+
             // configuration (resolvers, counter key builders)
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             builder.Services.AddSingleton<IPxCache>(provider =>
@@ -104,16 +107,21 @@ namespace PxWeb
                 }
                 return instance;
             });
+
             builder.Services.AddSingleton<ILinkCreator, LinkCreator>();
             builder.Services.AddSingleton<ISelectionHandler, SelectionHandler>();
             builder.Services.AddSingleton<IPlacementHandler, PlacementHandler>();
             builder.Services.AddSingleton<IControllerStateProvider, ControllerStateProvider>();
+
             builder.Services.AddPxDataSource(builder);
+
             builder.Services.Configure<PxApiConfigurationOptions>(builder.Configuration.GetSection("PxApiConfiguration"));
             builder.Services.Configure<AdminProtectionConfigurationOptions>(builder.Configuration.GetSection("AdminProtection"));
             builder.Services.Configure<CacheMiddlewareConfigurationOptions>(builder.Configuration.GetSection("CacheMiddleware"));
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+
             builder.Services.AddSavedQuery(builder);
+
             builder.Services.AddTransient<IDataWorkflow, DataWorkflow>();
             builder.Services.AddTransient<ISavedQueryBackendProxy, SavedQueryBackendProxy>();
             builder.Services.AddTransient<IPxApiConfigurationService, PxApiConfigurationService>();
@@ -130,8 +138,10 @@ namespace PxWeb
             builder.Services.AddTransient<ISelectionResponseMapper, SelectionResponseMapper>();
             builder.Services.AddTransient<ISavedQueryResponseMapper, SavedQueryResponseMapper>();
             builder.Services.AddTransient<IDefaultSelectionAlgorithm, Bjarte3>();
+
             builder.Services.AddHostedService<LongRunningService>();
             builder.Services.AddSingleton<BackgroundWorkerQueue>();
+
             builder.Services.AddPxSearchEngine(builder);
             var languages = PxApiConfiguration.Languages?.Select(l => l.Id).ToList() ?? [];
             builder.Services.AddControllers(x =>
@@ -161,6 +171,7 @@ namespace PxWeb
                     Version = "v2"
                 });
             });
+
             builder.Services.AddSwaggerGenNewtonsoftSupport();
 
             // Handle CORS configuration from appsettings.json
