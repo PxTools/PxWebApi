@@ -36,9 +36,9 @@ namespace PxWeb
 {
     class Program
     {
-        private const string AdminPath = "/admin";
-        private static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
-        private static bool CorsEnabled { get; set; }
+        const string AdminPath = "/admin";
+        static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
+        static bool CorsEnabled { get; set; }
 
         static void Main(string[] args)
         {
@@ -63,7 +63,7 @@ namespace PxWeb
             app.Run();
         }
 
-        private static void ConfigureLogging(WebApplicationBuilder builder)
+        static void ConfigureLogging(WebApplicationBuilder builder)
         {
             // Only use Log4Net provider
             builder.Logging.ClearProviders();
@@ -77,7 +77,7 @@ namespace PxWeb
             }
         }
 
-        private static void RegisterServices(WebApplicationBuilder builder)
+        static void RegisterServices(WebApplicationBuilder builder)
         {
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
@@ -191,7 +191,7 @@ namespace PxWeb
             CorsEnabled = builder.Services.ConfigurePxCORS(builder);
         }
 
-        private static void ConfigureMiddleware(WebApplication app)
+        static void ConfigureMiddleware(WebApplication app)
         {
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(PxApiConfiguration.RoutePrefix);
             app.UsePathBase(new PathString(PxApiConfiguration.RoutePrefix));
@@ -252,7 +252,7 @@ namespace PxWeb
             });
         }
 
-        private static OpenApiPaths RemoveAdminEndpoints(OpenApiPaths paths)
+        static OpenApiPaths RemoveAdminEndpoints(OpenApiPaths paths)
         {
             var openApiPaths = new OpenApiPaths();
             foreach (var path in paths.Where(p => !p.Key.StartsWith(AdminPath)))
@@ -262,7 +262,7 @@ namespace PxWeb
             return openApiPaths;
         }
 
-        private static List<OpenApiServer> GetOpenApiServers()
+        static List<OpenApiServer> GetOpenApiServers()
         {
             var part1 = "";
             if (!string.IsNullOrEmpty(PxApiConfiguration.BaseURL))
