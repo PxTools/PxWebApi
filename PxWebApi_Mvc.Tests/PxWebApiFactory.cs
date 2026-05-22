@@ -10,6 +10,9 @@ namespace PxWebApi_Mvc.Tests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment(environment);
+            builder.UseSetting("DataSource:DataSourceType", "CNMM");
+            builder.UseSetting("PxApiConfiguration:BaseURL", "https://www.pxtools.net/api");
+            builder.UseSetting("PxApiConfiguration:RoutePrefix", "/v2");
         }
     }
 }
