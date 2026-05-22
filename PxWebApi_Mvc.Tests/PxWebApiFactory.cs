@@ -11,8 +11,8 @@ namespace PxWebApi_Mvc.Tests
         {
             builder.UseEnvironment(environment);
             builder.UseSetting("DataSource:DataSourceType", "CNMM");
-            builder.UseSetting("PxApiConfiguration:BaseURL", "https://www.pxtools.net/api");
-            builder.UseSetting("PxApiConfiguration:RoutePrefix", "/v2");
+            builder.UseSetting("PxApiConfiguration:BaseURL", "https://www.pxtools.net/");
+            builder.UseSetting("PxApiConfiguration:RoutePrefix", "/api/v2");
         }
     }
 }
