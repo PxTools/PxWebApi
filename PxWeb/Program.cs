@@ -34,13 +34,13 @@ using PxWeb.Middleware;
 
 namespace PxWeb
 {
-    public class Program
+    class Program
     {
         private const string AdminPath = "/admin";
         private static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
         private static bool CorsEnabled { get; set; }
 
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
