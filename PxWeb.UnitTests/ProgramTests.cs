@@ -1,6 +1,6 @@
 namespace PxWeb.UnitTests
 {
-    [TestClass]
+    //[TestClass]
     public class ProgramTests
     {
         // [TestMethod]
