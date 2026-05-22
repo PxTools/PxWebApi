@@ -47,5 +47,22 @@ namespace PxWebApi_Mvc.Tests
             // Assert
             Assert.AreEqual("/api/v2", serverUrl);
         }
+
+        [TestMethod]
+        [DataRow("Development")]
+        public async Task HealthCheck_ShouldReturnSuccess(string environment)
+        {
+            // Arrange
+            await using var app = new PxWebApiFactory(environment);
+            var client = app.CreateClient();
+
+            // Act
+            var live = await client.GetAsync("/healthz/live", TestContext.CancellationToken);
+            var ready = await client.GetAsync("/healthz/ready", TestContext.CancellationToken);
+
+            // Assert
+            Assert.IsTrue(live.IsSuccessStatusCode);
+            Assert.IsTrue(ready.IsSuccessStatusCode);
+        }
     }
 }
