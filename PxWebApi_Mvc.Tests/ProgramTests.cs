@@ -16,6 +16,8 @@ namespace PxWebApi_Mvc.Tests
     [TestClass]
     public class ProgramTests
     {
+        public TestContext TestContext { get; set; }
+
         [TestMethod]
         [DataRow("Development")]
         [DataRow("Production")]
@@ -23,9 +25,8 @@ namespace PxWebApi_Mvc.Tests
         {
             await using var main = new PxWebApiFactory(environment);
             var client = main.CreateClient();
-            var response = await client.GetAsync("/");
+            var response = await client.GetAsync("/", TestContext.CancellationToken);
             Assert.IsTrue(response.IsSuccessStatusCode, $"Expected successful response from / endpoint, but got {(int)response.StatusCode} {response.ReasonPhrase}");
-
         }
     }
 }
