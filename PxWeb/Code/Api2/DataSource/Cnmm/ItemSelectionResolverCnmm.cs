@@ -109,14 +109,14 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
                 }
                 else
                 {
-                    filter[selection.Menu] = new List<ItemSelection>() { selection };
+                    filter[selection.Menu.ToUpper()] = new List<ItemSelection>() { selection };
                 }
             }
 
-            if (filter.ContainsKey(rootItem))
+            if (filter.ContainsKey(rootItem.ToUpper()))
             {
-                newLookup.Add(rootItem, lookupTable[rootItem]);
-                AddRecursive(rootItem, newLookup, filter);
+                newLookup.Add(rootItem.ToUpper(), lookupTable[rootItem]);
+                AddRecursive(rootItem.ToUpper(), newLookup, filter);
             }
 
             return newLookup;
@@ -133,8 +133,8 @@ namespace PxWeb.Code.Api2.DataSource.Cnmm
             {
                 foreach (var selection in selections)
                 {
-                    result.Add(selection.Selection, selection);
-                    AddRecursive(selection.Selection, result, lookup);
+                    result.Add(selection.Selection.ToUpper(), selection);
+                    AddRecursive(selection.Selection.ToUpper(), result, lookup);
                 }
             }
         }
