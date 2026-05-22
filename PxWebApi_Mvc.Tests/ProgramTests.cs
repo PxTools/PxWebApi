@@ -25,8 +25,10 @@ namespace PxWebApi_Mvc.Tests
         {
             await using var main = new PxWebApiFactory(environment);
             var client = main.CreateClient();
-            var response = await client.GetAsync("/", TestContext.CancellationToken);
-            Assert.IsTrue(response.IsSuccessStatusCode, $"Expected successful response from / endpoint, but got {(int)response.StatusCode} {response.ReasonPhrase}");
+            var response = await client.GetAsync("/index.html", TestContext.CancellationToken);
+            Assert.IsTrue(response.IsSuccessStatusCode);
+            Assert.IsTrue(response.Headers.TryGetValues("x-swagger-ui-version", out var values));
+            Assert.AreEqual("5.29.2", values.Single());
         }
     }
 }
