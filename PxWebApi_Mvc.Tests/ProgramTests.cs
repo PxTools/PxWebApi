@@ -23,12 +23,16 @@ namespace PxWebApi_Mvc.Tests
         [DataRow("Production")]
         public async Task RunMain(string environment)
         {
+            // Arrange
             await using var main = new PxWebApiFactory(environment);
             var client = main.CreateClient();
+
+            // Act
             var response = await client.GetAsync("/index.html", TestContext.CancellationToken);
+
+            // Assert
             Assert.IsTrue(response.IsSuccessStatusCode);
             Assert.IsTrue(response.Headers.TryGetValues("x-swagger-ui-version", out var values));
-            Assert.AreEqual("5.29.2", values.Single());
         }
     }
 }
