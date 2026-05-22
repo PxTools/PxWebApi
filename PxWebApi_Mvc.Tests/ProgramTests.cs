@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace PxWebApi_Mvc.Tests
 {
     [TestClass]
@@ -20,6 +22,30 @@ namespace PxWebApi_Mvc.Tests
             // Assert
             Assert.IsTrue(response.IsSuccessStatusCode);
             Assert.IsTrue(response.Headers.TryGetValues("x-swagger-ui-version", out var values));
+        }
+
+        [TestMethod]
+        [DataRow("Development")]
+        [DataRow("Production")]
+        public async Task SwaggerJson_ShouldContainConfiguredServerUrl(string environment)
+        {
+            // Arrange
+            await using var app = new PxWebApiFactory(environment);
+            var client = app.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/swagger/v2/swagger.json", TestContext.CancellationToken);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync(TestContext.CancellationToken);
+            using var document = JsonDocument.Parse(json);
+            var serverUrl = document.RootElement
+                .GetProperty("servers")[0]
+                .GetProperty("url")
+                .GetString();
+
+            // Assert
+            Assert.AreEqual("/api/v2", serverUrl);
         }
     }
 }
