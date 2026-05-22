@@ -1,18 +1,5 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-
-using PxWeb;
-
 namespace PxWebApi_Mvc.Tests
 {
-    internal class PxWebApiFactory(string environment) : WebApplicationFactory<Program>
-    {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder.UseEnvironment(environment);
-        }
-    }
-
     [TestClass]
     public class ProgramTests
     {
@@ -21,11 +8,11 @@ namespace PxWebApi_Mvc.Tests
         [TestMethod]
         [DataRow("Development")]
         [DataRow("Production")]
-        public async Task RunMain(string environment)
+        public async Task IndexHtml_ShouldReturnSuccessAndSwaggerUiVersionHeader(string environment)
         {
             // Arrange
-            await using var main = new PxWebApiFactory(environment);
-            var client = main.CreateClient();
+            await using var app = new PxWebApiFactory(environment);
+            var client = app.CreateClient();
 
             // Act
             var response = await client.GetAsync("/index.html", TestContext.CancellationToken);
