@@ -62,7 +62,7 @@ namespace PxWebApi_Mvc.Tests
 
             // Assert
             Assert.IsTrue(live.IsSuccessStatusCode);
-            Assert.IsTrue(ready.IsSuccessStatusCode);
+            Assert.IsFalse(ready.IsSuccessStatusCode, "Did not expect CNMM to be ready");
         }
     }
 }
