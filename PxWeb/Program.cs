@@ -34,15 +34,37 @@ using PxWeb.Middleware;
 
 namespace PxWeb
 {
-    public class Program
+    class Program
     {
-        public static void Main(string[] args)
-        {
+        const string AdminPath = "/admin";
+        static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
+        static bool CorsEnabled { get; set; }
 
+        static void Main(string[] args)
+        {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             var builder = WebApplication.CreateBuilder(args);
 
+            // Bind the configuration to the PxApiConfigurationOptions class
+            builder.Configuration.Bind("PxApiConfiguration", PxApiConfiguration);
+
+            ConfigureLogging(builder);
+
+            // Paxiom settings
+            PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = PxApiConfiguration.OmitContentsInTitle;
+
+            // Add services to the container.
+            Console.WriteLine("Starting!");
+            RegisterServices(builder);
+
+            var app = builder.Build();
+            ConfigureMiddleware(app);
+            app.Run();
+        }
+
+        static void ConfigureLogging(WebApplicationBuilder builder)
+        {
             // Only use Log4Net provider
             builder.Logging.ClearProviders();
             if (builder.Environment.IsDevelopment())
@@ -53,36 +75,19 @@ namespace PxWeb
             {
                 builder.Logging.AddLog4Net("log4net.config");
             }
+        }
 
-            // Paxiom settings
-            var omit = builder.Configuration.GetSection("PxApiConfiguration:OmitContentsInTitle");
-            if (omit != null && bool.TryParse(omit.Value, out bool omitContentsInTitle))
-            {
-                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = omitContentsInTitle;
-            }
-            else
-            {
-                PCAxis.Paxiom.Settings.Metadata.OmitContentsVariableInTitle = true; // Default value
-            }
-
-            // Add services to the container.
-            Console.WriteLine("Starting!");
-
+        static void RegisterServices(WebApplicationBuilder builder)
+        {
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
 
             var hBuilder = builder.Services.AddHealthChecks()
-                            .AddCheck<MaintenanceHealthCheck>(
-                            "Maintenance",
-                            tags: new[] { "ready" });
+                .AddCheck<MaintenanceHealthCheck>("Maintenance", tags: ["ready"]);
             var datasourceType = builder.Configuration.GetSection("DataSource:DataSourceType").Value ?? "PX";
             if (datasourceType.Equals("CNMM", StringComparison.OrdinalIgnoreCase))
             {
-                // var sqlQuery = builder.Configuration.GetSection("DataSource:CNMM:HealthCheckQuery").Value ?? CnmmConfigurationOptions.DEFAULT_QUERY;
-
-                hBuilder.AddCheck<SqlDbConnectionHealthCheck>(
-                    "Database",
-                    tags: new[] { "ready" });
+                hBuilder.AddCheck<SqlDbConnectionHealthCheck>("Database", tags: ["ready"]);
             }
 
             // needed to store rate limit counters and ip rules
@@ -104,10 +109,9 @@ namespace PxWeb
                 var logger = provider.GetRequiredService<ILogger<PxCache>>();
                 var instance = new PxCache(logger);
 
-                // G�r n�got med instansen innan den returneras
-                var clearTime = builder.Configuration.GetSection("PxApiConfiguration:CacheClearTime").Value;
+                var clearTime = PxApiConfiguration.CacheClearTime;
 
-                if (clearTime != null && DateTime.TryParse(clearTime, out DateTime time))
+                if (!string.IsNullOrEmpty(clearTime) && DateTime.TryParse(clearTime, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime time))
                 {
                     DefaultCacheClearer.SetNextClearTime(time);
                     instance.SetCoherenceChecker(DefaultCacheClearer.CacheIsCoherent);
@@ -152,27 +156,20 @@ namespace PxWeb
 
             builder.Services.AddPxSearchEngine(builder);
 
-            var langList = builder.Configuration.GetSection("PxApiConfiguration:Languages")
-                .AsEnumerable()
-                .Where(p => p.Value != null && p.Key.ToLower().Contains("id"))
-                .Select(p => p.Value ?? "")
-                .ToList();
-
-
+            var languages = PxApiConfiguration.Languages?.Select(l => l.Id).ToList() ?? [];
             builder.Services.AddControllers(x =>
-                x.Filters.Add(new LangValidationFilter(langList))
+                x.Filters.Add(new LangValidationFilter(languages))
                 )
                 .AddNewtonsoftJson(opts =>
-            {
-                //opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                opts.SerializerSettings.ContractResolver = new BaseFirstContractResolver();
-                opts.SerializerSettings.Converters.Add(new StringEnumConverter
                 {
-                    NamingStrategy = new CamelCaseNamingStrategy()
+                    opts.SerializerSettings.ContractResolver = new BaseFirstContractResolver();
+                    opts.SerializerSettings.Converters.Add(new StringEnumConverter
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    });
+                    opts.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    opts.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ssZ"; // UTC
                 });
-                opts.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                opts.SerializerSettings.DateFormatString = "yyyy-MM-ddTHH:mm:ssZ"; // UTC
-            });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             // builder.Services.AddEndpointsApiExplorer(); //only needed for minimal APIS according to
@@ -185,48 +182,34 @@ namespace PxWeb
                 {
                     Title = "PxWebApi",
                     Version = "v2"
-                }
-                );
+                });
             });
 
             builder.Services.AddSwaggerGenNewtonsoftSupport();
 
             // Handle CORS configuration from appsettings.json
-            bool corsEnbled = builder.Services.ConfigurePxCORS(builder);
+            CorsEnabled = builder.Services.ConfigurePxCORS(builder);
+        }
 
-            // Bind the configuration to the PxApiConfigurationOptions class
-            var pxApiConfiguration = new PxApiConfigurationOptions();
-            builder.Configuration.Bind("PxApiConfiguration", pxApiConfiguration);
-
-            var app = builder.Build();
-
-            app.UseMiddleware<GlobalRoutePrefixMiddleware>(pxApiConfiguration.RoutePrefix);
-            app.UsePathBase(new PathString(pxApiConfiguration.RoutePrefix));
-
-
-
-            app.UseSwagger(options =>
-            {
-                options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+        static void ConfigureMiddleware(WebApplication app)
+        {
+            app.UseMiddleware<GlobalRoutePrefixMiddleware>(PxApiConfiguration.RoutePrefix);
+            app.UsePathBase(new PathString(PxApiConfiguration.RoutePrefix));
+            app.UseSwagger(options => options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
-                    if (!(pxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
+                    if (!(PxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
                     {
                         swaggerDoc.Paths = RemoveAdminEndpoints(swaggerDoc.Paths);
                     }
-                    swaggerDoc.Servers = Program.GetOpenApiServers(pxApiConfiguration.BaseURL, pxApiConfiguration.RoutePrefix);
-                });
+                    swaggerDoc.Servers = GetOpenApiServers();
+                }));
+            app.UseSwaggerUI(options =>
+            {
+                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0");
             });
 
-
-
-            app.UseSwaggerUI(options =>
-                {
-                    options.RoutePrefix = string.Empty;
-                    options.SwaggerEndpoint("swagger/v2/swagger.json", "PxWebApi 2.0");
-                });
-
-
-            if (corsEnbled)
+            if (CorsEnabled)
             {
                 app.UseCors();
                 app.UseOptions();
@@ -238,7 +221,7 @@ namespace PxWeb
 
                 app.UseAuthorization();
 
-                app.UseWhen(context => context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin"), appBuilder =>
+                app.UseWhen(context => context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath), appBuilder =>
                 {
                     appBuilder.UseAdminProtectionIpWhitelist();
                     appBuilder.UseAdminProtectionKey();
@@ -262,34 +245,29 @@ namespace PxWeb
                 app.UseIpRateLimiting();
             }
 
-            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/admin") || context.Request.Path.StartsWithSegments("/admin") || context.Request.Path.StartsWithSegments(pxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
+            app.UseWhen(context => !(context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath) || context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
                 appBuilder.UseUsageLogMiddleware();
                 appBuilder.UseCacheMiddleware();
             });
-
-            app.Run();
         }
 
-        private static OpenApiPaths RemoveAdminEndpoints(OpenApiPaths paths)
+        static OpenApiPaths RemoveAdminEndpoints(OpenApiPaths paths)
         {
-            OpenApiPaths openApiPaths = [];
-            foreach (var path in paths)
+            var openApiPaths = new OpenApiPaths();
+            foreach (var path in paths.Where(p => !p.Key.StartsWith(AdminPath)))
             {
-                if (!path.Key.StartsWith("/admin"))
-                {
-                    openApiPaths.Add(path.Key, path.Value);
-                }
+                openApiPaths.Add(path.Key, path.Value);
             }
             return openApiPaths;
         }
 
-        private static List<OpenApiServer> GetOpenApiServers(string pxApiConfiguration_BaseURL, string pxApiConfiguration_RoutePrepix)
+        static List<OpenApiServer> GetOpenApiServers()
         {
             var part1 = "";
-            if (!string.IsNullOrEmpty(pxApiConfiguration_BaseURL))
+            if (!string.IsNullOrEmpty(PxApiConfiguration.BaseURL))
             {
-                part1 = (new Uri(pxApiConfiguration_BaseURL)).PathAndQuery;
+                part1 = new Uri(PxApiConfiguration.BaseURL).PathAndQuery;
                 if (string.IsNullOrEmpty(part1) || part1 == "/")
                 {
                     part1 = "";
@@ -298,7 +276,7 @@ namespace PxWeb
 
             return
             [
-                new OpenApiServer { Url = part1 + pxApiConfiguration_RoutePrepix }
+                new() { Url = part1 + PxApiConfiguration.RoutePrefix }
             ];
 
         }

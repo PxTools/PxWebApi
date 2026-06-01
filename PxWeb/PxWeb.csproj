@@ -87,4 +87,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PxWebApi_Mvc.Tests" />
+    <InternalsVisibleTo Include="PxWebApi.BigTests" />
+  </ItemGroup>
+
 </Project>
