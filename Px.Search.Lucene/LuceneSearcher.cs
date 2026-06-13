@@ -9,12 +9,14 @@ namespace Px.Search.Lucene
         private readonly IndexSearcher _indexSearcher;
         private static readonly Operator _defaultOperator = Operator.AND;
         private readonly Analyzer _analyzer;
+        private readonly string[] _fieldNames;
+
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="indexDirectory">Index directory</param>
-        public LuceneSearcher(string indexDirectory, string language)
+        public LuceneSearcher(string indexDirectory, string language, string[] fieldNames)
         {
             if (string.IsNullOrWhiteSpace(indexDirectory))
             {
@@ -26,6 +28,7 @@ namespace Px.Search.Lucene
             IndexReader reader = DirectoryReader.Open(fsDir);
             _indexSearcher = new IndexSearcher(reader);
             _analyzer = LuceneAnalyzer.GetAnalyzer(language);
+            _fieldNames = fieldNames;
         }
 
 
@@ -43,7 +46,7 @@ namespace Px.Search.Lucene
             var skipRecords = pageSize * (pageNumber - 1);
             var searchResultContainer = new SearchResultContainer();
             var searchResultList = new List<SearchResult>();
-            string[] fields = GetSearchFields();
+            string[] fields = _fieldNames;
             Query luceneQuery;
             QueryParser queryParser = new MultiFieldQueryParser(LuceneAnalyzer.luceneVersion,
                                                        fields,
@@ -171,40 +174,5 @@ namespace Px.Search.Lucene
 
             return searchResult;
         }
-
-        /// <summary>
-        /// Get fields in index to search in
-        /// </summary>
-        /// <returns></returns>
-        private static string[] GetSearchFields()
-        {
-            string[] fields;
-
-            // Default fields
-            fields = new[] { SearchConstants.SEARCH_FIELD_DOCID,
-                                SearchConstants.SEARCH_FIELD_SEARCHID,
-                                SearchConstants.SEARCH_FIELD_UPDATED,
-                                SearchConstants.SEARCH_FIELD_MATRIX,
-                                SearchConstants.SEARCH_FIELD_TITLE,
-                                SearchConstants.SEARCH_FIELD_DESCRIPTION,
-                                SearchConstants.SEARCH_FIELD_SORTCODE,
-                                SearchConstants.SEARCH_FIELD_CATEGORY,
-                                SearchConstants.SEARCH_FIELD_FIRSTPERIOD,
-                                SearchConstants.SEARCH_FIELD_LASTPERIOD,
-                                SearchConstants.SEARCH_FIELD_VARIABLES,
-                                SearchConstants.SEARCH_FIELD_PERIOD,
-                                SearchConstants.SEARCH_FIELD_VALUES,
-                                SearchConstants.SEARCH_FIELD_CODES,
-                                SearchConstants.SEARCH_FIELD_GROUPINGS,
-                                SearchConstants.SEARCH_FIELD_GROUPINGCODES,
-                                SearchConstants.SEARCH_FIELD_VALUESETS,
-                                SearchConstants.SEARCH_FIELD_VALUESETCODES,
-                                SearchConstants.SEARCH_FIELD_DISCONTINUED,
-                                SearchConstants.SEARCH_FIELD_TAGS
-            };
-
-            return fields;
-        }
-
     }
 }

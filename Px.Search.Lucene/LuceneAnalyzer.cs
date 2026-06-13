@@ -1,10 +1,12 @@
-﻿namespace Px.Search.Lucene
+﻿using Lucene.Net.Analysis.Miscellaneous;
+
+namespace Px.Search.Lucene
 {
     public class LuceneAnalyzer
     {
         internal static LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
 
-        internal static Analyzer GetAnalyzer(string language)
+        internal static Analyzer GetDefaultAnalyzer(string language)
         {
             switch (language)
             {
@@ -44,9 +46,26 @@
 
         }
 
-    }
-    // TODO ? Should read langs from config and prepare a static analyzerByLanguage dictionary? 
+        internal static Analyzer GetAnalyzer(string language)
+        {
+            var defaultAnalyzer = GetDefaultAnalyzer(language);
+            var keywordAnalyzer = new CaseInsensitiveKeywordAnalyzer();
 
-    // depricated: Analyzer analyzer = new SnowballAnalyzer(LuceneVersion.LUCENE_48, "English");
+            return new PerFieldAnalyzerWrapper(defaultAnalyzer,
+                new Dictionary<string, Analyzer>
+                {
+                    { SearchConstants.SEARCH_FIELD_TAGS, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_MATRIX, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_CODES, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_GROUPINGCODES, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_VALUESETCODES, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_LEVEL_CODE, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_META_ID, keywordAnalyzer },
+                    { SearchConstants.SEARCH_FIELD_LEGACY_ID, keywordAnalyzer }
+                });
+
+        }
+
+    }
 }
 

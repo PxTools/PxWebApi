@@ -4,5 +4,7 @@
     {
         LuceneConfigurationOptions GetConfiguration();
         string GetIndexDirectoryPath();
+
+        string[] GetSearchFields();
     }
 }

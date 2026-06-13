@@ -222,6 +222,34 @@ namespace Px.Search.Lucene
             doc.Add(new TextField(SearchConstants.SEARCH_FIELD_TIME_UNIT, tbl.TimeUnit, Field.Store.YES));
             doc.Add(new TextField(SearchConstants.SEARCH_SUBJECT_CODE, tbl.SubjectCode, Field.Store.YES));
             doc.Add(new StoredField(SearchConstants.SEARCH_FIELD_PATHS, GetBytes(tbl.Paths)));
+
+            foreach (var path in tbl.Paths)
+            {
+                foreach (var level in path)
+                {
+                    doc.Add(new TextField(SearchConstants.SEARCH_FIELD_LEVEL_CODE, level.Code, Field.Store.NO));
+                    doc.Add(new TextField(SearchConstants.SEARCH_FIELD_LEVEL_NAME, level.Text, Field.Store.NO));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(meta.MetaId))
+            {
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_META_ID, meta.MetaId, Field.Store.NO));
+
+                foreach (var variable in meta.Variables)
+                {
+                    if (!string.IsNullOrWhiteSpace(variable.MetaId))
+                    {
+                        doc.Add(new TextField(SearchConstants.SEARCH_FIELD_META_ID, variable.MetaId, Field.Store.NO));
+                    }
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(meta.MainTable))
+            {
+                doc.Add(new TextField(SearchConstants.SEARCH_FIELD_META_ID, meta.MainTable, Field.Store.NO));
+            }
+
             doc.Add(new StoredField(SearchConstants.SEARCH_AVAILABLE_LANGUAGES, string.Join("|", tbl.Languages)));
             if (!string.IsNullOrEmpty(meta.Synonyms))
             {
