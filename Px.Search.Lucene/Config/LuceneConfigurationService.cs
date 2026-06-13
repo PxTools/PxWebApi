@@ -42,5 +42,16 @@
 
             return indexDirectory;
         }
+
+        public string[] GetSearchFields()
+        {
+            var luceneOptions = GetConfiguration();
+            if (luceneOptions.SearchFields == null || luceneOptions.SearchFields.Length == 0)
+            {
+                throw new Exception("Search fields not configured for Lucene index");
+            }
+            return luceneOptions.SearchFields;
+        }
     }
+
 }
