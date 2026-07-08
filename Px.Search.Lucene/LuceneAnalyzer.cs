@@ -2,7 +2,7 @@
 
 namespace Px.Search.Lucene
 {
-    public class LuceneAnalyzer
+    public static class LuceneAnalyzer
     {
         internal static LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
 
