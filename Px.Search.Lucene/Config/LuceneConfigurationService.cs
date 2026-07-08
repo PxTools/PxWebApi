@@ -1,4 +1,6 @@
-﻿namespace Px.Search.Lucene.Config
+﻿using System.Configuration;
+
+namespace Px.Search.Lucene.Config
 {
     public class LuceneConfigurationService : ILuceneConfigurationService
     {
@@ -48,7 +50,7 @@
             var luceneOptions = GetConfiguration();
             if (luceneOptions.SearchFields == null || luceneOptions.SearchFields.Length == 0)
             {
-                throw new Exception("Search fields not configured for Lucene index");
+                throw new ConfigurationErrorsException("Search fields not configured for Lucene index");
             }
             return luceneOptions.SearchFields;
         }
