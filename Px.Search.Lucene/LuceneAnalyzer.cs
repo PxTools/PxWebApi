@@ -4,7 +4,7 @@ namespace Px.Search.Lucene
 {
     public static class LuceneAnalyzer
     {
-        internal static LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
+        internal const LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
 
         internal static Analyzer GetDefaultAnalyzer(string language)
         {
