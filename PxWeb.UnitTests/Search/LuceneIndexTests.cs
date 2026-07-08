@@ -302,10 +302,18 @@ namespace PxWeb.UnitTests.Search
         [TestMethod]
         public void Dispose_CanBeCalledMultipleTimes_WithActiveWriter()
         {
-            _luceneIndex.BeginWrite("en");
+            try
+            {
 
-            _luceneIndex.Dispose();
-            _luceneIndex.Dispose();
+                _luceneIndex.BeginWrite("en");
+
+                _luceneIndex.Dispose();
+                _luceneIndex.Dispose();
+            }
+            catch (Exception)
+            {
+                Assert.Fail("Calling Dispose multiple times should not throw exception");
+            }
         }
 
         [TestMethod]
