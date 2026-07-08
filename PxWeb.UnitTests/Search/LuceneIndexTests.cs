@@ -147,8 +147,15 @@ namespace PxWeb.UnitTests.Search
         [TestMethod]
         public void EndWrite_And_EndUpdate_WhenNotStarted_DoNotThrow()
         {
-            _luceneIndex.EndWrite("en");
-            _luceneIndex.EndUpdate("en");
+            try
+            {
+                _luceneIndex.EndWrite("en");
+                _luceneIndex.EndUpdate("en");
+            }
+            catch (Exception)
+            {
+                Assert.Fail("EndWrite and EndUpdate should not throw when not started.");
+            }
         }
 
         [TestMethod]
