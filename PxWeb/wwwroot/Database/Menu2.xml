@@ -86,9 +86,9 @@
             <Attribute name="Var4NumberOfValues">4</Attribute>
             <Attribute name="size">16412</Attribute>
             <Attribute name="cells">2448</Attribute>
-            <Attribute name="updated">20250305 15:38</Attribute>
+            <Attribute name="updated">20260202 10:26</Attribute>
             <Attribute name="modified">20230525 16:13</Attribute>
-            <Published>2025-03-05 15:38:31</Published>
+            <Published>2026-02-02 10:26:28</Published>
             <LastUpdated>2023-05-25 16:13:00</LastUpdated>
             <StartTime>2010</StartTime>
             <EndTime>2016</EndTime>
@@ -122,11 +122,11 @@
             <Attribute name="Var5Name">year</Attribute>
             <Attribute name="Var5Values">1981, 1991, 2001, </Attribute>
             <Attribute name="Var5NumberOfValues">3</Attribute>
-            <Attribute name="size">46967</Attribute>
+            <Attribute name="size">47340</Attribute>
             <Attribute name="cells">5940</Attribute>
-            <Attribute name="updated">20250906 21:22</Attribute>
+            <Attribute name="updated">20260602 09:14</Attribute>
             <Attribute name="modified">20230525 15:42</Attribute>
-            <Published>2025-09-06 21:22:02</Published>
+            <Published>2026-06-02 09:14:14</Published>
             <LastUpdated>2023-05-25 15:42:00</LastUpdated>
             <StartTime>1981</StartTime>
             <EndTime>2001</EndTime>
@@ -198,11 +198,11 @@
             <Attribute name="Var5Name">år</Attribute>
             <Attribute name="Var5Values">1981, 1991, 2001, </Attribute>
             <Attribute name="Var5NumberOfValues">3</Attribute>
-            <Attribute name="size">46967</Attribute>
+            <Attribute name="size">47340</Attribute>
             <Attribute name="cells">5940</Attribute>
-            <Attribute name="updated">20250906 21:22</Attribute>
+            <Attribute name="updated">20260602 09:14</Attribute>
             <Attribute name="modified">20230525 15:42</Attribute>
-            <Published>2025-09-06 21:22:02</Published>
+            <Published>2026-06-02 09:14:14</Published>
             <LastUpdated>2023-05-25 15:42:00</LastUpdated>
             <StartTime>1981</StartTime>
             <EndTime>2001</EndTime>
@@ -266,9 +266,9 @@
             <Attribute name="Var4NumberOfValues">4</Attribute>
             <Attribute name="size">16412</Attribute>
             <Attribute name="cells">2448</Attribute>
-            <Attribute name="updated">20250305 15:38</Attribute>
+            <Attribute name="updated">20260202 10:26</Attribute>
             <Attribute name="modified">20230525 16:13</Attribute>
-            <Published>2025-03-05 15:38:31</Published>
+            <Published>2026-02-02 10:26:28</Published>
             <LastUpdated>2023-05-25 16:13:00</LastUpdated>
             <StartTime>2010</StartTime>
             <EndTime>2016</EndTime>

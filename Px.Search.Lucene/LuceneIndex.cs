@@ -236,12 +236,9 @@ namespace Px.Search.Lucene
             {
                 doc.Add(new TextField(SearchConstants.SEARCH_FIELD_META_ID, meta.MetaId, Field.Store.NO));
 
-                foreach (var variable in meta.Variables)
+                foreach (var variable in meta.Variables.Where(v => !string.IsNullOrWhiteSpace(v.MetaId)))
                 {
-                    if (!string.IsNullOrWhiteSpace(variable.MetaId))
-                    {
-                        doc.Add(new TextField(SearchConstants.SEARCH_FIELD_META_ID, variable.MetaId, Field.Store.NO));
-                    }
+                    doc.Add(new TextField(SearchConstants.SEARCH_FIELD_META_ID, variable.MetaId, Field.Store.NO));
                 }
             }
 
