@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -195,6 +196,7 @@ namespace PxWeb.Controllers.Api2
 
         }
 
+        [RequestTimeout("GetTableDataTimeout")]
         public override IActionResult GetTableData(
             [FromRoute(Name = "id"), Required] string id,
             [FromQuery(Name = "lang")] string? lang,
@@ -209,6 +211,7 @@ namespace PxWeb.Controllers.Api2
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<OutputFormatParamType>() : outputFormatParams);
         }
 
+        [RequestTimeout("GetTableDataTimeout")]
         public override IActionResult GetTableDataByPost(
             [FromRoute(Name = "id"), Required] string id,
             [FromQuery(Name = "lang")] string? lang,
@@ -219,63 +222,81 @@ namespace PxWeb.Controllers.Api2
             return GetData(id, lang, variablesSelection, outputFormat, outputFormatParams is null ? new List<OutputFormatParamType>() : outputFormatParams);
         }
 
+
         private IActionResult GetData(string id, string? lang, VariablesSelection? variablesSelection, OutputFormatType? outputFormat, List<OutputFormatParamType> outputFormatParams)
         {
 
-            Problem? problem = null;
-
-            lang = _languageHelper.HandleLanguage(lang);
-
-            bool paramError;
-            string outputFormatStr;
-            List<string> outputFormatParamsStr;
-
-            (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
-
-            if (paramError)
+            try
             {
-                _logger.LogUnsupportedOutputFormat(outputFormatStr);
-                return BadRequest(ProblemUtility.UnsupportedOutputFormat());
-            }
+                Problem? problem = null;
 
-            PXModel? model;
+                lang = _languageHelper.HandleLanguage(lang);
 
-            if (SelectionUtil.UseDefaultSelection(variablesSelection))
-            {
-                var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
-                if (savedQuery is not null)
+                bool paramError;
+                string outputFormatStr;
+                List<string> outputFormatParamsStr;
+
+                (outputFormatStr, outputFormatParamsStr) = OutputParameterUtil.TranslateOutputParamters(outputFormat, _configOptions, outputFormatParams, out paramError);
+
+                if (paramError)
                 {
-                    _logger.LogDataExctractionBySavedQuery(savedQuery.Id ?? "Unknown");
-                    variablesSelection = savedQuery.Selection;
-                    model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                    _logger.LogUnsupportedOutputFormat(outputFormatStr);
+                    return BadRequest(ProblemUtility.UnsupportedOutputFormat());
+                }
+
+                PXModel? model;
+
+                if (SelectionUtil.UseDefaultSelection(variablesSelection))
+                {
+                    var savedQuery = _savedQueryBackendProxy.LoadDefaultSelection(id);
+                    if (savedQuery is not null)
+                    {
+                        _logger.LogDataExctractionBySavedQuery(savedQuery.Id ?? "Unknown");
+                        variablesSelection = savedQuery.Selection;
+                        // TODO pass the cancelation tocken into the the Run method so it can cansel the processing
+                        model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                    }
+                    else
+                    {
+                        _logger.LogDataExctractionByAlgorithm();
+                        model = _dataWorkflow.Run(id, lang, out problem);
+                    }
                 }
                 else
                 {
-                    _logger.LogDataExctractionByAlgorithm();
-                    model = _dataWorkflow.Run(id, lang, out problem);
+                    _logger.LogDataExctractionBySelection();
+                    model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
                 }
+
+                if (model is null)
+                {
+                    _logger.LogCouldNotRunWorkflowSucessfully();
+                    return BadRequest(problem);
+                }
+
+                var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
+
+                HttpContext.RequestAborted.ThrowIfCancellationRequested();
+
+                Response.ContentType = serializationInfo.ContentType;
+                Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
+                serializationInfo.Serializer.Serialize(model, Response.Body);
+
+                HttpContext.AddLoggingContext(id, outputFormatStr, model.Data.MatrixSize);
+
+                return Ok();
             }
-            else
+            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
             {
-                _logger.LogDataExctractionBySelection();
-                model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                _logger.LogWarning("Request timeout for table data. Id: {TableId}", id);
+                return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
+                {
+                    Type = "Timeout",
+                    Status = StatusCodes.Status504GatewayTimeout,
+                    Title = "Request timeout",
+                    Detail = "The request took too long to complete."
+                });
             }
-
-            if (model is null)
-            {
-                _logger.LogCouldNotRunWorkflowSucessfully();
-                return BadRequest(problem);
-            }
-
-            var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
-
-            Response.ContentType = serializationInfo.ContentType;
-            Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
-            serializationInfo.Serializer.Serialize(model, Response.Body);
-
-            HttpContext.AddLoggingContext(id, outputFormatStr, model.Data.MatrixSize);
-
-            return Ok();
         }
 
 

@@ -6,6 +6,7 @@ using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +38,7 @@ namespace PxWeb
     class Program
     {
         const string AdminPath = "/admin";
+        const string GetTableDataTimeoutPolicy = "GetTableDataTimeout";
         static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
         static bool CorsEnabled { get; set; }
 
@@ -79,6 +81,15 @@ namespace PxWeb
 
         static void RegisterServices(WebApplicationBuilder builder)
         {
+
+            builder.Services.AddRequestTimeouts(options =>
+            {
+                options.AddPolicy(GetTableDataTimeoutPolicy, new RequestTimeoutPolicy
+                {
+                    Timeout = TimeSpan.FromSeconds(20)
+                });
+            });
+
             // needed to load configuration from appsettings.json
             builder.Services.AddOptions();
 
@@ -195,6 +206,10 @@ namespace PxWeb
         {
             app.UseMiddleware<GlobalRoutePrefixMiddleware>(PxApiConfiguration.RoutePrefix);
             app.UsePathBase(new PathString(PxApiConfiguration.RoutePrefix));
+
+            app.UseRouting();
+            app.UseRequestTimeouts();
+
             app.UseSwagger(options => options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
                     if (!(PxApiConfiguration.EnableAllEndpointsSwaggerUI || app.Environment.IsDevelopment()))
@@ -244,6 +259,8 @@ namespace PxWeb
             {
                 app.UseIpRateLimiting();
             }
+
+
 
             app.UseWhen(context => !(context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + AdminPath) || context.Request.Path.StartsWithSegments(AdminPath) || context.Request.Path.StartsWithSegments(PxApiConfiguration.RoutePrefix + "/healthz") || context.Request.Path.StartsWithSegments("/healthz")), appBuilder =>
             {
