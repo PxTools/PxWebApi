@@ -1,7 +1,11 @@
 ﻿using System.Net;
 using System.Text;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 
 using Newtonsoft.Json;
 
@@ -183,6 +187,34 @@ namespace PxWebApi_Mvc.Tests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task Saved_query_that_takes_too_long_to_execute_should_not_be_created()
+        {
+            await using var application = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureTestServices(services =>
+                    {
+                        services.PostConfigure<RequestTimeoutOptions>(options =>
+                        {
+                            options.Policies["GetTableDataTimeout"] = new RequestTimeoutPolicy
+                            {
+                                Timeout = TimeSpan.FromMilliseconds(1),
+                                TimeoutStatusCode = StatusCodes.Status504GatewayTimeout
+                            };
+                        });
+                    });
+                });
+
+            using var client = application.CreateClient();
+
+
+            var content = new StringContent(SavedQuery, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/savedqueries", content);
+
+            Assert.AreEqual(HttpStatusCode.GatewayTimeout, response.StatusCode);
         }
     }
 }
