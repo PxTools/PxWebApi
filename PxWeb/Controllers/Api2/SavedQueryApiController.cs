@@ -66,9 +66,9 @@ namespace PxWeb.Controllers.Api2
             {
                 _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem, HttpContext.RequestAborted);
             }
-            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            catch (OperationCanceledException ex) when (HttpContext.RequestAborted.IsCancellationRequested)
             {
-                _logger.LogInformation("Request timeout for table data.");
+                _logger.LogInformation(ex, "Request timeout for table data.");
                 return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
                 {
                     Type = "Timeout",
@@ -171,9 +171,9 @@ namespace PxWeb.Controllers.Api2
             {
                 model = _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, savedQuery.Selection, out problem, HttpContext.RequestAborted);
             }
-            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            catch (OperationCanceledException ex) when (HttpContext.RequestAborted.IsCancellationRequested)
             {
-                _logger.LogInformation("Request timeout for table data.");
+                _logger.LogInformation(ex, "Request timeout for table data.");
                 return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
                 {
                     Type = "Timeout",

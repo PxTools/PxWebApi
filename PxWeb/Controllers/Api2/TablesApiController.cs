@@ -286,9 +286,9 @@ namespace PxWeb.Controllers.Api2
 
                 return Ok();
             }
-            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            catch (OperationCanceledException ex) when (HttpContext.RequestAborted.IsCancellationRequested)
             {
-                _logger.LogInformation("Request timeout for table data.");
+                _logger.LogInformation(ex, "Request timeout for table data.");
                 return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
                 {
                     Type = "Timeout",
