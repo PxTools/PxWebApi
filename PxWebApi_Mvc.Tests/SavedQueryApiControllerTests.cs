@@ -17,6 +17,8 @@ namespace PxWebApi_Mvc.Tests
     [TestClass]
     public class SavedQueryApiControllerTests
     {
+        public TestContext TestContext { get; set; }
+
         private const string SavedQuery = @"{
                             ""language"": ""en"",
                             ""tableId"": ""TAB001"",
@@ -212,7 +214,7 @@ namespace PxWebApi_Mvc.Tests
 
 
             var content = new StringContent(SavedQuery, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("/savedqueries", content);
+            var response = await client.PostAsync("/savedqueries", content, TestContext.CancellationToken);
 
             Assert.AreEqual(HttpStatusCode.GatewayTimeout, response.StatusCode);
         }
