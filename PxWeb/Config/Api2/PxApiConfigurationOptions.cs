@@ -28,6 +28,7 @@ namespace PxWeb.Config.Api2
         public string CacheClearTime { get; set; } = string.Empty;
         public string SearchEngine { get; set; } = string.Empty;
         public int PageSize { get; set; } = 20;
+        public int GetTableDataTimeoutSeconds { get; set; } = 40;
         public string BaseURL { get; set; } = string.Empty;
         public string RoutePrefix { get; set; } = string.Empty;
         public List<string> OutputFormats { get; set; } = [];

@@ -39,6 +39,7 @@ namespace PxWeb
     {
         const string AdminPath = "/admin";
         const string GetTableDataTimeoutPolicy = "GetTableDataTimeout";
+        const int DefaultGetTableDataTimeoutSeconds = 40;
         static PxApiConfigurationOptions PxApiConfiguration { get; set; } = new PxApiConfigurationOptions();
         static bool CorsEnabled { get; set; }
 
@@ -84,9 +85,17 @@ namespace PxWeb
 
             builder.Services.AddRequestTimeouts(options =>
             {
+                var configuredTimeoutSeconds = builder.Configuration.GetValue<int?>("PxApiConfiguration:GetTableDataTimeoutSeconds");
+                var timeoutSeconds = configuredTimeoutSeconds.GetValueOrDefault(DefaultGetTableDataTimeoutSeconds);
+
+                if (timeoutSeconds <= 0)
+                {
+                    timeoutSeconds = DefaultGetTableDataTimeoutSeconds;
+                }
+
                 options.AddPolicy(GetTableDataTimeoutPolicy, new RequestTimeoutPolicy
                 {
-                    Timeout = TimeSpan.FromSeconds(20)
+                    Timeout = TimeSpan.FromSeconds(timeoutSeconds)
                 });
             });
 
