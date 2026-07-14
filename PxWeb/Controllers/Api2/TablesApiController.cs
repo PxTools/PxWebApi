@@ -311,7 +311,7 @@ namespace PxWeb.Controllers.Api2
         /// <param name="heading"></param>
         /// <param name="stub"></param> 
         /// <returns></returns>
-        private VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, List<string>? heading, List<string>? stub)
+        private static VariablesSelection MapDataParameters(Dictionary<string, List<string>>? valuecodes, Dictionary<string, string>? codelist, List<string>? heading, List<string>? stub)
         {
             VariablesSelection selections = new VariablesSelection();
             if (valuecodes != null)
