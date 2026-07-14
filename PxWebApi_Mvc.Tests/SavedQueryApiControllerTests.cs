@@ -6,11 +6,15 @@ using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Newtonsoft.Json;
 
 using PxWeb;
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code.Api2;
+
+using PxWebApi_Mvc.Tests.Wrappers;
 
 namespace PxWebApi_Mvc.Tests
 {
@@ -199,6 +203,9 @@ namespace PxWebApi_Mvc.Tests
                 {
                     builder.ConfigureTestServices(services =>
                     {
+                        services.RemoveAll<IDataWorkflow>();
+                        services.AddSingleton<IDataWorkflow, CancellationAwareDataWorkflow>();
+
                         services.PostConfigure<RequestTimeoutOptions>(options =>
                         {
                             options.Policies["GetTableDataTimeout"] = new RequestTimeoutPolicy
