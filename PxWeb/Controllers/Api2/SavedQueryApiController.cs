@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -49,6 +50,7 @@ namespace PxWeb.Controllers.Api2
             _savedQueryResponseMapper = (SavedQueryResponseMapper)savedQueryResponseMapper;
         }
 
+        [RequestTimeout("GetTableDataTimeout")]
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
         {
             Problem? problem;
@@ -123,6 +125,7 @@ namespace PxWeb.Controllers.Api2
             return Ok(_savedQueryResponseMapper.Map(savedQuery));
         }
 
+        [RequestTimeout("GetTableDataTimeout")]
         public override IActionResult RunSaveQuery([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat, [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams)
         {
             Problem? problem;
