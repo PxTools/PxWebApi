@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+using PCAxis.Paxiom;
+
 using Px.Abstractions.Interfaces;
 
 using PxWeb.Api2.Server.Models;
@@ -60,8 +62,21 @@ namespace PxWeb.Controllers.Api2
             // Create a copy of the selection to be able to expand it
             var variablesSelection = SelectionUtil.Copy(savedQuery.Selection);
 
-            _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem);
-
+            try
+            {
+                _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem, HttpContext.RequestAborted);
+            }
+            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            {
+                _logger.LogWarning("Request timeout for table data.");
+                return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
+                {
+                    Type = "Timeout",
+                    Status = StatusCodes.Status504GatewayTimeout,
+                    Title = "Request timeout",
+                    Detail = "The request took too long to complete."
+                });
+            }
             if (problem is not null)
             {
                 return BadRequest(problem);
@@ -151,7 +166,22 @@ namespace PxWeb.Controllers.Api2
             }
 
             // 4. Run the SavedQuery
-            var model = _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, savedQuery.Selection, out problem);
+            PXModel? model;
+            try
+            {
+                model = _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, savedQuery.Selection, out problem, HttpContext.RequestAborted);
+            }
+            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            {
+                _logger.LogWarning("Request timeout for table data.");
+                return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
+                {
+                    Type = "Timeout",
+                    Status = StatusCodes.Status504GatewayTimeout,
+                    Title = "Request timeout",
+                    Detail = "The request took too long to complete."
+                });
+            }
 
             if (model is null)
             {

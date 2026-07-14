@@ -253,19 +253,18 @@ namespace PxWeb.Controllers.Api2
                     {
                         _logger.LogDataExctractionBySavedQuery(savedQuery.Id ?? "Unknown");
                         variablesSelection = savedQuery.Selection;
-                        // TODO pass the cancelation tocken into the the Run method so it can cansel the processing
-                        model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                        model = _dataWorkflow.Run(id, lang, variablesSelection, out problem, HttpContext.RequestAborted);
                     }
                     else
                     {
                         _logger.LogDataExctractionByAlgorithm();
-                        model = _dataWorkflow.Run(id, lang, out problem);
+                        model = _dataWorkflow.Run(id, lang, out problem, HttpContext.RequestAborted);
                     }
                 }
                 else
                 {
                     _logger.LogDataExctractionBySelection();
-                    model = _dataWorkflow.Run(id, lang, variablesSelection, out problem);
+                    model = _dataWorkflow.Run(id, lang, variablesSelection, out problem, HttpContext.RequestAborted);
                 }
 
                 if (model is null)
@@ -274,9 +273,10 @@ namespace PxWeb.Controllers.Api2
                     return BadRequest(problem);
                 }
 
-                var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
 
                 HttpContext.RequestAborted.ThrowIfCancellationRequested();
+                var serializationInfo = _serializeManager.GetSerializer(outputFormatStr, model.Meta.CodePage, outputFormatParamsStr);
+
 
                 Response.ContentType = serializationInfo.ContentType;
                 Response.Headers.Append("Content-Disposition", $"inline; filename=\"{model.Meta.Matrix}{serializationInfo.Suffix}\"");
