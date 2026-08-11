@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-
-namespace Px.Search.Lucene.Config
+﻿namespace Px.Search.Lucene.Config
 {
     public class LuceneConfigurationService : ILuceneConfigurationService
     {
@@ -27,7 +25,8 @@ namespace Px.Search.Lucene.Config
 
             if (string.IsNullOrWhiteSpace(luceneOptions.IndexDirectory))
             {
-                throw new Exception("Index directory not configured for Lucene index");
+                // If the IndexDirectory is not set, use a default path
+                return "Database/_INDEX/";
             }
 
             string path = luceneOptions.IndexDirectory;
@@ -50,7 +49,29 @@ namespace Px.Search.Lucene.Config
             var luceneOptions = GetConfiguration();
             if (luceneOptions.SearchFields == null || luceneOptions.SearchFields.Length == 0)
             {
-                throw new ConfigurationErrorsException("Search fields not configured for Lucene index");
+                return
+                [
+                  "docid",
+                  "searchid",
+                  "updated",
+                  "matrix",
+                  "title",
+                  "description",
+                  "sortcode",
+                  "category",
+                  "firstperiod",
+                  "lastperiod",
+                  "variables",
+                  "period",
+                  "values",
+                  "codes",
+                  "groupings",
+                  "groupingcodes",
+                  "valuesets",
+                  "valuesetcodes",
+                  "discontinued",
+                  "tags"
+                ];
             }
             return luceneOptions.SearchFields;
         }
