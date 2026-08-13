@@ -27,6 +27,10 @@
         public const string SEARCH_FIELD_SOURCE = "source";
         public const string SEARCH_FIELD_TIME_UNIT = "timeunit";
         public const string SEARCH_FIELD_PATHS = "paths";
+        public const string SEARCH_FIELD_LEVEL_CODE = "levelcode";
+        public const string SEARCH_FIELD_LEVEL_NAME = "levelname";
+        public const string SEARCH_FIELD_META_ID = "metaid";
+        public const string SEARCH_FIELD_LEGACY_ID = "legacyid";
         public const string SEARCH_SUBJECT_CODE = "subjectcode";
         public const string SEARCH_AVAILABLE_LANGUAGES = "languages";
     }

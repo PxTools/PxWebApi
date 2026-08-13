@@ -25,7 +25,8 @@
 
             if (string.IsNullOrWhiteSpace(luceneOptions.IndexDirectory))
             {
-                throw new Exception("Index directory not configured for Lucene index");
+                // If the IndexDirectory is not set, use a default path
+                return "Database/_INDEX/";
             }
 
             string path = luceneOptions.IndexDirectory;
@@ -42,5 +43,38 @@
 
             return indexDirectory;
         }
+
+        public string[] GetSearchFields()
+        {
+            var luceneOptions = GetConfiguration();
+            if (luceneOptions.SearchFields == null || luceneOptions.SearchFields.Length == 0)
+            {
+                return
+                [
+                  "docid",
+                  "searchid",
+                  "updated",
+                  "matrix",
+                  "title",
+                  "description",
+                  "sortcode",
+                  "category",
+                  "firstperiod",
+                  "lastperiod",
+                  "variables",
+                  "period",
+                  "values",
+                  "codes",
+                  "groupings",
+                  "groupingcodes",
+                  "valuesets",
+                  "valuesetcodes",
+                  "discontinued",
+                  "tags"
+                ];
+            }
+            return luceneOptions.SearchFields;
+        }
     }
+
 }

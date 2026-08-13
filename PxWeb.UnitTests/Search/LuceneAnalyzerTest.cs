@@ -21,6 +21,7 @@
         {
             LuceneConfigurationOptions luceneConfigurationOptions = new LuceneConfigurationOptions();
             luceneConfigurationOptions.IndexDirectory = @"Database/_INDEX/";
+            luceneConfigurationOptions.SearchFields = new string[] { "docid", "searchid", "updated", "matrix", "title", "description", "sortcode", "category", "firstperiod", "lastperiod", "variables", "period", "values", "codes", "groupings", "groupingcodes", "valuesets", "valuesetcodes", "discontinued", "tags" };
 
             //seeking "C:\\repos\\github\\pxtools\\PxwebApi3\\PxWebApi\\PxWeb\\wwwroot" 
             string pathRunning = Directory.GetCurrentDirectory();
