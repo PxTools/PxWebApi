@@ -6,36 +6,33 @@ namespace PxWeb.Config.Api2
 {
     public class PxApiConfigurationOptions
     {
-        private readonly string _apiVersion;
-        private readonly string _appVersion;
-
         public PxApiConfigurationOptions()
         {
-            _apiVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.Load("PxWeb.Api2.Server").Location).ProductVersion ?? "2.0.0";
-            _appVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).ProductVersion ?? "2.0.0";
+            ApiVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.Load("PxWeb.Api2.Server").Location).ProductVersion ?? "2.0.0";
+            AppVersion = System.Diagnostics.FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).ProductVersion ?? "2.0.0";
             OutputFormats.Add("json-stat2");
             OutputFormats.Add("csv");
             OutputFormats.Add("px");
         }
 
-        public string ApiVersion => _apiVersion;
-        public string AppVersion => _appVersion;
-
-        public List<Language> Languages { get; set; } = new List<Language>();
-        public string DefaultLanguage { get; set; } = String.Empty;
+        public string ApiVersion { get; }
+        public string AppVersion { get; }
+        public List<Language> Languages { get; set; } = [];
+        public string DefaultLanguage { get; set; } = string.Empty;
         public virtual int MaxDataCells { get; set; } = 1;
-        public List<ApiFeature> Features { get; set; } = new List<ApiFeature>();
-        public string License { get; set; } = String.Empty;
+        public List<ApiFeature> Features { get; set; } = [];
+        public string License { get; set; } = string.Empty;
         public List<SourceReference>? SourceReferences { get; set; }
         public Cors? Cors { get; set; }
         public int CacheTime { get; set; } = 5;
-        public int PageSize { get; set; }
-        public string BaseURL { get; set; } = String.Empty;
-        public string RoutePrefix { get; set; } = String.Empty;
-        public List<string> OutputFormats { get; set; } = new List<string>();
-        public string DefaultOutputFormat { get; set; } = String.Empty;
+        public string CacheClearTime { get; set; } = string.Empty;
+        public string SearchEngine { get; set; } = string.Empty;
+        public int PageSize { get; set; } = 20;
+        public string BaseURL { get; set; } = string.Empty;
+        public string RoutePrefix { get; set; } = string.Empty;
+        public List<string> OutputFormats { get; set; } = [];
+        public string DefaultOutputFormat { get; set; } = string.Empty;
         public bool EnableAllEndpointsSwaggerUI { get; set; } = false;
         public bool OmitContentsInTitle { get; set; } = true;
-
     }
 }

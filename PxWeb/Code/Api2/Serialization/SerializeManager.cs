@@ -90,6 +90,10 @@ namespace PxWeb.Code.Api2.Serialization
                 {
                     serializer.ValueDelimiter = CsvSerializer.Delimiters.Semicolon;
                 }
+                else if (param.Equals("ExcludeZerosAndMissingValues", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    serializer.ExcludeZerosAndMissingValues = true;
+                }
             }
 
             return serializer;
@@ -117,6 +121,10 @@ namespace PxWeb.Code.Api2.Serialization
                 {
                     serializer.ValueLablesDisplay = Xlsx2Serializer.LablePreference.BothCodeAndText;
                 }
+                else if (param.Equals("ExcludeZerosAndMissingValues", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    serializer.ExcludeZerosAndMissingValues = true;
+                }
             }
 
             return serializer;
@@ -143,6 +151,10 @@ namespace PxWeb.Code.Api2.Serialization
                 else if (param.Equals("UseCodesAndTexts", StringComparison.InvariantCultureIgnoreCase))
                 {
                     serializer.ValueLablesDisplay = HtmlSerializer.LablePreference.BothCodeAndText;
+                }
+                else if (param.Equals("ExcludeZerosAndMissingValues", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    serializer.ExcludeZerosAndMissingValues = true;
                 }
             }
 

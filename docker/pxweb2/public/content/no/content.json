@@ -42,9 +42,10 @@
     "noResultSearchHelp": {
       "enabled": true,
       "helpText": [
-        "Du kan søke på tabellnavn, variabler og tabellnummer",
-        "Foreløpig kan du ikke søke på innhold i tabellene, som navnet på en kommune eller et fylke",
-        "Vi jobber med å gjøre søket bedre, slik at det blir enklere å finne tallene du trenger"
+        "Hele setninger vil gi få eller ingen treff. Prøv å søke mer generelt med få ord, og bruk filteret for å avgrense.",
+        "Bruk anførselstegn for å søke etter en eksakt frase, for eksempel *“privat sektor”*. Dette gir kun treff på tabeller som inneholder akkurat den ordkombinasjonen.",
+        "Bruk *title*: for å søke kun i tabellnavnet, for eksempel *title:oslo*.",
+        "Legg til eller fjern punkter for å tilpasse søkehjelpslisten til din database."
       ]
     }
   },
@@ -58,9 +59,27 @@
             "url": "https://www.pxtools.net/PxWeb2/",
             "external": true
           },
-          { "text": "Kontakt", "url": "mailto:px@scb.se" }
+          {
+            "text": "Kontakt",
+            "url": "mailto:px@scb.se"
+          }
         ]
       }
     ]
+  },
+  "tableViewer": {
+    "helpSection": {
+      "description": "Hjelp og tips til hvordan du bruker Statistikkbanken finner du på våre hjelpesider:",
+      "links": [
+        {
+          "text": "Hvordan bruke Statistikkbanken",
+          "url": "#"
+        }
+      ],
+      "informationCard": {
+        "enabled": true,
+        "text": "For spørsmål om tallene og innholdet i tabellen, se under knappen «Informasjon»."
+      }
+    }
   }
 }

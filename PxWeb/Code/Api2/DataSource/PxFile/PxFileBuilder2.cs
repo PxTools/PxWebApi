@@ -29,7 +29,6 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                     PaxiomUtil.SetCode(value, "content");
                     // Move the contentInfo from tablelevel to the content value
                     value.ContentInfo = meta.ContentInfo;
-                    meta.ContentInfo = null;
                     contentVariable.Values.Add(value);
 
                     // Insert the content variable as the first variable in the stub
@@ -40,7 +39,7 @@ namespace PxWeb.Code.Api2.DataSource.PxFile
                     // Add text and ContentInfo for all languages
                     var languages = meta.GetAllLanguages();
                     var currentLanguage = meta.CurrentLanguage;
-                    for (int i = 0; i < languages.Length; i++)
+                    for (int i = 0; i < languages?.Length; i++)
                     {
                         var lang = languages[i];
 

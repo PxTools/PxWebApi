@@ -24,6 +24,7 @@
       }
     },
     "skip_to_main": "Skip to main content",
+    "switch_language_landmark": "Select language",
     "footer": {
       "language_header": "Language",
       "copyright": "© Copyright PxTools",
@@ -46,7 +47,7 @@
       "error": "Error:"
     },
     "status_messages": {
-      "welcome": "Welcome to the new PxWeb 2.0! We're still improving to help you find and use the numbers you need 📊✨",
+      "welcome": "Welcome to the new PxWeb 2.0! We're still improving to help you find and use the figures you need 📊✨",
       "drawer_view": "Graph display is under construction.",
       "drawer_save_file": "More file formats are in the works.",
       "drawer_save_api": "Feature for API query is under construction.",
@@ -59,11 +60,18 @@
       "breadcrumb_root_title": "Home",
       "breadcrumb_home_title": "Home",
       "show_more_breadcrumbs": "Show more"
+    },
+    "code_snippet": {
+      "copy_button_tooltip": "Copy code",
+      "copy_button_label": "Copy code for ",
+      "copied_button_label": "Code copied to clipboard",
+      "wrap_code_button_label": "Wrap lines",
+      "unwrap_code_button_label": "Unwrap lines"
     }
   },
   "start_page": {
     "header": "Welcome to PxWeb 2.0",
-    "ingress": "Looking for the perfect table? Use the search field and filters to dig into the numbers you need. Whether you're hunting for trends, facts, or just an oddly satisfying dataset, PxWeb 2.0 has your back.",
+    "ingress": "Looking for the perfect table? Use the search field and filters to dig into the figures you need. Whether you're hunting for trends, facts, or just an oddly satisfying dataset, PxWeb 2.0 has your back.",
     "more_about_label": "More about PxWeb 2.0",
     "more_about_text": "More about Text EN",
     "no_result_header": "We couldn't find any tables",
@@ -71,8 +79,8 @@
     "no_result_search_help": "Search help",
     "result_hidden_header": "Result",
     "search_label": "Search in PxWeb 2.0",
-    "search_placeholder": "Search for table names or variables",
-    "skip_to.filter": "Skip to filter", 
+    "search_placeholder": "",
+    "skip_to.filter": "Skip to filter",
     "skip_to.result": "Skip to result",
     "filter": {
       "button": "Filter",
@@ -120,10 +128,14 @@
       "show_less": "Show less",
       "loading": "Loading...",
       "show_number_of_tables": "Showing {{countShown}} of {{countTotal}}",
-      "show_number_of_tables_aria": "{{count}} tables found, showing {{countShown}} of {{countTotal}}"
+      "show_number_of_tables_aria": "{{countTotal}} tables found, showing {{countShown}} of {{countTotal}}"
     }
   },
   "presentation_page": {
+    "common": {
+      "table_title_by": "by",
+      "table_title_and": "and"
+    },
     "side_menu": {
       "aria_label_tool_side_menu": "Tool menu for table",
       "hide": "Hide",
@@ -133,7 +145,7 @@
           "search": {
             "placeholder": "Search in list",
             "label": "Search",
-            "aria_label_clear_button_text": "Clear search icon"
+            "aria_label_clear_button_text": "Clear"
           },
           "header": {
             "tag_selected": "{{selected}} of {{total}} selected",
@@ -214,7 +226,7 @@
           "formats": {
             "excel": "Excel (.xlsx)",
             "csv": "Semicolon-delimited with heading (.csv)",
-            "px": "PC-Axis (.px)",
+            "px": "Px-file (.px)",
             "jsonstat2": "JSON-stat2 (.json)",
             "html": "HTML (.html)",
             "parquet": "Parquet (.parquet)"
@@ -222,12 +234,12 @@
         },
         "savequery": {
           "title": "Link to updated table",
-          "info": "You get a unique link to your table, that we keep updated for you. How new time periods are added is up to you.",
+          "info": "Will you be using this table again? Here you will get a link to the table, so you don't have to set it up again. The table will stay up to date, and you choose how new time periods are added.",
           "radio_legend": "Options for new time periods",
           "period_options": {
-            "selected": "Don't add new ones (the table will only show the ones you've selected now)",
-            "from": "Add new ones (they will be added to the ones you've selected now)",
-            "top": "Add new ones, but keep the same number (when a new time period is added, the oldest one is removed)"
+            "selected": "Don't add new time periods – I only want the ones I've selected now",
+            "from": "Add new time periods",
+            "top": "Add new time periods, but keep the same number (when a new period is added, the oldest one is removed)"
           },
           "create_button": "Get link",
           "copy_button": "Copy link",
@@ -246,8 +258,16 @@
         },
         "api": {
           "title": "API",
-          "description": "Description text...",
-          "query": "API query"
+          "description": "Here you will find the API query for the table. Use GET for short queries (under about 2 100 characters) and POST if the query is long and more detailed.",
+          "query": "API query",
+          "link_text": "Learn more about using the API",
+          "link_url": "https://www.pxtools.net/PxWebApi/documentation/user-guide/",
+          "select_format": "Select format",
+          "get_button_text": "GET",
+          "post_button_text": "POST",
+          "url_text": "URL",
+          "post_body_text": "POST BODY",
+          "select_http_method_aria": "Select HTTP request method"
         }
       },
       "help": {
@@ -259,7 +279,6 @@
       "shrink_view": "Shrink view",
       "last_updated": "Updated",
       "show_details": "Show details",
-      "dynamic_table_title": "{{table_content_type}} by {{table_content_label_first_part}} and {{table_content_label_last_part}}",
       "table": {
         "warnings": {
           "missing_mandatory": {
@@ -296,8 +315,17 @@
           "important_about_selection_body_one_note": "Click on this message to read the note."
         },
         "definitions": {
-          "title": "Definitions",
-          "description": "The table is part of the statistics {{statistics}}"
+          "panel_title": "Definitions",
+          "about_statistics": {
+            "title": "About the statistics",
+            "description": "Definitions, explanations, and other information related to the table can be found on the table's statistics page.",
+            "link_text_definitions": "Definitions and explanations",
+            "link_text_homepage": "Statistics page"
+          },
+          "metadata": {
+            "title": "Metadata",
+            "description": "Here you can find links to variable definitions and classifications used in the table."
+          }
         },
         "details": {
           "title": "Details",
