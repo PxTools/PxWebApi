@@ -7,7 +7,7 @@ namespace Px.Search.Lucene
         protected override TokenStreamComponents CreateComponents(string fieldName, TextReader reader)
         {
             // Keeps the text as a single token (no word splitting)
-            Tokenizer source = new KeywordTokenizer(reader);
+            Tokenizer source = new WhitespaceTokenizer(LuceneVersion.LUCENE_48, reader);
 
             // Converts that single token to lowercase
             TokenStream filter = new LowerCaseFilter(LuceneVersion.LUCENE_48, source);
