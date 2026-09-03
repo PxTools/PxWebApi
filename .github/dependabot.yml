@@ -18,6 +18,8 @@ updates:
       default-days: 9
       exclude:
         - "PCAxis.Sql"
+        - "PCAxis.Serializers"
+        
 
   - package-ecosystem: "github-actions"
     directory: "/"
