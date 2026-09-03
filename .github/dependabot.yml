@@ -16,6 +16,8 @@ updates:
           - "minor"
     cooldown:
       default-days: 9
+      exclude:
+        - "PCAxis.Sql"
 
   - package-ecosystem: "github-actions"
     directory: "/"
