@@ -6,7 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "nuget"
-    directory: "/"
+    directory: "/PxWeb/"
     schedule:
       interval: "weekly"
     groups:
