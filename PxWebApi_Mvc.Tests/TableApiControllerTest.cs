@@ -1,8 +1,16 @@
 using System.Net;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using PxWeb;
+using PxWeb.Code.Api2;
+
+using PxWebApi_Mvc.Tests.Wrappers;
 
 namespace PxWebApi_Mvc.Tests
 {
@@ -164,6 +172,37 @@ namespace PxWebApi_Mvc.Tests
 
 
         }
+
+        [TestMethod]
+        [DoNotParallelize]
+        public async Task Cancelling_request_should_return_timeout()
+        {
+            await using var application = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureTestServices(services =>
+                    {
+                        services.RemoveAll<IDataWorkflow>();
+                        services.AddSingleton<IDataWorkflow, CancellationAwareDataWorkflow>();
+
+                        services.PostConfigure<RequestTimeoutOptions>(options =>
+                        {
+                            options.Policies["GetTableDataTimeout"] = new RequestTimeoutPolicy
+                            {
+                                Timeout = TimeSpan.FromMilliseconds(50),
+                                TimeoutStatusCode = StatusCodes.Status504GatewayTimeout
+                            };
+                        });
+                    });
+                });
+
+            using var client = application.CreateClient();
+
+            var response = await client.GetAsync("/tables/tab003/data?lang=en", TestContext.CancellationToken);
+
+            Assert.AreEqual(HttpStatusCode.GatewayTimeout, response.StatusCode);
+        }
+
 
     }
 }
