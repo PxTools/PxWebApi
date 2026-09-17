@@ -16,6 +16,14 @@
             TestSearcher("sv", "region", 3);
         }
 
+        [TestMethod]
+        public void SearchUsesOrAsDefaultOperator()
+        {
+            // "region" has 3 hits in current test data.
+            // The second term should not exist, so with OR the result should still be 3.
+            // With AND this would become 0, so this test guards the default operator behavior.
+            TestSearcher("sv", "region thistextdoesnotexist", 3);
+        }
 
         private void TestSearcher(string language, string searchFor, int expectedCount)
         {
@@ -35,8 +43,6 @@
             string wwwPath = Path.Combine(repoRoot, "PxWeb", "wwwroot");
 
             MyHost myHost = new MyHost(wwwPath);
-
-
 
             var myOptions = Microsoft.Extensions.Options.Options.Create(luceneConfigurationOptions);
 

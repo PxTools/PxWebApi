@@ -7,7 +7,7 @@ namespace Px.Search.Lucene
     public class LuceneSearcher : ISearcher
     {
         private readonly IndexSearcher _indexSearcher;
-        private static readonly Operator _defaultOperator = Operator.AND;
+        private static readonly Operator _defaultOperator = Operator.OR;
         private readonly Analyzer _analyzer;
         private readonly string[] _fieldNames;
 
