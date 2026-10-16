@@ -8,6 +8,18 @@ namespace Px.Search.Lucene
     {
         private readonly IndexSearcher _indexSearcher;
         private static readonly Operator _defaultOperator = Operator.AND;
+        // Keyword fields must be queried as complete, normalized terms.
+        private static readonly HashSet<string> _keywordFields = new()
+        {
+            SearchConstants.SEARCH_FIELD_TAGS,
+            SearchConstants.SEARCH_FIELD_MATRIX,
+            SearchConstants.SEARCH_FIELD_CODES,
+            SearchConstants.SEARCH_FIELD_GROUPINGCODES,
+            SearchConstants.SEARCH_FIELD_VALUESETCODES,
+            SearchConstants.SEARCH_FIELD_LEVEL_CODE,
+            SearchConstants.SEARCH_FIELD_META_ID,
+            SearchConstants.SEARCH_FIELD_LEGACY_ID
+        };
         private readonly Analyzer _analyzer;
         private readonly string[] _fieldNames;
 
@@ -46,15 +58,8 @@ namespace Px.Search.Lucene
             var skipRecords = pageSize * (pageNumber - 1);
             var searchResultContainer = new SearchResultContainer();
             var searchResultList = new List<SearchResult>();
-            string[] fields = _fieldNames;
-            Query luceneQuery;
-            QueryParser queryParser = new MultiFieldQueryParser(LuceneAnalyzer.luceneVersion,
-                                                       fields,
-                                                        _analyzer);
             BooleanFilter filter = new BooleanFilter();
-            queryParser.DefaultOperator = _defaultOperator;
-
-            luceneQuery = string.IsNullOrEmpty(query) ? queryParser.Parse("*:*") : queryParser.Parse(query);
+            Query luceneQuery = BuildQuery(query);
 
             if (!string.IsNullOrEmpty(pastdays.ToString()))
             {
@@ -103,6 +108,52 @@ namespace Px.Search.Lucene
             return searchResultContainer;
 
         }
+
+        private Query BuildQuery(string? query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return new MatchAllDocsQuery();
+            }
+
+            // Text fields use language analysis; keyword fields need exact matching.
+            string[] textFields = _fieldNames
+                .Where(field => !_keywordFields.Contains(field))
+                .ToArray();
+            string[] keywordFields = _fieldNames
+                .Where(field => _keywordFields.Contains(field))
+                .ToArray();
+
+            var queries = new BooleanQuery();
+
+            if (textFields.Length > 0)
+            {
+                // Boost title matches while keeping the other text fields searchable.
+                var boosts = textFields.ToDictionary(
+                    field => field,
+                    field => field == SearchConstants.SEARCH_FIELD_TITLE ? 3f : 1f);
+                var textParser = new MultiFieldQueryParser(
+                    LuceneAnalyzer.luceneVersion,
+                    textFields,
+                    _analyzer,
+                    boosts)
+                {
+                    DefaultOperator = _defaultOperator
+                };
+
+                queries.Add(textParser.Parse(query), Occur.SHOULD);
+            }
+
+            string keywordValue = query.Trim().ToLowerInvariant();
+            foreach (string field in keywordFields)
+            {
+                // Keep stopwords and punctuation meaningful for keyword fields.
+                queries.Add(new TermQuery(new Term(field, keywordValue)), Occur.SHOULD);
+            }
+
+            return queries;
+        }
+
         /// <summary>
         /// Search in index on table id
         /// </summary>
