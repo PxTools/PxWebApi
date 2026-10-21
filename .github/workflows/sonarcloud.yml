@@ -32,8 +32,8 @@ jobs:
       - name: Begin SonarScanner
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner begin /k:PxTools_PxWebApi
-          /o:pxtools
+        run: dotnet sonarscanner begin /k:PerIngeVaaje_PxWebApi
+          /o:PerIngeVaaje
           /d:sonar.verbose=false
           /d:sonar.exclusions=docker/**
           /d:sonar.token=$SONAR_TOKEN
