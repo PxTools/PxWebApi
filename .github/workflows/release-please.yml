@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
@@ -21,6 +20,7 @@ jobs:
         with:
           config-file: .github/workflows/release-please-config.json
           manifest-file: .github/workflows/release-please-manifest.json
+          target-branch: main
 
   asset-publish:
     needs: release-please
