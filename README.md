@@ -17,7 +17,7 @@ curl -i -H 'API_ADMIN_KEY: test' -X 'DELETE' https://localhost:8443/api/v2/admin
 
 ### Code formatting
 
-We use [dotnet format](https://github.com/dotnet/format) to clean the source code. The build pipeline aslo checks for formatting error.
+We use [dotnet format](https://github.com/dotnet/format) to clean the source code. The build pipeline aslo checks for formatting error
 
 If you don't want to manually run `dotnet format` or Code Cleanup in Visual Studio you can use git [pre-commit](https://pre-commit.com/). After installing pre-commit for your operating system, run `pre-commit install`from the root of this repo and you're done.
 
