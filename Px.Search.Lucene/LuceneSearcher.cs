@@ -1,13 +1,11 @@
-﻿
-
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Px.Search.Lucene
 {
     public class LuceneSearcher : ISearcher
     {
         private readonly IndexSearcher _indexSearcher;
-        private static readonly Operator _defaultOperator = Operator.AND;
+        private static readonly Operator _defaultOperator = Operator.OR;
         private readonly Analyzer _analyzer;
         private readonly string[] _fieldNames;
 
@@ -47,10 +45,23 @@ namespace Px.Search.Lucene
             var searchResultContainer = new SearchResultContainer();
             var searchResultList = new List<SearchResult>();
             string[] fields = _fieldNames;
+
+            Dictionary<string, float> boosts = new Dictionary<string, float>();
+            boosts.Add(SearchConstants.SEARCH_FIELD_TITLE, 10.0f);
+
+            foreach (var field in fields)
+            {
+                if (!boosts.ContainsKey(field))
+                {
+                    boosts.Add(field, 1.0f);
+                }
+            }
+
             Query luceneQuery;
             QueryParser queryParser = new MultiFieldQueryParser(LuceneAnalyzer.luceneVersion,
                                                        fields,
-                                                        _analyzer);
+                                                        _analyzer,
+                                                        boosts);
             BooleanFilter filter = new BooleanFilter();
             queryParser.DefaultOperator = _defaultOperator;
 
