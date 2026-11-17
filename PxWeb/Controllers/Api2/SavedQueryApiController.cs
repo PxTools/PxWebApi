@@ -2,9 +2,12 @@
 using System.Linq;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
+using PCAxis.Paxiom;
 
 using Px.Abstractions.Interfaces;
 
@@ -47,6 +50,7 @@ namespace PxWeb.Controllers.Api2
             _savedQueryResponseMapper = (SavedQueryResponseMapper)savedQueryResponseMapper;
         }
 
+        [RequestTimeout("GetTableDataTimeout")]
         public override IActionResult CreateSaveQuery([FromBody] SavedQuery? savedQuery)
         {
             Problem? problem;
@@ -60,8 +64,21 @@ namespace PxWeb.Controllers.Api2
             // Create a copy of the selection to be able to expand it
             var variablesSelection = SelectionUtil.Copy(savedQuery.Selection);
 
-            _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem);
-
+            try
+            {
+                _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, variablesSelection, out problem, HttpContext.RequestAborted);
+            }
+            catch (OperationCanceledException ex) when (HttpContext.RequestAborted.IsCancellationRequested)
+            {
+                _logger.LogInformation(ex, "Request timeout for table data.");
+                return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
+                {
+                    Type = "Timeout",
+                    Status = StatusCodes.Status504GatewayTimeout,
+                    Title = "Request timeout",
+                    Detail = "The request took too long to complete."
+                });
+            }
             if (problem is not null)
             {
                 return BadRequest(problem);
@@ -108,6 +125,7 @@ namespace PxWeb.Controllers.Api2
             return Ok(_savedQueryResponseMapper.Map(savedQuery));
         }
 
+        [RequestTimeout("GetTableDataTimeout")]
         public override IActionResult RunSaveQuery([FromRoute(Name = "id"), Required] string id, [FromQuery(Name = "lang")] string? lang, [FromQuery(Name = "outputFormat")] OutputFormatType? outputFormat, [FromQuery(Name = "outputFormatParams")] List<OutputFormatParamType>? outputFormatParams)
         {
             Problem? problem;
@@ -151,7 +169,22 @@ namespace PxWeb.Controllers.Api2
             }
 
             // 4. Run the SavedQuery
-            var model = _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, savedQuery.Selection, out problem);
+            PXModel? model;
+            try
+            {
+                model = _dataWorkflow.Run(savedQuery.TableId, savedQuery.Language, savedQuery.Selection, out problem, HttpContext.RequestAborted);
+            }
+            catch (OperationCanceledException ex) when (HttpContext.RequestAborted.IsCancellationRequested)
+            {
+                _logger.LogInformation(ex, "Request timeout for table data.");
+                return StatusCode(StatusCodes.Status504GatewayTimeout, new Problem
+                {
+                    Type = "Timeout",
+                    Status = StatusCodes.Status504GatewayTimeout,
+                    Title = "Request timeout",
+                    Detail = "The request took too long to complete."
+                });
+            }
 
             if (model is null)
             {

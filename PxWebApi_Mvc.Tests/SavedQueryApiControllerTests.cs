@@ -1,18 +1,28 @@
 ﻿using System.Net;
 using System.Text;
 
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using Newtonsoft.Json;
 
 using PxWeb;
 using PxWeb.Api2.Server.Models;
+using PxWeb.Code.Api2;
+
+using PxWebApi_Mvc.Tests.Wrappers;
 
 namespace PxWebApi_Mvc.Tests
 {
     [TestClass]
     public class SavedQueryApiControllerTests
     {
+        public TestContext TestContext { get; set; }
+
         private const string SavedQuery = @"{
                             ""language"": ""en"",
                             ""tableId"": ""TAB001"",
@@ -183,6 +193,37 @@ namespace PxWebApi_Mvc.Tests
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task Saved_query_that_takes_too_long_to_execute_should_not_be_created()
+        {
+            await using var application = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureTestServices(services =>
+                    {
+                        services.RemoveAll<IDataWorkflow>();
+                        services.AddSingleton<IDataWorkflow, CancellationAwareDataWorkflow>();
+
+                        services.PostConfigure<RequestTimeoutOptions>(options =>
+                        {
+                            options.Policies["GetTableDataTimeout"] = new RequestTimeoutPolicy
+                            {
+                                Timeout = TimeSpan.FromMilliseconds(1),
+                                TimeoutStatusCode = StatusCodes.Status504GatewayTimeout
+                            };
+                        });
+                    });
+                });
+
+            using var client = application.CreateClient();
+
+
+            var content = new StringContent(SavedQuery, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/savedqueries", content, TestContext.CancellationToken);
+
+            Assert.AreEqual(HttpStatusCode.GatewayTimeout, response.StatusCode);
         }
     }
 }

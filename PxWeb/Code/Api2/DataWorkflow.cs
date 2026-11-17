@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 
 using PCAxis.Paxiom;
 using PCAxis.Paxiom.Operations;
@@ -25,7 +26,7 @@ namespace PxWeb.Code.Api2
             _defaultSelectionAlgorithm = defaultSelectionAlgorithm;
             _placementHandler = placementHandler;
         }
-        public PXModel? Run(string tableId, string language, VariablesSelection? variablesSelection, out Problem? problem)
+        public PXModel? Run(string tableId, string language, VariablesSelection? variablesSelection, out Problem? problem, CancellationToken token)
         {
             //If no selection is made, return a problem and exit early
             if (variablesSelection is null)
@@ -42,11 +43,15 @@ namespace PxWeb.Code.Api2
                 problem = ProblemUtility.NonExistentTable();
                 return null;
             }
+
+            token.ThrowIfCancellationRequested();
+
             builder.BuildForSelection();
-            return Run(variablesSelection, builder, out problem);
+
+            return Run(variablesSelection, builder, out problem, token);
         }
 
-        public PXModel? Run(string tableId, string language, out Problem? problem)
+        public PXModel? Run(string tableId, string language, out Problem? problem, CancellationToken token)
         {
             var builder = _dataSource.CreateBuilder(tableId, language);
             if (builder == null)
@@ -55,7 +60,11 @@ namespace PxWeb.Code.Api2
                 return null;
             }
 
+            token.ThrowIfCancellationRequested();
+
             builder.BuildForSelection();
+
+            token.ThrowIfCancellationRequested();
 
             var variablesSelection = _defaultSelectionAlgorithm.GetDefaultSelection(builder);
             //If no selection is made, return a problem and exit early
@@ -66,11 +75,13 @@ namespace PxWeb.Code.Api2
 
             }
 
+
+
             // Create a builder for the table and read in the table metadata
-            return Run(variablesSelection, builder, out problem);
+            return Run(variablesSelection, builder, out problem, token);
         }
 
-        private PXModel? Run(VariablesSelection variablesSelection, IPXModelBuilder? builder, out Problem? problem)
+        private PXModel? Run(VariablesSelection variablesSelection, IPXModelBuilder? builder, out Problem? problem, CancellationToken token)
         {
             //If no selection is made, return a problem and exit early
             if (variablesSelection is null)
@@ -87,6 +98,7 @@ namespace PxWeb.Code.Api2
             }
 
 
+            token.ThrowIfCancellationRequested();
             // Expand and verify the selections
             if (!_selectionHandler.ExpandAndVerfiySelections(variablesSelection, builder, out problem))
             {
@@ -107,6 +119,7 @@ namespace PxWeb.Code.Api2
             //Fix selection loses all values after BuildForPresentation
             var selectionCopy = SelectionUtil.Copy(selection);
 
+            token.ThrowIfCancellationRequested();
             builder.BuildForPresentation(selection);
 
             selection = selectionCopy;
@@ -133,6 +146,8 @@ namespace PxWeb.Code.Api2
                 }));
 
                 var pivot = new PCAxis.Paxiom.Operations.Pivot();
+
+                token.ThrowIfCancellationRequested();
                 model = pivot.Execute(model, descriptions.ToArray());
             }
 
